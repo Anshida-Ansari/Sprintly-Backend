@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import { Role } from "src/domain/enum/role.enum";
+import { Status } from "src/domain/enum/status.enum";
 
-const userSchema = new mongoose.Schema(
+export const userSchema = new mongoose.Schema(
     {
          
     _id: {
@@ -26,20 +28,18 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["SuperAdmin", "Admin","Developers"],
-      default: "Employee",
+      enum: Object.values(Role),
+      default: Role.DEVELOPERS,
+      required: true,
+
     },
-    companyId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Company",
-      required: function () {
-        return this.role !== "SuperAdmin"; 
-      },
+    status:{
+      type:String,
+      enum:Object.values(Status),
+      default:"pending"
     },
-    companyname: {
-      type: String,
-      require: true,
-      trim:true
+    companyName: {
+      type: String
     },
     performanceScore: {
       type: Number,
@@ -65,6 +65,15 @@ const userSchema = new mongoose.Schema(
         default: true,
       },
     },
+    adminId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+    required: function(this:any){
+    return this.role !==  Role.ADMIN
+    }, 
+    index: true
+}
+
   },
  
 {
