@@ -1,0 +1,27 @@
+import { ContainerModule } from "inversify";
+import { AuthController } from "src/presentation/http/controllers/auth.controller";
+import { AUTH_TYPES } from "../../types/auth/auth.types";
+import { RegisterAdminUseCase } from "src/application/usecases/auth/implementation/admin.register.usecase";
+import { VerifyAdminOtpUseCase } from "src/application/usecases/auth/implementation/verifyadmin.otp.usecase";
+import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
+import { RefreshUseCase } from "src/application/usecases/auth/implementation/refresh.usecase";
+import { ILoginUseCase } from "src/application/usecases/auth/interface/login.interface";
+import { IRefreshUseCase } from "src/application/usecases/auth/interface/refresh.interface";
+// import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
+
+export const AuthModule = new ContainerModule(({bind})=>{
+
+bind<AuthController>(AUTH_TYPES.AuthController).to(AuthController)
+
+//providers
+
+//usecases
+
+bind<RegisterAdminUseCase>(AUTH_TYPES.RegisterAdminUseCase).to(RegisterAdminUseCase)
+bind<VerifyAdminOtpUseCase>(AUTH_TYPES.VerifyAdminOtpUseCase).to(VerifyAdminOtpUseCase)
+bind<ILoginUseCase>(AUTH_TYPES.LoginUseCase).to(LoginUseCase)
+bind<IRefreshUseCase>(AUTH_TYPES.RefreshUseCase).to(RefreshUseCase)
+//controllers
+
+
+})

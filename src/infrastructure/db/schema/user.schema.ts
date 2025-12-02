@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Role } from "src/domain/enum/role.enum";
-import { Status } from "src/domain/enum/status.enum";
+import { UserStatus } from "src/domain/enum/status.enum";
+import { Status } from "src/domain/enum/user/user.status.enum";
 
 export const userSchema = new mongoose.Schema(
     {
@@ -23,8 +24,7 @@ export const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
-      select: false, 
+      required: true, 
     },
     role: {
       type: String,
@@ -35,11 +35,8 @@ export const userSchema = new mongoose.Schema(
     },
     status:{
       type:String,
-      enum:Object.values(Status),
-      default:"pending"
-    },
-    companyName: {
-      type: String
+      enum:Object.values(UserStatus),
+      default:UserStatus.ACTIVE
     },
     performanceScore: {
       type: Number,
@@ -58,21 +55,28 @@ export const userSchema = new mongoose.Schema(
     notificationPreferences: {
       emailNotification: {
         type: Boolean,
-        default: true,
+        // default: true,
       },
       pushNotification: {
         type: Boolean,
-        default: true,
+        // default: true,
       },
     },
-    adminId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
-    required: function(this:any){
-    return this.role !==  Role.ADMIN
-    }, 
-    index: true
-}
+     companyId: { 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Companies',
+            required: function(this: any) {
+                return this.role !== Role.SUPER_ADMIN;
+            }
+        },
+        adminId: { 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Users",
+            required: function(this: any) {
+                return this.role === Role.DEVELOPERS;
+            }, 
+            index: true
+        }
 
   },
  

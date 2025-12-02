@@ -1,5 +1,8 @@
+import { hash } from "../../shared/utils/password.hash.util";
+import { ErrorMessage } from "../enum/messages/error.message.enum";
 import { Role } from "../enum/role.enum";
-import { Status } from "../enum/status.enum";
+import { UserStatus } from "../enum/status.enum";
+import { Status } from "../enum/user/user.status.enum";
 
 export class UserEntity {
   private readonly _id?: string;
@@ -7,9 +10,8 @@ export class UserEntity {
   private _email: string;
   private _password: string;
   private _role: Role;
-  private _status: Status;
-  // private _companyId?: ObjectId;
-  private _companyName?: string;
+  private _status: UserStatus;
+  private _companyId?: string;
   private _adminId?:string;
 
 
@@ -19,8 +21,8 @@ export class UserEntity {
     email: string;
     password: string;
     role: Role;
-    status: Status;
-    companyName?: string;
+    status: UserStatus;
+    companyId?: string;
     adminId?:string
     
    
@@ -31,10 +33,11 @@ export class UserEntity {
     this._password = props.password;
     this._role = props.role;
     this._status = props.status;
-    this._companyName = props.companyName;
+    this._companyId = props.companyId;
     this._adminId = props.adminId;
     
   }
+
 
   static create(props: {
     id?: string;
@@ -42,8 +45,8 @@ export class UserEntity {
     email: string;
     password: string;
     role: Role;
-    status: Status;
-    companyName?: string;
+    status: UserStatus;
+    companyId?: string;
     adminId?:string
   }): UserEntity {
      return new UserEntity({ 
@@ -53,7 +56,7 @@ export class UserEntity {
       password: props.password,
       role: props.role,
       status: props.status,
-      companyName: props.companyName,
+      companyId: props.companyId,
       adminId: props.adminId
     });
   }
@@ -64,8 +67,23 @@ export class UserEntity {
   get password() { return this._password; }
   get role() { return this._role; }
   get status() { return this._status; }
-  get companyName() { return this._companyName; }
+  get companyId() { return this._companyId; }
   get adminId() { return this._adminId; }
+
+
+  isBlocked(){
+    if(this._status === UserStatus.BLOCK){
+      throw new Error(ErrorMessage.ADMIN_BLOCKED)
+    }
+  }
+
+  setPassword(newPassword: string){
+    this._password = newPassword
+  }
+
+  async getHashedPassword(){
+    return await hash(this.password)
+  }
 
 }
 

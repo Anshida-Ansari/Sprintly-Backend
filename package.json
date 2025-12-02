@@ -22,13 +22,15 @@
     "deep-email-validator": "^0.1.21",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "inversify": "^7.10.4",
     "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.3",
     "node-mailer": "^0.1.1",
     "nodemailer": "^7.0.10",
     "otp-generator": "^4.0.1",
-    "redis": "^5.9.0"
+    "redis": "^5.9.0",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@types/argon2": "^0.14.1",

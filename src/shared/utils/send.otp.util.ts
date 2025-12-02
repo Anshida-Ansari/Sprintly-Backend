@@ -9,7 +9,7 @@ export const sendOtpEmail = async (email:string,otp:number)=>{
     }
  })
 
-   await transporter.sendMail({
+  await transporter.sendMail({
     from:`Sprintly <${process.env.EMAIL_USER}>`,
     to:email,
     subject:"Your OTP code",

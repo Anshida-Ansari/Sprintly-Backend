@@ -1,28 +1,36 @@
-import { hash } from "bcrypt";
+import { hash } from "src/shared/utils/password.hash.util"
 import { randomBytes } from "crypto";
+import { inject, injectable } from "inversify";
 import { AdminRegisterDTO } from "src/application/dtos/auth/admin.register.dto";
 import { UserEntity } from "src/domain/entities/user.entities";
 import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
 import { Role } from "src/domain/enum/role.enum";
-import { Status } from "src/domain/enum/status.enum";
 import { UserRepository } from "src/infrastructure/db/repository/implements/user.repository";
 import { UserMapper } from "src/infrastructure/mappers/user.percistance.mapper";
 import { redisClient } from "src/infrastructure/providers/redis/redis.provider";
 import { generateOTP } from "src/shared/utils/otp.generate.util";
 import { sendOtpEmail } from "src/shared/utils/send.otp.util";
+import { IRegisterAdminUseCase } from "../interface/admin.register.interface";
+import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types";
+import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
 
-export class RegisterAdminUseCase{
-    constructor(private userRepostitory:UserRepository){}
+@injectable()   
+export class RegisterAdminUseCase implements IRegisterAdminUseCase{
 
-    async execute(dto:AdminRegisterDTO){
+    constructor(
+        @inject(USER_TYPES.UserRepository) private _userRepository:IUserRepository
+    ){}
+
+    async execute(dto:AdminRegisterDTO):Promise<{message: string, token: string}>{
 
         try {
 
-          const existing = await this.userRepostitory.findByEmail(dto.email)
+          const existing = await this._userRepository.findByEmail(dto.email)
           if(existing) throw new Error(ErrorMessage.EMAIL_ALREADY_EXISTS)
         
 
-          const hashed = await hash(dto.password,10)
+          const hashed = await hash(dto.password)
 
           const otp = generateOTP()
           const token = randomBytes(32).toString('hex')
@@ -40,6 +48,8 @@ export class RegisterAdminUseCase{
              })
 
           )
+
+          
 
        
 

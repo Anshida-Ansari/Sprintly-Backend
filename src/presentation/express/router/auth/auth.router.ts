@@ -1,23 +1,25 @@
-import { Router } from "express";
-import { RegisterAdminUseCase } from "src/application/usecases/auth/admin.register.usecase";
-import { VerifyAdminOtpUseCase } from "src/application/usecases/auth/verifyadmin.otp.usecase";
-import { userModel } from "src/infrastructure/db/models/user.model";
-import { UserRepository } from "src/infrastructure/db/repository/implements/user.repository";
-import { AdminController } from "src/presentation/http/controllers/auth.controller";
-import { IUser } from "src/infrastructure/db/interface/user.interface";
-
+import { log } from "console"
+import { Router } from "express"
+import { AdminRegisterDTO } from "src/application/dtos/auth/admin.register.dto"
+import { LoginDTO } from "src/application/dtos/auth/login.dto"
+import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto"
+import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase"
+import { CompanyRepository } from "src/infrastructure/db/repository/implements/company.repositry"
+import { UserRepository } from "src/infrastructure/db/repository/implements/user.repository"
+import { container } from "src/infrastructure/di/inversify.di"
+import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types"
+import { AuthController } from "src/presentation/http/controllers/auth.controller"
+import { validateDTO } from "src/shared/middleware/validate.dto.middlware"
 
 const router = Router()
 
-const userRepositry = new UserRepository(userModel)
-const registerAdminUseCase = new RegisterAdminUseCase(userRepositry)
-const verifyAdminOtpUseCase = new VerifyAdminOtpUseCase(userRepositry)
-const adminController = new AdminController(registerAdminUseCase,verifyAdminOtpUseCase)
+const authController = container.get<AuthController>(AUTH_TYPES.AuthController)
+
+router.post('/admin/register',validateDTO(AdminRegisterDTO),(req,res)=>authController.register(req, res))
+router.post('/verify-otp',validateDTO(VerifyOtpDTO),(req,res)=>authController.verifyOTP(req,res))
+router.post('/login',validateDTO(LoginDTO),(req,res)=>authController.Login(req,res))
+router.post('/refresh',(req,res)=>authController.RefreshToken(req,res))
 
 
 
-router.post("/admin/register",(req,res)=>adminController.register(req,res))
-router.post("/admin/verify-otp",(req,res)=>adminController.verifyOTP(req,res))
-
-
-export default router
+export default router;

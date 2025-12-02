@@ -12,5 +12,11 @@ export enum ErrorMessage {
     OTP_INVALID = "Invalid OTP",
     OTP_EXPIRED = "OTP has expired",
     USER_UPDATE_FAILED = 'User Update Failed',
-    ADMIN_BLOCKED = 'Your account has been blocked by the admin'
+    ADMIN_BLOCKED = 'Your account has been blocked by the admin',
+    COMPANY_CREATION_FAILED = 'Company creation failed',
+    COMPANY_NOT_FOUND = "Company not found",
+    COMPANY_NOT_EXIST = "Company does not exist",
+    COMPANY_NOT_APPROVED = "Company is not approved",
+    COMPANY_NOT_ASSOCIATED_TO_COMPANY = "User is not associated with any company",
+    DEVELOPER_NOT_ASSIGNED_TO_COMPANY = "Employee is not assigned to a company"
 }

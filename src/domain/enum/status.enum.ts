@@ -1,5 +1,5 @@
-export enum Status{
-    PENDING = 'pending',
-    APPROVED = 'approved',
-    REJECTED = 'rejected'
+export enum UserStatus{
+    BLOCK = 'block',
+    ACTIVE = 'active'
+
 }
