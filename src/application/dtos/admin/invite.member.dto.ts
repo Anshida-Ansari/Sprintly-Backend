@@ -18,10 +18,5 @@ export class InviteMemberDTO {
   @IsNotEmpty({ message: "Email is required" })
   email!: string;
 
-  // @Expose()
-  // @IsString()
-  // @IsNotEmpty({ message: "Company ID is required" })
-  // companyId!: string;
-
 
 }

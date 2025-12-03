@@ -8,6 +8,7 @@ import { ADMIN_TYPES } from "src/infrastructure/di/types/admin/admin.types";
 import { Request, Response } from "express";
 import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
 import { log } from "node:console";
+import { VerifyInvitationUseCase } from "src/application/usecases/admin/implementation/verify.member.usecase";
 
 @injectable()
 export class AdminController{
@@ -15,6 +16,8 @@ export class AdminController{
 
         @inject(ADMIN_TYPES.InviteMemberUseCase)
         private _inviteMemberUseCase:InviteMemberUseCase,
+        @inject(ADMIN_TYPES.VerifyInvitationUseCase)
+        private _verifyInvitationUseCase:VerifyInvitationUseCase
     ){}
 
     async inviteMember(req:Request,res:Response){
@@ -48,5 +51,36 @@ export class AdminController{
             
         }
     }
+
+    async verifyInvitation(req:Request,res:Response){
+        try {
+
+            const token = req.query.token as string
+
+            if(!token){
+                return res.status(ClientErrorStatus.BAD_REQUEST).json({
+                    success:false,
+                    message:"Tocken is Expired"
+                })
+            }
+
+            const data = await this._verifyInvitationUseCase.execute(token)
+
+            return res.status(SuccessStatus.OK).json({
+                success:true,
+                message:'Token is required',
+                data:data,
+                redirectUrl:`https://sprintly.com/reset-password?token=${token}`
+            })
+
+        } catch (error) {
+            return res.status(ClientErrorStatus.BAD_REQUEST).json({
+                success:false,
+                message:error
+            })
+        }
+    }
+    
+    
 
 }
