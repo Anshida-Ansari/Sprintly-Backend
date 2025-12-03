@@ -20,7 +20,7 @@ export const generateRefreshToken = (payload: object) => {
 export const verifyToken = (token: string,type: 'access' | 'refresh')=>{
     try {
         const seceret = type === "access" ? ACCESS_TOKEN_SECERET : REFRESH_TOKEN_SECERET
-        return jwt.verify(token,type)
+        return jwt.verify(token,seceret)
 
     } catch (err) {
 

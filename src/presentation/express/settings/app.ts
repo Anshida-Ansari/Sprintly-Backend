@@ -1,7 +1,8 @@
 import express from 'express'
 const app = express()
 import cors from 'cors'
-import router from '../router/auth/auth.router'
+import { adminRouter } from '../router/admin/admin.router'
+import { authRouter } from '../router/auth/auth.router'
 
 app.use(cors({
     origin:"http://localhost:2000",
@@ -11,6 +12,8 @@ app.use(cors({
 
 app.use(express.json())
 
-app.use("/api/auth",router)
+app.use("/api/auth",authRouter)
+app.use("/api",adminRouter)
+
 
 export default app

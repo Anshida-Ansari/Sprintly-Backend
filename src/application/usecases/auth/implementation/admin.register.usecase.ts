@@ -49,9 +49,7 @@ export class RegisterAdminUseCase implements IRegisterAdminUseCase{
 
           )
 
-          
-
-       
+              
 
         await sendOtpEmail(dto.email,otp)
          console.log(otp);
