@@ -14,3 +14,4 @@ export async function validateEmail(email:string):Promise<boolean>{
 
     return valid
 }
+

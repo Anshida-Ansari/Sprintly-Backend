@@ -1,3 +1,4 @@
+import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
 
 export const AUTH_TYPES = {
 
@@ -13,6 +14,7 @@ RegisterAdminUseCase: Symbol.for("RegisterAdminUseCase"),
 LoginUseCase: Symbol.for("LoginUseCase"),
 VerifyAdminOtpUseCase: Symbol.for("VerifyAdminOtpUseCase")  ,
 RefreshUseCase: Symbol.for('RefreshUseCase'),
+SetPasswrodUseCase: Symbol.for('SetPasswrodUseCase')
     
 //Providers
 

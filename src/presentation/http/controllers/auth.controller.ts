@@ -6,7 +6,7 @@ import { RegisterAdminUseCase } from "src/application/usecases/auth/implementati
 import { VerifyAdminOtpUseCase } from "src/application/usecases/auth/implementation/verifyadmin.otp.usecase";
 import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
 import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum";
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto";
 import { inject, injectable } from "inversify";
 import { ILoginUseCase } from "src/application/usecases/auth/interface/login.interface";
@@ -16,23 +16,27 @@ import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
 import { access } from "fs";
 import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
 import { RefreshUseCase } from "src/application/usecases/auth/implementation/refresh.usecase";
+import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
+import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
 
 
 @injectable()
-export class AuthController{
+export class AuthController {
     constructor(
         @inject(AUTH_TYPES.RegisterAdminUseCase)
-        private _registerAdminUseCase:RegisterAdminUseCase,
+        private _registerAdminUseCase: RegisterAdminUseCase,
         @inject(AUTH_TYPES.VerifyAdminOtpUseCase)
-        private _verifyAdminUseCase:VerifyAdminOtpUseCase,
-        @inject(AUTH_TYPES.LoginUseCase)    
-        private  _loginUseCase: LoginUseCase,
+        private _verifyAdminUseCase: VerifyAdminOtpUseCase,
+        @inject(AUTH_TYPES.LoginUseCase)
+        private _loginUseCase: LoginUseCase,
         @inject(AUTH_TYPES.RefreshUseCase)
-        private  _refreshUseCase: RefreshUseCase
-    ){}
+        private _refreshUseCase: RefreshUseCase,
+        @inject(AUTH_TYPES.SetPasswrodUseCase)
+        private _setPasswrodUseCase:SetPasswrodUseCase
+    ) { }
 
 
-    async register(req:Request,res:Response){
+    async register(req: Request, res: Response) {
 
         try {
             const admin = await this._registerAdminUseCase.execute(req.body)
@@ -43,39 +47,39 @@ export class AuthController{
             })
 
         } catch (error) {
-            
-           const err = error as Error
-           return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)   
+
+            const err = error as Error
+            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
         }
 
     }
 
-    async verifyOTP(req:Request,res:Response){
+    async verifyOTP(req: Request, res: Response) {
         try {
-        
+
             const result = await this._verifyAdminUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
-                message:'Admin registerd Successfully',
-                data:{
-                    user:result.user
+                message: 'Admin registerd Successfully',
+                data: {
+                    user: result.user
                 }
             })
 
         } catch (error) {
-           const err = error as Error
-           return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
+            const err = error as Error
+            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
         }
     }
-    async Login(req:Request,res:Response){
-        
+    async Login(req: Request, res: Response) {
+
         try {
 
             console.log('I am at eteh controller right now ');
-            
-            
+
+
             const result = await this._loginUseCase.execute(req.body)
-                        
-            res.cookie("accessToken",result.accessToken,{
+
+            res.cookie("accessToken", result.accessToken, {
                 httpOnly: true,
                 sameSite: 'strict',
                 maxAge: Number(process.env.ACCESS_TOKEN_MAX_AGE)
@@ -91,33 +95,33 @@ export class AuthController{
 
             return res.status(SuccessStatus.OK).json({
                 message: result.message,
-                data:{
-                    accessToken:result.accessToken,
-                    role: result.user?.role,  
-                    user:result.user
+                data: {
+                    accessToken: result.accessToken,
+                    role: result.user?.role,
+                    user: result.user
                 }
             })
 
 
-            
+
         } catch (error) {
-            console.log('it is not woriking',error);
-            
+            console.log('it is not woriking', error);
+
 
             res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                message: error instanceof Error ? error.message: 'Login failed'
+                message: error instanceof Error ? error.message : 'Login failed'
             })
-            
+
         }
     }
 
-    async RefreshToken(req:Request,res:Response){
+    async RefreshToken(req: Request, res: Response) {
         try {
 
             const refreshToken = req.cookies?.refreshToken
             const result = await this._refreshUseCase.execute(refreshToken)
 
-            res.cookie("accessToken",result.accessToken,{
+            res.cookie("accessToken", result.accessToken, {
                 httpOnly: true,
                 sameSite: "strict",
                 maxAge: Number(process.env.ACCESS_TOKEN_MAX_AGE)
@@ -126,16 +130,37 @@ export class AuthController{
 
             return res.status(SuccessStatus.OK).json({
                 message: result.message,
-                data:{
-                    accessToken:result.accessToken
+                data: {
+                    accessToken: result.accessToken
                 }
+            })
+
+        } catch (error) {
+
+            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
+                message: error instanceof Error ? error.message : "Refresh Token failed"
+            })
+        }
+    }
+    async SetPassword(req:Request, res:Response){
+        try {
+
+            const {token,password} = req.body
+            
+            const response = await this._setPasswrodUseCase.execute(token,password)
+
+            return res.status(SuccessStatus.CREATED).json({
+                success: true,
+                message:response.message
             })
             
         } catch (error) {
-            
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                message: error instanceof Error ? error.message: "Refresh Token failed"
+
+            return res.status(ClientErrorStatus.NOT_FOUND).json({
+                success:false,
+                message:error
             })
+            
         }
     }
 }

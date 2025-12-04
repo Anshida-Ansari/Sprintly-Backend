@@ -23,61 +23,61 @@ import mongoose from "mongoose";
 import { log } from "console";
 
 @injectable()
-export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase{
-    constructor(
-        @inject(USER_TYPES.UserRepository)
-        private readonly _userRepository:IUserRepository,
+export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
+  constructor(
+    @inject(USER_TYPES.UserRepository)
+    private readonly _userRepository: IUserRepository,
 
-        @inject(USER_TYPES.UserPersistenceMapper)
-        private readonly _userPersistance:UserPersistenceMapper,
+    @inject(USER_TYPES.UserPersistenceMapper)
+    private readonly _userPersistance: UserPersistenceMapper,
 
-        @inject(COMPANY_TYPES.CompanyRepository)
-        private readonly _companyRepository:ICompanyRepository,
+    @inject(COMPANY_TYPES.CompanyRepository)
+    private readonly _companyRepository: ICompanyRepository,
 
-        @inject(COMPANY_TYPES.CompanyPersistenceMapper)    
-        private readonly _companyPersistance:CompanyPersistenceMapper
-    ){}
+    @inject(COMPANY_TYPES.CompanyPersistenceMapper)
+    private readonly _companyPersistance: CompanyPersistenceMapper
+  ) { }
 
-    async execute(dto: VerifyOtpDTO): Promise<{ message: string; user: { id?: string; name: string; email: string; }; company: { id?: string; name: string; }; }> {
-        try {
-            console.log('hello i am hitting')
-            const key = `admin.otp:${dto.token}`
-            const data = await redisClient.get(key)
+  async execute(dto: VerifyOtpDTO): Promise<{ message: string; user: { id?: string; name: string; email: string; }; company: { id?: string; name: string; }; }> {
+    try {
+      console.log('hello i am hitting')
+      const key = `admin.otp:${dto.token}`
+      const data = await redisClient.get(key)
 
-            if(!data){
-                throw new Error(ErrorMessage.OTP_EXPIRED)
-            }
+      if (!data) {
+        throw new Error(ErrorMessage.OTP_EXPIRED)
+      }
 
-            const parsed = JSON.parse(data)
-            console.log('parsed data',parsed)
+      const parsed = JSON.parse(data)
+      console.log('parsed data', parsed)
 
-            if(parsed.otp.toString() !== dto.otp.toString()){
-                throw new Error(ErrorMessage.OTP_INVALID)
-            }
+      if (parsed.otp.toString() !== dto.otp.toString()) {
+        throw new Error(ErrorMessage.OTP_INVALID)
+      }
 
-           const tempCompanyId = new mongoose.Types.ObjectId().toString();
+      const tempCompanyId = new mongoose.Types.ObjectId().toString();
 
-           const adminEntity = UserEntity.create({
-           name: parsed.name,
-           email: parsed.email,
-           password: parsed.password,
-           role: Role.ADMIN,
-           status: UserStatus.ACTIVE,
-           companyId: tempCompanyId,
-           adminId: undefined,
-           });
-           
-          console.log('adminEntity',adminEntity)
+      const adminEntity = UserEntity.create({
+        name: parsed.name,
+        email: parsed.email,
+        password: parsed.password,
+        role: Role.ADMIN,
+        status: UserStatus.ACTIVE,
+        companyId: tempCompanyId,
+        adminId: undefined,
+      });
 
-          // const hashedPassword = await adminEntity.getHashedPassword()
-          // adminEntity.setPassword(hashedPassword)
+      console.log('adminEntity', adminEntity)
+
+      // const hashedPassword = await adminEntity.getHashedPassword()
+      // adminEntity.setPassword(hashedPassword)
 
 
-            const adminMongo = this._userPersistance.toMongo(adminEntity)
-            const newAdmin = await this._userRepository.create(adminMongo);
-            console.log("DATA GOING TO MONGO:");
+      const adminMongo = this._userPersistance.toMongo(adminEntity)
+      const newAdmin = await this._userRepository.create(adminMongo);
+      console.log("DATA GOING TO MONGO:");
 
-        if (!newAdmin.id) throw new Error("Failed to create admin");
+      if (!newAdmin.id) throw new Error("Failed to create admin");
 
       const companyEntity = CompanyEnitiy.create({
         companyName: parsed.companyName,
@@ -94,32 +94,32 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase{
         companyId: newCompany.id.toString(),
       });
 
-      console.log('new compnay',newCompany); 
+      console.log('new compnay', newCompany);
       await redisClient.del(key);
-      console.log('admin',adminEntity)
+      console.log('admin', adminEntity)
 
 
-        return {
+      return {
         message: "Admin registered successfully",
         user: {
-        id: newAdmin.id?.toString(),
-        name: newAdmin.name,
-        email: newAdmin.email
-         },
+          id: newAdmin.id?.toString(),
+          name: newAdmin.name,
+          email: newAdmin.email
+        },
         company: {
-        id: newCompany.id?.toString(),
-        name: newCompany.companyName
+          id: newCompany.id?.toString(),
+          name: newCompany.companyName
         }
-};
+      };
 
 
 
-        } catch (error) {
-           
-            throw error
-        }
+    } catch (error) {
+
+      throw error
     }
+  }
 
-            
-   
+
+
 }

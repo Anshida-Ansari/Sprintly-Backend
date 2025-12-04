@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { AdminRegisterDTO } from "src/application/dtos/auth/admin.register.dto"
 import { LoginDTO } from "src/application/dtos/auth/login.dto"
+import { SetPasswordDTO } from "src/application/dtos/auth/set.password.dto"
 import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto"
 import { container } from "src/infrastructure/di/inversify.di"
 import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types"
@@ -11,11 +12,11 @@ const router = Router()
 
 const authController = container.get<AuthController>(AUTH_TYPES.AuthController)
 
-router.post('/admin/register',validateDTO(AdminRegisterDTO),(req,res)=>authController.register(req, res))
-router.post('/verify-otp',validateDTO(VerifyOtpDTO),(req,res)=>authController.verifyOTP(req,res))
-router.post('/login',validateDTO(LoginDTO),(req,res)=>authController.Login(req,res))
-router.post('/refresh',(req,res)=>authController.RefreshToken(req,res))
+router.post('/admin/register', validateDTO(AdminRegisterDTO), (req, res) => authController.register(req, res))
+router.post('/verify-otp', validateDTO(VerifyOtpDTO), (req, res) => authController.verifyOTP(req, res))
+router.post('/login', validateDTO(LoginDTO), (req, res) => authController.Login(req, res))
+router.post('/refresh', (req, res) => authController.RefreshToken(req, res))
+router.post('/set-password',validateDTO(SetPasswordDTO),(req,res)=>authController.SetPassword(req,res))
 
 
-
-export {router as authRouter}
+export { router as authRouter }

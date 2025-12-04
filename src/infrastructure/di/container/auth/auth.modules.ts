@@ -7,6 +7,8 @@ import { LoginUseCase } from "src/application/usecases/auth/implementation/login
 import { RefreshUseCase } from "src/application/usecases/auth/implementation/refresh.usecase";
 import { ILoginUseCase } from "src/application/usecases/auth/interface/login.interface";
 import { IRefreshUseCase } from "src/application/usecases/auth/interface/refresh.interface";
+import { ISetPassWordUseCase } from "src/application/usecases/auth/interface/set.password.interface";
+import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
 // import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
 
 export const AuthModule = new ContainerModule(({bind})=>{
@@ -21,6 +23,8 @@ bind<RegisterAdminUseCase>(AUTH_TYPES.RegisterAdminUseCase).to(RegisterAdminUseC
 bind<VerifyAdminOtpUseCase>(AUTH_TYPES.VerifyAdminOtpUseCase).to(VerifyAdminOtpUseCase)
 bind<ILoginUseCase>(AUTH_TYPES.LoginUseCase).to(LoginUseCase)
 bind<IRefreshUseCase>(AUTH_TYPES.RefreshUseCase).to(RefreshUseCase)
+bind<ISetPassWordUseCase>(AUTH_TYPES.SetPasswrodUseCase).to(SetPasswrodUseCase)
+
 //controllers
 
 
