@@ -20,5 +20,6 @@ export enum ErrorMessage {
     COMPANY_NOT_ASSOCIATED_TO_COMPANY = "User is not associated with any company",
     DEVELOPER_NOT_ASSIGNED_TO_COMPANY = "Employee is not assigned to a company",
     TOKEN_MISSING = "Token missing or invalid format",
-    INVITATION_EXPIRED_OR_INVALID = "Invitation expired or invalid"
+    INVITATION_EXPIRED_OR_INVALID = "Invitation expired or invalid",
+    ADMIN_NOT_FOUND ="Admin is not found" 
 }

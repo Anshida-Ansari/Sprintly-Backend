@@ -67,7 +67,8 @@ export class AuthGurd{
                 id:decoded.id,
                 email:decoded.email,
                 role:decoded.role,
-                companyId:user.companyId ?? ""
+                companyId:user.companyId ?? "",
+                adminId:user.adminId ?? ""
             }
 
             next()

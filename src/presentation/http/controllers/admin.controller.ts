@@ -27,6 +27,8 @@ export class AdminController{
             
 
             const companyId = req.user.companyId
+            const adminId = req.user.id
+            
 
             if(!companyId){
                 return res.status(ClientErrorStatus.NOT_FOUND).json({
@@ -35,8 +37,14 @@ export class AdminController{
                 })
             }
             
+            if(!adminId){
+                return res.status(ClientErrorStatus.NOT_FOUND).json({
+                    success:false,
+                    message:ErrorMessage.ADMIN_NOT_FOUND
+                })
+            }
             
-            const result = await this._inviteMemberUseCase.execute(req.body,companyId)
+            const result = await this._inviteMemberUseCase.execute(req.body,companyId,adminId)
 
 
             return res.status(SuccessStatus.OK).json({

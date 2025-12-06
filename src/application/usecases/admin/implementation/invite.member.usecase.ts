@@ -16,7 +16,7 @@ export class InviteMemberUseCase implements IInviteMemberUseCase{
         private _userRepository:IUserRepository
     ){}
 
-    async execute(dto: InviteMemberDTO, companyId: string): Promise<{ message: string; inviteLink: string; }> {
+    async execute(dto: InviteMemberDTO, companyId: string ,adminId: string): Promise<{ message: string; inviteLink: string; }> {
         try {
             console.log('reching the usecase');
             
@@ -37,7 +37,8 @@ export class InviteMemberUseCase implements IInviteMemberUseCase{
                 JSON.stringify({
                     name:dto.name,
                     email:dto.email,
-                    companyId:companyId
+                    companyId,
+                    adminId  
                 }),
 
                 "EX",

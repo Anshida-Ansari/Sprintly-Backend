@@ -8,7 +8,9 @@ import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
 import { UserRepository } from "src/infrastructure/db/repository/implements/user.repository";
 import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
 import { Role } from "src/domain/enum/role.enum";
-
+import { threadId } from "worker_threads";
+import { log } from "console";
+    
 @injectable()
 export class SetPasswrodUseCase implements ISetPassWordUseCase{
     constructor(
@@ -16,16 +18,32 @@ export class SetPasswrodUseCase implements ISetPassWordUseCase{
         private _userRepository:IUserRepository
     ){}
 
-    async execute(token: string, password: string): Promise<{ message: string; }> {
+    async execute(token: string, password: string , confirmPassword: string): Promise<{ message: string; }> {
         try {
-            const key = `members.invite${token}`
+            console.log('taking the data');
+            
+            const key = `member.invite:${token}`
             const inviteData = await redisClient.get(key)
+            console.log('the invitedData is here',inviteData);
+            
 
             if(!inviteData){
                 throw new Error(ErrorMessage.INVITATION_EXPIRED_OR_INVALID)
             }
 
-            const {name,email,companyId} = JSON.parse(inviteData)
+            if(password !== confirmPassword){
+                throw new Error(ErrorMessage.PASSWORDS_DO_NOT_MATCH)
+            }
+
+            
+            
+
+            const {name,email,companyId,adminId} = JSON.parse(inviteData)
+
+            const existingUser = await this._userRepository.findByEmail(email)
+            if(existingUser){
+                throw new Error(ErrorMessage.EMAIL_ALREADY_EXISTS)
+            }
 
             const hashedPassword = await hash(password)
 
@@ -33,6 +51,7 @@ export class SetPasswrodUseCase implements ISetPassWordUseCase{
                 name,
                 email,
                 companyId,
+                adminId,
                 password:hashedPassword,
                 role:Role.DEVELOPERS
             })
@@ -46,6 +65,8 @@ export class SetPasswrodUseCase implements ISetPassWordUseCase{
         
 
         } catch (error) {
+            console.log('there is an error',error);
+            
             throw error
         }
     }

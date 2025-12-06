@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { error } from "console";
+import { error, log } from "console";
 import { AdminRegisterDTO } from "src/application/dtos/auth/admin.register.dto";
 import { RegisterAdminUseCase } from "src/application/usecases/auth/implementation/admin.register.usecase";
 import { VerifyAdminOtpUseCase } from "src/application/usecases/auth/implementation/verifyadmin.otp.usecase";
@@ -102,6 +102,9 @@ export class AuthController {
                 }
             })
 
+            console.log('it is working ');
+            
+
 
 
         } catch (error) {
@@ -145,17 +148,24 @@ export class AuthController {
     async SetPassword(req:Request, res:Response){
         try {
 
-            const {token,password} = req.body
+            console.log('Reaching here')
+
+            const {token,password,confirmPassword} = req.body
             
-            const response = await this._setPasswrodUseCase.execute(token,password)
+            const response = await this._setPasswrodUseCase.execute(token,password,confirmPassword)
 
             return res.status(SuccessStatus.CREATED).json({
                 success: true,
                 message:response.message
             })
+
+            console.log('success');
+            
+            
             
         } catch (error) {
 
+            console.log(error)
             return res.status(ClientErrorStatus.NOT_FOUND).json({
                 success:false,
                 message:error
