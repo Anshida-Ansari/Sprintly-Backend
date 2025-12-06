@@ -9,6 +9,10 @@ import { ILoginUseCase } from "src/application/usecases/auth/interface/login.int
 import { IRefreshUseCase } from "src/application/usecases/auth/interface/refresh.interface";
 import { ISetPassWordUseCase } from "src/application/usecases/auth/interface/set.password.interface";
 import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
+import { IForgotPasswordUseCase } from "src/application/usecases/auth/interface/forgot.password.interface";
+import { ForgotPasswordUseCase } from "src/application/usecases/auth/implementation/forgot.password.usecase";
+import { ResetPasswordUsecase } from "src/application/usecases/auth/implementation/reset.password.usecase";
+import { IResetPasswordUseCase } from "src/application/usecases/auth/interface/reset.password.interface";
 // import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
 
 export const AuthModule = new ContainerModule(({bind})=>{
@@ -24,6 +28,8 @@ bind<VerifyAdminOtpUseCase>(AUTH_TYPES.VerifyAdminOtpUseCase).to(VerifyAdminOtpU
 bind<ILoginUseCase>(AUTH_TYPES.LoginUseCase).to(LoginUseCase)
 bind<IRefreshUseCase>(AUTH_TYPES.RefreshUseCase).to(RefreshUseCase)
 bind<ISetPassWordUseCase>(AUTH_TYPES.SetPasswrodUseCase).to(SetPasswrodUseCase)
+bind<IForgotPasswordUseCase>(AUTH_TYPES.ForgotPasswordUseCase).to(ForgotPasswordUseCase)
+bind<IResetPasswordUseCase>(AUTH_TYPES.ResetPasswordUsecase).to(ResetPasswordUsecase)
 
 //controllers
 

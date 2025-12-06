@@ -18,6 +18,8 @@ import { LoginUseCase } from "src/application/usecases/auth/implementation/login
 import { RefreshUseCase } from "src/application/usecases/auth/implementation/refresh.usecase";
 import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
 import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
+import { ForgotPasswordUseCase } from "src/application/usecases/auth/implementation/forgot.password.usecase";
+import { ResetPasswordUsecase } from "src/application/usecases/auth/implementation/reset.password.usecase";
 
 
 @injectable()
@@ -32,7 +34,11 @@ export class AuthController {
         @inject(AUTH_TYPES.RefreshUseCase)
         private _refreshUseCase: RefreshUseCase,
         @inject(AUTH_TYPES.SetPasswrodUseCase)
-        private _setPasswrodUseCase:SetPasswrodUseCase
+        private _setPasswrodUseCase:SetPasswrodUseCase,
+        @inject(AUTH_TYPES.ForgotPasswordUseCase)
+        private _forgotPasswordUseCase:ForgotPasswordUseCase,
+        @inject(AUTH_TYPES.ResetPasswordUsecase)
+        private _resetPassWordUseCase:ResetPasswordUsecase
     ) { }
 
 
@@ -171,6 +177,35 @@ export class AuthController {
                 message:error
             })
             
+        }
+    }
+    async ForgotPasswrod(req:Request,res:Response){
+        try {
+            const result =await this._forgotPasswordUseCase.execute(req.body)
+            return res.status(SuccessStatus.OK).json({
+                success:true,
+                message:result.message
+            })
+
+        } catch (error) {
+            return res.status(ClientErrorStatus.NOT_FOUND).json({
+                success:false,
+                message:ServerErrorStatus.INTERNAL_SERVER_ERROR
+            })
+        }
+    }
+    async ResetPassword(req:Request,res:Response){
+        try {
+            const result =await this._resetPassWordUseCase.execute(req.body)
+            return res.status(SuccessStatus.OK).json({
+                success:true,
+                message:result.message  
+            })
+        } catch (error) {
+            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
+                success:false,
+                message:ServerErrorStatus.INTERNAL_SERVER_ERROR
+            })
         }
     }
 }
