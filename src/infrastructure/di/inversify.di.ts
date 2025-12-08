@@ -3,6 +3,7 @@ import { AuthModule } from "./container/auth/auth.modules";
 import { UserModule } from "./container/user/user.modules";
 import { CompanyModule } from "./container/company/company.modules";
 import { InviteModule } from "./container/admin/admin.modules";
+import { SuperAdminModule } from "./container/superadmin/superadmin.modules";
 
 const container = new Container({
     defaultScope:"Singleton",
@@ -13,7 +14,9 @@ container.load(
     AuthModule,
     UserModule,
     CompanyModule,
-    InviteModule
+    InviteModule,
+    SuperAdminModule
+
 )
 
 export {container}

@@ -12,8 +12,6 @@ import { inject, injectable } from "inversify";
 import { ILoginUseCase } from "src/application/usecases/auth/interface/login.interface";
 import { IRefreshUseCase } from "src/application/usecases/auth/interface/refresh.interface";
 import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types";
-import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
-import { access } from "fs";
 import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
 import { RefreshUseCase } from "src/application/usecases/auth/implementation/refresh.usecase";
 import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
