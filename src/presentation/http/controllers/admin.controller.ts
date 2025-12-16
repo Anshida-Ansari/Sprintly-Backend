@@ -9,89 +9,125 @@ import { Request, Response } from "express";
 import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
 import { log } from "node:console";
 import { VerifyInvitationUseCase } from "src/application/usecases/admin/implementation/verify.member.usecase";
+import { ListUserUseCase } from "src/application/usecases/admin/implementation/list.members.usecase";
 
 @injectable()
-export class AdminController{
+export class AdminController {
     constructor(
 
         @inject(ADMIN_TYPES.InviteMemberUseCase)
-        private _inviteMemberUseCase:InviteMemberUseCase,
+        private _inviteMemberUseCase: InviteMemberUseCase,
         @inject(ADMIN_TYPES.VerifyInvitationUseCase)
-        private _verifyInvitationUseCase:VerifyInvitationUseCase
-    ){}
+        private _verifyInvitationUseCase: VerifyInvitationUseCase,
+        @inject(ADMIN_TYPES.ListUserUseCase)
+        private _listUserUseCase: ListUserUseCase
+    ) { }
 
-    async inviteMember(req:Request,res:Response){
+    async inviteMember(req: Request, res: Response) {
         try {
 
             console.log('reaching the controller');
-            
+
 
             const companyId = req.user.companyId
             const adminId = req.user.id
-            
 
-            if(!companyId){
+
+            if (!companyId) {
                 return res.status(ClientErrorStatus.NOT_FOUND).json({
-                   success:false,
-                   message:ErrorMessage.COMPANY_NOT_FOUND
+                    success: false,
+                    message: ErrorMessage.COMPANY_NOT_FOUND
                 })
             }
-            
-            if(!adminId){
+
+            if (!adminId) {
                 return res.status(ClientErrorStatus.NOT_FOUND).json({
-                    success:false,
-                    message:ErrorMessage.ADMIN_NOT_FOUND
+                    success: false,
+                    message: ErrorMessage.ADMIN_NOT_FOUND
                 })
             }
-            
-            const result = await this._inviteMemberUseCase.execute(req.body,companyId,adminId)
+
+            const result = await this._inviteMemberUseCase.execute(req.body, companyId, adminId)
 
 
             return res.status(SuccessStatus.OK).json({
-                success:true,
-                message:result.message,
-                inviteLink:result.inviteLink
+                success: true,
+                message: result.message,
+                inviteLink: result.inviteLink
             })
         } catch (error) {
 
             const err = error as Error
             return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
-            
+
         }
     }
 
-    async verifyInvitation(req:Request,res:Response){
+    async verifyInvitation(req: Request, res: Response) {
         try {
 
             console.log('reaching the verify');
-            
-            const {token} = req.body
-            // const token = req.query.token as string
+
+            const { token } = req.body
             console.log(token);
-            
-            if(!token){
+
+            if (!token) {
                 return res.status(ClientErrorStatus.BAD_REQUEST).json({
-                    success:false,
-                    message:"Tocken is Expired"
+                    success: false,
+                    message: "Tocken is Expired"
                 })
             }
 
             const data = await this._verifyInvitationUseCase.execute(token)
-console.log('the data from the',data);
 
             return res.status(SuccessStatus.OK).json({
-                success:true,
-                data:data,
+                success: true,
+                data: data,
             })
 
-        } catch (error:any) {
+        } catch (error: any) {
             return res.status(ClientErrorStatus.BAD_REQUEST).json({
-                success:false,
-                message:error.message
+                success: false,
+                message: error.message
             })
         }
     }
-    
-    
+
+    async ListUsers(req: Request, res: Response) {
+        try {
+            console.log('hitting');
+            
+            const companyId = req.user.companyId;
+            if (!companyId) {
+                return res.status(ClientErrorStatus.NOT_FOUND).json({
+                    success: false,
+                    message: ErrorMessage.COMPANY_NOT_FOUND,
+                });
+            }
+          
+            const { page, limit, search } = req.query
+
+            const query = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+                search: search ? String(search) : ""
+            }
+
+            const response = await this._listUserUseCase.execute(companyId, query)
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                ...response,
+            })
+        } catch (error: any) {
+            console.error("Error in ListUsers:", error);
+            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
+                success: false,
+                message: error.message || "Failed to fetch members",
+            })
+
+        }
+    }
+
+
 
 }

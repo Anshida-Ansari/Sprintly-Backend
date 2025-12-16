@@ -1,9 +1,9 @@
-import { inject } from "inversify";
+import { inject, injectable } from "inversify";
 import { IListCompanyUseCase } from "../interface/list.companies.interface";
 import { COMPANY_TYPES } from "src/infrastructure/di/types/company/company.types";
 import { ICompanyRepository } from "src/infrastructure/db/repository/interface/company.interface";
 import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
-
+@injectable()
 export class ListCompanyUseCase implements IListCompanyUseCase {
     constructor(
         @inject(COMPANY_TYPES.CompanyRepository)
