@@ -14,7 +14,7 @@ export class GetDetailPageUseCase implements IGetDetailPageUseCase{
 
     async execute(companyId: string): Promise<any> {
         try {
-            console.log('it reaches the usecase ');
+            // console.log('it reaches the usecase ');
             
             const company = await this._companyrepository.findByCompanyId(companyId)
             console.log('company is ',company);
@@ -24,7 +24,13 @@ export class GetDetailPageUseCase implements IGetDetailPageUseCase{
                 return new Error(ErrorMessage.COMPANY_NOT_FOUND)
             }
 
-            return company
+            return {
+                id:company.id,
+                companyName:company.companyName,
+                status:company.status,
+                adminId:company.adminId,
+                
+            }
 
         } catch (error) {
             throw error

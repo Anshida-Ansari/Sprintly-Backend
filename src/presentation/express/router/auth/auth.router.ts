@@ -2,6 +2,8 @@ import { Router } from "express"
 import { AdminRegisterDTO } from "src/application/dtos/auth/admin.register.dto"
 import { ForgotPasswordDTO } from "src/application/dtos/auth/forgot.password.dto"
 import { LoginDTO } from "src/application/dtos/auth/login.dto"
+import { LogoutDTO } from "src/application/dtos/auth/logout.register.dto"
+import { ResendAdminOtpDTO } from "src/application/dtos/auth/resend.otp.dto"
 import { ResetPasswordDTO } from "src/application/dtos/auth/reset.password.dto"
 import { SetPasswordDTO } from "src/application/dtos/auth/set.password.dto"
 import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto"
@@ -21,6 +23,8 @@ router.post('/refresh', (req, res) => authController.RefreshToken(req, res))
 router.post('/set-password',validateDTO(SetPasswordDTO),(req,res)=>authController.SetPassword(req,res))
 router.post('/forgot-password',validateDTO(ForgotPasswordDTO),(req,res)=>authController.ForgotPasswrod(req,res))
 router.post('/reset-password',validateDTO(ResetPasswordDTO),(req,res)=>authController.ResetPassword(req,res))
+router.post('/resend-otp',validateDTO(ResendAdminOtpDTO),(req,res)=>authController.ResendOtp(req,res))
+router.post('/logout',validateDTO(LogoutDTO),(req,res)=>authController.Logout(req,res))
 
 
 export { router as authRouter }

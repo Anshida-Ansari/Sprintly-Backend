@@ -6,7 +6,7 @@ import { authRouter } from '../router/auth/auth.router'
 import { superadminRouter } from '../router/superadmin/superadmin.router'
 
 app.use(cors({
-    origin:"http://localhost:2000",
+    origin:"http://localhost:5173",
     credentials:true
 }))
 

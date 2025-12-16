@@ -52,7 +52,7 @@ export class SetPasswrodUseCase implements ISetPassWordUseCase{
                 email,
                 companyId,
                 adminId,
-                password:hashedPassword,
+                password:hashedPassword,    
                 role:Role.DEVELOPERS
             })
 

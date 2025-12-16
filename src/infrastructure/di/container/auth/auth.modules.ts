@@ -13,6 +13,10 @@ import { IForgotPasswordUseCase } from "src/application/usecases/auth/interface/
 import { ForgotPasswordUseCase } from "src/application/usecases/auth/implementation/forgot.password.usecase";
 import { ResetPasswordUsecase } from "src/application/usecases/auth/implementation/reset.password.usecase";
 import { IResetPasswordUseCase } from "src/application/usecases/auth/interface/reset.password.interface";
+import { IResendAdminOtpUseCase } from "src/application/usecases/auth/interface/resend.register.otp.interface";
+import { ResendAdminOtpUseCase } from "src/application/usecases/auth/implementation/resend.register.otp.ussecase";
+import { ILogoutUseCase } from "src/application/usecases/auth/interface/logout.interface";
+import { LogoutUseCase } from "src/application/usecases/auth/implementation/logout.usecase";
 // import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
 
 export const AuthModule = new ContainerModule(({bind})=>{
@@ -30,6 +34,8 @@ bind<IRefreshUseCase>(AUTH_TYPES.RefreshUseCase).to(RefreshUseCase)
 bind<ISetPassWordUseCase>(AUTH_TYPES.SetPasswrodUseCase).to(SetPasswrodUseCase)
 bind<IForgotPasswordUseCase>(AUTH_TYPES.ForgotPasswordUseCase).to(ForgotPasswordUseCase)
 bind<IResetPasswordUseCase>(AUTH_TYPES.ResetPasswordUsecase).to(ResetPasswordUsecase)
+bind<IResendAdminOtpUseCase>(AUTH_TYPES.ResendAdminOtpUseCase).to(ResendAdminOtpUseCase)
+bind<ILogoutUseCase>(AUTH_TYPES.LogoutUseCase).to(LogoutUseCase)
 
 //controllers
 

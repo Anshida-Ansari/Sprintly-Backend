@@ -82,7 +82,7 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
       const companyEntity = CompanyEnitiy.create({
         companyName: parsed.companyName,
         adminId: newAdmin.id.toString(),
-        status: Status.PENDING,
+        status: Status.PENDING, 
       });
 
       const companyMongo = this._companyPersistance.toMongo(companyEntity)

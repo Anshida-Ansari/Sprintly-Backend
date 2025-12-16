@@ -10,56 +10,57 @@ import { redisClient } from "src/infrastructure/providers/redis/redis.provider";
 import { sendInviteEmail } from "src/shared/utils/send.invitaion.util";
 
 @injectable()
-export class InviteMemberUseCase implements IInviteMemberUseCase{
+export class InviteMemberUseCase implements IInviteMemberUseCase {
     constructor(
-        @inject(USER_TYPES.UserRepository) 
-        private _userRepository:IUserRepository
-    ){}
+        @inject(USER_TYPES.UserRepository)
+        private _userRepository: IUserRepository
+    ) { }
 
-    async execute(dto: InviteMemberDTO, companyId: string ,adminId: string): Promise<{ message: string; inviteLink: string; }> {
+    async execute(dto: InviteMemberDTO, companyId: string, adminId: string): Promise<{ message: string; inviteLink: string; }> {
         try {
-            console.log('reching the usecase');
             
-            const existing  = await this._userRepository.findOne({email:dto.email})
-            if(existing){
+
+            const existing = await this._userRepository.findOne({ email: dto.email })
+            if (existing) {
                 throw new Error(ErrorMessage.EMAIL_ALREADY_EXISTS)
             }
 
             const token = crypto.randomBytes(20).toString("hex")
-            console.log(token);
-            
+            console.log("generated token",token);
+
             const key = `member.invite:${token}`
-            console.log(key);
-            
+            console.log("saving to redis key",key);
+
 
             await redisClient.set(
                 key,
                 JSON.stringify({
-                    name:dto.name,
-                    email:dto.email,
+                    name: dto.name,
+                    email: dto.email,
                     companyId,
-                    adminId  
+                    adminId
                 }),
 
                 "EX",
                 172800
             )
 
-            const inviteLink = `https://sprintly.com/member.accept?token=${token}`
+            const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 
+            const inviteLink = `${frontendUrl}/member/accept?token=${token}`;
             console.log(inviteLink);
-            
 
-            await sendInviteEmail(dto.email,inviteLink)
+
+            await sendInviteEmail(dto.email, inviteLink)
 
             return {
-                message:"Invitation  send successfully",
-                inviteLink:inviteLink
+                message: "Invitation  send successfully",
+                inviteLink: inviteLink
             }
 
 
         } catch (error) {
-            
+
             throw error
         }
     }

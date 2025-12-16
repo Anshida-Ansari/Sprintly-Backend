@@ -21,5 +21,6 @@ export enum ErrorMessage {
     DEVELOPER_NOT_ASSIGNED_TO_COMPANY = "Employee is not assigned to a company",
     TOKEN_MISSING = "Token missing or invalid format",
     INVITATION_EXPIRED_OR_INVALID = "Invitation expired or invalid",
-    ADMIN_NOT_FOUND ="Admin is not found" 
+    ADMIN_NOT_FOUND ="Admin is not found",
+    REFRESH_TOKEN_REQUIRED = "Refresh token is required "
 }

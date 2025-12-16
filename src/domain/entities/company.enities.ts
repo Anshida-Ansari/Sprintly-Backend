@@ -36,6 +36,7 @@ export class CompanyEnitiy{
     get companyName(){return this._companyName}
     get status(){return this._status}
     get adminId(){return this._adminId}
+  
 
 
 }

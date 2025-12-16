@@ -18,6 +18,8 @@ import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation
 import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
 import { ForgotPasswordUseCase } from "src/application/usecases/auth/implementation/forgot.password.usecase";
 import { ResetPasswordUsecase } from "src/application/usecases/auth/implementation/reset.password.usecase";
+import { ResendAdminOtpUseCase } from "src/application/usecases/auth/implementation/resend.register.otp.ussecase";
+import { LogoutUseCase } from "src/application/usecases/auth/implementation/logout.usecase";
 
 
 @injectable()
@@ -36,7 +38,11 @@ export class AuthController {
         @inject(AUTH_TYPES.ForgotPasswordUseCase)
         private _forgotPasswordUseCase:ForgotPasswordUseCase,
         @inject(AUTH_TYPES.ResetPasswordUsecase)
-        private _resetPassWordUseCase:ResetPasswordUsecase
+        private _resetPassWordUseCase:ResetPasswordUsecase,
+        @inject(AUTH_TYPES.ResendAdminOtpUseCase)
+        private _resendAdminOtpUseCase:ResendAdminOtpUseCase,
+        @inject(AUTH_TYPES.LogoutUseCase)
+        private _logoutUseCase:LogoutUseCase
     ) { }
 
 
@@ -163,7 +169,6 @@ export class AuthController {
                 message:response.message
             })
 
-            console.log('success');
             
             
             
@@ -203,6 +208,37 @@ export class AuthController {
             return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
                 success:false,
                 message:ServerErrorStatus.INTERNAL_SERVER_ERROR
+            })
+        }
+    }
+
+    async ResendOtp(req:Request,res:Response){
+        try {
+            const result = await this._resendAdminOtpUseCase.execute(req.body)
+            return res.status(SuccessStatus.OK).json({
+                success:true,
+                message:result.message
+            })
+        } catch (error:any) {
+            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
+                success:false,
+                message:error.message
+            })
+        }
+    }
+    async Logout(req:Request,res:Response){
+        try {
+            const refreshToken = req.cookies.refreshToken
+            const result = await this._logoutUseCase.execute(refreshToken)
+
+            res.clearCookie(refreshToken)
+
+            res.json(result)
+
+        } catch (error:any) {
+            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
+                success:false,
+                message:error.message
             })
         }
     }

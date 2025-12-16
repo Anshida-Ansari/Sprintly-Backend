@@ -63,8 +63,12 @@ export class AdminController{
     async verifyInvitation(req:Request,res:Response){
         try {
 
-            const token = req.query.token as string
-
+            console.log('reaching the verify');
+            
+            const {token} = req.body
+            // const token = req.query.token as string
+            console.log(token);
+            
             if(!token){
                 return res.status(ClientErrorStatus.BAD_REQUEST).json({
                     success:false,
@@ -73,18 +77,17 @@ export class AdminController{
             }
 
             const data = await this._verifyInvitationUseCase.execute(token)
+console.log('the data from the',data);
 
             return res.status(SuccessStatus.OK).json({
                 success:true,
-                message:'Token is required',
                 data:data,
-                redirectUrl:`https://sprintly.com/reset-password?token=${token}`
             })
 
-        } catch (error) {
+        } catch (error:any) {
             return res.status(ClientErrorStatus.BAD_REQUEST).json({
                 success:false,
-                message:error
+                message:error.message
             })
         }
     }
