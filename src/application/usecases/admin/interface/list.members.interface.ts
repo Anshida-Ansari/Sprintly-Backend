@@ -1,4 +1,4 @@
-import { UserStatus } from "src/domain/enum/status.enum";
+import { UserStatus } from "../../../../domain/enum/status.enum";
 
 export interface IListMembersUseCase {
   execute(

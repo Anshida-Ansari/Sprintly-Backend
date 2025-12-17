@@ -1,9 +1,8 @@
 import { inject, injectable } from "inversify";
 import { IUpdateStatusInterface } from "../interface/update.status.interface";
-import { COMPANY_TYPES } from "src/infrastructure/di/types/company/company.types";
-import { CompanyRepository } from "src/infrastructure/db/repository/implements/company.repositry";
-import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
-import { ICompanyRepository } from "src/infrastructure/db/repository/interface/company.interface";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
+import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
+import { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
 
 @injectable()
 export class UpdateStatusUseCase implements IUpdateStatusInterface{

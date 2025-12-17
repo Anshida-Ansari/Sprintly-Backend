@@ -1,4 +1,4 @@
-import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto";
+import { VerifyOtpDTO } from "../../../../application/dtos/auth/verify.admin.dto";
 
 export interface IVerifyOtpUseCase{
     execute(dto:VerifyOtpDTO):Promise<{

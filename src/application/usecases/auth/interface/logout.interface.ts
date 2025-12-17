@@ -1,4 +1,4 @@
-import { LogoutDTO } from "src/application/dtos/auth/logout.register.dto";
+import { LogoutDTO } from "../../../../application/dtos/auth/logout.register.dto";
 
 export interface ILogoutUseCase{
     execute(dto:LogoutDTO):Promise<void>

@@ -1,26 +1,21 @@
 import { inject, injectable } from "inversify";
-import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto";
-import { UserEntity } from "src/domain/entities/user.entities";
-import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
-import { Role } from "src/domain/enum/role.enum";
-import { Status } from "src/domain/enum/user/user.status.enum";
-import { UserRepository } from "src/infrastructure/db/repository/implements/user.repository";
-import { UserMapper, UserPersistenceMapper } from "src/infrastructure/mappers/user.percistance.mapper";
-import { redisClient } from "src/infrastructure/providers/redis/redis.provider";
-import { IVerifyOtpUseCase } from "../interface/verifyadmin.otp.interface";
-import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types";
-import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
-import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
-import { IUser } from "src/infrastructure/db/interface/user.interface";
-import { COMPANY_TYPES } from "src/infrastructure/di/types/company/company.types";
-import { ICompanyRepository } from "src/infrastructure/db/repository/interface/company.interface";
-import { CompanyPersistenceMapper } from "src/infrastructure/mappers/company.persistance.mapper";
-import { parse } from "path";
-import { UserStatus } from "src/domain/enum/status.enum";
-import { CompanyEnitiy } from "src/domain/entities/company.enities";
-import { CompanyRepository } from "src/infrastructure/db/repository/implements/company.repositry";
 import mongoose from "mongoose";
-import { log } from "console";
+import { IVerifyOtpUseCase } from "../interface/verifyadmin.otp.interface";
+import { VerifyOtpDTO } from "../../../dtos/auth/verify.admin.dto";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
+import { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
+import { UserPersistenceMapper } from "../../../../infrastructure/mappers/user.percistance.mapper";
+import { CompanyPersistenceMapper } from "../../../../infrastructure/mappers/company.persistance.mapper";
+import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
+import { UserEntity } from "../../../../domain/entities/user.entities";
+import { CompanyEnitiy } from "../../../../domain/entities/company.enities";
+import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
+import { Role } from "../../../../domain/enum/role.enum";
+import { Status } from "../../../../domain/enum/user/user.status.enum";
+import { UserStatus } from "../../../../domain/enum/status.enum";
+
 
 @injectable()
 export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {

@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { IVerifyInvitationUseCase } from "../interface/verify.member.interface";
-import { redisClient } from "src/infrastructure/providers/redis/redis.provider";
-import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
+import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
+import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { parse } from "path";
 
 @injectable()

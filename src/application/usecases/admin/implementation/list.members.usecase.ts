@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
-import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
-import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
-import { UserStatus } from "src/domain/enum/status.enum";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { UserStatus } from "../../../../domain/enum/status.enum";
 import { IListMembersUseCase } from "../interface/list.members.interface";
 
 @injectable()
@@ -10,9 +10,6 @@ export class ListUserUseCase implements IListMembersUseCase{
         @inject(USER_TYPES.IUserRepository)
         private _userrepository: IUserRepository
     ){}
-
-    
-
     async execute(companyId:string,query: { page: number; limit: number; search?: string; }): Promise<{
         data: Array<{
           name: string;

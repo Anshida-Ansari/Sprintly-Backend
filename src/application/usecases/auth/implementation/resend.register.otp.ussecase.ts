@@ -1,11 +1,10 @@
 import { injectable } from "inversify";
 import { IResendAdminOtpUseCase } from "../interface/resend.register.otp.interface";
-import { ResendAdminOtpDTO } from "src/application/dtos/auth/resend.otp.dto";
-import { redisClient } from "src/infrastructure/providers/redis/redis.provider";
-import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
-import { generateOTP } from "src/shared/utils/otp.generate.util";
-import { sendOtpEmail } from "src/shared/utils/send.otp.util";
-import { log } from "node:console";
+import { ResendAdminOtpDTO } from "../../../dtos/auth/resend.otp.dto";
+import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
+import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
+import { generateOTP } from "../../../../shared/utils/otp.generate.util";
+import { sendOtpEmail } from "../../../../shared/utils/send.otp.util";
 
 @injectable()
 export class ResendAdminOtpUseCase implements IResendAdminOtpUseCase {

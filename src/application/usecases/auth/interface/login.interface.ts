@@ -1,5 +1,5 @@
-import { LoginDTO } from "src/application/dtos/auth/login.dto";
-import { AuthResult } from "src/domain/types/auth/auth.result.types";
+import { LoginDTO } from "../../../../application/dtos/auth/login.dto";
+import { AuthResult } from "../../../../domain/types/auth/auth.result.types";
 
 export interface ILoginUseCase{
     execute(dto:LoginDTO):Promise<AuthResult>

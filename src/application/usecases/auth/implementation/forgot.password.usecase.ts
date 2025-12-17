@@ -1,13 +1,12 @@
 import { inject, injectable } from "inversify";
 import { IForgotPasswordUseCase } from "../interface/forgot.password.interface";
-import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
-import { UserRepository } from "src/infrastructure/db/repository/implements/user.repository";
-import { ForgotPasswordDTO } from "src/application/dtos/auth/forgot.password.dto";
-import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
-import { generateOTP } from "src/shared/utils/otp.generate.util";
-import { redisClient } from "src/infrastructure/providers/redis/redis.provider";
-import { sendOtpEmail } from "src/shared/utils/send.otp.util";
-import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
+import { ForgotPasswordDTO } from "../../../dtos/auth/forgot.password.dto";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
+import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
+import { generateOTP } from "../../../../shared/utils/otp.generate.util";
+import { sendOtpEmail } from "../../../../shared/utils/send.otp.util";
 
 @injectable()
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase{

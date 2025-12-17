@@ -1,13 +1,11 @@
 import { inject, injectable } from "inversify";
 import { IResetPasswordUseCase } from "../interface/reset.password.interface";
-import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
-import { UserRepository } from "src/infrastructure/db/repository/implements/user.repository";
-import { ResetPasswordDTO } from "src/application/dtos/auth/reset.password.dto";
-import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
-import { ErrorReply } from "redis";
-import { UserEntity } from "src/domain/entities/user.entities";
-import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
-import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
+import { ResetPasswordDTO } from "../../../dtos/auth/reset.password.dto";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { UserEntity } from "../../../../domain/entities/user.entities";
+import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
+import { SuccessMessage } from "../../../../domain/enum/messages/success.message.enum";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUseCase{
