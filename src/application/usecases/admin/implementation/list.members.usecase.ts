@@ -7,7 +7,7 @@ import { IListMembersUseCase } from "../interface/list.members.interface";
 @injectable()
 export class ListUserUseCase implements IListMembersUseCase{
     constructor(
-        @inject(USER_TYPES.UserRepository)
+        @inject(USER_TYPES.IUserRepository)
         private _userrepository: IUserRepository
     ){}
 

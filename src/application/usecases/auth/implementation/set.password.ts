@@ -14,7 +14,7 @@ import { log } from "console";
 @injectable()
 export class SetPasswrodUseCase implements ISetPassWordUseCase{
     constructor(
-        @inject(USER_TYPES.UserRepository)
+        @inject(USER_TYPES.IUserRepository)
         private _userRepository:IUserRepository
     ){}
 

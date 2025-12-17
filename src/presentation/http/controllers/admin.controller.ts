@@ -10,17 +10,20 @@ import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.sta
 import { log } from "node:console";
 import { VerifyInvitationUseCase } from "src/application/usecases/admin/implementation/verify.member.usecase";
 import { ListUserUseCase } from "src/application/usecases/admin/implementation/list.members.usecase";
+import { IInviteMemberUseCase } from "src/application/usecases/admin/interface/invite.member.interface";
+import { IVerifyInvitationUseCase } from "src/application/usecases/admin/interface/verify.member.interface";
+import { IListMembersUseCase } from "src/application/usecases/admin/interface/list.members.interface";
 
 @injectable()
 export class AdminController {
     constructor(
 
-        @inject(ADMIN_TYPES.InviteMemberUseCase)
-        private _inviteMemberUseCase: InviteMemberUseCase,
-        @inject(ADMIN_TYPES.VerifyInvitationUseCase)
-        private _verifyInvitationUseCase: VerifyInvitationUseCase,
-        @inject(ADMIN_TYPES.ListUserUseCase)
-        private _listUserUseCase: ListUserUseCase
+        @inject(ADMIN_TYPES.IInviteMemberUseCase)
+        private _inviteMemberUseCase: IInviteMemberUseCase,
+        @inject(ADMIN_TYPES.IVerifyInvitationUseCase)
+        private _verifyInvitationUseCase: IVerifyInvitationUseCase,
+        @inject(ADMIN_TYPES.IListMembersUseCase)
+        private _listUserUseCase: IListMembersUseCase
     ) { }
 
     async inviteMember(req: Request, res: Response) {
@@ -93,7 +96,7 @@ export class AdminController {
         }
     }
 
-    async ListUsers(req: Request, res: Response) {
+    async listUsers(req: Request, res: Response) {
         try {
             console.log('hitting');
             

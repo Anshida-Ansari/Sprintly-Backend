@@ -3,8 +3,9 @@ import { VerifyInvitationUseCase } from "src/application/usecases/admin/implemen
 
 export const ADMIN_TYPES = {
     AdminController : Symbol.for('AdminController'),
-    InviteMemberUseCase : Symbol.for('InviteMemberUseCase'),
+    IInviteMemberUseCase : Symbol.for('IInviteMemberUseCase'),
     AuthGurd: Symbol.for('AuthGurd'),
-    VerifyInvitationUseCase: Symbol.for('VerifyInvitationUseCase'),
-    ListUserUseCase:Symbol.for('ListUserUseCase')
+    IVerifyInvitationUseCase: Symbol.for('IVerifyInvitationUseCase'),
+    IListMembersUseCase:Symbol.for('IListMembersUseCase')
 }
+

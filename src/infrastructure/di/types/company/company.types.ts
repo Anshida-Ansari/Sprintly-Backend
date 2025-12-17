@@ -1,5 +1,5 @@
 export const COMPANY_TYPES = {
-   CompanyRepository: Symbol.for('CompanyRepository'),
+   ICompanyRepository: Symbol.for('ICompanyRepository'),
    CompanyModel: Symbol.for('CompanyModel'),
    CompanyPersistenceMapper: Symbol.for('CompanyPersistenceMapper'),
 }

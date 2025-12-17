@@ -8,8 +8,8 @@ import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
 @injectable()
 export class GetDetailPageUseCase implements IGetDetailPageUseCase{
     constructor(
-        @inject(COMPANY_TYPES.CompanyRepository)
-        private _companyrepository:CompanyRepository
+        @inject(COMPANY_TYPES.ICompanyRepository)
+        private _companyrepository:ICompanyRepository
     ){}
 
     async execute(companyId: string): Promise<any> {

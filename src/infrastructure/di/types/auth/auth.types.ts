@@ -15,15 +15,15 @@ AuthController: Symbol.for("AuthController"),
 //interfaces
 
 //UseCases
-RegisterAdminUseCase: Symbol.for("RegisterAdminUseCase"),
-LoginUseCase: Symbol.for("LoginUseCase"),
-VerifyAdminOtpUseCase: Symbol.for("VerifyAdminOtpUseCase")  ,
-RefreshUseCase: Symbol.for('RefreshUseCase'),
-SetPasswrodUseCase: Symbol.for('SetPasswrodUseCase'),
-ForgotPasswordUseCase: Symbol.for('ForgotPasswordUseCase'),
-ResetPasswordUsecase: Symbol.for('ResetPasswordUsecase')    ,
-ResendAdminOtpUseCase: Symbol.for('ResendAdminOtpUseCase'),
-LogoutUseCase: Symbol.for('LogoutUseCase')
+IRegisterAdminUseCase: Symbol.for("IRegisterAdminUseCase"),
+ILoginUseCase: Symbol.for("ILoginUseCase"),
+IVerifyOtpUseCase: Symbol.for("IVerifyOtpUseCase")  ,
+IRefreshUseCase: Symbol.for('IRefreshUseCase'),
+ISetPassWordUseCase: Symbol.for('ISetPassWordUseCase'),
+IForgotPasswordUseCase: Symbol.for('IForgotPasswordUseCase'),
+IResetPasswordUseCase: Symbol.for('IResetPasswordUseCase')    ,
+IResendAdminOtpUseCase: Symbol.for('IResendAdminOtpUseCase'),
+ILogoutUseCase: Symbol.for('ILogoutUseCase')
 
     
 //Providers

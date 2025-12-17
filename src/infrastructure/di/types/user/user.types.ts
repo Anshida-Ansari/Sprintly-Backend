@@ -1,5 +1,5 @@
 export const USER_TYPES = {
-    UserRepository: Symbol.for('UserRepository'),
+    IUserRepository: Symbol.for('IUserRepository'),
     userModel: Symbol.for('UserModel'),
     UserPersistenceMapper: Symbol.for('UserPersistenceMapper'),
     

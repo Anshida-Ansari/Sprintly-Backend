@@ -10,23 +10,23 @@ import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum"
 import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
 import { UpdateStatusUseCase } from "src/application/usecases/superadmin/implementation/update.status.usecase";
 import { GetDetailPageUseCase } from "src/application/usecases/superadmin/implementation/get.detailpage.usecase";
+import { ICompanyRepository } from "src/infrastructure/db/repository/interface/company.interface";
+import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
+import { IUpdateStatusInterface } from "src/application/usecases/superadmin/interface/update.status.interface";
+import { IGetDetailPageUseCase } from "src/application/usecases/superadmin/interface/get.detailpage.interface";
 
 @injectable()
 export class SuperAdminController{
     constructor(
-    @inject(COMPANY_TYPES.CompanyRepository)
-    private _companyRepositoryUseCase:CompanyRepository,
-    @inject(USER_TYPES.UserRepository)
-    private _userRepositoryUseCase:UserRepository,
-    @inject(SUPERADMIN_TYPES.ListCompanyUseCase)
+    @inject(SUPERADMIN_TYPES.IListCompanyUseCase)
     private _listCompanyUseCase:ListCompanyUseCase,
-    @inject(SUPERADMIN_TYPES.UpdateStatusUseCase)
-    private _updateStatusUseCase:UpdateStatusUseCase,
-    @inject(SUPERADMIN_TYPES.GetDetailPageUseCase)
-    private _getDetailPageUseCase:GetDetailPageUseCase
+    @inject(SUPERADMIN_TYPES.IUpdateStatusInterface)
+    private _updateStatusUseCase:IUpdateStatusInterface,
+    @inject(SUPERADMIN_TYPES.IGetDetailPageUseCase)
+    private _getDetailPageUseCase:IGetDetailPageUseCase
     ){}
 
-    async ListCompanies(req:Request,res:Response){
+    async listCompanies(req:Request,res:Response){
         try {
 
             const {page,limit,search} = req.query
@@ -52,7 +52,7 @@ export class SuperAdminController{
             })
         }
     }
-    async UpdateStatus(req:Request,res:Response){
+    async updateStatus(req:Request,res:Response){
         try {
 
             console.log('It is hitting');
@@ -76,7 +76,7 @@ export class SuperAdminController{
             })
         }
     }
-    async GetDetailPage(req:Request,res:Response){
+    async getDetailPage(req:Request,res:Response){
         try {
             console.log('I am getting teh request log');
             
@@ -84,7 +84,6 @@ export class SuperAdminController{
             console.log('the companyId is ',companyId);
             
             const company = await this._getDetailPageUseCase.execute(companyId)
-            // console.log(company);
 
             
 

@@ -24,9 +24,9 @@ import { companySchema } from "src/infrastructure/db/schema/company.schema";
 @injectable()
 export class LoginUseCase implements ILoginUseCase{
     constructor(
-        @inject(USER_TYPES.UserRepository) 
+        @inject(USER_TYPES.IUserRepository) 
         private _userRepository:IUserRepository,
-        @inject(COMPANY_TYPES.CompanyRepository)
+        @inject(COMPANY_TYPES.ICompanyRepository)
         private _companyRepository:ICompanyRepository
         
         

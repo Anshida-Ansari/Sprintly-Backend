@@ -19,7 +19,7 @@ import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
 export class RegisterAdminUseCase implements IRegisterAdminUseCase{
 
     constructor(
-        @inject(USER_TYPES.UserRepository) private _userRepository:IUserRepository
+        @inject(USER_TYPES.IUserRepository) private _userRepository:IUserRepository
     ){}
 
     async execute(dto:AdminRegisterDTO):Promise<{message: string, token: string}>{

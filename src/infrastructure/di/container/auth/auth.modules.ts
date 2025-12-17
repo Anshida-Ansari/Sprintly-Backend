@@ -17,6 +17,8 @@ import { IResendAdminOtpUseCase } from "src/application/usecases/auth/interface/
 import { ResendAdminOtpUseCase } from "src/application/usecases/auth/implementation/resend.register.otp.ussecase";
 import { ILogoutUseCase } from "src/application/usecases/auth/interface/logout.interface";
 import { LogoutUseCase } from "src/application/usecases/auth/implementation/logout.usecase";
+import { IRegisterAdminUseCase } from "src/application/usecases/auth/interface/admin.register.interface";
+import { IVerifyOtpUseCase } from "src/application/usecases/auth/interface/verifyadmin.otp.interface";
 // import { LoginUseCase } from "src/application/usecases/auth/implementation/login.usecase";
 
 export const AuthModule = new ContainerModule(({bind})=>{
@@ -27,15 +29,15 @@ bind<AuthController>(AUTH_TYPES.AuthController).to(AuthController)
 
 //usecases
 
-bind<RegisterAdminUseCase>(AUTH_TYPES.RegisterAdminUseCase).to(RegisterAdminUseCase)
-bind<VerifyAdminOtpUseCase>(AUTH_TYPES.VerifyAdminOtpUseCase).to(VerifyAdminOtpUseCase)
-bind<ILoginUseCase>(AUTH_TYPES.LoginUseCase).to(LoginUseCase)
-bind<IRefreshUseCase>(AUTH_TYPES.RefreshUseCase).to(RefreshUseCase)
-bind<ISetPassWordUseCase>(AUTH_TYPES.SetPasswrodUseCase).to(SetPasswrodUseCase)
-bind<IForgotPasswordUseCase>(AUTH_TYPES.ForgotPasswordUseCase).to(ForgotPasswordUseCase)
-bind<IResetPasswordUseCase>(AUTH_TYPES.ResetPasswordUsecase).to(ResetPasswordUsecase)
-bind<IResendAdminOtpUseCase>(AUTH_TYPES.ResendAdminOtpUseCase).to(ResendAdminOtpUseCase)
-bind<ILogoutUseCase>(AUTH_TYPES.LogoutUseCase).to(LogoutUseCase)
+bind<IRegisterAdminUseCase>(AUTH_TYPES.IRegisterAdminUseCase).to(RegisterAdminUseCase)
+bind<IVerifyOtpUseCase>(AUTH_TYPES.IVerifyOtpUseCase).to(VerifyAdminOtpUseCase)
+bind<ILoginUseCase>(AUTH_TYPES.ILoginUseCase).to(LoginUseCase)
+bind<IRefreshUseCase>(AUTH_TYPES.IRefreshUseCase).to(RefreshUseCase)
+bind<ISetPassWordUseCase>(AUTH_TYPES.ISetPassWordUseCase).to(SetPasswrodUseCase)
+bind<IForgotPasswordUseCase>(AUTH_TYPES.IForgotPasswordUseCase).to(ForgotPasswordUseCase)
+bind<IResetPasswordUseCase>(AUTH_TYPES.IResetPasswordUseCase).to(ResetPasswordUsecase)
+bind<IResendAdminOtpUseCase>(AUTH_TYPES.IResendAdminOtpUseCase).to(ResendAdminOtpUseCase)
+bind<ILogoutUseCase>(AUTH_TYPES.ILogoutUseCase).to(LogoutUseCase)
 
 //controllers
 

@@ -20,29 +20,36 @@ import { ForgotPasswordUseCase } from "src/application/usecases/auth/implementat
 import { ResetPasswordUsecase } from "src/application/usecases/auth/implementation/reset.password.usecase";
 import { ResendAdminOtpUseCase } from "src/application/usecases/auth/implementation/resend.register.otp.ussecase";
 import { LogoutUseCase } from "src/application/usecases/auth/implementation/logout.usecase";
+import { IRegisterAdminUseCase } from "src/application/usecases/auth/interface/admin.register.interface";
+import { IVerifyOtpUseCase } from "src/application/usecases/auth/interface/verifyadmin.otp.interface";
+import { ISetPassWordUseCase } from "src/application/usecases/auth/interface/set.password.interface";
+import { IForgotPasswordUseCase } from "src/application/usecases/auth/interface/forgot.password.interface";
+import { IResetPasswordUseCase } from "src/application/usecases/auth/interface/reset.password.interface";
+import { IResendAdminOtpUseCase } from "src/application/usecases/auth/interface/resend.register.otp.interface";
+import { ILogoutUseCase } from "src/application/usecases/auth/interface/logout.interface";
 
 
 @injectable()
 export class AuthController {
     constructor(
-        @inject(AUTH_TYPES.RegisterAdminUseCase)
-        private _registerAdminUseCase: RegisterAdminUseCase,
-        @inject(AUTH_TYPES.VerifyAdminOtpUseCase)
-        private _verifyAdminUseCase: VerifyAdminOtpUseCase,
-        @inject(AUTH_TYPES.LoginUseCase)
-        private _loginUseCase: LoginUseCase,
-        @inject(AUTH_TYPES.RefreshUseCase)
-        private _refreshUseCase: RefreshUseCase,
-        @inject(AUTH_TYPES.SetPasswrodUseCase)
-        private _setPasswrodUseCase:SetPasswrodUseCase,
-        @inject(AUTH_TYPES.ForgotPasswordUseCase)
-        private _forgotPasswordUseCase:ForgotPasswordUseCase,
-        @inject(AUTH_TYPES.ResetPasswordUsecase)
-        private _resetPassWordUseCase:ResetPasswordUsecase,
-        @inject(AUTH_TYPES.ResendAdminOtpUseCase)
-        private _resendAdminOtpUseCase:ResendAdminOtpUseCase,
-        @inject(AUTH_TYPES.LogoutUseCase)
-        private _logoutUseCase:LogoutUseCase
+        @inject(AUTH_TYPES.IRegisterAdminUseCase)
+        private _registerAdminUseCase: IRegisterAdminUseCase,
+        @inject(AUTH_TYPES.IVerifyOtpUseCase)
+        private _verifyAdminUseCase: IVerifyOtpUseCase,
+        @inject(AUTH_TYPES.ILoginUseCase)
+        private _loginUseCase: ILoginUseCase,
+        @inject(AUTH_TYPES.IRefreshUseCase)
+        private _refreshUseCase: IRefreshUseCase,
+        @inject(AUTH_TYPES.ISetPassWordUseCase)
+        private _setPasswrodUseCase:ISetPassWordUseCase,
+        @inject(AUTH_TYPES.IForgotPasswordUseCase)
+        private _forgotPasswordUseCase:IForgotPasswordUseCase,
+        @inject(AUTH_TYPES.IResetPasswordUseCase)
+        private _resetPassWordUseCase:IResetPasswordUseCase,
+        @inject(AUTH_TYPES.IResendAdminOtpUseCase)
+        private _resendAdminOtpUseCase:IResendAdminOtpUseCase,
+        @inject(AUTH_TYPES.ILogoutUseCase)
+        private _logoutUseCase:ILogoutUseCase
     ) { }
 
 
@@ -80,7 +87,7 @@ export class AuthController {
             return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
         }
     }
-    async Login(req: Request, res: Response) {
+    async login(req: Request, res: Response) {
 
         try {
 
@@ -128,7 +135,7 @@ export class AuthController {
         }
     }
 
-    async RefreshToken(req: Request, res: Response) {
+    async refreshToken(req: Request, res: Response) {
         try {
 
             const refreshToken = req.cookies?.refreshToken
@@ -155,7 +162,7 @@ export class AuthController {
             })
         }
     }
-    async SetPassword(req:Request, res:Response){
+    async setPassword(req:Request, res:Response){
         try {
 
             console.log('Reaching here')
@@ -182,7 +189,7 @@ export class AuthController {
             
         }
     }
-    async ForgotPasswrod(req:Request,res:Response){
+    async forgotPasswrod(req:Request,res:Response){
         try {
             const result =await this._forgotPasswordUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
@@ -197,7 +204,7 @@ export class AuthController {
             })
         }
     }
-    async ResetPassword(req:Request,res:Response){
+    async resetPassword(req:Request,res:Response){
         try {
             const result =await this._resetPassWordUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
@@ -212,7 +219,7 @@ export class AuthController {
         }
     }
 
-    async ResendOtp(req:Request,res:Response){
+    async resendOtp(req:Request,res:Response){
         try {
             const result = await this._resendAdminOtpUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
@@ -226,7 +233,7 @@ export class AuthController {
             })
         }
     }
-    async Logout(req:Request,res:Response){
+    async logout(req:Request,res:Response){
         try {
             const refreshToken = req.cookies.refreshToken
             const result = await this._logoutUseCase.execute(refreshToken)

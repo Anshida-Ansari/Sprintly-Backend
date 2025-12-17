@@ -10,7 +10,7 @@ import { UserEntity } from "src/domain/entities/user.entities";
 import { IUser } from "src/infrastructure/db/interface/user.interface";
 
 export const UserModule = new ContainerModule(({bind})=>{
-    bind<IUserRepository>(USER_TYPES.UserRepository).to(UserRepository)
+    bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository)
     bind<UserPersistenceMapper>(USER_TYPES.UserPersistenceMapper).to(UserPersistenceMapper)
     bind<Model<IUser>>(USER_TYPES.userModel).toConstantValue(userModel)
 })  

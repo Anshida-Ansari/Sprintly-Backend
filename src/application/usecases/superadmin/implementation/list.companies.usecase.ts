@@ -6,7 +6,7 @@ import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
 @injectable()
 export class ListCompanyUseCase implements IListCompanyUseCase {
     constructor(
-        @inject(COMPANY_TYPES.CompanyRepository)
+        @inject(COMPANY_TYPES.ICompanyRepository)
         private _companyrepository: ICompanyRepository
     ) { }
     async execute(query: { page: number; limit: number; search?: string; }): Promise<{ data: any[]; total: number; page: number; limit: number; totalPages: number; }> {

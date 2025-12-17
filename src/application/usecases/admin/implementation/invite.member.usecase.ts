@@ -12,10 +12,10 @@ import { sendInviteEmail } from "src/shared/utils/send.invitaion.util";
 @injectable()
 export class InviteMemberUseCase implements IInviteMemberUseCase {
     constructor(
-        @inject(USER_TYPES.UserRepository)
+        @inject(USER_TYPES.IUserRepository)
         private _userRepository: IUserRepository
     ) { }
-
+    
     async execute(dto: InviteMemberDTO, companyId: string, adminId: string): Promise<{ message: string; inviteLink: string; }> {
         try {
             

@@ -13,7 +13,7 @@ import { UserStatus } from "src/domain/enum/status.enum";
 @injectable()
 export class RefreshUseCase implements IRefreshUseCase{
     constructor(
-        @inject(USER_TYPES.UserRepository)
+        @inject(USER_TYPES.IUserRepository)
         private _userRepository:IUserRepository
     ){}
 

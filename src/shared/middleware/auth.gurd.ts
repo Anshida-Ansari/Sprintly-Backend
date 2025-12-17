@@ -13,7 +13,7 @@ import { decode } from "punycode";
 export class AuthGurd{
     constructor(
 
-        @inject(USER_TYPES.UserRepository)
+        @inject(USER_TYPES.IUserRepository)
         private _userRepository: IUserRepository
 
     ){}

@@ -25,13 +25,13 @@ import { log } from "console";
 @injectable()
 export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
   constructor(
-    @inject(USER_TYPES.UserRepository)
+    @inject(USER_TYPES.IUserRepository)
     private readonly _userRepository: IUserRepository,
 
     @inject(USER_TYPES.UserPersistenceMapper)
     private readonly _userPersistance: UserPersistenceMapper,
 
-    @inject(COMPANY_TYPES.CompanyRepository)
+    @inject(COMPANY_TYPES.ICompanyRepository)
     private readonly _companyRepository: ICompanyRepository,
 
     @inject(COMPANY_TYPES.CompanyPersistenceMapper)

@@ -7,12 +7,13 @@ import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
 import { generateOTP } from "src/shared/utils/otp.generate.util";
 import { redisClient } from "src/infrastructure/providers/redis/redis.provider";
 import { sendOtpEmail } from "src/shared/utils/send.otp.util";
+import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
 
 @injectable()
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase{
     constructor(
-        @inject(USER_TYPES.UserRepository)
-        private _userRepository:UserRepository
+        @inject(USER_TYPES.IUserRepository)
+        private _userRepository:IUserRepository
     ){}
 
     async execute({email}: ForgotPasswordDTO): Promise<{ message: string; }> {

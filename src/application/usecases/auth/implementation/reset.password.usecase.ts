@@ -7,12 +7,13 @@ import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
 import { ErrorReply } from "redis";
 import { UserEntity } from "src/domain/entities/user.entities";
 import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
+import { IUserRepository } from "src/infrastructure/db/repository/interface/user.interface";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUseCase{
     constructor(
-        @inject(USER_TYPES.UserRepository)
-        private _userRepository:UserRepository
+        @inject(USER_TYPES.IUserRepository)
+        private _userRepository:IUserRepository
     ){}
 
     async execute({email,newPassword,confirmPassword}: ResetPasswordDTO): Promise<{ message: string; }> {

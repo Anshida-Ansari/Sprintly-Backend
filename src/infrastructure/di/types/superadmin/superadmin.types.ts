@@ -1,8 +1,8 @@
 import { GetDetailPageUseCase } from "src/application/usecases/superadmin/implementation/get.detailpage.usecase";
 
 export const SUPERADMIN_TYPES = {
-    ListCompanyUseCase: Symbol.for('ListCompanyUseCase'),
+    IListCompanyUseCase: Symbol.for('IListCompanyUseCase'),
     SuperAdminController: Symbol.for('SuperAdminController'),
-    UpdateStatusUseCase: Symbol.for('UpdateStatusUseCase'),
-    GetDetailPageUseCase: Symbol.for('GetDetailPageUseCase')
+    IUpdateStatusInterface: Symbol.for('IUpdateStatusInterface'),
+    IGetDetailPageUseCase: Symbol.for('IGetDetailPageUseCase')
 }

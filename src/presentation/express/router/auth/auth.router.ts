@@ -18,13 +18,13 @@ const authController = container.get<AuthController>(AUTH_TYPES.AuthController)
 
 router.post('/admin/register', validateDTO(AdminRegisterDTO), (req, res) => authController.register(req, res))
 router.post('/verify-otp', validateDTO(VerifyOtpDTO), (req, res) => authController.verifyOTP(req, res))
-router.post('/login', validateDTO(LoginDTO), (req, res) => authController.Login(req, res))
-router.post('/refresh', (req, res) => authController.RefreshToken(req, res))
-router.post('/set-password',validateDTO(SetPasswordDTO),(req,res)=>authController.SetPassword(req,res))
-router.post('/forgot-password',validateDTO(ForgotPasswordDTO),(req,res)=>authController.ForgotPasswrod(req,res))
-router.post('/reset-password',validateDTO(ResetPasswordDTO),(req,res)=>authController.ResetPassword(req,res))
-router.post('/resend-otp',validateDTO(ResendAdminOtpDTO),(req,res)=>authController.ResendOtp(req,res))
-router.post('/logout',validateDTO(LogoutDTO),(req,res)=>authController.Logout(req,res))
+router.post('/login', validateDTO(LoginDTO), (req, res) => authController.login(req, res))
+router.post('/refresh', (req, res) => authController.refreshToken(req, res))
+router.post('/set-password',validateDTO(SetPasswordDTO),(req,res)=>authController.setPassword(req,res))
+router.post('/forgot-password',validateDTO(ForgotPasswordDTO),(req,res)=>authController.forgotPasswrod(req,res))
+router.post('/reset-password',validateDTO(ResetPasswordDTO),(req,res)=>authController.resetPassword(req,res))
+router.post('/resend-otp',validateDTO(ResendAdminOtpDTO),(req,res)=>authController.resendOtp(req,res))
+router.post('/logout',validateDTO(LogoutDTO),(req,res)=>authController.logout(req,res))
 
 
 export { router as authRouter }

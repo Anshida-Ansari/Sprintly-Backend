@@ -9,7 +9,7 @@ import { UserPersistenceMapper } from "src/infrastructure/mappers/user.percistan
 import { ICompanyRepository } from "src/infrastructure/db/repository/interface/company.interface";
 
 export const CompanyModule = new ContainerModule(({bind})=>{
-    bind<ICompanyRepository>(COMPANY_TYPES.CompanyRepository).to(CompanyRepository)
+    bind<ICompanyRepository>(COMPANY_TYPES.ICompanyRepository).to(CompanyRepository)
     bind<Model<ICompany>>(COMPANY_TYPES.CompanyModel).toConstantValue(CompanyModel)
     bind<CompanyPersistenceMapper>(COMPANY_TYPES.CompanyPersistenceMapper).to(CompanyPersistenceMapper)
     
