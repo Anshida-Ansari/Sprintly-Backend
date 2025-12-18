@@ -1,9 +1,8 @@
 import { inject, injectable } from "inversify";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { SUPERADMIN_TYPES } from "../../../infrastructure/di/types/superadmin/superadmin.types";
 import { ListCompanyUseCase } from "../../../application/usecases/superadmin/implementation/list.companies.usecase";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
-import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
 import { IUpdateStatusInterface } from "../../../application/usecases/superadmin/interface/update.status.interface";
 import { IGetDetailPageUseCase } from "../../../application/usecases/superadmin/interface/get.detailpage.interface";
 
@@ -18,7 +17,7 @@ export class SuperAdminController {
         private _getDetailPageUseCase: IGetDetailPageUseCase
     ) { }
 
-    async listCompanies(req: Request, res: Response) {
+    async listCompanies(req: Request, res: Response, next: NextFunction) {
         try {
 
             const { page, limit, search } = req.query
@@ -35,20 +34,12 @@ export class SuperAdminController {
                 success: true,
                 ...response
             })
-        } catch (error: any) {
-
-
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                success: false,
-                message: error.message
-            })
+        } catch (error) {
+            next(error)
         }
     }
-    async updateStatus(req: Request, res: Response) {
+    async updateStatus(req: Request, res: Response,next: NextFunction) {
         try {
-
-            console.log('It is hitting');
-
 
             const { companyId } = req.params
             const { status } = req.body
@@ -61,19 +52,14 @@ export class SuperAdminController {
             })
 
 
-        } catch (error: any) {
-            res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                success: false,
-                message: error.message
-            })
+        } catch (error) {
+            next(error)
         }
     }
-    async getDetailPage(req: Request, res: Response) {
+    async getDetailPage(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('I am getting teh request log');
 
             const { companyId } = req.params
-            console.log('the companyId is ', companyId);
 
             const company = await this._getDetailPageUseCase.execute(companyId)
 
@@ -84,12 +70,9 @@ export class SuperAdminController {
                 data: company
             })
 
-        } catch (error: any) {
+        } catch (error) {
 
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                success: false,
-                message: error.message
-            })
+            next(error)
 
         }
     }

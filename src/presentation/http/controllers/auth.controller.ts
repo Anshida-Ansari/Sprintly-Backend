@@ -1,11 +1,9 @@
-import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
-import { Request, Response } from "express";
+import e, { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { ILoginUseCase } from "../../../application/usecases/auth/interface/login.interface";
 import { IRefreshUseCase } from "../../../application/usecases/auth/interface/refresh.interface";
 import { AUTH_TYPES } from "../../../infrastructure/di/types/auth/auth.types";
-import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
 import { IRegisterAdminUseCase } from "../../../application/usecases/auth/interface/admin.register.interface";
 import { IVerifyOtpUseCase } from "../../../application/usecases/auth/interface/verifyadmin.otp.interface";
 import { ISetPassWordUseCase } from "../../../application/usecases/auth/interface/set.password.interface";
@@ -39,7 +37,7 @@ export class AuthController {
     ) { }
 
 
-    async register(req: Request, res: Response) {
+    async register(req: Request, res: Response,next: NextFunction) {
 
         try {
             const admin = await this._registerAdminUseCase.execute(req.body)
@@ -50,14 +48,12 @@ export class AuthController {
             })
 
         } catch (error) {
-
-            const err = error as Error
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
+            next(error)
         }
 
     }
 
-    async verifyOTP(req: Request, res: Response) {
+    async verifyOTP(req: Request, res: Response,next: NextFunction) {
         try {
 
             const result = await this._verifyAdminUseCase.execute(req.body)
@@ -69,11 +65,10 @@ export class AuthController {
             })
 
         } catch (error) {
-            const err = error as Error
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
+           next(error)
         }
     }
-    async login(req: Request, res: Response) {
+    async login(req: Request, res: Response,next: NextFunction) {
 
         try {
 
@@ -105,23 +100,14 @@ export class AuthController {
                 }
             })
 
-            console.log('it is working ');
-            
-
-
-
+    
         } catch (error) {
-            console.log('it is not woriking', error);
-
-
-            res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                message: error instanceof Error ? error.message : 'Login failed'
-            })
+           next(error)
 
         }
     }
 
-    async refreshToken(req: Request, res: Response) {
+    async refreshToken(req: Request, res: Response,next: NextFunction) {
         try {
 
             const refreshToken = req.cookies?.refreshToken
@@ -142,16 +128,12 @@ export class AuthController {
             })
 
         } catch (error) {
-
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                message: error instanceof Error ? error.message : "Refresh Token failed"
-            })
+            next(error)
         }
     }
-    async setPassword(req:Request, res:Response){
+    async setPassword(req:Request, res:Response,next: NextFunction){
         try {
 
-            console.log('Reaching here')
 
             const {token,password,confirmPassword} = req.body
             
@@ -166,16 +148,10 @@ export class AuthController {
             
             
         } catch (error) {
-
-            console.log(error)
-            return res.status(ClientErrorStatus.NOT_FOUND).json({
-                success:false,
-                message:error
-            })
-            
+            next(error)
         }
     }
-    async forgotPasswrod(req:Request,res:Response){
+    async forgotPasswrod(req:Request,res:Response,next: NextFunction){
         try {
             const result =await this._forgotPasswordUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
@@ -184,13 +160,10 @@ export class AuthController {
             })
 
         } catch (error) {
-            return res.status(ClientErrorStatus.NOT_FOUND).json({
-                success:false,
-                message:ServerErrorStatus.INTERNAL_SERVER_ERROR
-            })
+           next(error)
         }
     }
-    async resetPassword(req:Request,res:Response){
+    async resetPassword(req:Request,res:Response,next:NextFunction){
         try {
             const result =await this._resetPassWordUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
@@ -198,14 +171,11 @@ export class AuthController {
                 message:result.message  
             })
         } catch (error) {
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                success:false,
-                message:ServerErrorStatus.INTERNAL_SERVER_ERROR
-            })
+          next(error)
         }
     }
 
-    async resendOtp(req:Request,res:Response){
+    async resendOtp(req:Request,res:Response,next: NextFunction){
         try {
             const result = await this._resendAdminOtpUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
@@ -213,13 +183,10 @@ export class AuthController {
                 message:result.message
             })
         } catch (error:any) {
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                success:false,
-                message:error.message
-            })
+            next(error)
         }
     }
-    async logout(req:Request,res:Response){
+    async logout(req:Request,res:Response,next: NextFunction){
         try {
             const refreshToken = req.cookies.refreshToken
             const result = await this._logoutUseCase.execute(refreshToken)
@@ -228,11 +195,8 @@ export class AuthController {
 
             res.json(result)
 
-        } catch (error:any) {
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                success:false,
-                message:error.message
-            })
+        } catch (error) {
+            next(error)
         }
     }
 }

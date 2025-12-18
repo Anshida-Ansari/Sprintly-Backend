@@ -6,65 +6,56 @@ import { IUserRepository } from "../../../../infrastructure/db/repository/interf
 import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { Role } from "../../../../domain/enum/role.enum";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
+import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
+import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
 
-    
+
 @injectable()
-export class SetPasswrodUseCase implements ISetPassWordUseCase{
+export class SetPasswrodUseCase implements ISetPassWordUseCase {
     constructor(
         @inject(USER_TYPES.IUserRepository)
-        private _userRepository:IUserRepository
-    ){}
+        private _userRepository: IUserRepository
+    ) { }
 
-    async execute(token: string, password: string , confirmPassword: string): Promise<{ message: string; }> {
-        try {
-            console.log('taking the data');
-            
-            const key = `member.invite:${token}`
-            const inviteData = await redisClient.get(key)
-            console.log('the invitedData is here',inviteData);
-            
+    async execute(token: string, password: string, confirmPassword: string): Promise<{ message: string; }> {
 
-            if(!inviteData){
-                throw new Error(ErrorMessage.INVITATION_EXPIRED_OR_INVALID)
-            }
+        const key = `member.invite:${token}`
+        const inviteData = await redisClient.get(key)
 
-            if(password !== confirmPassword){
-                throw new Error(ErrorMessage.PASSWORDS_DO_NOT_MATCH)
-            }
 
-            
-            
-
-            const {name,email,companyId,adminId} = JSON.parse(inviteData)
-
-            const existingUser = await this._userRepository.findByEmail(email)
-            if(existingUser){
-                throw new Error(ErrorMessage.EMAIL_ALREADY_EXISTS)
-            }
-
-            const hashedPassword = await hash(password)
-
-            await this._userRepository.create({
-                name,
-                email,
-                companyId,
-                adminId,
-                password:hashedPassword,    
-                role:Role.DEVELOPERS
-            })
-
-            await redisClient.del(key)
-
-            return {
-                message:'Password set successfully'
-            }
-
-        
-
-        } catch (error) {
-            console.log('there is an error',error);
-            
-            throw error
+        if (!inviteData) {
+            throw new NotFoundError(ErrorMessage.INVITATION_EXPIRED_OR_INVALID)
         }
+
+        if (password !== confirmPassword) {
+            throw new validationError(ErrorMessage.PASSWORDS_DO_NOT_MATCH)
+        }
+
+        const { name, email, companyId, adminId } = JSON.parse(inviteData)
+
+        const existingUser = await this._userRepository.findByEmail(email)
+        if (existingUser) {
+            throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS)
+        }
+
+        const hashedPassword = await hash(password)
+
+        await this._userRepository.create({
+            name,
+            email,
+            companyId,
+            adminId,
+            password: hashedPassword,
+            role: Role.DEVELOPERS
+        })
+
+        await redisClient.del(key)
+
+        return {
+            message: 'Password set successfully'
+        }
+
+
     }
 }

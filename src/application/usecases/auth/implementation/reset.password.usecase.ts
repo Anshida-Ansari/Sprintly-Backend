@@ -6,6 +6,8 @@ import { IUserRepository } from "../../../../infrastructure/db/repository/interf
 import { UserEntity } from "../../../../domain/entities/user.entities";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { SuccessMessage } from "../../../../domain/enum/messages/success.message.enum";
+import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUseCase{
@@ -15,14 +17,14 @@ export class ResetPasswordUsecase implements IResetPasswordUseCase{
     ){}
 
     async execute({email,newPassword,confirmPassword}: ResetPasswordDTO): Promise<{ message: string; }> {
-        try {
+       
             if(newPassword !== confirmPassword){
-                throw new Error(ErrorMessage.PASSWORDS_DO_NOT_MATCH)
+                throw new validationError(ErrorMessage.PASSWORDS_DO_NOT_MATCH)
             }
 
             const user = await this._userRepository.findByEmail(email)
             if(!user){
-                throw new Error(ErrorMessage.USER_NOT_FOUND)
+                throw new NotFoundError(ErrorMessage.USER_NOT_FOUND)
             }
 
             const userEntity = UserEntity.create({
@@ -44,9 +46,6 @@ export class ResetPasswordUsecase implements IResetPasswordUseCase{
             return{
                 message:SuccessMessage.PASSWORD_RESET
             }
-        } catch (error) {
-            throw error
-            
-        }
+      
     }
 }

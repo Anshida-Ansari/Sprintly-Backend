@@ -7,6 +7,10 @@ import { RefreshResult } from "../../../../domain/types/auth/refresh.result.type
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { UserStatus } from "../../../../domain/enum/status.enum";
 import { generateAccessToken, verifyToken } from "../../../../shared/utils/jwt.util";
+import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
+import { Unauthorized } from "../../../../shared/utils/error-handling/errors/unauthorized.error";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
+import { ForbiddenError } from "../../../../shared/utils/error-handling/errors/forbidden.error";
 
 @injectable()
 export class RefreshUseCase implements IRefreshUseCase {
@@ -17,39 +21,36 @@ export class RefreshUseCase implements IRefreshUseCase {
 
     async execute(refreshToken: string): Promise<RefreshResult> {
 
-        try {
-            if (!refreshToken) throw new Error('Refresh token missing')
 
-            const decoded: any = verifyToken(refreshToken, "refresh")
-            if (!decoded) throw new Error('Invalid or expired refresh token')
+        if (!refreshToken) throw new validationError('Refresh token missing')
 
-            const storedToken = await redisClient.get(`refresh:${decoded.email}`)
-            if (!storedToken || storedToken !== refreshToken) {
-                throw new Error('Refresh token expired or revoked')
-            }
+        const decoded: any = verifyToken(refreshToken, "refresh")
+        if (!decoded) throw new Unauthorized('Invalid or expired refresh token')
 
-            const user = await this._userRepository.findByEmail(decoded.email)
-            if (!user) throw new Error(ErrorMessage.USER_NOT_FOUND)
-
-
-            if (user.status === UserStatus.BLOCK) {
-                throw new Error(ErrorMessage.ADMIN_BLOCKED)
-            }
-
-            const newAccessToken = generateAccessToken({
-                id: user.id?.toString(),
-                email: user.email,
-                role: user.role
-            })
-
-
-            return {
-                accessToken: newAccessToken,
-                message: 'Access tocken refreshed successfully'
-            }
-        } catch (error) {
-
-            throw error
+        const storedToken = await redisClient.get(`refresh:${decoded.email}`)
+        if (!storedToken || storedToken !== refreshToken) {
+            throw new Unauthorized('Refresh token expired or revoked')
         }
+
+        const user = await this._userRepository.findByEmail(decoded.email)
+        if (!user) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND)
+
+
+        if (user.status === UserStatus.BLOCK) {
+            throw new ForbiddenError(ErrorMessage.ADMIN_BLOCKED)
+        }
+
+        const newAccessToken = generateAccessToken({
+            id: user.id?.toString(),
+            email: user.email,
+            role: user.role
+        })
+
+
+        return {
+            accessToken: newAccessToken,
+            message: 'Access tocken refreshed successfully'
+        }
+
     }
 }

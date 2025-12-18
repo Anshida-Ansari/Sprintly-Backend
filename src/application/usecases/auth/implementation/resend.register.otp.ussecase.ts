@@ -5,25 +5,24 @@ import { redisClient } from "../../../../infrastructure/providers/redis/redis.pr
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { generateOTP } from "../../../../shared/utils/otp.generate.util";
 import { sendOtpEmail } from "../../../../shared/utils/send.otp.util";
+import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
 
 @injectable()
 export class ResendAdminOtpUseCase implements IResendAdminOtpUseCase {
     constructor() { }
 
     async execute(dto: ResendAdminOtpDTO): Promise<any> {
-        try {
+       
 
             const { token } = dto
-            console.log('the token is', token);
 
 
             const key = `admin.otp:${token}`
             const data = await redisClient.get(key)
 
-            console.log('the data is ', data);
 
             if (!data) {
-                throw new Error(ErrorMessage.OTP_EXPIRED)
+                throw new NotFoundError(ErrorMessage.OTP_EXPIRED)
             }
 
             const parsed = JSON.parse(data)
@@ -48,8 +47,6 @@ export class ResendAdminOtpUseCase implements IResendAdminOtpUseCase {
                 message: 'Resend OTP successfully'
             }
 
-        } catch (error) {
-            throw error
-        }
+       
     }
 }

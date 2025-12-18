@@ -2,47 +2,32 @@ import { injectable } from "inversify";
 import { IVerifyInvitationUseCase } from "../interface/verify.member.interface";
 import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import { parse } from "path";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 
 @injectable()
 export class VerifyInvitationUseCase implements IVerifyInvitationUseCase {
-    constructor(
-
-    ) { }
-
-
+    constructor() {}
 
     async execute(token: string): Promise<{ name: string; email: string; companyId: string; }> {
-        try {
 
+        const key = `member.invite:${token}`
 
-            console.log('I reached the verify usecase as you can see');
+        const data = await redisClient.get(key)
 
-
-            const key = `member.invite:${token}`
-            console.log("the key is ", key);
-
-            const data = await redisClient.get(key)
-            console.log("the data is ", data);
-
-            if (!data) {
-                throw new Error(ErrorMessage.INVITATION_EXPIRED_OR_INVALID)
-            }
-
-            const parsed = JSON.parse(data)
-            console.log("Verify token:", token);
-            console.log("Redis key:", key);
-            console.log("Redis data:", data);
-
-            return {
-                name: parsed.name,
-                email: parsed.email,
-                companyId: parsed.companyId
-            }
-
-        } catch (error) {
-            throw error
+        if (!data) {
+            throw new  NotFoundError(ErrorMessage.INVITATION_EXPIRED_OR_INVALID)
         }
+
+        const parsed = JSON.parse(data)
+        
+
+        return {
+            name: parsed.name,
+            email: parsed.email,
+            companyId: parsed.companyId
+        }
+
+
     }
 }
 

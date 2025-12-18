@@ -14,6 +14,10 @@ import { Status } from "../../../../domain/enum/user/user.status.enum";
 import { validateEmail } from "../../../../shared/utils/email.validate.util";
 import { generateAccessToken, generateRefreshToken } from "../../../../shared/utils/jwt.util";
 import { verify } from "../../../../shared/utils/password.hash.util";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
+import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
+import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
+import { ForbiddenError } from "../../../../shared/utils/error-handling/errors/forbidden.error";
 
 @injectable()
 export class LoginUseCase implements ILoginUseCase {
@@ -27,52 +31,52 @@ export class LoginUseCase implements ILoginUseCase {
     ) { }
 
     async execute(dto: LoginDTO): Promise<AuthResult> {
-        try {
+       
             console.log('reaching the login ');
 
             const { email, password } = dto
 
             const isValidEmail = validateEmail(email)
-            if (!isValidEmail) throw new Error(ErrorMessage.EMAIL_INVALID)
+            if (!isValidEmail) throw new validationError(ErrorMessage.EMAIL_INVALID)
 
             const user = await this._userRepository.findByEmail(email)
-            if (!user) throw new Error(ErrorMessage.EMAIL_NOT_EXIST)
+            if (!user) throw new NotFoundError(ErrorMessage.EMAIL_NOT_EXIST)
 
             user.isBlocked()
 
             console.log('user', user);
 
             const isPasswrord = await verify(user.password, password)
-            if (!isPasswrord) throw new Error(ErrorMessage.INVALID_PASSWORD)
+            if (!isPasswrord) throw new validationError(ErrorMessage.INVALID_PASSWORD)
 
             if (user.role !== Role.SUPER_ADMIN) {
+
                 if (user.role === Role.DEVELOPERS && !user.companyId) {
-                    throw new Error(ErrorMessage.DEVELOPER_NOT_ASSIGNED_TO_COMPANY)
+                    throw new ConflictError(ErrorMessage.DEVELOPER_NOT_ASSIGNED_TO_COMPANY)
                 }
 
                 if (user.role === Role.ADMIN && !user.companyId) {
-                    throw new Error(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
+                    throw new ConflictError(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
                 }
 
                 if (!user.companyId) {
-                    throw new Error(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
+                    throw new ConflictError(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
                 }
 
 
-                console.log('trying to find companyid', user.companyId)
 
                 const company = await this._companyRepository.findByCompanyId(user.companyId)
-                if (!company) throw new Error(ErrorMessage.COMPANY_NOT_FOUND)
+                if (!company) throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
 
 
 
 
                 if (company.status !== Status.APPROVED) {
-                    throw new Error(ErrorMessage.COMPANY_NOT_APPROVED)
+                    throw new ForbiddenError(ErrorMessage.COMPANY_NOT_APPROVED)
                 }
 
                 if (user.role === Role.ADMIN && company.status !== Status.APPROVED) {
-                    throw new Error("Admin is not approved yet")
+                    throw new ForbiddenError("Admin is not approved yet")
                 }
 
             }
@@ -105,8 +109,6 @@ export class LoginUseCase implements ILoginUseCase {
                 }
             }
 
-        } catch (error) {
-            throw error
-        }
+       
     }
 } 

@@ -3,6 +3,7 @@ import { IUpdateStatusInterface } from "../interface/update.status.interface";
 import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 
 @injectable()
 export class UpdateStatusUseCase implements IUpdateStatusInterface{
@@ -16,10 +17,9 @@ export class UpdateStatusUseCase implements IUpdateStatusInterface{
             const company = await this._companyRepository.findById(companyId)
 
             if(!company){
-                throw new Error(ErrorMessage.COMPANY_NOT_FOUND)
+                throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
             }
 
-            // company.status = status
             await this._companyRepository.update(companyId,{status})
 
             return {

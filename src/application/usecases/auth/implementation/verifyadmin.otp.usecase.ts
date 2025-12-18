@@ -15,6 +15,9 @@ import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enu
 import { Role } from "../../../../domain/enum/role.enum";
 import { Status } from "../../../../domain/enum/user/user.status.enum";
 import { UserStatus } from "../../../../domain/enum/status.enum";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
+import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
+import { InternalServerError } from "../../../../shared/utils/error-handling/errors/internal.server.error";
 
 
 @injectable()
@@ -34,20 +37,18 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
   ) { }
 
   async execute(dto: VerifyOtpDTO): Promise<{ message: string; user: { id?: string; name: string; email: string; }; company: { id?: string; name: string; }; }> {
-    try {
-      console.log('hello i am hitting')
+    
       const key = `admin.otp:${dto.token}`
       const data = await redisClient.get(key)
 
       if (!data) {
-        throw new Error(ErrorMessage.OTP_EXPIRED)
+        throw new NotFoundError(ErrorMessage.OTP_EXPIRED)
       }
 
       const parsed = JSON.parse(data)
-      console.log('parsed data', parsed)
 
       if (parsed.otp.toString() !== dto.otp.toString()) {
-        throw new Error(ErrorMessage.OTP_INVALID)
+        throw new validationError(ErrorMessage.OTP_INVALID)
       }
 
       const tempCompanyId = new mongoose.Types.ObjectId().toString();
@@ -64,15 +65,12 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 
       console.log('adminEntity', adminEntity)
 
-      // const hashedPassword = await adminEntity.getHashedPassword()
-      // adminEntity.setPassword(hashedPassword)
-
 
       const adminMongo = this._userPersistance.toMongo(adminEntity)
       const newAdmin = await this._userRepository.create(adminMongo);
       console.log("DATA GOING TO MONGO:");
 
-      if (!newAdmin.id) throw new Error("Failed to create admin");
+      if (!newAdmin.id) throw new InternalServerError("Failed to create admin");
 
       const companyEntity = CompanyEnitiy.create({
         companyName: parsed.companyName,
@@ -83,7 +81,7 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
       const companyMongo = this._companyPersistance.toMongo(companyEntity)
       const newCompany = await this._companyRepository.create(companyMongo);
 
-      if (!newCompany.id) throw new Error(ErrorMessage.COMPANY_CREATION_FAILED);
+      if (!newCompany.id) throw new InternalServerError(ErrorMessage.COMPANY_CREATION_FAILED);
 
       await this._userRepository.update(newAdmin.id, {
         companyId: newCompany.id.toString(),
@@ -106,13 +104,6 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
           name: newCompany.companyName
         }
       };
-
-
-
-    } catch (error) {
-
-      throw error
-    }
   }
 
 

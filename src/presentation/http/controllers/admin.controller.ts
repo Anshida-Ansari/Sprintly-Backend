@@ -1,13 +1,13 @@
 import { inject, injectable } from "inversify";
 import { ErrorMessage } from "../../../domain/enum/messages/error.message.enum";
-import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { ADMIN_TYPES } from "../../../infrastructure/di/types/admin/admin.types";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
 import { IInviteMemberUseCase } from "../../../application/usecases/admin/interface/invite.member.interface";
 import { IVerifyInvitationUseCase } from "../../../application/usecases/admin/interface/verify.member.interface";
 import { IListMembersUseCase } from "../../../application/usecases/admin/interface/list.members.interface";
+import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
 
 @injectable()
 export class AdminController {
@@ -21,7 +21,7 @@ export class AdminController {
         private _listUserUseCase: IListMembersUseCase
     ) { }
 
-    async inviteMember(req: Request, res: Response) {
+    async inviteMember(req: Request, res: Response, next: NextFunction) {
         try {
 
             console.log('reaching the controller');
@@ -32,17 +32,11 @@ export class AdminController {
 
 
             if (!companyId) {
-                return res.status(ClientErrorStatus.NOT_FOUND).json({
-                    success: false,
-                    message: ErrorMessage.COMPANY_NOT_FOUND
-                })
+              throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
             }
 
             if (!adminId) {
-                return res.status(ClientErrorStatus.NOT_FOUND).json({
-                    success: false,
-                    message: ErrorMessage.ADMIN_NOT_FOUND
-                })
+                throw new NotFoundError(ErrorMessage.ADMIN_NOT_FOUND)
             }
 
             const result = await this._inviteMemberUseCase.execute(req.body, companyId, adminId)
@@ -55,13 +49,12 @@ export class AdminController {
             })
         } catch (error) {
 
-            const err = error as Error
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json(err.message)
+            next(error)
 
         }
     }
 
-    async verifyInvitation(req: Request, res: Response) {
+    async verifyInvitation(req: Request, res: Response, next: NextFunction) {
         try {
 
             console.log('reaching the verify');
@@ -83,18 +76,15 @@ export class AdminController {
                 data: data,
             })
 
-        } catch (error: any) {
-            return res.status(ClientErrorStatus.BAD_REQUEST).json({
-                success: false,
-                message: error.message
-            })
+        } catch (error) {
+            next(error)
         }
     }
 
-    async listUsers(req: Request, res: Response) {
+    async listUsers(req: Request, res: Response, next: NextFunction) {
         try {
             console.log('hitting');
-            
+
             const companyId = req.user.companyId;
             if (!companyId) {
                 return res.status(ClientErrorStatus.NOT_FOUND).json({
@@ -102,7 +92,7 @@ export class AdminController {
                     message: ErrorMessage.COMPANY_NOT_FOUND,
                 });
             }
-          
+
             const { page, limit, search } = req.query
 
             const query = {
@@ -117,11 +107,7 @@ export class AdminController {
                 ...response,
             })
         } catch (error: any) {
-            console.error("Error in ListUsers:", error);
-            return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({
-                success: false,
-                message: error.message || "Failed to fetch members",
-            })
+            next(error)
 
         }
     }

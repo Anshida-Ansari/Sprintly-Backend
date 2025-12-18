@@ -9,54 +9,51 @@ import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enu
 import { hash } from "../../../../shared/utils/password.hash.util";
 import { generateOTP } from "../../../../shared/utils/otp.generate.util";
 import { sendOtpEmail } from "../../../../shared/utils/send.otp.util";
+import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
 
-@injectable()   
-export class RegisterAdminUseCase implements IRegisterAdminUseCase{
+@injectable()
+export class RegisterAdminUseCase implements IRegisterAdminUseCase {
 
     constructor(
-        @inject(USER_TYPES.IUserRepository) private _userRepository:IUserRepository
-    ){}
+        @inject(USER_TYPES.IUserRepository) private _userRepository: IUserRepository
+    ) { }
 
-    async execute(dto:AdminRegisterDTO):Promise<{message: string, token: string}>{
+    async execute(dto: AdminRegisterDTO): Promise<{ message: string, token: string }> {
 
-        try {
+        const existing = await this._userRepository.findByEmail(dto.email)
+        if (existing) throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS)
 
-          const existing = await this._userRepository.findByEmail(dto.email)
-          if(existing) throw new Error(ErrorMessage.EMAIL_ALREADY_EXISTS)
-        
 
-          const hashed = await hash(dto.password)
+        const hashed = await hash(dto.password)
 
-          const otp = generateOTP()
-          const token = randomBytes(32).toString('hex')
+        const otp = generateOTP()
+        const token = randomBytes(32).toString('hex')
 
-          await redisClient.setex(
+        await redisClient.setex(
             `admin.otp:${token}`,
-             3*60,
-             
-             JSON.stringify({
-                name:dto.name,
-                email:dto.email,
-                password:hashed,
-                companyName:dto.companyName,
+            3 * 60,
+
+            JSON.stringify({
+                name: dto.name,
+                email: dto.email,
+                password: hashed,
+                companyName: dto.companyName,
                 otp
-             })
+            })
 
-          )
+        )
 
-              
 
-        await sendOtpEmail(dto.email,otp)
-         console.log(otp);
 
-         return { 
-                message: "OTP sent successfully",
-                token: token 
-            }
-          
-        } catch (error) {
-            throw error
+        await sendOtpEmail(dto.email, otp)
+        console.log(otp);
+
+        return {
+            message: "OTP sent successfully",
+            token: token
         }
+
+
     }
 
 }
