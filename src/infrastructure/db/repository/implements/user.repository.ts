@@ -6,9 +6,7 @@ import { UserMapper, UserPersistenceMapper } from "src/infrastructure/mappers/us
 import { IUser } from "../../interface/user.interface";
 import { inject, injectable } from "inversify";
 import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
-import { UserModule } from "src/infrastructure/di/container/user/user.modules";
-import { Mode } from "fs";
-import { userModel } from "../../models/user.model";
+
 
 @injectable()
 export class UserRepository extends BaseRepository<UserEntity> implements IUserRepository{

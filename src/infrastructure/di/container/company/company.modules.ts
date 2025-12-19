@@ -13,4 +13,4 @@ export const CompanyModule = new ContainerModule(({bind})=>{
     bind<Model<ICompany>>(COMPANY_TYPES.CompanyModel).toConstantValue(CompanyModel)
     bind<CompanyPersistenceMapper>(COMPANY_TYPES.CompanyPersistenceMapper).to(CompanyPersistenceMapper)
     
-})
+})  

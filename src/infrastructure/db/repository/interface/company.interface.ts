@@ -1,8 +1,6 @@
 import { Status } from "src/domain/enum/user/user.status.enum";
-import { IUser } from "../../interface/user.interface";
 import { IBaseRepository } from "./base.repository";
 import { CompanyEnitiy } from "src/domain/entities/company.enities";
-import { ICompany } from "../../interface/company.interface";
 
 export interface ICompanyRepository extends IBaseRepository<CompanyEnitiy>{
 

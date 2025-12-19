@@ -4,6 +4,7 @@ import { UserModule } from "./container/user/user.modules";
 import { CompanyModule } from "./container/company/company.modules";
 import { InviteModule } from "./container/admin/admin.modules";
 import { SuperAdminModule } from "./container/superadmin/superadmin.modules";
+import { ProjectModule } from "./container/project/project.modules";
 
 const container = new Container({
     defaultScope:"Singleton",
@@ -15,7 +16,8 @@ container.load(
     UserModule,
     CompanyModule,
     InviteModule,
-    SuperAdminModule
+    SuperAdminModule,
+    ProjectModule
 
 )
 
