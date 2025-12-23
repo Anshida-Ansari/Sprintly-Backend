@@ -3,7 +3,7 @@ import { ProjectEntity } from "src/domain/entities/project.entities";
 export class ProjectPersistanceMapper {
     toMongo(project: ProjectEntity) {
         return {
-    
+
             name: project.name,
             description: project.description,
             status: project.status,
@@ -12,7 +12,7 @@ export class ProjectPersistanceMapper {
             createdBy: project.createdBy,
             companyId: project.companyId,
             members: project.members,
-            gitRepoUrls: project.gitRepoUrl,
+            gitRepoUrl: project.gitRepoUrl,
             createdAt: project.createdAt,
             updatedAt: project.updatedAt,
 

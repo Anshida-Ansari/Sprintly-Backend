@@ -12,9 +12,9 @@ const adminController = container.get<AdminController>(ADMIN_TYPES.AdminControll
 const authGuard = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 
-router.post('/members/invite',authGuard.authorize(['admin']),validateDTO(InviteMemberDTO),(req,res)=>adminController.inviteMember(req,res))
-router.post('/verify-members',(req,res)=>adminController.verifyInvitation(req,res))
-router.get('/members',authGuard.authorize(['admin']),(req,res)=>adminController.listUsers(req,res))
+router.post('/members/invite',authGuard.authorize(['admin']),validateDTO(InviteMemberDTO),(req,res,next)=>adminController.inviteMember(req,res,next))
+router.post('/verify-members',(req,res,next)=>adminController.verifyInvitation(req,res,next))
+router.get('/members',authGuard.authorize(['admin']),(req,res,next)=>adminController.listUsers(req,res,next))
 
 
 export {router as adminRouter}

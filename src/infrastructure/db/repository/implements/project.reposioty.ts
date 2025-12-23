@@ -21,6 +21,12 @@ export class ProjectRepository extends BaseRepository<ProjectEntity> implements 
         this._projectMapper = _projectMapper;
     }
 
+    async create(item: ProjectEntity): Promise<ProjectEntity> {
+        const payload = this._projectMapper.toMongo(item)
+        const result = await this.model.create(payload)
+
+        return this._projectMapper.fromMongo(result)
+    }
     async findByUserId(userId: string): Promise<ProjectEntity | null> {
         const doc = await this.findOne({
             members: userId

@@ -6,10 +6,15 @@ import { IProject } from "src/infrastructure/db/interface/project.interface";
 import { ProjectModel } from "src/infrastructure/db/models/project.model";
 import { ProjectPersistanceMapper } from "src/infrastructure/mappers/project.mapper";
 import { Model } from "mongoose";
+import { ICreateProjectUseCase } from "src/application/usecases/projects/interface/create.project.interface";
+import { CreateProjectUseCase } from "src/application/usecases/projects/implementation/create.project.usecase";
+import { ProjectController } from "src/presentation/http/controllers/project.controller";
 
 export const ProjectModule = new ContainerModule(({bind})=>{
     bind<IProjectReposiotory>(PROJECT_TYPE.IProjectRepository).to(ProjectRepository)
     bind<Model<IProject>>(PROJECT_TYPE.ProjectModel).toConstantValue(ProjectModel)
     bind<ProjectPersistanceMapper>(PROJECT_TYPE.ProjectPersistanceMapper).to(ProjectPersistanceMapper)
+    bind<ICreateProjectUseCase>(PROJECT_TYPE.CreateProjectUseCase).to(CreateProjectUseCase)
+    bind<ProjectController>(PROJECT_TYPE.ProjectController).to(ProjectController)
 
 })

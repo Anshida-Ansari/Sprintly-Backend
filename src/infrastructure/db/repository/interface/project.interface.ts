@@ -6,6 +6,5 @@ export interface IProjectReposiotory extends IBaseRepository<ProjectEntity>{
     
     findByUserId(userId: string):Promise<ProjectEntity | null>
     findByStatus(status :ProjectStatus):Promise<ProjectEntity[]>
-    findByAdminId(adminId: string):Promise<ProjectEntity | null>
-    
+    findByAdminId(adminId: string):Promise<ProjectEntity | null>    
 }

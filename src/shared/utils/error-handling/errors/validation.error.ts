@@ -1,4 +1,3 @@
-import { ClientClosedError } from "redis";
 import { BaseError } from "../base.error";
 import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
 
