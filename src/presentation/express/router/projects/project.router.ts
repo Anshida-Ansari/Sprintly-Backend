@@ -12,9 +12,8 @@ const router = Router()
 const projectController = container.get<ProjectController>(PROJECT_TYPE.ProjectController)
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd)
 
-console.log("✅ Project routes loaded");
 
 router.post('/create-project',authGurd.authorize(['admin']),validateDTO(CreateProjectDTO),(req,res,next)=>projectController.createProject(req,res,next))
-
+router.get('/projects',authGurd.authorize(['admin']),(req,res,next)=>projectController.listProject(req,res,next))
 
 export {router as projectRouter}

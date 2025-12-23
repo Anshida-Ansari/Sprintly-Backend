@@ -9,6 +9,8 @@ import { Model } from "mongoose";
 import { ICreateProjectUseCase } from "src/application/usecases/projects/interface/create.project.interface";
 import { CreateProjectUseCase } from "src/application/usecases/projects/implementation/create.project.usecase";
 import { ProjectController } from "src/presentation/http/controllers/project.controller";
+import { IListProjectUseCase } from "src/application/usecases/projects/interface/list.project.interface";
+import { ListProjectUseCase } from "src/application/usecases/projects/implementation/list.project.usecase";
 
 export const ProjectModule = new ContainerModule(({bind})=>{
     bind<IProjectReposiotory>(PROJECT_TYPE.IProjectRepository).to(ProjectRepository)
@@ -16,5 +18,6 @@ export const ProjectModule = new ContainerModule(({bind})=>{
     bind<ProjectPersistanceMapper>(PROJECT_TYPE.ProjectPersistanceMapper).to(ProjectPersistanceMapper)
     bind<ICreateProjectUseCase>(PROJECT_TYPE.CreateProjectUseCase).to(CreateProjectUseCase)
     bind<ProjectController>(PROJECT_TYPE.ProjectController).to(ProjectController)
+    bind<IListProjectUseCase>(PROJECT_TYPE.IListProjectUseCase).to(ListProjectUseCase)
 
 })

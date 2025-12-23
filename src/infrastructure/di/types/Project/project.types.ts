@@ -1,4 +1,5 @@
 import { CreateProjectUseCase } from "src/application/usecases/projects/implementation/create.project.usecase";
+import { ListProjectUseCase } from "src/application/usecases/projects/implementation/list.project.usecase";
 import { ProjectController } from "src/presentation/http/controllers/project.controller";
 
 export const PROJECT_TYPE = {
@@ -7,6 +8,7 @@ export const PROJECT_TYPE = {
     ProjectModel: Symbol.for('ProjectModel'),
     ProjectPersistanceMapper: Symbol.for('ProjectPersistanceMapper'),
     CreateProjectUseCase: Symbol.for('CreateProjectUseCase'),
+    IListProjectUseCase: Symbol.for('IListProjectUseCase ')
 
     
 }
