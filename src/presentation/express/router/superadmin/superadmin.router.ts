@@ -10,8 +10,8 @@ const router = Router()
 const superadminController = container.get<SuperAdminController>(SUPERADMIN_TYPES.SuperAdminController)
 const authGuard = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd)
 
-router.get('/companies',authGuard.authorize(['superadmin']),(req,res)=>superadminController.listCompanies(req,res))
-router.patch('/company/:companyId/status',authGuard.authorize(['superadmin']),(req,res)=>superadminController.updateStatus(req,res))
-router.get('/company/:companyId',authGuard.authorize(['superadmin']),(req,res)=>superadminController.getDetailPage(req,res))
+router.get('/companies',authGuard.authorize(['superadmin']),(req, res, next)=>superadminController.listCompanies(req, res, next))
+router.patch('/company/:companyId/status',authGuard.authorize(['superadmin']),(req, res, next)=>superadminController.updateStatus(req, res, next))
+router.get('/company/:companyId',authGuard.authorize(['superadmin']),(req, res, next)=>superadminController.getDetailPage(req, res, next))
 
 export {router as superadminRouter}
