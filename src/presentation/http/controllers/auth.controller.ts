@@ -72,17 +72,7 @@ export class AuthController {
 
         try {
 
-            console.log('I am at eteh controller right now ');
-
-
             const result = await this._loginUseCase.execute(req.body)
-
-            res.cookie("accessToken", result.accessToken, {
-                httpOnly: true,
-                sameSite: 'strict',
-                maxAge: Number(process.env.ACCESS_TOKEN_MAX_AGE)
-            })
-
 
             res.cookie("refreshToken", result.refreshToken, {
                 httpOnly: true,
@@ -92,6 +82,7 @@ export class AuthController {
 
 
             return res.status(SuccessStatus.OK).json({
+                success:true,
                 message: result.message,
                 data: {
                     accessToken: result.accessToken,
@@ -112,13 +103,6 @@ export class AuthController {
 
             const refreshToken = req.cookies?.refreshToken
             const result = await this._refreshUseCase.execute(refreshToken)
-
-            res.cookie("accessToken", result.accessToken, {
-                httpOnly: true,
-                sameSite: "strict",
-                maxAge: Number(process.env.ACCESS_TOKEN_MAX_AGE)
-
-            })
 
             return res.status(SuccessStatus.OK).json({
                 message: result.message,
