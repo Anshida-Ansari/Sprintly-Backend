@@ -20,7 +20,7 @@ export const projectSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: Object.values(ProjectStatus),
-      default: ProjectStatus.ACTIVE,
+      default: ProjectStatus.PLANNED,
     },
     startDate: {
       type: Date,

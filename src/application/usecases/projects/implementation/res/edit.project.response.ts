@@ -5,4 +5,5 @@ export interface EditProjectResponse {
     startDate?: string;
     endDate?: string;
     gitRepoUrl?: string;
+    status?: string;
 }

@@ -25,19 +25,19 @@ export class AuthController {
         @inject(AUTH_TYPES.IRefreshUseCase)
         private _refreshUseCase: IRefreshUseCase,
         @inject(AUTH_TYPES.ISetPassWordUseCase)
-        private _setPasswrodUseCase:ISetPassWordUseCase,
+        private _setPasswrodUseCase: ISetPassWordUseCase,
         @inject(AUTH_TYPES.IForgotPasswordUseCase)
-        private _forgotPasswordUseCase:IForgotPasswordUseCase,
+        private _forgotPasswordUseCase: IForgotPasswordUseCase,
         @inject(AUTH_TYPES.IResetPasswordUseCase)
-        private _resetPassWordUseCase:IResetPasswordUseCase,
+        private _resetPassWordUseCase: IResetPasswordUseCase,
         @inject(AUTH_TYPES.IResendAdminOtpUseCase)
-        private _resendAdminOtpUseCase:IResendAdminOtpUseCase,
+        private _resendAdminOtpUseCase: IResendAdminOtpUseCase,
         @inject(AUTH_TYPES.ILogoutUseCase)
-        private _logoutUseCase:ILogoutUseCase
+        private _logoutUseCase: ILogoutUseCase
     ) { }
 
 
-    async register(req: Request, res: Response,next: NextFunction) {
+    async register(req: Request, res: Response, next: NextFunction) {
 
         try {
             const admin = await this._registerAdminUseCase.execute(req.body)
@@ -53,7 +53,7 @@ export class AuthController {
 
     }
 
-    async verifyOTP(req: Request, res: Response,next: NextFunction) {
+    async verifyOTP(req: Request, res: Response, next: NextFunction) {
         try {
 
             const result = await this._verifyAdminUseCase.execute(req.body)
@@ -65,10 +65,10 @@ export class AuthController {
             })
 
         } catch (error) {
-           next(error)
+            next(error)
         }
     }
-    async login(req: Request, res: Response,next: NextFunction) {
+    async login(req: Request, res: Response, next: NextFunction) {
 
         try {
 
@@ -76,13 +76,14 @@ export class AuthController {
 
             res.cookie("refreshToken", result.refreshToken, {
                 httpOnly: true,
-                sameSite: "strict",
-                maxAge: Number(process.env.REFRESH_TOKEN_MAX_AGE)
+                sameSite: "lax",
+                secure: false,
+                maxAge: Number(process.env.REFRESH_TOKEN_MAX_AGE) || 30 * 24 * 60 * 60 * 1000
             })
 
 
             return res.status(SuccessStatus.OK).json({
-                success:true,
+                success: true,
                 message: result.message,
                 data: {
                     accessToken: result.accessToken,
@@ -91,14 +92,14 @@ export class AuthController {
                 }
             })
 
-    
+
         } catch (error) {
-           next(error)
+            next(error)
 
         }
     }
 
-    async refreshToken(req: Request, res: Response,next: NextFunction) {
+    async refreshToken(req: Request, res: Response, next: NextFunction) {
         try {
 
             const refreshToken = req.cookies?.refreshToken
@@ -115,62 +116,62 @@ export class AuthController {
             next(error)
         }
     }
-    async setPassword(req:Request, res:Response,next: NextFunction){
+    async setPassword(req: Request, res: Response, next: NextFunction) {
         try {
 
 
-            const {token,password,confirmPassword} = req.body
-            
-            const response = await this._setPasswrodUseCase.execute(token,password,confirmPassword)
+            const { token, password, confirmPassword } = req.body
+
+            const response = await this._setPasswrodUseCase.execute(token, password, confirmPassword)
 
             return res.status(SuccessStatus.CREATED).json({
                 success: true,
-                message:response.message
+                message: response.message
             })
 
-            
-            
-            
+
+
+
         } catch (error) {
             next(error)
         }
     }
-    async forgotPasswrod(req:Request,res:Response,next: NextFunction){
+    async forgotPasswrod(req: Request, res: Response, next: NextFunction) {
         try {
-            const result =await this._forgotPasswordUseCase.execute(req.body)
+            const result = await this._forgotPasswordUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
-                success:true,
-                message:result.message
+                success: true,
+                message: result.message
             })
 
         } catch (error) {
-           next(error)
+            next(error)
         }
     }
-    async resetPassword(req:Request,res:Response,next:NextFunction){
+    async resetPassword(req: Request, res: Response, next: NextFunction) {
         try {
-            const result =await this._resetPassWordUseCase.execute(req.body)
+            const result = await this._resetPassWordUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
-                success:true,
-                message:result.message  
+                success: true,
+                message: result.message
             })
         } catch (error) {
-          next(error)
+            next(error)
         }
     }
 
-    async resendOtp(req:Request,res:Response,next: NextFunction){
+    async resendOtp(req: Request, res: Response, next: NextFunction) {
         try {
             const result = await this._resendAdminOtpUseCase.execute(req.body)
             return res.status(SuccessStatus.OK).json({
-                success:true,
-                message:result.message
+                success: true,
+                message: result.message
             })
-        } catch (error:any) {
+        } catch (error: any) {
             next(error)
         }
     }
-    async logout(req:Request,res:Response,next: NextFunction){
+    async logout(req: Request, res: Response, next: NextFunction) {
         try {
             const refreshToken = req.cookies.refreshToken
             const result = await this._logoutUseCase.execute(refreshToken)

@@ -67,7 +67,7 @@ export class ProjectEntity {
       ...props,
       name: props.name.trim(),
       description: props.description?.trim() || "",
-      status: props.status || ProjectStatus.ACTIVE,
+      status: props.status || ProjectStatus.PLANNED,
     });
   }
 
@@ -77,12 +77,15 @@ export class ProjectEntity {
     startDate: Date;
     endDate: Date;
     gitRepoUrl: string;
+    status: ProjectStatus;
   }>) {
     if (props.name !== undefined) this._name = props.name.trim();
     if (props.description !== undefined) this._description = props.description?.trim();
     if (props.startDate !== undefined) this._startDate = props.startDate;
     if (props.endDate !== undefined) this._endDate = props.endDate;
+    if (props.endDate !== undefined) this._endDate = props.endDate;
     if (props.gitRepoUrl !== undefined) this._gitRepoUrl = props.gitRepoUrl;
+    if (props.status !== undefined) this._status = props.status;
 
     this._updatedAt = new Date();
   }
@@ -93,6 +96,16 @@ export class ProjectEntity {
       this._members.push(userId);
       this._updatedAt = new Date();
     }
+  }
+
+  startProject() {
+    this._status = ProjectStatus.ACTIVE;
+    this._updatedAt = new Date();
+  }
+
+  holdProject() {
+    this._status = ProjectStatus.ON_HOLD;
+    this._updatedAt = new Date();
   }
 
   completeProject() {

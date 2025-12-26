@@ -30,7 +30,8 @@ export class EditProjectUseCase implements IEditProjectUsecase {
             description: dto.description,
             startDate: dto.startDate ? new Date(dto.startDate) : undefined,
             endDate: dto.endDate ? new Date(dto.endDate) : undefined,
-            gitRepoUrl: dto.gitRepoUrl
+            gitRepoUrl: dto.gitRepoUrl,
+            status: dto.status
         });
 
         const updatedProject = await this._projectreposiotry.updateProject(projectId, existingProject)
@@ -45,7 +46,8 @@ export class EditProjectUseCase implements IEditProjectUsecase {
             description: updatedProject.description,
             startDate: updatedProject.startDate ? updatedProject.startDate.toISOString() : undefined,
             endDate: updatedProject.endDate ? updatedProject.endDate.toISOString() : undefined,
-            gitRepoUrl: updatedProject.gitRepoUrl
+            gitRepoUrl: updatedProject.gitRepoUrl,
+            status: updatedProject.status
 
         }
 

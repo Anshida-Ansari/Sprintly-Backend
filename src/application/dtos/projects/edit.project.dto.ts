@@ -3,9 +3,11 @@ import {
   IsOptional,
   IsDateString,
   MinLength,
-  MaxLength
+  MaxLength,
+  IsEnum
 } from "class-validator";
 import { Exclude, Expose } from "class-transformer";
+import { ProjectStatus } from "../../../domain/enum/project/project.status";
 
 @Exclude()
 export class EditProjectDTO {
@@ -38,4 +40,9 @@ export class EditProjectDTO {
   @IsOptional()
   @IsString({ message: "Git repository URL must be a string" })
   gitRepoUrl?: string;
+
+  @Expose()
+  @IsOptional()
+  @IsEnum(ProjectStatus, { message: "Invalid project status" })
+  status?: ProjectStatus;
 }

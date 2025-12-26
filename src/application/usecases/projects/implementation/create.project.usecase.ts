@@ -38,7 +38,7 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
             endDate,
             createdBy: adminId,
             companyId,
-            status: ProjectStatus.ACTIVE,
+            status: ProjectStatus.PLANNED,
             gitRepoUrl: dto.gitRepoUrl,
             members: []
 
@@ -48,11 +48,11 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
 
         return {
             id: savedProject.id!,
-            name:savedProject.name,
-            description:savedProject.description,
-            startDate:savedProject.startDate,
-            endDate:savedProject.endDate,
-            gitRepoUrl:savedProject.gitRepoUrl
+            name: savedProject.name,
+            description: savedProject.description,
+            startDate: savedProject.startDate,
+            endDate: savedProject.endDate,
+            gitRepoUrl: savedProject.gitRepoUrl
         }
     }
 }

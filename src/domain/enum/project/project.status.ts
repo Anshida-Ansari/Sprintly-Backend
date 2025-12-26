@@ -1,4 +1,6 @@
-export enum ProjectStatus{
+export enum ProjectStatus {
+    PLANNED = "Planned",
     ACTIVE = "Active",
-    COMPLETED = "Completed"
+    COMPLETED = "Completed",
+    ON_HOLD = "On Hold"
 }
