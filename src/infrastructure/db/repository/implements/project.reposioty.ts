@@ -27,20 +27,47 @@ export class ProjectRepository extends BaseRepository<ProjectEntity> implements 
 
         return this._projectMapper.fromMongo(result)
     }
+    // async update(projectId: string, entity: ProjectEntity): Promise<ProjectEntity | null> {
+
+    //     const payload = this._projectMapper.toMongo(entity);
+
+    //     const updatedDoc = await this.model.findByIdAndUpdate(
+    //         projectId,
+    //         { $set: payload },
+    //         { new: true }
+    //     );
+
+    //     return updatedDoc
+    //         ? this._projectMapper.fromMongo(updatedDoc)
+    //         : null;
+    // }
+
+    async updateProject(id: string, project: ProjectEntity): Promise<ProjectEntity | null> {
+        const payload = this._projectMapper.toMongo(project)
+        const result = await this.model.findByIdAndUpdate(id, payload, { new: true })
+        return result ? this._projectMapper.fromMongo(result) : null
+    }
+
+    async findById(id: string): Promise<ProjectEntity | null> {
+        const doc = await this.model.findById(id)
+        return doc ? this._projectMapper.fromMongo(doc) : null
+    }
+
+    async findOne(filter: any): Promise<ProjectEntity | null> {
+        const doc = await this.model.findOne(filter)
+        return doc ? this._projectMapper.fromMongo(doc) : null
+    }
+
     async findByUserId(userId: string): Promise<ProjectEntity | null> {
-        const doc = await this.findOne({
+        return this.findOne({
             members: userId
         });
-
-        return doc ? this._projectMapper.fromMongo(doc) : null;
     }
 
     async findByAdminId(adminId: string): Promise<ProjectEntity | null> {
-        const doc = await this.findOne({
+        return this.findOne({
             createdBy: adminId
         });
-
-        return doc ? this._projectMapper.fromMongo(doc) : null;
     }
 
     async findByStatus(status: ProjectStatus): Promise<ProjectEntity[]> {

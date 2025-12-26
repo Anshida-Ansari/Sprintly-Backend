@@ -18,6 +18,7 @@ app.use("/api/auth",authRouter)
 app.use("/api/admin",adminRouter)
 app.use("/api/superadmin",superadminRouter)
 app.use("/api/project",projectRouter)
+app.use("/api/project",projectRouter)
 
 
 export default app

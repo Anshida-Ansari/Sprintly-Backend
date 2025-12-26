@@ -5,6 +5,8 @@ import { NextFunction, Request, Response } from "express";
 import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
 import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum";
 import { IListProjectUseCase } from "src/application/usecases/projects/interface/list.project.interface";
+import { IEditProjectUsecase } from "src/application/usecases/projects/interface/edit.project.interface";
+import { log } from "node:console";
 
 @injectable()
 export class ProjectController {
@@ -12,7 +14,9 @@ export class ProjectController {
         @inject(PROJECT_TYPE.CreateProjectUseCase)
         private _createProjectUseCase: ICreateProjectUseCase,
         @inject(PROJECT_TYPE.IListProjectUseCase)
-        private _listProjectUseCase: IListProjectUseCase
+        private _listProjectUseCase: IListProjectUseCase,
+        @inject(PROJECT_TYPE.IEditProjectUsecase)
+        private _editProjectUseCase: IEditProjectUsecase
 
     ) { }
 
@@ -35,7 +39,7 @@ export class ProjectController {
         } catch (error) {
             next(error)
         }
-    }
+    }   
     async listProject(req: Request, res: Response, next: NextFunction) {
         try {
             const companyId = req.user.companyId
@@ -56,5 +60,28 @@ export class ProjectController {
             next(error)
 
         }
+    }
+    async editProject(req: Request,res: Response,next: NextFunction){
+        try {
+            const {id: adminId,companyId}  = req.user
+            const {projectId} = req.params
+            console.log(projectId);
+            
+            const dto = req.body
+
+            const result = await this._editProjectUseCase.execute(projectId,dto,adminId,companyId)
+            console.log(result);
+            
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Project Updated Successfully',
+                data: result
+            })
+            
+        } catch (error) {
+            next(error)           
+        }
+        
     }
 }

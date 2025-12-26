@@ -11,6 +11,8 @@ import { CreateProjectUseCase } from "src/application/usecases/projects/implemen
 import { ProjectController } from "src/presentation/http/controllers/project.controller";
 import { IListProjectUseCase } from "src/application/usecases/projects/interface/list.project.interface";
 import { ListProjectUseCase } from "src/application/usecases/projects/implementation/list.project.usecase";
+import { IEditProjectUsecase } from "src/application/usecases/projects/interface/edit.project.interface";
+import { EditProjectUseCase } from "src/application/usecases/projects/implementation/edit.project.usecase";
 
 export const ProjectModule = new ContainerModule(({bind})=>{
     bind<IProjectReposiotory>(PROJECT_TYPE.IProjectRepository).to(ProjectRepository)
@@ -19,5 +21,6 @@ export const ProjectModule = new ContainerModule(({bind})=>{
     bind<ICreateProjectUseCase>(PROJECT_TYPE.CreateProjectUseCase).to(CreateProjectUseCase)
     bind<ProjectController>(PROJECT_TYPE.ProjectController).to(ProjectController)
     bind<IListProjectUseCase>(PROJECT_TYPE.IListProjectUseCase).to(ListProjectUseCase)
+    bind<IEditProjectUsecase>(PROJECT_TYPE.IEditProjectUsecase).to(EditProjectUseCase)
 
 })

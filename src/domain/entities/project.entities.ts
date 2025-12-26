@@ -7,7 +7,7 @@ export class ProjectEntity {
   private _status: ProjectStatus;
   private _startDate: Date;
   private _endDate: Date;
-  private _createdBy: string; 
+  private _createdBy: string;
   private _companyId: string;
   private _members: string[];
   private _gitRepoUrl?: string;
@@ -48,13 +48,13 @@ export class ProjectEntity {
     description: string;
     startDate: Date;
     endDate: Date;
-    status:ProjectStatus;
+    status: ProjectStatus;
     createdBy: string;
     companyId: string;
     members?: string[];
     gitRepoUrl?: string;
-    createdAt?: Date;        
-    updatedAt?: Date; 
+    createdAt?: Date;
+    updatedAt?: Date;
   }): ProjectEntity {
     if (!props.name?.trim()) {
       throw new Error("Project name is required");
@@ -67,9 +67,26 @@ export class ProjectEntity {
       ...props,
       name: props.name.trim(),
       description: props.description?.trim() || "",
-      status: ProjectStatus.ACTIVE,
+      status: props.status || ProjectStatus.ACTIVE,
     });
   }
+
+  update(props: Partial<{
+    name: string;
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    gitRepoUrl: string;
+  }>) {
+    if (props.name !== undefined) this._name = props.name.trim();
+    if (props.description !== undefined) this._description = props.description?.trim();
+    if (props.startDate !== undefined) this._startDate = props.startDate;
+    if (props.endDate !== undefined) this._endDate = props.endDate;
+    if (props.gitRepoUrl !== undefined) this._gitRepoUrl = props.gitRepoUrl;
+
+    this._updatedAt = new Date();
+  }
+
 
   addMember(userId: string) {
     if (!this._members.includes(userId)) {

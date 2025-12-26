@@ -83,7 +83,6 @@ export class AdminController {
 
     async listUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('hitting');
 
             const companyId = req.user.companyId;
             if (!companyId) {
