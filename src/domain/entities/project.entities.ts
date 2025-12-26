@@ -67,7 +67,7 @@ export class ProjectEntity {
       ...props,
       name: props.name.trim(),
       description: props.description?.trim() || "",
-      status: props.status || ProjectStatus.PLANNED,
+      status: props.status || ProjectStatus.ACTIVE,
     });
   }
 
@@ -104,7 +104,7 @@ export class ProjectEntity {
   }
 
   holdProject() {
-    this._status = ProjectStatus.ON_HOLD;
+    this._status = ProjectStatus.ACTIVE;
     this._updatedAt = new Date();
   }
 

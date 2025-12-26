@@ -15,6 +15,6 @@ const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd)
 
 router.post('/create-project',authGurd.authorize(['admin']),validateDTO(CreateProjectDTO),(req,res,next)=>projectController.createProject(req,res,next))
 router.get('/projects',authGurd.authorize(['admin']),(req,res,next)=>projectController.listProject(req,res,next))
-router.patch('/projects/:projectId',authGurd.authorize(['admin']),(req,res,next)=>projectController.editProject(req,res,next))
+router.patch('/update-project/:projectId',authGurd.authorize(['admin']),(req,res,next)=>projectController.editProject(req,res,next))
 
 export {router as projectRouter}

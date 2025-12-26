@@ -38,7 +38,7 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
             endDate,
             createdBy: adminId,
             companyId,
-            status: ProjectStatus.PLANNED,
+            status: ProjectStatus.ACTIVE,
             gitRepoUrl: dto.gitRepoUrl,
             members: []
 

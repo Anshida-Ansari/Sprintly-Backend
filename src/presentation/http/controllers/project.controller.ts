@@ -65,7 +65,7 @@ export class ProjectController {
         try {
             const {id: adminId,companyId}  = req.user
             const {projectId} = req.params
-            console.log(projectId);
+            console.log('projectId',projectId);
             
             const dto = req.body
 
