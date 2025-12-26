@@ -7,6 +7,10 @@ import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum"
 import { IListProjectUseCase } from "src/application/usecases/projects/interface/list.project.interface";
 import { IEditProjectUsecase } from "src/application/usecases/projects/interface/edit.project.interface";
 import { log } from "node:console";
+import { IGetDetailProjectUseCase } from "src/application/usecases/projects/interface/get.detail.project.interface";
+import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
+import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
+import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
 
 @injectable()
 export class ProjectController {
@@ -16,7 +20,9 @@ export class ProjectController {
         @inject(PROJECT_TYPE.IListProjectUseCase)
         private _listProjectUseCase: IListProjectUseCase,
         @inject(PROJECT_TYPE.IEditProjectUsecase)
-        private _editProjectUseCase: IEditProjectUsecase
+        private _editProjectUseCase: IEditProjectUsecase,
+        @inject(PROJECT_TYPE.IGetDetailProjectUseCase)
+        private _projectdetailUseCase: IGetDetailProjectUseCase
 
     ) { }
 
@@ -39,7 +45,7 @@ export class ProjectController {
         } catch (error) {
             next(error)
         }
-    }   
+    }
     async listProject(req: Request, res: Response, next: NextFunction) {
         try {
             const companyId = req.user.companyId
@@ -50,7 +56,7 @@ export class ProjectController {
                 search: search ? String(search) : ""
             }
 
-            const response = await this._listProjectUseCase.execute(query,companyId)
+            const response = await this._listProjectUseCase.execute(query, companyId)
             return res.status(SuccessStatus.OK).json({
 
                 success: true,
@@ -61,27 +67,52 @@ export class ProjectController {
 
         }
     }
-    async editProject(req: Request,res: Response,next: NextFunction){
+    async editProject(req: Request, res: Response, next: NextFunction) {
         try {
-            const {id: adminId,companyId}  = req.user
-            const {projectId} = req.params
-            console.log('projectId',projectId);
-            
+            const { id: adminId, companyId } = req.user
+            const { projectId } = req.params
+            console.log('projectId', projectId);
+
             const dto = req.body
 
-            const result = await this._editProjectUseCase.execute(projectId,dto,adminId,companyId)
+            const result = await this._editProjectUseCase.execute(projectId, dto, adminId, companyId)
             console.log(result);
-            
+
 
             return res.status(SuccessStatus.OK).json({
                 success: true,
                 message: 'Project Updated Successfully',
                 data: result
             })
-            
+
         } catch (error) {
-            next(error)           
+            next(error)
         }
-        
+
+    }
+
+    async getProjectDetail(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { companyId } = req.user
+            const { projectId } = req.params
+
+            if (!projectId) {
+                return res.status(ClientErrorStatus.NOT_FOUND).json({
+                    message: "Project ID is required"
+                })
+            }
+
+            const result = await this._projectdetailUseCase.execute(companyId, projectId)
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                data: result
+            })
+
+
+
+        } catch (error) {
+            next(error)
+        }
     }
 }
