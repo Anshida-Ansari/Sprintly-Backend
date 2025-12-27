@@ -27,21 +27,7 @@ export class ProjectRepository extends BaseRepository<ProjectEntity> implements 
 
         return this._projectMapper.fromMongo(result)
     }
-    // async update(projectId: string, entity: ProjectEntity): Promise<ProjectEntity | null> {
-
-    //     const payload = this._projectMapper.toMongo(entity);
-
-    //     const updatedDoc = await this.model.findByIdAndUpdate(
-    //         projectId,
-    //         { $set: payload },
-    //         { new: true }
-    //     );
-
-    //     return updatedDoc
-    //         ? this._projectMapper.fromMongo(updatedDoc)
-    //         : null;
-    // }
-
+  
     async updateProject(id: string, project: ProjectEntity): Promise<ProjectEntity | null> {
         const payload = this._projectMapper.toMongo(project)
         const result = await this.model.findByIdAndUpdate(id, payload, { new: true })
@@ -80,4 +66,5 @@ export class ProjectRepository extends BaseRepository<ProjectEntity> implements 
             this._projectMapper.fromMongo(doc)
         );
     }
+
 }

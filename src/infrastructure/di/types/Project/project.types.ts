@@ -9,7 +9,8 @@ export const PROJECT_TYPE = {
     ProjectPersistanceMapper: Symbol.for('ProjectPersistanceMapper'),
     CreateProjectUseCase: Symbol.for('CreateProjectUseCase'),
     IListProjectUseCase: Symbol.for('IListProjectUseCase '),
-    IEditProjectUsecase: Symbol.for('IEditProjectUsecase')
+    IEditProjectUsecase: Symbol.for('IEditProjectUsecase'),
+    IGetDetailProjectUseCase: Symbol.for('IGetDetailProjectUseCase')
 
     
 }
