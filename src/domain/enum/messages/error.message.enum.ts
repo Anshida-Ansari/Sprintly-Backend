@@ -22,5 +22,6 @@ export enum ErrorMessage {
     TOKEN_MISSING = "Token missing or invalid format",
     INVITATION_EXPIRED_OR_INVALID = "Invitation expired or invalid",
     ADMIN_NOT_FOUND ="Admin is not found",
-    REFRESH_TOKEN_REQUIRED = "Refresh token is required "
+    REFRESH_TOKEN_REQUIRED = "Refresh token is required ",
+    NOT_FOUND = 'Not found'
 }

@@ -3,7 +3,8 @@ export const USERSTORY_TYPE = {
     UserStoryPersisitanceMapper: Symbol.for("UserStoryPersisitanceMapper"),
     IUserStroyRepository: Symbol.for("IUserStroyRepository"),
     ICreateUserstoryUsecase: Symbol.for("ICreateUserstoryUsecase"),
-    UserstoryController: Symbol.for("UserstoryController")
+    UserstoryController: Symbol.for("UserstoryController"),
+    IEditUserstoryUseCase: Symbol.for("IEditUserstoryUseCase")
 
 
 }

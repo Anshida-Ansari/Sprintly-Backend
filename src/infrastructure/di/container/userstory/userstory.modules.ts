@@ -9,6 +9,8 @@ import { ICreateUserstoryUsecase } from "src/application/usecases/userstory/inte
 import { CreateUserstoryUseCase } from "src/application/usecases/userstory/implementation/create.userstory.usecase";
 import { UserstoryController } from "src/presentation/http/controllers/userstory.controller";
 import { UserStoryRepository } from "src/infrastructure/db/repository/implements/user.story.repository";
+import { EditUserStoryUseCase } from "src/application/usecases/userstory/implementation/edit.userstory.usecase";
+import { IEditUserstoryUseCase } from "src/application/usecases/userstory/interface/edit.usertory.interface";
 
 export const UserStoryModule = new ContainerModule(({bind})=>{
     // bind<IUserStroyRepository>(USERSTORY_TYPE.IUserStroyRepository).to()
@@ -17,4 +19,5 @@ export const UserStoryModule = new ContainerModule(({bind})=>{
     bind<ICreateUserstoryUsecase>(USERSTORY_TYPE.ICreateUserstoryUsecase).to(CreateUserstoryUseCase)
     bind<UserstoryController>(USERSTORY_TYPE.UserstoryController).to(UserstoryController)
     bind<IUserStroyRepository>(USERSTORY_TYPE.IUserStroyRepository).to(UserStoryRepository)
+    bind<IEditUserstoryUseCase>(USERSTORY_TYPE.IEditUserstoryUseCase).to(EditUserStoryUseCase)
 })

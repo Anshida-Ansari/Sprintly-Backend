@@ -7,33 +7,46 @@ import { UserStoryEntity } from "src/domain/entities/user.story.entities";
 import { UserStoryPersisitanceMapper } from "src/infrastructure/mappers/userstrory.mapper";
 
 @injectable()
-export class UserStoryRepository extends BaseRepository<UserStoryEntity> implements IUserStroyRepository{
+export class UserStoryRepository extends BaseRepository<UserStoryEntity> implements IUserStroyRepository {
     constructor(
         @inject(USERSTORY_TYPE.UserStoryModel)
         model: Model<UserStoryEntity>,
 
         @inject(USERSTORY_TYPE.UserStoryPersisitanceMapper)
         private readonly _userstoryMapper: UserStoryPersisitanceMapper
-    ){
+    ) {
         super(model)
         // this._userstoryMapper = _userstoryMapper
     }
 
     async create(item: UserStoryEntity): Promise<UserStoryEntity> {
-    const payload = this._userstoryMapper.toMongo(item); 
-    const result = await this.model.create(payload);
-    
-    return this._userstoryMapper.fromMongo(result);
-}
+        const payload = this._userstoryMapper.toMongo(item);
+        const result = await this.model.create(payload);
+
+        return this._userstoryMapper.fromMongo(result);
+    }
 
 
     async findByProjectId(projectId: string): Promise<UserStoryEntity[]> {
-      const docs = await this.model.find({ projectId });
-    return docs.map(doc => this._userstoryMapper.fromMongo(doc));
+        const docs = await this.model.find({ projectId });
+        return docs.map(doc => this._userstoryMapper.fromMongo(doc));
     }
 
     async findBySprintId(sprintId: string): Promise<UserStoryEntity[]> {
-       const docs = await this.model.find({ sprintId });
-    return docs.map(doc => this._userstoryMapper.fromMongo(doc));
+        const docs = await this.model.find({ sprintId });
+        return docs.map(doc => this._userstoryMapper.fromMongo(doc));
     }
+
+    async findById(id: string): Promise<UserStoryEntity | null> {
+        const result = await this.model.findById(id)
+        return result ? this._userstoryMapper.fromMongo(result) : null
+    }
+    async update(id: string, entity: UserStoryEntity): Promise<UserStoryEntity | null> {
+        const payload = this._userstoryMapper.toMongo(entity)
+        const result = await this.model.findByIdAndUpdate(id, payload, { new: true })
+        return result ? this._userstoryMapper.fromMongo(result) : null
+    }
+
+
+
 }

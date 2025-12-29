@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { CreateUserStoryDTO } from "src/application/dtos/userstory/create.userstory.dto";
+import { EditUserStoryDTO } from "src/application/dtos/userstory/edit.userstory";
 import { container } from "src/infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "src/infrastructure/di/types/admin/admin.types";
 import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
@@ -13,6 +14,7 @@ const userstoryController = container.get<UserstoryController>(USERSTORY_TYPE.Us
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd)
 
 router.post('/:projectId/user-stories',authGurd.authorize(['admin']),validateDTO(CreateUserStoryDTO),(req,res,next)=>userstoryController.createUserstory(req,res,next))
+router.post('/:projectId/user-stories/:userstoryId',authGurd.authorize((['admin'])),validateDTO(EditUserStoryDTO),(req,res,next)=>userstoryController.editUserstory(req,res,next))
 
 export {router as userstoryRouter}
 
