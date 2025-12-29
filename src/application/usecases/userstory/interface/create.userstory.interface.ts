@@ -3,11 +3,13 @@ import { PriorityStatus } from "src/domain/enum/userstory/user.story.priority";
 import { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
 
 export interface ICreateUserstoryUsecase{
-    execute(dto:CreateUserStoryDTO , companyId: string):Promise<{
-        tilte: string
+    execute(dto:CreateUserStoryDTO , companyId: string, projectId: string):Promise<{
+        id: string;
+        title: string
         description: string
         priority:PriorityStatus
+        status:UserStoryStatus
         sprintId?: string
-        status?:UserStoryStatus
+        createdAt: Date
     }>
 }

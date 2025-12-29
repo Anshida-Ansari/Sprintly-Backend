@@ -19,6 +19,14 @@ export class UserStoryRepository extends BaseRepository<UserStoryEntity> impleme
         // this._userstoryMapper = _userstoryMapper
     }
 
+    async create(item: UserStoryEntity): Promise<UserStoryEntity> {
+    const payload = this._userstoryMapper.toMongo(item); 
+    const result = await this.model.create(payload);
+    
+    return this._userstoryMapper.fromMongo(result);
+}
+
+
     async findByProjectId(projectId: string): Promise<UserStoryEntity[]> {
       const docs = await this.model.find({ projectId });
     return docs.map(doc => this._userstoryMapper.fromMongo(doc));

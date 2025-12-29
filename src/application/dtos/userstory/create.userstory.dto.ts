@@ -12,9 +12,9 @@ import { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
 @Exclude()
 export class CreateUserStoryDTO {
 
-  @Expose()
-  @IsString({ message: "Project ID must be a string" })
-  projectId: string;
+  // @Expose()
+  // @IsString({ message: "Project ID must be a string" })
+  // projectId: string;
 
   @Expose()
   @IsString({ message: "Title must be a string" })

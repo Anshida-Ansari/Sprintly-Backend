@@ -5,6 +5,7 @@ export class UserStoryPersisitanceMapper {
         return{
             _id: userStory.id,
             projectId: userStory.projectId,
+            companyId: userStory.companyId,
             title: userStory.title,
             description: userStory.description,
             status: userStory.status,
@@ -17,8 +18,9 @@ export class UserStoryPersisitanceMapper {
 
     fromMongo(doc:any):UserStoryEntity {
         return UserStoryEntity.create({
-              id: doc._id.toString(),
+            id: doc._id.toString(),
             projectId: doc.projectId.toString(),
+            companyId: doc.companyId.toString(),
             title: doc.title,
             description: doc.description,
             priority: doc.priority,

@@ -4,6 +4,7 @@ import { UserStoryStatus } from "../enum/userstory/user.story.status";
 export class UserStoryEntity {
   private readonly _id?: string;
   private _projectId: string;
+  private _companyId: string;
   private _title: string;
   private _description: string;
   private _status: UserStoryStatus;
@@ -15,6 +16,7 @@ export class UserStoryEntity {
   private constructor(props: {
     id?: string;
     projectId: string;
+    companyId: string;
     title: string;
     description: string;
     status: UserStoryStatus;
@@ -25,6 +27,7 @@ export class UserStoryEntity {
   }) {
     this._id = props.id;
     this._projectId = props.projectId;
+    this._companyId = props.companyId
     this._title = props.title;
     this._description = props.description;
     this._status = props.status;
@@ -37,6 +40,7 @@ export class UserStoryEntity {
   static create(props: {
     id?: string;
     projectId: string;
+    companyId: string;
     title: string;
     description: string;
     priority?:PriorityStatus
@@ -48,6 +52,7 @@ export class UserStoryEntity {
       ...props,
       title: props.title.trim(),
       description: props.description?.trim() || "",
+      companyId: props.companyId, 
       status: UserStoryStatus.IN_PENDING,
       priority: PriorityStatus.MEDIUM,
       sprintId: props.sprintId,
@@ -74,6 +79,7 @@ export class UserStoryEntity {
   
   get id() { return this._id; }
   get projectId() { return this._projectId; }
+  get companyId() { return this._companyId}
   get title() { return this._title; }
   get description() { return this._description; }
   get status() { return this._status; }
