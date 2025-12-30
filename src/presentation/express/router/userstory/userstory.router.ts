@@ -15,6 +15,6 @@ const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd)
 
 router.post('/:projectId/user-stories',authGurd.authorize(['admin']),validateDTO(CreateUserStoryDTO),(req,res,next)=>userstoryController.createUserstory(req,res,next))
 router.post('/:projectId/user-stories/:userstoryId',authGurd.authorize((['admin'])),validateDTO(EditUserStoryDTO),(req,res,next)=>userstoryController.editUserstory(req,res,next))
-
+router.get('/:projectId/user-stories',authGurd.authorize(['admin']),(req,res,next)=>userstoryController.listUserstory(req,res,next))
 export {router as userstoryRouter}
 

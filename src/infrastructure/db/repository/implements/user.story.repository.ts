@@ -47,6 +47,46 @@ export class UserStoryRepository extends BaseRepository<UserStoryEntity> impleme
         return result ? this._userstoryMapper.fromMongo(result) : null
     }
 
+    async listByProject(params: {
+        projectId: string
+        companyId: string
+        page: number
+        limit: number
+        search?: string
+        sprintId?: string
+        status?: string
+    }) {
+        const { page, limit, search, sprintId, status, projectId, companyId } = params
+
+        const filter: any = {
+            projectId,
+            companyId
+        }
+
+        if (search) {
+            filter.title = { $regex: search, $options: "i" }
+        }
+
+        if (sprintId) {
+            filter.sprintId = sprintId
+        }
+
+        if (status) {
+            filter.status = status
+        }
+
+        const skip = (page - 1) * limit
+
+        const [docs, total] = await Promise.all([
+            this.model.find(filter).skip(skip).limit(limit),
+            this.model.countDocuments(filter)
+        ])
+
+        return {
+            data: docs.map(doc => this._userstoryMapper.fromMongo(doc)),
+            total
+        }
+    }
 
 
 }

@@ -4,7 +4,8 @@ export const USERSTORY_TYPE = {
     IUserStroyRepository: Symbol.for("IUserStroyRepository"),
     ICreateUserstoryUsecase: Symbol.for("ICreateUserstoryUsecase"),
     UserstoryController: Symbol.for("UserstoryController"),
-    IEditUserstoryUseCase: Symbol.for("IEditUserstoryUseCase")
+    IEditUserstoryUseCase: Symbol.for("IEditUserstoryUseCase"),
+    IListUserstoryUseCase: Symbol.for("IListUserstoryUseCase")
 
 
 }
