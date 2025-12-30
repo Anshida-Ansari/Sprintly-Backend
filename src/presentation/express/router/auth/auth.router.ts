@@ -10,7 +10,7 @@ import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto"
 import { container } from "src/infrastructure/di/inversify.di"
 import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types"
 import { AuthController } from "src/presentation/http/controllers/auth.controller"
-import { validateDTO } from "src/shared/middleware/validate.dto.middlware"
+import { validateDTO } from "src/presentation/express/middleware/validate.dto.middlware"
 
 const router = Router()
 

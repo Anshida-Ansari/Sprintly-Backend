@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { ErrorMessage } from "../../domain/enum/messages/error.message.enum"
-import { ClientErrorStatus } from "../../domain/enum/status-codes/client.error.status.enum"
-import { verifyToken } from "../utils/jwt.util";
+import { ErrorMessage } from "../../../domain/enum/messages/error.message.enum"
+import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum"
+import { verifyToken } from "../../../shared/utils/jwt.util";
 import { inject } from "inversify";
-import { USER_TYPES } from "../../infrastructure/di/types/user/user.types";
-import { IUserRepository } from "../../infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "../../../infrastructure/di/types/user/user.types";
+import { IUserRepository } from "../../../infrastructure/db/repository/interface/user.interface";
 
 export class AuthGurd {
     constructor(

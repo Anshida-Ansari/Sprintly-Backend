@@ -1,6 +1,6 @@
 import { NextFunction,Request,Response } from "express";
-import AppError from "../utils/error-handling/app.errors";
-import { BaseError } from "../utils/error-handling/base.error";
+import AppError from "../../../shared/utils/error-handling/app.errors";
+import { BaseError } from "../../../shared/utils/error-handling/base.error";
 import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
 
 export const errorMiddleware = (

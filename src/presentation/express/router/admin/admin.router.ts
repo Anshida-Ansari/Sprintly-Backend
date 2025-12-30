@@ -3,8 +3,8 @@ import { InviteMemberDTO } from "src/application/dtos/admin/invite.member.dto";
 import { container } from "src/infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "src/infrastructure/di/types/admin/admin.types";
 import { AdminController } from "src/presentation/http/controllers/admin.controller";
-import { AuthGurd } from "src/shared/middleware/auth.gurd";
-import { validateDTO } from "src/shared/middleware/validate.dto.middlware";
+import { AuthGurd } from "src/presentation/express/middleware/auth.gurd";
+import { validateDTO } from "src/presentation/express/middleware/validate.dto.middlware";
 
 const router = Router()
 
