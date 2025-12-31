@@ -18,6 +18,7 @@ import { NotFoundError } from "../../../../shared/utils/error-handling/errors/no
 import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
 import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
 import { ForbiddenError } from "../../../../shared/utils/error-handling/errors/forbidden.error";
+import env from "src/infrastructure/providers/env/env.validation";
 
 @injectable()
 export class LoginUseCase implements ILoginUseCase {
@@ -93,7 +94,7 @@ export class LoginUseCase implements ILoginUseCase {
                 `refresh:${user.email}`,
                 refreshToken,
                 "EX",
-                Number(process.env.REFRESH_TOKEN_MAX_AGE)
+                Number(env.REFRESH_TOKEN_MAX_AGE)
             )
 
             return {

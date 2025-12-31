@@ -2,8 +2,9 @@ import { config } from "dotenv";
 config()    
 import app from "./app.js"
 import connectDB from "src/infrastructure/db/mongoose/connect.db.js";
+import env from "src/infrastructure/providers/env/env.validation.js";
 
-const PORT = process.env.PORT
+const PORT = env.PORT
 
 
 connectDB()

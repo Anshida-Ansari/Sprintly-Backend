@@ -8,6 +8,7 @@ import crypto from "crypto";
 import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
 import { sendInviteEmail } from "../../../../shared/utils/send.invitaion.util";
 import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
+import env from "src/infrastructure/providers/env/env.validation";
 
 @injectable()
 export class InviteMemberUseCase implements IInviteMemberUseCase {
@@ -41,7 +42,7 @@ export class InviteMemberUseCase implements IInviteMemberUseCase {
             172800
         )
 
-        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        const frontendUrl = env.FRONTENT_URL|| "http://localhost:5173";
 
         const inviteLink = `${frontendUrl}/member/accept?token=${token}`;
         console.log(inviteLink);

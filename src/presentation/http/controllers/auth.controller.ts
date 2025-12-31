@@ -11,6 +11,7 @@ import { IForgotPasswordUseCase } from "../../../application/usecases/auth/inter
 import { IResetPasswordUseCase } from "../../../application/usecases/auth/interface/reset.password.interface";
 import { IResendAdminOtpUseCase } from "../../../application/usecases/auth/interface/resend.register.otp.interface";
 import { ILogoutUseCase } from "../../../application/usecases/auth/interface/logout.interface";
+import env from "src/infrastructure/providers/env/env.validation";
 
 
 @injectable()
@@ -78,7 +79,8 @@ export class AuthController {
                 httpOnly: true,
                 sameSite: "lax",
                 secure: false,
-                maxAge: Number(process.env.REFRESH_TOKEN_MAX_AGE) || 30 * 24 * 60 * 60 * 1000
+                maxAge: env.REFRESH_TOKEN_MAX_AGE
+
             })
 
 

@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
+import env from 'src/infrastructure/providers/env/env.validation';
 
 
-const ACCESS_TOKEN_SECERET = process.env.ACCESS_TOKEN_SECERET || "access_seceret"
-const REFRESH_TOKEN_SECERET = process.env.REFRESH_TOKEN_SECERET || "refresh_seceret"
+const ACCESS_TOKEN_SECERET = env.ACCESS_TOKEN_SECERET || "access_seceret"
+const REFRESH_TOKEN_SECERET = env.REFRESH_TOKEN_SECERET || "refresh_seceret"
 
 
  
