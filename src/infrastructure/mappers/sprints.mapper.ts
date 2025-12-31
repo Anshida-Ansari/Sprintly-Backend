@@ -1,15 +1,34 @@
-// import { SprintEntity } from "src/domain/entities/sptint.entities";
+import { SprintEntity } from "../../domain/entities/sptint.entities";
+import { SprintStatus } from "../../domain/enum/sprints/sprints.status";
 
-// export class SprintPersistanceMapper {
-//     toMongo(sptints:SprintEntity){
-//         return{
+export class SprintPersistenceMapper {
+    toMongo(sprint: SprintEntity) {
+        return {
+            _id: sprint.id,
+            projectId: sprint.projectId,
+            companyId: sprint.companyId,
+            name: sprint.name,
+            goal: sprint.goal,
+            startDate: sprint.startDate,
+            endDate: sprint.endDate,
+            status: sprint.status,
+            createdAt: sprint.createdAt,
+            updatedAt: sprint.updatedAt,
+        };
+    }
 
-//         }
-//     }
-
-//     fromMongo(doc:any):SprintEntity{
-//         return{
-
-//         }
-//     }
-// }
+    fromMongo(doc: any): SprintEntity {
+        return SprintEntity.create({
+            id: doc._id.toString(),
+            projectId: doc.projectId.toString(),
+            companyId: doc.companyId.toString(),
+            name: doc.name,
+            goal: doc.goal,
+            startDate: new Date(doc.startDate),
+            endDate: new Date(doc.endDate),
+            status: doc.status as SprintStatus,
+            createdAt: doc.createdAt ? new Date(doc.createdAt) : undefined,
+            updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : undefined,
+        });
+    }
+}
