@@ -1,9 +1,9 @@
-import { ResetPasswordDTO } from "src/application/dtos/auth/reset.password.dto";
-import { ForgotPasswordUseCase } from "src/application/usecases/auth/implementation/forgot.password.usecase";
-import { LogoutUseCase } from "src/application/usecases/auth/implementation/logout.usecase";
-import { ResendAdminOtpUseCase } from "src/application/usecases/auth/implementation/resend.register.otp.ussecase";
-import { ResetPasswordUsecase } from "src/application/usecases/auth/implementation/reset.password.usecase";
-import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
+import { ResetPasswordDTO } from "../../../../application/dtos/auth/reset.password.dto";
+import { ForgotPasswordUseCase } from "../../../../application/usecases/auth/implementation/forgot.password.usecase";
+import { LogoutUseCase } from "../../../../application/usecases/auth/implementation/logout.usecase";
+import { ResendAdminOtpUseCase } from "../../../../application/usecases/auth/implementation/resend.register.otp.ussecase";
+import { ResetPasswordUsecase } from "../../../../application/usecases/auth/implementation/reset.password.usecase";
+import { SetPasswrodUseCase } from "../../../../application/usecases/auth/implementation/set.password";
 
 export const AUTH_TYPES = {
 	userModel: Symbol.for("UserModel"),

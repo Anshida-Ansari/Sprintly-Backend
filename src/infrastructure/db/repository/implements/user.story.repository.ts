@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
-import type { UserStoryEntity } from "src/domain/entities/user.story.entities";
-import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
-import type { UserStoryPersisitanceMapper } from "src/infrastructure/mappers/userstrory.mapper";
+import type { UserStoryEntity } from "../../../../domain/entities/user.story.entities";
+import { USERSTORY_TYPE } from "../../../di/types/userstory/userstory";
+import type { UserStoryPersisitanceMapper } from "../../../mappers/userstrory.mapper";
 import type { IUserStroyRepository } from "../interface/user.story.interface";
 import { BaseRepository } from "./base.repository";
 

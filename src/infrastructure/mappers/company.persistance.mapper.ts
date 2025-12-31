@@ -1,4 +1,4 @@
-import { CompanyEnitiy } from "src/domain/entities/company.enities";
+import { CompanyEnitiy } from "../../domain/entities/company.enities";
 
 export class CompanyPersistenceMapper {
 	toMongo(company: CompanyEnitiy) {

@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
-import type { CreateProjectDTO } from "src/application/dtos/projects/create.project.dto";
-import { ProjectEntity } from "src/domain/entities/project.entities";
-import { ProjectErrorMessage } from "src/domain/enum/project/project.error.message";
-import { ProjectStatus } from "src/domain/enum/project/project.status";
-import type { IProjectReposiotory } from "src/infrastructure/db/repository/interface/project.interface";
-import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
-import { ConflictError } from "src/shared/utils/error-handling/errors/conflict.error";
+import type { CreateProjectDTO } from "../../../dtos/projects/create.project.dto";
+import { ProjectEntity } from "../../../../domain/entities/project.entities";
+import { ProjectErrorMessage } from "../../../../domain/enum/project/project.error.message";
+import { ProjectStatus } from "../../../../domain/enum/project/project.status";
+import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
+import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
+import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
 import type { ICreateProjectUseCase } from "../interface/create.project.interface";
 import type { CreateProjectResponse } from "./res/create.project.response";
 

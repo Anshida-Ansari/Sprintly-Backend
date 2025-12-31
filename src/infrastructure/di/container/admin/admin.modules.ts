@@ -1,12 +1,12 @@
 import { ContainerModule } from "inversify";
-import { InviteMemberUseCase } from "src/application/usecases/admin/implementation/invite.member.usecase";
-import { ListUserUseCase } from "src/application/usecases/admin/implementation/list.members.usecase";
-import { VerifyInvitationUseCase } from "src/application/usecases/admin/implementation/verify.member.usecase";
-import type { IInviteMemberUseCase } from "src/application/usecases/admin/interface/invite.member.interface";
-import type { IListMembersUseCase } from "src/application/usecases/admin/interface/list.members.interface";
-import type { IVerifyInvitationUseCase } from "src/application/usecases/admin/interface/verify.member.interface";
-import { AuthGurd } from "src/presentation/express/middleware/auth.gurd";
-import { AdminController } from "src/presentation/http/controllers/admin.controller";
+import { InviteMemberUseCase } from "../../../../application/usecases/admin/implementation/invite.member.usecase";
+import { ListUserUseCase } from "../../../../application/usecases/admin/implementation/list.members.usecase";
+import { VerifyInvitationUseCase } from "../../../../application/usecases/admin/implementation/verify.member.usecase";
+import type { IInviteMemberUseCase } from "../../../../application/usecases/admin/interface/invite.member.interface";
+import type { IListMembersUseCase } from "../../../../application/usecases/admin/interface/list.members.interface";
+import type { IVerifyInvitationUseCase } from "../../../../application/usecases/admin/interface/verify.member.interface";
+import { AuthGurd } from "../../../../presentation/express/middleware/auth.gurd";
+import { AdminController } from "../../../../presentation/http/controllers/admin.controller";
 import { ADMIN_TYPES } from "../../types/admin/admin.types";
 
 export const InviteModule = new ContainerModule(({ bind }) => {

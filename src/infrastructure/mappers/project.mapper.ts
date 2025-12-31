@@ -1,4 +1,4 @@
-import { ProjectEntity } from "src/domain/entities/project.entities";
+import { ProjectEntity } from "../../domain/entities/project.entities";
 
 export class ProjectPersistanceMapper {
 	toMongo(project: ProjectEntity) {

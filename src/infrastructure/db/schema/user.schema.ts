@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { Role } from "src/domain/enum/role.enum";
-import { UserStatus } from "src/domain/enum/status.enum";
-import { Status } from "src/domain/enum/user/user.status.enum";
+import { Role } from "../../../domain/enum/role.enum";
+import { UserStatus } from "../../../domain/enum/status.enum";
+import { Status } from "../../../domain/enum/user/user.status.enum";
 
 export const userSchema = new mongoose.Schema(
 	{

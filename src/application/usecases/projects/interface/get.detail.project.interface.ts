@@ -1,4 +1,4 @@
-import type { ProjectStatus } from "src/domain/enum/project/project.status";
+import type { ProjectStatus } from "../../../../domain/enum/project/project.status";
 
 export interface IGetDetailProjectUseCase {
 	execute(

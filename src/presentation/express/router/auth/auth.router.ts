@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { AdminRegisterDTO } from "src/application/dtos/auth/admin.register.dto";
-import { ForgotPasswordDTO } from "src/application/dtos/auth/forgot.password.dto";
-import { LoginDTO } from "src/application/dtos/auth/login.dto";
-import { LogoutDTO } from "src/application/dtos/auth/logout.register.dto";
-import { ResendAdminOtpDTO } from "src/application/dtos/auth/resend.otp.dto";
-import { ResetPasswordDTO } from "src/application/dtos/auth/reset.password.dto";
-import { SetPasswordDTO } from "src/application/dtos/auth/set.password.dto";
-import { VerifyOtpDTO } from "src/application/dtos/auth/verify.admin.dto";
-import { container } from "src/infrastructure/di/inversify.di";
-import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types";
-import { validateDTO } from "src/presentation/express/middleware/validate.dto.middlware";
-import type { AuthController } from "src/presentation/http/controllers/auth.controller";
+import { AdminRegisterDTO } from "../../../../application/dtos/auth/admin.register.dto";
+import { ForgotPasswordDTO } from "../../../../application/dtos/auth/forgot.password.dto";
+import { LoginDTO } from "../../../../application/dtos/auth/login.dto";
+import { LogoutDTO } from "../../../../application/dtos/auth/logout.register.dto";
+import { ResendAdminOtpDTO } from "../../../../application/dtos/auth/resend.otp.dto";
+import { ResetPasswordDTO } from "../../../../application/dtos/auth/reset.password.dto";
+import { SetPasswordDTO } from "../../../../application/dtos/auth/set.password.dto";
+import { VerifyOtpDTO } from "../../../../application/dtos/auth/verify.admin.dto";
+import { container } from "../../../../infrastructure/di/inversify.di";
+import { AUTH_TYPES } from "../../../../infrastructure/di/types/auth/auth.types";
+import { validateDTO } from "../../middleware/validate.dto.middlware";
+import type { AuthController } from "../../../http/controllers/auth.controller";
 
 const router = Router();
 

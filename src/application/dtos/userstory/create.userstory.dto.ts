@@ -6,8 +6,8 @@ import {
 	MaxLength,
 	MinLength,
 } from "class-validator";
-import { PriorityStatus } from "src/domain/enum/userstory/user.story.priority";
-import { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
+import { PriorityStatus } from "../../../domain/enum/userstory/user.story.priority";
+import { UserStoryStatus } from "../../../domain/enum/userstory/user.story.status";
 
 @Exclude()
 export class CreateUserStoryDTO {

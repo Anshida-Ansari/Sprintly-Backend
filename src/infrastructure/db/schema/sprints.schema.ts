@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { SprintStatus } from "src/domain/enum/sprints/sprints.status";
+import { SprintStatus } from "../../../domain/enum/sprints/sprints.status";
 
 export const sprintSchema = new mongoose.Schema(
 	{

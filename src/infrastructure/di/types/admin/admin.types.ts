@@ -1,5 +1,5 @@
-import { ListUserUseCase } from "src/application/usecases/admin/implementation/list.members.usecase";
-import { VerifyInvitationUseCase } from "src/application/usecases/admin/implementation/verify.member.usecase";
+import { ListUserUseCase } from "../../../../application/usecases/admin/implementation/list.members.usecase";
+import { VerifyInvitationUseCase } from "../../../../application/usecases/admin/implementation/verify.member.usecase";
 
 export const ADMIN_TYPES = {
 	AdminController: Symbol.for("AdminController"),

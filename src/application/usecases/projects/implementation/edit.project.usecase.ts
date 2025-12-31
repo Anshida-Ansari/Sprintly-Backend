@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
-import type { EditProjectDTO } from "src/application/dtos/projects/edit.project.dto";
-import { ProjectErrorMessage } from "src/domain/enum/project/project.error.message";
-import type { IProjectReposiotory } from "src/infrastructure/db/repository/interface/project.interface";
-import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
-import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
+import type { EditProjectDTO } from "../../../dtos/projects/edit.project.dto";
+import { ProjectErrorMessage } from "../../../../domain/enum/project/project.error.message";
+import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
+import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 import type { IEditProjectUsecase } from "../interface/edit.project.interface";
 import type { EditProjectResponse } from "./res/edit.project.response";
 

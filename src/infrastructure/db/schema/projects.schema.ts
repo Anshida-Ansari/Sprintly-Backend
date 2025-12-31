@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ProjectStatus } from "src/domain/enum/project/project.status";
+import { ProjectStatus } from "../../../domain/enum/project/project.status";
 
 export const projectSchema = new mongoose.Schema(
 	{

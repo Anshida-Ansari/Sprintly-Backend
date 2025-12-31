@@ -1,8 +1,8 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import type { NextFunction, Request, Response } from "express";
-import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
-import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
+import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
+import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
 
 export const validateDTO = (dtoClass: any) => {
 	return async (req: Request, res: Response, next: NextFunction) => {

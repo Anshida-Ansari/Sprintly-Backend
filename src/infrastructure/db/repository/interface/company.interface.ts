@@ -1,5 +1,5 @@
-import type { CompanyEnitiy } from "src/domain/entities/company.enities";
-import type { Status } from "src/domain/enum/user/user.status.enum";
+import type { CompanyEnitiy } from "../../../../domain/entities/company.enities";
+import type { Status } from "../../../../domain/enum/user/user.status.enum";
 import type { IBaseRepository } from "./base.repository";
 
 export interface ICompanyRepository extends IBaseRepository<CompanyEnitiy> {

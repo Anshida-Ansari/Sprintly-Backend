@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
 import { generateOTP } from "../../../../shared/utils/otp.generate.util";
@@ -9,7 +9,7 @@ import type { IResendAdminOtpUseCase } from "../interface/resend.register.otp.in
 
 @injectable()
 export class ResendAdminOtpUseCase implements IResendAdminOtpUseCase {
-	constructor() {}
+	constructor() { }
 
 	async execute(dto: ResendAdminOtpDTO): Promise<any> {
 		const { token } = dto;

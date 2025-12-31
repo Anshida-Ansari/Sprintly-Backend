@@ -1,14 +1,14 @@
-import crypto from "crypto";
 import { inject, injectable } from "inversify";
-import env from "src/infrastructure/providers/env/env.validation";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
-import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
-import { sendInviteEmail } from "../../../../shared/utils/send.invitaion.util";
+import crypto from "crypto";
 import type { InviteMemberDTO } from "../../../dtos/admin/invite.member.dto";
 import type { IInviteMemberUseCase } from "../interface/invite.member.interface";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
+import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
+import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
+import env from "../../../../infrastructure/providers/env/env.validation";
+import { sendInviteEmail } from "../../../../shared/utils/send.invitaion.util";
 
 @injectable()
 export class InviteMemberUseCase implements IInviteMemberUseCase {
@@ -42,7 +42,7 @@ export class InviteMemberUseCase implements IInviteMemberUseCase {
             172800
         )
 
-        const frontendUrl = env.FRONTENT_URL|| "http://localhost:5173";
+        const frontendUrl = env.FRONTENT_URL || "http://localhost:5173";
 
         const inviteLink = `${frontendUrl}/member/accept?token=${token}`;
         console.log(inviteLink);

@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
-import type { ProjectEntity } from "src/domain/entities/project.entities";
-import type { ProjectStatus } from "src/domain/enum/project/project.status";
-import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
-import type { ProjectPersistanceMapper } from "src/infrastructure/mappers/project.mapper";
+import type { ProjectEntity } from "../../../../domain/entities/project.entities";
+import type { ProjectStatus } from "../../../../domain/enum/project/project.status";
+import { PROJECT_TYPE } from "../../../di/types/Project/project.types";
+import type { ProjectPersistanceMapper } from "../../../mappers/project.mapper";
 import type { IProjectReposiotory } from "../interface/project.interface";
 import { BaseRepository } from "./base.repository";
 
@@ -27,7 +27,7 @@ export class ProjectRepository extends BaseRepository<ProjectEntity> implements 
 
         return this._projectMapper.fromMongo(result)
     }
-  
+
     async updateProject(id: string, project: ProjectEntity): Promise<ProjectEntity | null> {
         const payload = this._projectMapper.toMongo(project)
         const result = await this.model.findByIdAndUpdate(id, payload, { new: true })

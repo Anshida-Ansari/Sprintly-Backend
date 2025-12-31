@@ -1,5 +1,5 @@
-import type { ProjectEntity } from "src/domain/entities/project.entities";
-import type { ProjectStatus } from "src/domain/enum/project/project.status";
+import type { ProjectEntity } from "../../../../domain/entities/project.entities";
+import type { ProjectStatus } from "../../../../domain/enum/project/project.status";
 import type { IBaseRepository } from "../interface/base.repository";
 
 export interface IProjectReposiotory extends IBaseRepository<ProjectEntity> {

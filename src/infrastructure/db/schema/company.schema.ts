@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Status } from "src/domain/enum/user/user.status.enum";
+import { Status } from "../../../domain/enum/user/user.status.enum";
 
 export const companySchema = new mongoose.Schema(
 	{

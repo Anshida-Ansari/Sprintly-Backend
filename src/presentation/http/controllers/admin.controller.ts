@@ -32,7 +32,7 @@ export class AdminController {
 
 
             if (!companyId) {
-              throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
+                throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
             }
 
             if (!adminId) {

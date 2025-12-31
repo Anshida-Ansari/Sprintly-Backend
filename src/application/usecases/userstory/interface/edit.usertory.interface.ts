@@ -1,6 +1,6 @@
-import type { EditUserStoryDTO } from "src/application/dtos/userstory/edit.userstory";
-import type { PriorityStatus } from "src/domain/enum/userstory/user.story.priority";
-import type { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
+import type { EditUserStoryDTO } from "../../../dtos/userstory/edit.userstory";
+import type { PriorityStatus } from "../../../../domain/enum/userstory/user.story.priority";
+import type { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status";
 
 export interface IEditUserstoryUseCase {
 	execute(

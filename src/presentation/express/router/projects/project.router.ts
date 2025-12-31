@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { CreateProjectDTO } from "src/application/dtos/projects/create.project.dto";
-import { container } from "src/infrastructure/di/inversify.di";
-import { ADMIN_TYPES } from "src/infrastructure/di/types/admin/admin.types";
-import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
-import type { AuthGurd } from "src/presentation/express/middleware/auth.gurd";
-import { validateDTO } from "src/presentation/express/middleware/validate.dto.middlware";
-import type { ProjectController } from "src/presentation/http/controllers/project.controller";
+import { CreateProjectDTO } from "../../../../application/dtos/projects/create.project.dto";
+import { container } from "../../../../infrastructure/di/inversify.di";
+import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
+import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
+import type { AuthGurd } from "../../middleware/auth.gurd";
+import { validateDTO } from "../../middleware/validate.dto.middlware";
+import type { ProjectController } from "../../../http/controllers/project.controller";
 
 const router = Router();
 

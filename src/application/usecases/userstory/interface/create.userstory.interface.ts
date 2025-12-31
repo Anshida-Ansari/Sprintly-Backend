@@ -1,6 +1,6 @@
-import type { CreateUserStoryDTO } from "src/application/dtos/userstory/create.userstory.dto";
-import type { PriorityStatus } from "src/domain/enum/userstory/user.story.priority";
-import type { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
+import type { CreateUserStoryDTO } from "../../../dtos/userstory/create.userstory.dto";
+import type { PriorityStatus } from "../../../../domain/enum/userstory/user.story.priority";
+import type { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status";
 
 export interface ICreateUserstoryUsecase {
 	execute(

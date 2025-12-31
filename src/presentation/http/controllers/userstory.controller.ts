@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import type { ICreateUserstoryUsecase } from "src/application/usecases/userstory/interface/create.userstory.interface";
-import type { IEditUserstoryUseCase } from "src/application/usecases/userstory/interface/edit.usertory.interface";
-import type { IListUserstoryUseCase } from "src/application/usecases/userstory/interface/list.userstory.interface";
-import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum";
-import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
+import type { ICreateUserstoryUsecase } from "../../../application/usecases/userstory/interface/create.userstory.interface";
+import type { IEditUserstoryUseCase } from "../../../application/usecases/userstory/interface/edit.usertory.interface";
+import type { IListUserstoryUseCase } from "../../../application/usecases/userstory/interface/list.userstory.interface";
+import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
+import { USERSTORY_TYPE } from "../../../infrastructure/di/types/userstory/userstory";
 
 @injectable()
 export class UserstoryController {
@@ -69,8 +69,8 @@ export class UserstoryController {
                 page: page ? Number(page) : 1,
                 limit: limit ? Number(limit) : 10,
                 search: search ? String(search) : "",
-                sprintId: sprintId? String(sprintId):undefined,
-                status: status? String(status):undefined
+                sprintId: sprintId ? String(sprintId) : undefined,
+                status: status ? String(status) : undefined
             }
 
 

@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import env from "src/infrastructure/providers/env/env.validation";
+import env from "../../infrastructure/providers/env/env.validation";
 
 export const sendInviteEmail = async (email: string, inviteLink: string) => {
 	const transporter = nodemailer.createTransport({

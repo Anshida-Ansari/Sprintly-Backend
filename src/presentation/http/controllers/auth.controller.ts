@@ -1,6 +1,6 @@
 import e, { type NextFunction, type Request, type Response } from "express";
 import { inject, injectable } from "inversify";
-import env from "src/infrastructure/providers/env/env.validation";
+import env from "../../../infrastructure/providers/env/env.validation";
 import type { IRegisterAdminUseCase } from "../../../application/usecases/auth/interface/admin.register.interface";
 import type { IForgotPasswordUseCase } from "../../../application/usecases/auth/interface/forgot.password.interface";
 import type { ILoginUseCase } from "../../../application/usecases/auth/interface/login.interface";

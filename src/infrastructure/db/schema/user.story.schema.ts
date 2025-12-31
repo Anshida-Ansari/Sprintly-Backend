@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { PriorityStatus } from "src/domain/enum/userstory/user.story.priority";
-import { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
+import { PriorityStatus } from "../../../domain/enum/userstory/user.story.priority";
+import { UserStoryStatus } from "../../../domain/enum/userstory/user.story.status";
 
 export const userStorySchema = new mongoose.Schema(
 	{

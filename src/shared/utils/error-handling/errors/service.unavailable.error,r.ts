@@ -1,4 +1,4 @@
-import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
+import { ServerErrorStatus } from "../../../../domain/enum/status-codes/sever.error.status.enum";
 import { BaseError } from "../base.error";
 
 export class ServiceUnavailableError extends BaseError {

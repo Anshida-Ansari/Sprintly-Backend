@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
+import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
 import AppError from "../../../shared/utils/error-handling/app.errors";
 import { BaseError } from "../../../shared/utils/error-handling/base.error";
 

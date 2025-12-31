@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
 import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";

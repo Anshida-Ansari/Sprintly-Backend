@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import env from "src/infrastructure/providers/env/env.validation";
+import env from "../../../../infrastructure/providers/env/env.validation";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { SuccessMessage } from "../../../../domain/enum/messages/success.message.enum";
 import { Role } from "../../../../domain/enum/role.enum";
@@ -32,84 +32,84 @@ export class LoginUseCase implements ILoginUseCase {
     ) { }
 
     async execute(dto: LoginDTO): Promise<AuthResult> {
-       
-            console.log('reaching the login ');
 
-            const { email, password } = dto
+        console.log('reaching the login ');
 
-            const isValidEmail = validateEmail(email)
-            if (!isValidEmail) throw new validationError(ErrorMessage.EMAIL_INVALID)
+        const { email, password } = dto
 
-            const user = await this._userRepository.findByEmail(email)
-            if (!user) throw new NotFoundError(ErrorMessage.EMAIL_NOT_EXIST)
+        const isValidEmail = validateEmail(email)
+        if (!isValidEmail) throw new validationError(ErrorMessage.EMAIL_INVALID)
 
-            user.isBlocked()
+        const user = await this._userRepository.findByEmail(email)
+        if (!user) throw new NotFoundError(ErrorMessage.EMAIL_NOT_EXIST)
 
-            console.log('user', user);
+        user.isBlocked()
 
-            const isPasswrord = await verify(user.password, password)
-            if (!isPasswrord) throw new validationError(ErrorMessage.INVALID_PASSWORD)
+        console.log('user', user);
 
-            if (user.role !== Role.SUPER_ADMIN) {
+        const isPasswrord = await verify(user.password, password)
+        if (!isPasswrord) throw new validationError(ErrorMessage.INVALID_PASSWORD)
 
-                if (user.role === Role.DEVELOPERS && !user.companyId) {
-                    throw new ConflictError(ErrorMessage.DEVELOPER_NOT_ASSIGNED_TO_COMPANY)
-                }
+        if (user.role !== Role.SUPER_ADMIN) {
 
-                if (user.role === Role.ADMIN && !user.companyId) {
-                    throw new ConflictError(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
-                }
-
-                if (!user.companyId) {
-                    throw new ConflictError(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
-                }
-
-
-
-                const company = await this._companyRepository.findByCompanyId(user.companyId)
-                if (!company) throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
-
-
-
-
-                if (company.status !== Status.APPROVED) {
-                    throw new ForbiddenError(ErrorMessage.COMPANY_NOT_APPROVED)
-                }
-
-                if (user.role === Role.ADMIN && company.status !== Status.APPROVED) {
-                    throw new ForbiddenError("Admin is not approved yet")
-                }
-
+            if (user.role === Role.DEVELOPERS && !user.companyId) {
+                throw new ConflictError(ErrorMessage.DEVELOPER_NOT_ASSIGNED_TO_COMPANY)
             }
 
-            const payload = { id: user.id, email: user.email, role: user.role }
-
-
-            const accessToken = generateAccessToken(payload)
-            const refreshToken = generateRefreshToken(payload)
-
-
-
-            await redisClient.set(
-                `refresh:${user.email}`,
-                refreshToken,
-                "EX",
-                Number(env.REFRESH_TOKEN_MAX_AGE)
-            )
-
-            return {
-                message: SuccessMessage.LOGIN_SUCCESS,
-                accessToken,
-                refreshToken,
-                user: {
-                    id: user.id?.toString(),
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-
-                }
+            if (user.role === Role.ADMIN && !user.companyId) {
+                throw new ConflictError(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
             }
 
-       
+            if (!user.companyId) {
+                throw new ConflictError(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY)
+            }
+
+
+
+            const company = await this._companyRepository.findByCompanyId(user.companyId)
+            if (!company) throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
+
+
+
+
+            if (company.status !== Status.APPROVED) {
+                throw new ForbiddenError(ErrorMessage.COMPANY_NOT_APPROVED)
+            }
+
+            if (user.role === Role.ADMIN && company.status !== Status.APPROVED) {
+                throw new ForbiddenError("Admin is not approved yet")
+            }
+
+        }
+
+        const payload = { id: user.id, email: user.email, role: user.role }
+
+
+        const accessToken = generateAccessToken(payload)
+        const refreshToken = generateRefreshToken(payload)
+
+
+
+        await redisClient.set(
+            `refresh:${user.email}`,
+            refreshToken,
+            "EX",
+            Number(env.REFRESH_TOKEN_MAX_AGE)
+        )
+
+        return {
+            message: SuccessMessage.LOGIN_SUCCESS,
+            accessToken,
+            refreshToken,
+            user: {
+                id: user.id?.toString(),
+                name: user.name,
+                email: user.email,
+                role: user.role,
+
+            }
+        }
+
+
     }
 } 

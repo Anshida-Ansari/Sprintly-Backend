@@ -1,4 +1,4 @@
-import { UserStoryEntity } from "src/domain/entities/user.story.entities";
+import { UserStoryEntity } from "../../domain/entities/user.story.entities";
 
 export class UserStoryPersisitanceMapper {
 	toMongo(userStory: UserStoryEntity) {
