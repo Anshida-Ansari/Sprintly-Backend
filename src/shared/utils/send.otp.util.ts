@@ -2,15 +2,15 @@ import nodemailer from "nodemailer";
 import env from "src/infrastructure/providers/env/env.validation";
 
 export const sendOtpEmail = async (email: string, otp: number) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: env.EMAIL_USER,
-      pass: env.EMAIL_PASS,
-    },
-  });
+	const transporter = nodemailer.createTransport({
+		service: "gmail",
+		auth: {
+			user: env.EMAIL_USER,
+			pass: env.EMAIL_PASS,
+		},
+	});
 
-  const htmlTemplate = `
+	const htmlTemplate = `
   <!DOCTYPE html>
   <html>
   <head>
@@ -119,10 +119,10 @@ export const sendOtpEmail = async (email: string, otp: number) => {
   </html>
   `;
 
-  await transporter.sendMail({
-    from: `Sprintly <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: "Your Verification OTP - Sprintly",
-    html: htmlTemplate,
-  });
+	await transporter.sendMail({
+		from: `Sprintly <${process.env.EMAIL_USER}>`,
+		to: email,
+		subject: "Your Verification OTP - Sprintly",
+		html: htmlTemplate,
+	});
 };

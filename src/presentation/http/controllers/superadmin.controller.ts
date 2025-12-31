@@ -1,10 +1,10 @@
+import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { NextFunction, Request, Response } from "express";
-import { SUPERADMIN_TYPES } from "../../../infrastructure/di/types/superadmin/superadmin.types";
-import { ListCompanyUseCase } from "../../../application/usecases/superadmin/implementation/list.companies.usecase";
+import type { ListCompanyUseCase } from "../../../application/usecases/superadmin/implementation/list.companies.usecase";
+import type { IGetDetailPageUseCase } from "../../../application/usecases/superadmin/interface/get.detailpage.interface";
+import type { IUpdateStatusInterface } from "../../../application/usecases/superadmin/interface/update.status.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
-import { IUpdateStatusInterface } from "../../../application/usecases/superadmin/interface/update.status.interface";
-import { IGetDetailPageUseCase } from "../../../application/usecases/superadmin/interface/get.detailpage.interface";
+import { SUPERADMIN_TYPES } from "../../../infrastructure/di/types/superadmin/superadmin.types";
 
 @injectable()
 export class SuperAdminController {

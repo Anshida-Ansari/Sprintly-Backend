@@ -6,27 +6,23 @@ import { ResetPasswordUsecase } from "src/application/usecases/auth/implementati
 import { SetPasswrodUseCase } from "src/application/usecases/auth/implementation/set.password";
 
 export const AUTH_TYPES = {
+	userModel: Symbol.for("UserModel"),
+	CompanyModel: Symbol.for("CompanyModel"),
+	//controllers
+	AuthController: Symbol.for("AuthController"),
 
-userModel: Symbol.for('UserModel'),
-CompanyModel: Symbol.for('CompanyModel'),
-//controllers
-AuthController: Symbol.for("AuthController"),
+	//interfaces
 
-//interfaces
+	//UseCases
+	IRegisterAdminUseCase: Symbol.for("IRegisterAdminUseCase"),
+	ILoginUseCase: Symbol.for("ILoginUseCase"),
+	IVerifyOtpUseCase: Symbol.for("IVerifyOtpUseCase"),
+	IRefreshUseCase: Symbol.for("IRefreshUseCase"),
+	ISetPassWordUseCase: Symbol.for("ISetPassWordUseCase"),
+	IForgotPasswordUseCase: Symbol.for("IForgotPasswordUseCase"),
+	IResetPasswordUseCase: Symbol.for("IResetPasswordUseCase"),
+	IResendAdminOtpUseCase: Symbol.for("IResendAdminOtpUseCase"),
+	ILogoutUseCase: Symbol.for("ILogoutUseCase"),
 
-//UseCases
-IRegisterAdminUseCase: Symbol.for("IRegisterAdminUseCase"),
-ILoginUseCase: Symbol.for("ILoginUseCase"),
-IVerifyOtpUseCase: Symbol.for("IVerifyOtpUseCase")  ,
-IRefreshUseCase: Symbol.for('IRefreshUseCase'),
-ISetPassWordUseCase: Symbol.for('ISetPassWordUseCase'),
-IForgotPasswordUseCase: Symbol.for('IForgotPasswordUseCase'),
-IResetPasswordUseCase: Symbol.for('IResetPasswordUseCase')    ,
-IResendAdminOtpUseCase: Symbol.for('IResendAdminOtpUseCase'),
-ILogoutUseCase: Symbol.for('ILogoutUseCase')
-
-    
-//Providers
-
-
-}
+	//Providers
+};

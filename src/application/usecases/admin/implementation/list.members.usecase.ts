@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
 import { UserStatus } from "../../../../domain/enum/status.enum";
-import { IListMembersUseCase } from "../interface/list.members.interface";
+import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import type { IListMembersUseCase } from "../interface/list.members.interface";
 
 @injectable()
 export class ListUserUseCase implements IListMembersUseCase {

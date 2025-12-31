@@ -1,17 +1,17 @@
-import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
-import e, { NextFunction, Request, Response } from "express";
+import e, { type NextFunction, type Request, type Response } from "express";
 import { inject, injectable } from "inversify";
-import { ILoginUseCase } from "../../../application/usecases/auth/interface/login.interface";
-import { IRefreshUseCase } from "../../../application/usecases/auth/interface/refresh.interface";
-import { AUTH_TYPES } from "../../../infrastructure/di/types/auth/auth.types";
-import { IRegisterAdminUseCase } from "../../../application/usecases/auth/interface/admin.register.interface";
-import { IVerifyOtpUseCase } from "../../../application/usecases/auth/interface/verifyadmin.otp.interface";
-import { ISetPassWordUseCase } from "../../../application/usecases/auth/interface/set.password.interface";
-import { IForgotPasswordUseCase } from "../../../application/usecases/auth/interface/forgot.password.interface";
-import { IResetPasswordUseCase } from "../../../application/usecases/auth/interface/reset.password.interface";
-import { IResendAdminOtpUseCase } from "../../../application/usecases/auth/interface/resend.register.otp.interface";
-import { ILogoutUseCase } from "../../../application/usecases/auth/interface/logout.interface";
 import env from "src/infrastructure/providers/env/env.validation";
+import type { IRegisterAdminUseCase } from "../../../application/usecases/auth/interface/admin.register.interface";
+import type { IForgotPasswordUseCase } from "../../../application/usecases/auth/interface/forgot.password.interface";
+import type { ILoginUseCase } from "../../../application/usecases/auth/interface/login.interface";
+import type { ILogoutUseCase } from "../../../application/usecases/auth/interface/logout.interface";
+import type { IRefreshUseCase } from "../../../application/usecases/auth/interface/refresh.interface";
+import type { IResendAdminOtpUseCase } from "../../../application/usecases/auth/interface/resend.register.otp.interface";
+import type { IResetPasswordUseCase } from "../../../application/usecases/auth/interface/reset.password.interface";
+import type { ISetPassWordUseCase } from "../../../application/usecases/auth/interface/set.password.interface";
+import type { IVerifyOtpUseCase } from "../../../application/usecases/auth/interface/verifyadmin.otp.interface";
+import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
+import { AUTH_TYPES } from "../../../infrastructure/di/types/auth/auth.types";
 
 
 @injectable()

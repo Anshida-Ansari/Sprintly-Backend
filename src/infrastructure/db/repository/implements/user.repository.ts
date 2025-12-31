@@ -1,11 +1,11 @@
-import { UserEntity } from "src/domain/entities/user.entities";
-import { IUserRepository } from "../interface/user.interface";
-import { BaseRepository } from "./base.repository";
-import { model, Model, models } from "mongoose";
-import { UserMapper, UserPersistenceMapper } from "src/infrastructure/mappers/user.percistance.mapper";
-import { IUser } from "../../interface/user.interface";
 import { inject, injectable } from "inversify";
+import { type Model, model, models } from "mongoose";
+import type { UserEntity } from "src/domain/entities/user.entities";
 import { USER_TYPES } from "src/infrastructure/di/types/user/user.types";
+import { UserMapper, type UserPersistenceMapper } from "src/infrastructure/mappers/user.percistance.mapper";
+import { IUser } from "../../interface/user.interface";
+import type { IUserRepository } from "../interface/user.interface";
+import { BaseRepository } from "./base.repository";
 
 
 @injectable()

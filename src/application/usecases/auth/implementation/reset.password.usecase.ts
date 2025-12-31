@@ -1,13 +1,13 @@
 import { inject, injectable } from "inversify";
-import { IResetPasswordUseCase } from "../interface/reset.password.interface";
-import { ResetPasswordDTO } from "../../../dtos/auth/reset.password.dto";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
 import { UserEntity } from "../../../../domain/entities/user.entities";
 import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
 import { SuccessMessage } from "../../../../domain/enum/messages/success.message.enum";
-import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
+import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
 import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
+import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
+import type { ResetPasswordDTO } from "../../../dtos/auth/reset.password.dto";
+import type { IResetPasswordUseCase } from "../interface/reset.password.interface";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUseCase{

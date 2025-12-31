@@ -1,4 +1,4 @@
-import { InferSchemaType } from "mongoose";
-import { userStorySchema } from "../schema/user.story.schema";
+import type { InferSchemaType } from "mongoose";
+import type { userStorySchema } from "../schema/user.story.schema";
 
-export type IUsersStory = InferSchemaType<typeof userStorySchema>
+export type IUsersStory = InferSchemaType<typeof userStorySchema>;

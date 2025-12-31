@@ -2,7 +2,12 @@ import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.stat
 import { BaseError } from "../base.error";
 
 export class InternalServerError extends BaseError {
-    constructor(description = "Internal Server error") {
-        super("InternalServerError", ServerErrorStatus.INTERNAL_SERVER_ERROR, false, description)
-    }
+	constructor(description = "Internal Server error") {
+		super(
+			"InternalServerError",
+			ServerErrorStatus.INTERNAL_SERVER_ERROR,
+			false,
+			description,
+		);
+	}
 }

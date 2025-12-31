@@ -1,16 +1,16 @@
-import { inject, injectable } from "inversify";
-import { ICreateProjectUseCase } from "src/application/usecases/projects/interface/create.project.interface";
-import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
-import { NextFunction, Request, Response } from "express";
-import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
-import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum";
-import { IListProjectUseCase } from "src/application/usecases/projects/interface/list.project.interface";
-import { IEditProjectUsecase } from "src/application/usecases/projects/interface/edit.project.interface";
 import { log } from "node:console";
-import { IGetDetailProjectUseCase } from "src/application/usecases/projects/interface/get.detail.project.interface";
-import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
+import type { NextFunction, Request, Response } from "express";
+import { inject, injectable } from "inversify";
+import type { ICreateProjectUseCase } from "src/application/usecases/projects/interface/create.project.interface";
+import type { IEditProjectUsecase } from "src/application/usecases/projects/interface/edit.project.interface";
+import type { IGetDetailProjectUseCase } from "src/application/usecases/projects/interface/get.detail.project.interface";
+import type { IListProjectUseCase } from "src/application/usecases/projects/interface/list.project.interface";
 import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
+import { SuccessMessage } from "src/domain/enum/messages/success.message.enum";
 import { ClientErrorStatus } from "src/domain/enum/status-codes/client.error.status.enum";
+import { ServerErrorStatus } from "src/domain/enum/status-codes/sever.error.status.enum";
+import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum";
+import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
 
 @injectable()
 export class ProjectController {

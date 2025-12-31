@@ -1,5 +1,4 @@
-export enum UserStatus{
-    BLOCK = 'block',
-    ACTIVE = 'active'
-
+export enum UserStatus {
+	BLOCK = "block",
+	ACTIVE = "active",
 }

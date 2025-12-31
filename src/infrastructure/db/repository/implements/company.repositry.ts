@@ -1,13 +1,13 @@
 import { inject, injectable } from "inversify";
-import { ICompany } from "../../interface/company.interface";
-import { ICompanyRepository } from "../interface/company.interface";
-import { BaseRepository } from "./base.repository";
+import type {  Model } from "mongoose";
+import type { CompanyEnitiy } from "src/domain/entities/company.enities";
+import type { Status } from "src/domain/enum/user/user.status.enum";
 import { AUTH_TYPES } from "src/infrastructure/di/types/auth/auth.types";
 import { COMPANY_TYPES } from "src/infrastructure/di/types/company/company.types";
-import {  Model } from "mongoose";
-import { CompanyEnitiy } from "src/domain/entities/company.enities";
-import { CompanyPersistenceMapper } from "src/infrastructure/mappers/company.persistance.mapper";
-import { Status } from "src/domain/enum/user/user.status.enum";
+import type { CompanyPersistenceMapper } from "src/infrastructure/mappers/company.persistance.mapper";
+import { ICompany } from "../../interface/company.interface";
+import type { ICompanyRepository } from "../interface/company.interface";
+import { BaseRepository } from "./base.repository";
 
 
 @injectable()

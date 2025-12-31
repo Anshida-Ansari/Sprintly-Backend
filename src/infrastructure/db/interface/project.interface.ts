@@ -1,4 +1,4 @@
-import { InferSchemaType } from "mongoose";
-import { projectSchema } from "../schema/projects.schema";
+import type { InferSchemaType } from "mongoose";
+import type { projectSchema } from "../schema/projects.schema";
 
-export type IProject = InferSchemaType<typeof projectSchema>
+export type IProject = InferSchemaType<typeof projectSchema>;

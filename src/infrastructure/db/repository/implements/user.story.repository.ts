@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
-import { BaseRepository } from "./base.repository";
-import { IUserStroyRepository } from "../interface/user.story.interface";
+import type { Model } from "mongoose";
+import type { UserStoryEntity } from "src/domain/entities/user.story.entities";
 import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
-import { Model } from "mongoose";
-import { UserStoryEntity } from "src/domain/entities/user.story.entities";
-import { UserStoryPersisitanceMapper } from "src/infrastructure/mappers/userstrory.mapper";
+import type { UserStoryPersisitanceMapper } from "src/infrastructure/mappers/userstrory.mapper";
+import type { IUserStroyRepository } from "../interface/user.story.interface";
+import { BaseRepository } from "./base.repository";
 
 @injectable()
 export class UserStoryRepository extends BaseRepository<UserStoryEntity> implements IUserStroyRepository {

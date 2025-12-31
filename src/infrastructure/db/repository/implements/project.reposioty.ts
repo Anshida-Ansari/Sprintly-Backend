@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
-import { Model } from "mongoose";
-import { ProjectEntity } from "src/domain/entities/project.entities";
-import { IProjectReposiotory } from "../interface/project.interface";
-import { BaseRepository } from "./base.repository";
-import { ProjectStatus } from "src/domain/enum/project/project.status";
-import { ProjectPersistanceMapper } from "src/infrastructure/mappers/project.mapper";
+import type { Model } from "mongoose";
+import type { ProjectEntity } from "src/domain/entities/project.entities";
+import type { ProjectStatus } from "src/domain/enum/project/project.status";
 import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
+import type { ProjectPersistanceMapper } from "src/infrastructure/mappers/project.mapper";
+import type { IProjectReposiotory } from "../interface/project.interface";
+import { BaseRepository } from "./base.repository";
 
 @injectable()
 export class ProjectRepository extends BaseRepository<ProjectEntity> implements IProjectReposiotory {

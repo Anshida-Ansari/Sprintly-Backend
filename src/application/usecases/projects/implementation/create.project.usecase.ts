@@ -1,14 +1,13 @@
 import { inject, injectable } from "inversify";
-import { ICreateProjectUseCase } from "../interface/create.project.interface";
-import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
-import { IProjectReposiotory } from "src/infrastructure/db/repository/interface/project.interface";
-import { CreateProjectDTO } from "src/application/dtos/projects/create.project.dto";
-import { CreateProjectResponse } from "./res/create.project.response";
-import { ConflictError } from "src/shared/utils/error-handling/errors/conflict.error";
-import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
-import { ProjectErrorMessage } from "src/domain/enum/project/project.error.message";
+import type { CreateProjectDTO } from "src/application/dtos/projects/create.project.dto";
 import { ProjectEntity } from "src/domain/entities/project.entities";
+import { ProjectErrorMessage } from "src/domain/enum/project/project.error.message";
 import { ProjectStatus } from "src/domain/enum/project/project.status";
+import type { IProjectReposiotory } from "src/infrastructure/db/repository/interface/project.interface";
+import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
+import { ConflictError } from "src/shared/utils/error-handling/errors/conflict.error";
+import type { ICreateProjectUseCase } from "../interface/create.project.interface";
+import type { CreateProjectResponse } from "./res/create.project.response";
 
 @injectable()
 export class CreateProjectUseCase implements ICreateProjectUseCase {

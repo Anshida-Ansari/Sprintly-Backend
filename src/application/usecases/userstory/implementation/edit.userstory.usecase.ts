@@ -1,16 +1,16 @@
 import { inject, injectable } from "inversify";
-import { IEditUserstoryUseCase } from "../interface/edit.usertory.interface";
-import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
-import { IUserStroyRepository } from "src/infrastructure/db/repository/interface/user.story.interface";
-import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
-import { IProjectReposiotory } from "src/infrastructure/db/repository/interface/project.interface";
-import { EditUserStoryDTO } from "src/application/dtos/userstory/edit.userstory";
-import { PriorityStatus } from "src/domain/enum/userstory/user.story.priority";
-import { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
-import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
-import { ProjectErrorMessage } from "src/domain/enum/project/project.error.message";
-import { ForbiddenError } from "src/shared/utils/error-handling/errors/forbidden.error";
+import type { EditUserStoryDTO } from "src/application/dtos/userstory/edit.userstory";
 import { ErrorMessage } from "src/domain/enum/messages/error.message.enum";
+import { ProjectErrorMessage } from "src/domain/enum/project/project.error.message";
+import type { PriorityStatus } from "src/domain/enum/userstory/user.story.priority";
+import type { UserStoryStatus } from "src/domain/enum/userstory/user.story.status";
+import type { IProjectReposiotory } from "src/infrastructure/db/repository/interface/project.interface";
+import type { IUserStroyRepository } from "src/infrastructure/db/repository/interface/user.story.interface";
+import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";
+import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
+import { ForbiddenError } from "src/shared/utils/error-handling/errors/forbidden.error";
+import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
+import type { IEditUserstoryUseCase } from "../interface/edit.usertory.interface";
 
 @injectable()
 export class EditUserStoryUseCase implements IEditUserstoryUseCase {

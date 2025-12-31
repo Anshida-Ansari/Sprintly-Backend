@@ -4,4 +4,4 @@
 // export interface IUserMapper{
 //     toMongo(user:UserEntity)
 //     fromMongo(doc:IUser):UserEntity
-// } 
+// }

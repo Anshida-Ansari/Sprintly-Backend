@@ -1,6 +1,5 @@
-import { ResendAdminOtpDTO } from "../../../../application/dtos/auth/resend.otp.dto";
+import type { ResendAdminOtpDTO } from "../../../../application/dtos/auth/resend.otp.dto";
 
-export interface IResendAdminOtpUseCase{
-    execute(dto:ResendAdminOtpDTO):Promise<any>
-
+export interface IResendAdminOtpUseCase {
+	execute(dto: ResendAdminOtpDTO): Promise<any>;
 }

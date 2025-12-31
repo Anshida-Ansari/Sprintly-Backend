@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { ICreateUserstoryUsecase } from "src/application/usecases/userstory/interface/create.userstory.interface";
-import { IEditUserstoryUseCase } from "src/application/usecases/userstory/interface/edit.usertory.interface";
-import { IListUserstoryUseCase } from "src/application/usecases/userstory/interface/list.userstory.interface";
+import type { ICreateUserstoryUsecase } from "src/application/usecases/userstory/interface/create.userstory.interface";
+import type { IEditUserstoryUseCase } from "src/application/usecases/userstory/interface/edit.usertory.interface";
+import type { IListUserstoryUseCase } from "src/application/usecases/userstory/interface/list.userstory.interface";
 import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum";
 import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
 
