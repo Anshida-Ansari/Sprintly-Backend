@@ -20,12 +20,13 @@ router.post(
 	(req, res, next) => adminController.inviteMember(req, res, next),
 );
 
-router.post(
+router.get(
 	"/members",
 	authGurd.authorize(["admin"]),
 	(req,res,next) => adminController.listUsers(req,res,next)
 	
 )
+
 router.post(
 	"/verify-invitation",
 	(req, res, next) => adminController.verifyInvitation(req, res, next),

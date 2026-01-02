@@ -23,6 +23,7 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
             companyId
         })
 
+    
         if (exisitingProjeect) {
             throw new ConflictError(ProjectErrorMessage.PROJECT_ALREADY_EXIST)
         }
