@@ -21,6 +21,8 @@ export class RefreshUseCase implements IRefreshUseCase {
 
     async execute(refreshToken: string): Promise<RefreshResult> {
 
+        
+
         if (!refreshToken) throw new validationError('Refresh token missing')
 
         const decoded: any = verifyToken(refreshToken, "refresh")

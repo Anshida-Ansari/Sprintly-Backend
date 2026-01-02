@@ -4,6 +4,7 @@ const app = express();
 
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import env from "../../../infrastructure/providers/env/env.validation";
 import { adminRouter } from "../router/admin/admin.router";
 import { authRouter } from "../router/auth/auth.router";
 import { projectRouter } from "../router/projects/project.router";
@@ -12,7 +13,7 @@ import { userstoryRouter } from "../router/userstory/userstory.router";
 
 app.use(
 	cors({
-		origin: "http://localhost:5173",
+		origin: env.FRONTENT_URL,
 		credentials: true,
 	}),
 );

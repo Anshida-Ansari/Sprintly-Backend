@@ -75,13 +75,14 @@ export class AuthController {
 
             const result = await this._loginUseCase.execute(req.body)
 
+         
             res.cookie("refreshToken", result.refreshToken, {
                 httpOnly: true,
-                sameSite: "lax",
-                secure: false,
-                maxAge: env.REFRESH_TOKEN_MAX_AGE
-
-            })
+                sameSite: "lax",   
+                path: "/",        
+                secure: false,     
+                maxAge: env.REFRESH_TOKEN_MAX_AGE * 1000
+            });
 
 
             return res.status(SuccessStatus.OK).json({
@@ -105,6 +106,7 @@ export class AuthController {
         try {
 
             const refreshToken = req.cookies?.refreshToken
+
             const result = await this._refreshUseCase.execute(refreshToken)
 
             return res.status(SuccessStatus.OK).json({
@@ -178,7 +180,7 @@ export class AuthController {
             const refreshToken = req.cookies.refreshToken
             const result = await this._logoutUseCase.execute(refreshToken)
 
-            res.clearCookie(refreshToken)
+            res.clearCookie("refreshToken")
 
             res.json(result)
 
