@@ -21,10 +21,6 @@ export class VerifyForgotPasswordOtpUseCase implements IVerifyForgotPasswordOtpU
             throw new validationError(ErrorMessage.OTP_INVALID);
         }
 
-        // We don't delete the OTP yet because the reset password step might need to verify it again 
-        // OR we could return a temporary token here. 
-        // To keep it simple and match the existing reset password logic (which takes email),
-        // we'll just return success.
 
         return {
             message: "OTP verified successfully",
