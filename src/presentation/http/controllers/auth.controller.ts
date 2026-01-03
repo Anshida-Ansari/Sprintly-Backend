@@ -9,6 +9,7 @@ import type { IRefreshUseCase } from "../../../application/usecases/auth/interfa
 import type { IResendAdminOtpUseCase } from "../../../application/usecases/auth/interface/resend.register.otp.interface";
 import type { IResetPasswordUseCase } from "../../../application/usecases/auth/interface/reset.password.interface";
 import type { ISetPassWordUseCase } from "../../../application/usecases/auth/interface/set.password.interface";
+import type { IVerifyForgotPasswordOtpUseCase } from "../../../application/usecases/auth/interface/verify.forgot.otp.interface";
 import type { IVerifyOtpUseCase } from "../../../application/usecases/auth/interface/verifyadmin.otp.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { AUTH_TYPES } from "../../../infrastructure/di/types/auth/auth.types";
@@ -29,6 +30,8 @@ export class AuthController {
         private _setPasswrodUseCase: ISetPassWordUseCase,
         @inject(AUTH_TYPES.IForgotPasswordUseCase)
         private _forgotPasswordUseCase: IForgotPasswordUseCase,
+        @inject(AUTH_TYPES.IVerifyForgotPasswordOtpUseCase)
+        private _verifyForgotOtpUseCase: IVerifyForgotPasswordOtpUseCase,
         @inject(AUTH_TYPES.IResetPasswordUseCase)
         private _resetPassWordUseCase: IResetPasswordUseCase,
         @inject(AUTH_TYPES.IResendAdminOtpUseCase)
@@ -75,12 +78,12 @@ export class AuthController {
 
             const result = await this._loginUseCase.execute(req.body)
 
-         
+
             res.cookie("refreshToken", result.refreshToken, {
                 httpOnly: true,
-                sameSite: "lax",   
-                path: "/",        
-                secure: false,     
+                sameSite: "lax",
+                path: "/",
+                secure: false,
                 maxAge: env.REFRESH_TOKEN_MAX_AGE * 1000
             });
 
@@ -150,6 +153,19 @@ export class AuthController {
 
         } catch (error) {
             next(error)
+        }
+    }
+
+    async verifyForgotOTP(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email, otp } = req.body;
+            const result = await this._verifyForgotOtpUseCase.execute(email, otp);
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: result.message
+            });
+        } catch (error) {
+            next(error);
         }
     }
     async resetPassword(req: Request, res: Response, next: NextFunction) {

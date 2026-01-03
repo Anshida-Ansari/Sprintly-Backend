@@ -38,6 +38,9 @@ router.post(
 	validateDTO(ForgotPasswordDTO),
 	(req, res, next) => authController.forgotPasswrod(req, res, next),
 );
+router.post("/verify-forgot-otp", (req, res, next) =>
+	authController.verifyForgotOTP(req, res, next),
+);
 router.post(
 	"/reset-password",
 	validateDTO(ResetPasswordDTO),

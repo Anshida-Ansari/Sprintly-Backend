@@ -12,6 +12,8 @@ import type { IRegisterAdminUseCase } from "../../../../application/usecases/aut
 import type { IForgotPasswordUseCase } from "../../../../application/usecases/auth/interface/forgot.password.interface";
 import type { ILoginUseCase } from "../../../../application/usecases/auth/interface/login.interface";
 import type { ILogoutUseCase } from "../../../../application/usecases/auth/interface/logout.interface";
+import type { IVerifyForgotPasswordOtpUseCase } from "../../../../application/usecases/auth/interface/verify.forgot.otp.interface";
+import { VerifyForgotPasswordOtpUseCase } from "../../../../application/usecases/auth/implementation/verify.forgot.otp.usecase";
 import type { IRefreshUseCase } from "../../../../application/usecases/auth/interface/refresh.interface";
 import type { IResendAdminOtpUseCase } from "../../../../application/usecases/auth/interface/resend.register.otp.interface";
 import type { IResetPasswordUseCase } from "../../../../application/usecases/auth/interface/reset.password.interface";
@@ -46,6 +48,9 @@ export const AuthModule = new ContainerModule(({ bind }) => {
 	);
 	bind<IResendAdminOtpUseCase>(AUTH_TYPES.IResendAdminOtpUseCase).to(
 		ResendAdminOtpUseCase,
+	);
+	bind<IVerifyForgotPasswordOtpUseCase>(AUTH_TYPES.IVerifyForgotPasswordOtpUseCase).to(
+		VerifyForgotPasswordOtpUseCase,
 	);
 	bind<ILogoutUseCase>(AUTH_TYPES.ILogoutUseCase).to(LogoutUseCase);
 
