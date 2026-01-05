@@ -77,6 +77,12 @@ export class UserStoryEntity {
 
 		this._updatedAt = new Date();
 	}
+	
+	moveToBacklog() {
+		this._sprintId = undefined
+		this._updatedAt = new Date()
+	}
+
 
 	get id() {
 		return this._id;

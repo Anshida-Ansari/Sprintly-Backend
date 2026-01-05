@@ -27,8 +27,6 @@ export class SprintPersistenceMapper {
             startDate: new Date(doc.startDate),
             endDate: new Date(doc.endDate),
             status: doc.status as SprintStatus,
-            createdAt: doc.createdAt ? new Date(doc.createdAt) : undefined,
-            updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : undefined,
         });
     }
 }

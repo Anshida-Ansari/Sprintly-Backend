@@ -6,6 +6,7 @@ import { ProjectModule } from "./container/project/project.modules";
 import { SuperAdminModule } from "./container/superadmin/superadmin.modules";
 import { UserModule } from "./container/user/user.modules";
 import { UserStoryModule } from "./container/userstory/userstory.modules";
+import { SprintModule } from "./container/sprints/sprints.modules";
 
 const container = new Container({
 	defaultScope: "Singleton",
@@ -20,6 +21,7 @@ container.load(
 	SuperAdminModule,
 	ProjectModule,
 	UserStoryModule,
+	SprintModule,
 );
 
 export { container };
