@@ -10,6 +10,7 @@ import { authRouter } from "../router/auth/auth.router";
 import { projectRouter } from "../router/projects/project.router";
 import { superadminRouter } from "../router/superadmin/superadmin.router";
 import { userstoryRouter } from "../router/userstory/userstory.router";
+import { sprintRouter } from "../router/sprints/sprints.router";
 
 app.use(
 	cors({
@@ -26,5 +27,7 @@ app.use("/api/admin", adminRouter);
 app.use("/api/superadmin", superadminRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/projects", userstoryRouter);
+app.use("/api/project",sprintRouter);
+
 
 export default app;
