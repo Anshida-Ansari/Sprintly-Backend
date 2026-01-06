@@ -14,7 +14,7 @@ export class SprintsRepository extends BaseRepository<SprintEntity> implements I
         model: Model<SprintEntity>,
 
         @inject(SPRINTS_TYPE.SprintPersistenceMapper)
-        private readonly _sprintsMapper : SprintPersistenceMapper
+        private readonly _sprintsMapper: SprintPersistenceMapper
     ) {
         super(model)
     }
@@ -76,5 +76,35 @@ export class SprintsRepository extends BaseRepository<SprintEntity> implements I
             .sort({ startDate: 1 });
 
         return docs.map(doc => this._sprintsMapper.fromMongo(doc));
+    }
+
+    async listByProject(params: { projectId: string; companyId: string; page: number; limit: number; search?: string; status?: string; }): Promise<{ data: SprintEntity[]; total: number; }> {
+
+        const { projectId, companyId, page, limit, search, status } = params
+
+        const filter: any = {
+            projectId,
+            companyId
+        }
+
+        if (search) {
+            filter.name = { $regex: search, $options: "i" }
+        }
+
+        if (status) {
+            filter.status = status
+        }
+
+        const skip = (page - 1) * limit
+
+        const [docs, total] = await Promise.all([
+            this.model.find(filter).skip(skip).limit(limit),
+            this.model.countDocuments(filter)
+        ])
+
+        return {
+            data: docs.map(doc => this._sprintsMapper.fromMongo(doc)),
+            total
+        }
     }
 }

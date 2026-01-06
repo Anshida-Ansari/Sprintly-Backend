@@ -23,5 +23,11 @@ router.post(
 
 )
 
+router.get(
+    "/:projectId/sprints",
+    authGurd.authorize(["admin"]),
+    (req,res,next)=>sprintsController.listSprints(req,res,next)
+)
+
 export { router as sprintRouter}
 

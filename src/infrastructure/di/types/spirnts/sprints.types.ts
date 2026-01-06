@@ -3,6 +3,7 @@ export const SPRINTS_TYPE = {
     ISprintReposiotry: Symbol.for('ISprintReposiotry'),
     SprintPersistenceMapper: Symbol.for('SprintPersistenceMapper'),
     ICreateSprintUseCase: Symbol.for('ICreateSprintUseCase')  ,
-    SprintController: Symbol.for('SprintController')
+    SprintController: Symbol.for('SprintController'),
+    IListSprintsUseCase: Symbol.for('IListSprintsUseCase')
     
 }
