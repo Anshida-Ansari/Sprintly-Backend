@@ -4,6 +4,7 @@ export const SPRINTS_TYPE = {
     SprintPersistenceMapper: Symbol.for('SprintPersistenceMapper'),
     ICreateSprintUseCase: Symbol.for('ICreateSprintUseCase')  ,
     SprintController: Symbol.for('SprintController'),
-    IListSprintsUseCase: Symbol.for('IListSprintsUseCase')
+    IListSprintsUseCase: Symbol.for('IListSprintsUseCase'),
+    IEditSprintUseCase:Symbol.for('IEditSprintUseCase')
     
 }

@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { IListSprintsUseCase } from "../interface/list.sprints";
+import { IListSprintsUseCase } from "../interface/list.sprints.interface";
 import { SPRINTS_TYPE } from "src/infrastructure/di/types/spirnts/sprints.types";
 import { ISprintReposiotry } from "src/infrastructure/db/repository/interface/sprints.interface";
 import { PROJECT_TYPE } from "src/infrastructure/di/types/Project/project.types";

@@ -6,6 +6,7 @@ import { AuthGurd } from "../../middleware/auth.gurd";
 import { ADMIN_TYPES } from "src/infrastructure/di/types/admin/admin.types";
 import { CreateSprintDTO } from "src/application/dtos/sprints/create.sprints.dto";
 import { validateDTO } from "../../middleware/validate.dto.middlware";
+import { EditSprintDTO } from "src/application/dtos/sprints/edit.sprints.dto";
 
 const router = Router()
 
@@ -27,6 +28,13 @@ router.get(
     "/:projectId/sprints",
     authGurd.authorize(["admin"]),
     (req,res,next)=>sprintsController.listSprints(req,res,next)
+)
+
+router.patch(
+    "/:projectId/sprints/:sprintId",
+    authGurd.authorize(['admin']),
+    validateDTO(EditSprintDTO),
+    (req,res,next)=>sprintsController.editSprints(req,res,next)
 )
 
 export { router as sprintRouter}

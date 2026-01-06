@@ -9,8 +9,10 @@ import { SprintsRepository } from "src/infrastructure/db/repository/implements/s
 import { ICreateSprintUseCase } from "src/application/usecases/sprints/interface/create.sprint.interface";
 import { CreateSprintUseCase } from "src/application/usecases/sprints/implementation/create.sprints.usecase";
 import { SprintController } from "src/presentation/http/controllers/sprint.controller";
-import { IListSprintsUseCase } from "src/application/usecases/sprints/interface/list.sprints";
+import { IListSprintsUseCase } from "src/application/usecases/sprints/interface/list.sprints.interface";
 import { ListSprintsUseCase } from "src/application/usecases/sprints/implementation/list.sprints.usecase";
+import { IEditSprintUseCase } from "src/application/usecases/sprints/interface/edit.sprints.interface";
+import { EditSprintUseCase } from "src/application/usecases/sprints/implementation/edit.sprints.usecase";
 
 export const SprintModule = new ContainerModule(({bind})=>{
     bind<Model<ISprints>>(SPRINTS_TYPE.SprintModel).toConstantValue(SprintModel)
@@ -19,5 +21,6 @@ export const SprintModule = new ContainerModule(({bind})=>{
     bind<ICreateSprintUseCase>(SPRINTS_TYPE.ICreateSprintUseCase).to(CreateSprintUseCase)
     bind<SprintController>(SPRINTS_TYPE.SprintController).to(SprintController)
     bind<IListSprintsUseCase>(SPRINTS_TYPE.IListSprintsUseCase).to(ListSprintsUseCase)
+    bind<IEditSprintUseCase>(SPRINTS_TYPE.IEditSprintUseCase).to(EditSprintUseCase)
 
 })

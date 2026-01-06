@@ -24,4 +24,5 @@ export enum ErrorMessage {
 	ADMIN_NOT_FOUND = "Admin is not found",
 	REFRESH_TOKEN_REQUIRED = "Refresh token is required ",
 	NOT_FOUND = "Not found",
+	CANNOT_EDIT = "Cannot be edited"
 }

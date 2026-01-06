@@ -25,6 +25,21 @@ export class SprintsRepository extends BaseRepository<SprintEntity> implements I
 
         return this._sprintsMapper.fromMongo(result);
     }
+    async findById(id: string): Promise<SprintEntity | null> {
+        const result = await this.model.findById(id)
+        return result ? this._sprintsMapper.fromMongo(result) : null
+    }
+    async update(id: string, entity: SprintEntity): Promise<SprintEntity | null> {
+        const payload = this._sprintsMapper.toMongo(entity)
+
+        const result = await this.model.findByIdAndUpdate(
+            id,
+            payload,
+            { new: true }
+        )
+
+        return result ? this._sprintsMapper.fromMongo(result) : null
+    }
 
 
     async findActiveSprintByProject(
