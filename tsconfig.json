@@ -9,14 +9,38 @@
 		"resolveJsonModule": true,
 		"outDir": "./dist",
 		"rootDir": "./src",
-		"baseUrl": "./",
-		"types": ["node"],
+		"baseUrl": "./src",
+		"paths": {
+			"@application/*": [
+				"application/*"
+			],
+			"@domain/*": [
+				"domain/*"
+			],
+			"@infrastructure/*": [
+				"infrastructure/*"
+			],
+			"@presentation/*": [
+				"presentation/*"
+			],
+			"@shared/*": [
+				"shared/*"
+			]
+		},
+		"types": [
+			"node"
+		],
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		"strictPropertyInitialization": false
 	},
-	"include": ["src/**/*"],
-	"exclude": ["node_modules", "dist"],
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	],
 	"ts-node": {
 		"esm": true,
 		"experimentalSpecifierResolution": "node"

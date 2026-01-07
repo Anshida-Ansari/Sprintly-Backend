@@ -1,5 +1,5 @@
-import type { EditProjectDTO } from "../../../dtos/projects/edit.project.dto";
-import type { EditProjectResponse } from "../implementation/res/edit.project.response";
+import type { EditProjectDTO } from "@application/dtos/projects/edit.project.dto";
+import type { EditProjectResponse } from "@application/usecases/projects/implementation/res/edit.project.response";
 
 export interface IEditProjectUsecase {
 	execute(

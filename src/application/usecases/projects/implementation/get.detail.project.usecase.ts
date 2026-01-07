@@ -1,12 +1,16 @@
 import { inject, injectable } from "inversify";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import { ProjectErrorMessage } from "../../../../domain/enum/project/project.error.message";
-import type { ProjectStatus } from "../../../../domain/enum/project/project.status";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
-import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import { ForbiddenError } from "../../../../shared/utils/error-handling/errors/forbidden.error";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
-import type { IGetDetailProjectUseCase } from "../interface/get.detail.project.interface";
+
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
+import type { ProjectStatus } from "@domain/enum/project/project.status";
+
+import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
+import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
+
+import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+
+import type { IGetDetailProjectUseCase } from "@application/usecases/projects/interface/get.detail.project.interface";
 
 @injectable()
 export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {

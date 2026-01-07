@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { container } from "src/infrastructure/di/inversify.di";
-import { SPRINTS_TYPE } from "src/infrastructure/di/types/spirnts/sprints.types";
-import { SprintController } from "src/presentation/http/controllers/sprint.controller";
-import { AuthGurd } from "../../middleware/auth.gurd";
-import { ADMIN_TYPES } from "src/infrastructure/di/types/admin/admin.types";
-import { CreateSprintDTO } from "src/application/dtos/sprints/create.sprints.dto";
-import { validateDTO } from "../../middleware/validate.dto.middlware";
-import { EditSprintDTO } from "src/application/dtos/sprints/edit.sprints.dto";
+import { container } from "@infrastructure/di/inversify.di";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { ADMIN_TYPES } from "@infrastructure/di/types/admin/admin.types";
+import { SprintController } from "@presentation/http/controllers/sprint.controller";
+import { CreateSprintDTO } from "@application/dtos/sprints/create.sprints.dto";
+import { EditSprintDTO } from "@application/dtos/sprints/edit.sprints.dto";
+import { AuthGurd } from "@presentation/express/middleware/auth.gurd";
+import { validateDTO } from "@presentation/express/middleware/validate.dto.middlware";
 
 const router = Router()
 

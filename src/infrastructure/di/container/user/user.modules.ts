@@ -1,6 +1,5 @@
 import { ContainerModule } from "inversify";
 import type { Model } from "mongoose";
-import { UserEntity } from "../../../../domain/entities/user.entities";
 import type { IUser } from "../../../db/interface/user.interface";
 import { userModel } from "../../../db/models/user.model";
 import { UserRepository } from "../../../db/repository/implements/user.repository";

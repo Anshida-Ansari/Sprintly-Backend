@@ -1,18 +1,18 @@
 import { ContainerModule } from "inversify";
 import { Model } from "mongoose";
-import { ISprints } from "src/infrastructure/db/interface/sprints.interface";
-import { SPRINTS_TYPE } from "../../types/spirnts/sprints.types";
-import { SprintModel } from "src/infrastructure/db/models/sprints.model";
-import { SprintPersistenceMapper } from "src/infrastructure/mappers/sprints.mapper";
-import { ISprintReposiotry } from "src/infrastructure/db/repository/interface/sprints.interface";
-import { SprintsRepository } from "src/infrastructure/db/repository/implements/sprints.repository";
-import { ICreateSprintUseCase } from "src/application/usecases/sprints/interface/create.sprint.interface";
-import { CreateSprintUseCase } from "src/application/usecases/sprints/implementation/create.sprints.usecase";
-import { SprintController } from "src/presentation/http/controllers/sprint.controller";
-import { IListSprintsUseCase } from "src/application/usecases/sprints/interface/list.sprints.interface";
-import { ListSprintsUseCase } from "src/application/usecases/sprints/implementation/list.sprints.usecase";
-import { IEditSprintUseCase } from "src/application/usecases/sprints/interface/edit.sprints.interface";
-import { EditSprintUseCase } from "src/application/usecases/sprints/implementation/edit.sprints.usecase";
+import { ISprints } from "@infrastructure/db/interface/sprints.interface";
+import { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import { SprintsRepository } from "@infrastructure/db/repository/implements/sprints.repository";
+import { SprintModel } from "@infrastructure/db/models/sprints.model";
+import { SprintPersistenceMapper } from "@infrastructure/mappers/sprints.mapper";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
+import { CreateSprintUseCase } from "@application/usecases/sprints/implementation/create.sprints.usecase";
+import { IListSprintsUseCase } from "@application/usecases/sprints/interface/list.sprints.interface";
+import { ListSprintsUseCase } from "@application/usecases/sprints/implementation/list.sprints.usecase";
+import { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
+import { EditSprintUseCase } from "@application/usecases/sprints/implementation/edit.sprints.usecase";
+import { SprintController } from "@presentation/http/controllers/sprint.controller";
 
 export const SprintModule = new ContainerModule(({bind})=>{
     bind<Model<ISprints>>(SPRINTS_TYPE.SprintModel).toConstantValue(SprintModel)

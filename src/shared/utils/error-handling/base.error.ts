@@ -1,4 +1,4 @@
-import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
+import { ServerErrorStatus } from "@domain/enum/status-codes/sever.error.status.enum";
 
 export class BaseError extends Error {
 	public readonly name: string;

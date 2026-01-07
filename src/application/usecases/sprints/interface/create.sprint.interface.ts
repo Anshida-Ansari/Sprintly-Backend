@@ -1,5 +1,5 @@
-import { CreateSprintDTO } from "src/application/dtos/sprints/create.sprints.dto";
-import { SprintStatus } from "src/domain/enum/sprints/sprints.status";
+import { CreateSprintDTO } from "@application/dtos/sprints/create.sprints.dto";
+import { SprintStatus } from "@domain/enum/sprints/sprints.status";
 
 export interface ICreateSprintUseCase{
     execute(

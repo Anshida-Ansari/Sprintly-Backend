@@ -1,23 +1,28 @@
 import { inject, injectable } from "inversify";
 import mongoose from "mongoose";
-import { CompanyEnitiy } from "../../../../domain/entities/company.enities";
-import { UserEntity } from "../../../../domain/entities/user.entities";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import { Role } from "../../../../domain/enum/role.enum";
-import { UserStatus } from "../../../../domain/enum/status.enum";
-import { Status } from "../../../../domain/enum/user/user.status.enum";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
-import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import type { CompanyPersistenceMapper } from "../../../../infrastructure/mappers/company.persistance.mapper";
-import type { UserPersistenceMapper } from "../../../../infrastructure/mappers/user.percistance.mapper";
-import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
-import { InternalServerError } from "../../../../shared/utils/error-handling/errors/internal.server.error";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
-import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
-import type { VerifyOtpDTO } from "../../../dtos/auth/verify.admin.dto";
-import type { IVerifyOtpUseCase } from "../interface/verifyadmin.otp.interface";
+
+import { CompanyEnitiy } from "@domain/entities/company.enities";
+import { UserEntity } from "@domain/entities/user.entities";
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { Role } from "@domain/enum/role.enum";
+import { UserStatus } from "@domain/enum/status.enum";
+import { Status } from "@domain/enum/user/user.status.enum";
+
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+
+import type { CompanyPersistenceMapper } from "@infrastructure/mappers/company.persistance.mapper";
+import type { UserPersistenceMapper } from "@infrastructure/mappers/user.percistance.mapper";
+import { redisClient } from "@infrastructure/providers/redis/redis.provider";
+
+import { InternalServerError } from "@shared/utils/error-handling/errors/internal.server.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { validationError } from "@shared/utils/error-handling/errors/validation.error";
+
+import type { VerifyOtpDTO } from "@application/dtos/auth/verify.admin.dto";
+import type { IVerifyOtpUseCase } from "@application/usecases/auth/interface/verifyadmin.otp.interface";
 
 
 @injectable()

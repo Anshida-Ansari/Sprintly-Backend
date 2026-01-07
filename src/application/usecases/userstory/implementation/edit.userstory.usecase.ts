@@ -1,16 +1,23 @@
 import { inject, injectable } from "inversify";
-import type { EditUserStoryDTO } from "../../../dtos/userstory/edit.userstory";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import { ProjectErrorMessage } from "../../../../domain/enum/project/project.error.message";
-import type { PriorityStatus } from "../../../../domain/enum/userstory/user.story.priority";
-import type { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
-import type { IUserStroyRepository } from "../../../../infrastructure/db/repository/interface/user.story.interface";
-import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import { USERSTORY_TYPE } from "../../../../infrastructure/di/types/userstory/userstory";
-import { ForbiddenError } from "../../../../shared/utils/error-handling/errors/forbidden.error";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
-import type { IEditUserstoryUseCase } from "../interface/edit.usertory.interface";
+
+import type { EditUserStoryDTO } from "@application/dtos/userstory/edit.userstory";
+
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
+
+import type { PriorityStatus } from "@domain/enum/userstory/user.story.priority";
+import type { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
+
+import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
+import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+
+import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+
+import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+
+import type { IEditUserstoryUseCase } from "@application/usecases/userstory/interface/edit.usertory.interface";
 
 @injectable()
 export class EditUserStoryUseCase implements IEditUserstoryUseCase {

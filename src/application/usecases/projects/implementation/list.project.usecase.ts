@@ -1,7 +1,9 @@
 import { inject, injectable } from "inversify";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
-import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import type { IListProjectUseCase } from "../interface/list.project.interface";
+
+import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
+import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
+
+import type { IListProjectUseCase } from "@application/usecases/projects/interface/list.project.interface";
 
 @injectable()
 export class ListProjectUseCase implements IListProjectUseCase {

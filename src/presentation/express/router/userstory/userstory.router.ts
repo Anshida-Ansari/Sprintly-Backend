@@ -1,13 +1,12 @@
 import { Router } from "express";
-import { CreateUserStoryDTO } from "../../../../application/dtos/userstory/create.userstory.dto";
-import { EditUserStoryDTO } from "../../../../application/dtos/userstory/edit.userstory";
-import { container } from "../../../../infrastructure/di/inversify.di";
-import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
-import { USERSTORY_TYPE } from "src/infrastructure/di/types/userstory/userstory";
-import type { AuthGurd } from "../../middleware/auth.gurd";
-import { validateDTO } from "../../middleware/validate.dto.middlware";
-import type { UserstoryController } from "../../../http/controllers/userstory.controller";
-
+import { container } from "@infrastructure/di/inversify.di";
+import { ADMIN_TYPES } from "@infrastructure/di/types/admin/admin.types";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+import { CreateUserStoryDTO } from "@application/dtos/userstory/create.userstory.dto";
+import { EditUserStoryDTO } from "@application/dtos/userstory/edit.userstory";
+import type { UserstoryController } from "@presentation/http/controllers/userstory.controller";
+import type { AuthGurd } from "@presentation/express/middleware/auth.gurd";
+import { validateDTO } from "@presentation/express/middleware/validate.dto.middlware";
 const router = Router();
 
 const userstoryController = container.get<UserstoryController>(

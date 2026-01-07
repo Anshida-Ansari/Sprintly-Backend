@@ -1,11 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { ICreateSprintUseCase } from "src/application/usecases/sprints/interface/create.sprint.interface";
-import { IEditSprintUseCase } from "src/application/usecases/sprints/interface/edit.sprints.interface";
-import { IListSprintsUseCase } from "src/application/usecases/sprints/interface/list.sprints.interface";
-import { SprintStatus } from "src/domain/enum/sprints/sprints.status";
-import { SuccessStatus } from "src/domain/enum/status-codes/success.status.enum";
-import { SPRINTS_TYPE } from "src/infrastructure/di/types/spirnts/sprints.types";
+import { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
+import { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
+import { IListSprintsUseCase } from "@application/usecases/sprints/interface/list.sprints.interface";
+import { SprintStatus } from "@domain/enum/sprints/sprints.status";
+import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 
 @injectable()
 export class SprintController {

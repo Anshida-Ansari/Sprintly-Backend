@@ -1,16 +1,20 @@
 import { inject, injectable } from "inversify";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import { UserStatus } from "../../../../domain/enum/status.enum";
-import type { RefreshResult } from "../../../../domain/types/auth/refresh.result.types";
-import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
-import { ForbiddenError } from "../../../../shared/utils/error-handling/errors/forbidden.error";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
-import { Unauthorized } from "../../../../shared/utils/error-handling/errors/unauthorized.error";
-import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
-import { generateAccessToken, verifyToken } from "../../../../shared/utils/jwt.util";
-import type { IRefreshUseCase } from "../interface/refresh.interface";
+
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { UserStatus } from "@domain/enum/status.enum";
+import type { RefreshResult } from "@domain/types/auth/refresh.result.types";
+
+import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import { redisClient } from "@infrastructure/providers/redis/redis.provider";
+
+import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { Unauthorized } from "@shared/utils/error-handling/errors/unauthorized.error";
+import { validationError } from "@shared/utils/error-handling/errors/validation.error";
+import { generateAccessToken, verifyToken } from "@shared/utils/jwt.util";
+
+import type { IRefreshUseCase } from "@application/usecases/auth/interface/refresh.interface";
 
 @injectable()
 export class RefreshUseCase implements IRefreshUseCase {

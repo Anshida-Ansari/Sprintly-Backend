@@ -1,5 +1,5 @@
-import type { CreateProjectDTO } from "../../../dtos/projects/create.project.dto";
-import type { CreateProjectResponse } from "../implementation/res/create.project.response";
+import type { CreateProjectDTO } from "@application/dtos/projects/create.project.dto";
+import type { CreateProjectResponse } from "@application/usecases/projects/implementation/res/create.project.response";
 
 export interface ICreateProjectUseCase {
 	execute(

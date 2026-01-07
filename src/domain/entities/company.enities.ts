@@ -1,4 +1,4 @@
-import type { Status } from "../enum/user/user.status.enum";
+import type { Status } from "@domain/enum/user/user.status.enum";
 
 export class CompanyEnitiy {
 	private readonly _id?: string;

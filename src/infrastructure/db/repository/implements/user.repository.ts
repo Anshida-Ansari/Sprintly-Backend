@@ -3,7 +3,6 @@ import { type Model, model, models } from "mongoose";
 import type { UserEntity } from "../../../../domain/entities/user.entities";
 import { USER_TYPES } from "../../../di/types/user/user.types";
 import { UserMapper, type UserPersistenceMapper } from "../../../mappers/user.percistance.mapper";
-import { IUser } from "../../interface/user.interface";
 import type { IUserRepository } from "../interface/user.interface";
 import { BaseRepository } from "./base.repository";
 

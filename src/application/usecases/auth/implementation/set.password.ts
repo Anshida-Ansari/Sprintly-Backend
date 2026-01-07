@@ -1,14 +1,18 @@
 import { hash } from "argon2";
 import { inject, injectable } from "inversify";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import { Role } from "../../../../domain/enum/role.enum";
-import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
-import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
-import { validationError } from "../../../../shared/utils/error-handling/errors/validation.error";
-import type { ISetPassWordUseCase } from "../interface/set.password.interface";
+
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { Role } from "@domain/enum/role.enum";
+
+import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import { redisClient } from "@infrastructure/providers/redis/redis.provider";
+
+import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { validationError } from "@shared/utils/error-handling/errors/validation.error";
+
+import type { ISetPassWordUseCase } from "@application/usecases/auth/interface/set.password.interface";
 
 
 @injectable()

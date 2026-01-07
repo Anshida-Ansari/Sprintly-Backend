@@ -1,5 +1,5 @@
-import { PriorityStatus } from "../enum/userstory/user.story.priority";
-import { UserStoryStatus } from "../enum/userstory/user.story.status";
+import { PriorityStatus } from "@domain/enum/userstory/user.story.priority";
+import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 
 export class UserStoryEntity {
 	private readonly _id?: string;

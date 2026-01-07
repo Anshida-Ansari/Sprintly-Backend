@@ -1,9 +1,13 @@
 import { inject, injectable } from "inversify";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
-import type { IGetDetailPageUseCase } from "../interface/get.detailpage.interface";
+
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+
+import type { IGetDetailPageUseCase } from "@application/usecases/superadmin/interface/get.detailpage.interface";
 
 @injectable()
 export class GetDetailPageUseCase implements IGetDetailPageUseCase{

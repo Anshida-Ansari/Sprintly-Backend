@@ -1,4 +1,4 @@
-import { SprintStatus } from "../enum/sprints/sprints.status";
+import { SprintStatus } from "@domain/enum/sprints/sprints.status";
 
 export class SprintEntity {
 	private _id?: string;

@@ -1,4 +1,4 @@
-import type { AdminRegisterDTO } from "../../../../application/dtos/auth/admin.register.dto";
+import type { AdminRegisterDTO } from "@application/dtos/auth/admin.register.dto";
 
 export interface IRegisterAdminUseCase {
 	execute(dto: AdminRegisterDTO): Promise<{

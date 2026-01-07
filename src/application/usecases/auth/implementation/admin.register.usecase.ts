@@ -1,15 +1,19 @@
 import { randomBytes } from "crypto";
 import { inject, injectable } from "inversify";
-import { ErrorMessage } from "../../../../domain/enum/messages/error.message.enum";
-import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import { redisClient } from "../../../../infrastructure/providers/redis/redis.provider";
-import { ConflictError } from "../../../../shared/utils/error-handling/errors/conflict.error";
-import { generateOTP } from "../../../../shared/utils/otp.generate.util";
-import { hash } from "../../../../shared/utils/password.hash.util";
-import { sendOtpEmail } from "../../../../shared/utils/send.otp.util";
-import type { AdminRegisterDTO } from "../../../dtos/auth/admin.register.dto";
-import type { IRegisterAdminUseCase } from "../interface/admin.register.interface";
+
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+
+import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import { redisClient } from "@infrastructure/providers/redis/redis.provider";
+
+import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
+import { generateOTP } from "@shared/utils/otp.generate.util";
+import { hash } from "@shared/utils/password.hash.util";
+import { sendOtpEmail } from "@shared/utils/send.otp.util";
+
+import type { AdminRegisterDTO } from "@application/dtos/auth/admin.register.dto";
+import type { IRegisterAdminUseCase } from "@application/usecases/auth/interface/admin.register.interface";
 
 @injectable()
 export class RegisterAdminUseCase implements IRegisterAdminUseCase {

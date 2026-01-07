@@ -1,5 +1,5 @@
-import { EditSprintDTO } from "src/application/dtos/sprints/edit.sprints.dto";
-import { SprintStatus } from "src/domain/enum/sprints/sprints.status";
+import { EditSprintDTO } from "@application/dtos/sprints/edit.sprints.dto";
+import { SprintStatus } from "@domain/enum/sprints/sprints.status";
 
 export interface IEditSprintUseCase {
   execute(

@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { NotFoundError } from "src/shared/utils/error-handling/errors/not.found.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import type { IInviteMemberUseCase } from "../../../application/usecases/admin/interface/invite.member.interface";
 import type { IListMembersUseCase } from "../../../application/usecases/admin/interface/list.members.interface";
 import type { IVerifyInvitationUseCase } from "../../../application/usecases/admin/interface/verify.member.interface";

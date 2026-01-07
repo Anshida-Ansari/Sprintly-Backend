@@ -1,4 +1,4 @@
-import { ProjectStatus } from "../enum/project/project.status";
+import { ProjectStatus } from "@domain/enum/project/project.status";
 
 export class ProjectEntity {
 	private readonly _id?: string;
