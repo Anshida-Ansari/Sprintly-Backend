@@ -28,7 +28,6 @@ export class BlockUserUseCase implements IBlockUserUseCase {
 
         if (status === UserStatus.BLOCK) {
             await this._tokenBlacklistService.revokeUserRefreshTokens(user.email);
-            console.log(`[BlockUserUseCase] User ${user.email} blocked and tokens revoked.`);
         }
 
         return {
