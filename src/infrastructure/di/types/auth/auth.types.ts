@@ -19,5 +19,8 @@ export const AUTH_TYPES = {
 	IResendAdminOtpUseCase: Symbol.for("IResendAdminOtpUseCase"),
 	ILogoutUseCase: Symbol.for("ILogoutUseCase"),
 
+	//Services
+	TokenBlacklistService: Symbol.for("TokenBlacklistService"),
+
 	//Providers
 };

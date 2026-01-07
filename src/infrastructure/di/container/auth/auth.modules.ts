@@ -20,6 +20,7 @@ import type { IResetPasswordUseCase } from "../../../../application/usecases/aut
 import type { ISetPassWordUseCase } from "../../../../application/usecases/auth/interface/set.password.interface";
 import type { IVerifyOtpUseCase } from "../../../../application/usecases/auth/interface/verifyadmin.otp.interface";
 import { AuthController } from "../../../../presentation/http/controllers/auth.controller";
+import { TokenBlacklistService } from "../../../../infrastructure/services/token.blacklist.service";
 import { AUTH_TYPES } from "../../types/auth/auth.types";
 
 export const AuthModule = new ContainerModule(({ bind }) => {
@@ -53,6 +54,9 @@ export const AuthModule = new ContainerModule(({ bind }) => {
 		VerifyForgotPasswordOtpUseCase,
 	);
 	bind<ILogoutUseCase>(AUTH_TYPES.ILogoutUseCase).to(LogoutUseCase);
+
+	//services
+	bind<TokenBlacklistService>(AUTH_TYPES.TokenBlacklistService).to(TokenBlacklistService);
 
 	//controllers
 });

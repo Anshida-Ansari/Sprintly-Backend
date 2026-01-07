@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject } from "inversify";
 import { ErrorMessage } from "../../../domain/enum/messages/error.message.enum"
+import { UserStatus } from "../../../domain/enum/status.enum";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum"
 import type { IUserRepository } from "../../../infrastructure/db/repository/interface/user.interface";
 import { USER_TYPES } from "../../../infrastructure/di/types/user/user.types";
@@ -51,11 +52,19 @@ export class AuthGurd {
 
 
                 const user = await this._userRepository.findById(decoded.id)
+                console.log('user found for token verification ', user);
 
                 if (!user) {
                     return res.status(ClientErrorStatus.UNAUTHORIZED).json({
                         success: false,
                         message: "User not found"
+                    })
+                }
+
+                if (user.status === UserStatus.BLOCK) {
+                    return res.status(ClientErrorStatus.FORBIDDEN).json({
+                        success: false,
+                        message: ErrorMessage.ADMIN_BLOCKED
                     })
                 }
 

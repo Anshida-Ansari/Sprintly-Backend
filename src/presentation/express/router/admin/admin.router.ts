@@ -23,13 +23,19 @@ router.post(
 router.get(
 	"/members",
 	authGurd.authorize(["admin"]),
-	(req,res,next) => adminController.listUsers(req,res,next)
-	
+	(req, res, next) => adminController.listUsers(req, res, next)
+
 )
 
 router.post(
 	"/verify-invitation",
 	(req, res, next) => adminController.verifyInvitation(req, res, next),
+);
+
+router.patch(
+	"/block-user/:userId",
+	authGurd.authorize(["admin"]),
+	(req, res, next) => adminController.blockUser(req, res, next),
 );
 
 export { router as adminRouter };

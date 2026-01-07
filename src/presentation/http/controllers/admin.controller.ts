@@ -4,6 +4,7 @@ import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.err
 import type { IInviteMemberUseCase } from "../../../application/usecases/admin/interface/invite.member.interface";
 import type { IListMembersUseCase } from "../../../application/usecases/admin/interface/list.members.interface";
 import type { IVerifyInvitationUseCase } from "../../../application/usecases/admin/interface/verify.member.interface";
+import type { IBlockUserUseCase } from "../../../application/usecases/admin/interface/block.user.interface";
 import { ErrorMessage } from "../../../domain/enum/messages/error.message.enum";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
@@ -18,7 +19,9 @@ export class AdminController {
         @inject(ADMIN_TYPES.IVerifyInvitationUseCase)
         private _verifyInvitationUseCase: IVerifyInvitationUseCase,
         @inject(ADMIN_TYPES.IListMembersUseCase)
-        private _listUserUseCase: IListMembersUseCase
+        private _listUserUseCase: IListMembersUseCase,
+        @inject(ADMIN_TYPES.IBlockUserUseCase)
+        private _blockUserUseCase: IBlockUserUseCase
     ) { }
 
     async inviteMember(req: Request, res: Response, next: NextFunction) {
@@ -108,6 +111,22 @@ export class AdminController {
         } catch (error: any) {
             next(error)
 
+        }
+    }
+
+    async blockUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userId } = req.params
+            const { status } = req.body
+
+            const result = await this._blockUserUseCase.execute(userId, status)
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: result.message
+            })
+        } catch (error) {
+            next(error)
         }
     }
 
