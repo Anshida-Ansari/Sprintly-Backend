@@ -5,7 +5,7 @@ import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.err
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { AUTH_TYPES } from "@infrastructure/di/types/auth/auth.types";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
-import type { TokenBlacklistService } from "@infrastructure/services/token.blacklist.service";
+import type { TokenBlacklistService } from "@infrastructure/providers/token.blacklist.service";
 import type { IBlockUserUseCase } from "../interface/block.user.interface";
 
 @injectable()

@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { redisClient } from "../providers/redis/redis.provider";
+import { redisClient } from "./redis/redis.provider";
 
 @injectable()
 export class TokenBlacklistService {
