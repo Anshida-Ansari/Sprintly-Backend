@@ -12,10 +12,12 @@ export class ListUserUseCase implements IListMembersUseCase {
   ) { }
   async execute(companyId: string, query: { page: number; limit: number; search?: string; }): Promise<{
     data: Array<{
+      _id: string;
       name: string;
       email: string;
       role: string;
       status: UserStatus;
+      createdAt: Date;
     }>;
     total: number;
     page: number;
@@ -37,12 +39,13 @@ export class ListUserUseCase implements IListMembersUseCase {
     ])
 
     return {
-      data: users.map((user) => ({
+      data: users.map((user: any) => ({
+        _id: user._id,
         name: user.name || "No Name",
         email: user.email,
         role: user.role,
         status: user.status || UserStatus.ACTIVE,
-
+        createdAt: user.createdAt,
       })),
       total: count,
       page,
