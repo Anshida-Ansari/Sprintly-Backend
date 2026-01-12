@@ -12,7 +12,6 @@ export class ListCompanyUseCase implements IListCompanyUseCase {
         private _companyrepository: ICompanyRepository
     ) { }
     async execute(query: { page: number; limit: number; search?: string; }): Promise<{ data: any[]; total: number; page: number; limit: number; totalPages: number; }> {
-        try {
             const { page, limit, search } = query
             const filter: any = {}
             if (search) {
@@ -32,9 +31,6 @@ export class ListCompanyUseCase implements IListCompanyUseCase {
                 limit,
                 totalPages: Math.ceil(count / limit)
             }
-        } catch (error) {
-            throw error
-        }
     }
 
 }

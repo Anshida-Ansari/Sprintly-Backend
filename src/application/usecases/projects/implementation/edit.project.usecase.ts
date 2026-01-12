@@ -20,7 +20,7 @@ export class EditProjectUseCase implements IEditProjectUsecase {
         private _projectreposiotry: IProjectReposiotory
     ) { }
 
-    async execute(projectId: string, dto: EditProjectDTO, adminId: string, companyId: string): Promise<EditProjectResponse> {
+    async execute(projectId: string, dto: EditProjectDTO, _adminId: string, companyId: string): Promise<EditProjectResponse> {
 
         const existingProject = await this._projectreposiotry.findOne({ _id: projectId, companyId })
 

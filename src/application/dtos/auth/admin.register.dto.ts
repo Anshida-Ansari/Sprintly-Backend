@@ -1,7 +1,6 @@
 import { Exclude, Expose } from "class-transformer";
 import {
 	IsEmail,
-	IsNotEmpty,
 	IsString,
 	Matches,
 	MaxLength,

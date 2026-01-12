@@ -6,7 +6,7 @@ const connectDB = async (): Promise<void> => {
 
 		console.log("db is starting");
 
-		const db = await mongoose.connect(env.MONGO_URI as string);
+		const _db = await mongoose.connect(env.MONGO_URI as string);
 		
 
 		console.log("MongoDB Connected Successfully");

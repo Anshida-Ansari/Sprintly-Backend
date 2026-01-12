@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
-import { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
-import { IListSprintsUseCase } from "@application/usecases/sprints/interface/list.sprints.interface";
-import { SprintStatus } from "@domain/enum/sprints/sprints.status";
+import type { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
+import type { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
+import type { IListSprintsUseCase } from "@application/usecases/sprints/interface/list.sprints.interface";
+import type { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 

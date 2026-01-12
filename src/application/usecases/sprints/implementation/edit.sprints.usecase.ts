@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
-import { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
-import { EditSprintDTO } from "@application/dtos/sprints/edit.sprints.dto";
+import type { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
+import type { EditSprintDTO } from "@application/dtos/sprints/edit.sprints.dto";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
-import { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
-import { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
+import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
 import { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";

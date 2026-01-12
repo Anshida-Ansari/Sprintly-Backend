@@ -17,7 +17,6 @@ export class UpdateStatusUseCase implements IUpdateStatusInterface{
     ){}
 
     async execute(companyId: string, status: string): Promise<{ message: string; }> {
-        try {
             const company = await this._companyRepository.findById(companyId)
 
             if(!company){
@@ -29,8 +28,5 @@ export class UpdateStatusUseCase implements IUpdateStatusInterface{
             return {
                 message:`company status is updated to ${status}`
             }
-        } catch (error) {
-            throw error
-        }
     }
 }

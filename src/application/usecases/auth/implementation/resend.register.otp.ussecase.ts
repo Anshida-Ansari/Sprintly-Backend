@@ -13,7 +13,6 @@ import type { IResendAdminOtpUseCase } from "@application/usecases/auth/interfac
 
 @injectable()
 export class ResendAdminOtpUseCase implements IResendAdminOtpUseCase {
-	constructor() { }
 
 	async execute(dto: ResendAdminOtpDTO): Promise<any> {
 		const { token, email } = dto;

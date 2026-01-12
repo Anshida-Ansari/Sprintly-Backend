@@ -78,7 +78,7 @@ export class AuthGurd {
 
                 next()
 
-            } catch (error) {
+            } catch (_error) {
 
                 return res.status(ClientErrorStatus.NOT_FOUND).json({
                     success: false,

@@ -1,8 +1,6 @@
-import { Types } from "mongoose";
+
 import { UserEntity } from "../../domain/entities/user.entities";
 import type { UserStatus } from "../../domain/enum/status.enum";
-import { Status } from "../../domain/enum/user/user.status.enum";
-import { IUser } from "../db/interface/user.interface";
 
 export class UserPersistenceMapper {
 	toMongo(user: UserEntity) {

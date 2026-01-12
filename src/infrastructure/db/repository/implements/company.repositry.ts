@@ -2,10 +2,8 @@ import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
 import type { CompanyEnitiy } from "../../../../domain/entities/company.enities";
 import type { Status } from "../../../../domain/enum/user/user.status.enum";
-import { AUTH_TYPES } from "../../../di/types/auth/auth.types";
 import { COMPANY_TYPES } from "../../../di/types/company/company.types";
 import type { CompanyPersistenceMapper } from "../../../mappers/company.persistance.mapper";
-import { ICompany } from "../../interface/company.interface";
 import type { ICompanyRepository } from "../interface/company.interface";
 import { BaseRepository } from "./base.repository";
 

@@ -12,21 +12,16 @@ import type { ILogoutUseCase } from "@application/usecases/auth/interface/logout
 
 @injectable()
 export class LogoutUseCase implements ILogoutUseCase {
-	constructor() { }
 
 	async execute(dto: LogoutDTO): Promise<void> {
-		try {
 			const { refreshToken } = dto;
 			if (!refreshToken) {
 				throw new validationError(ErrorMessage.REFRESH_TOKEN_REQUIRED);
 			}
 
 			const decoded = verifyToken(refreshToken, "refresh") as { email: string };
-			if (decoded && decoded.email) {
+			if (decoded?.email) {
 				await redisClient.del(`refresh:${decoded.email}`);
 			}
-		} catch (error) {
-			throw error;
-		}
 	}
 }

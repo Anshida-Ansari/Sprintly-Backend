@@ -1,6 +1,4 @@
-import { CreateProjectUseCase } from "../../../../application/usecases/projects/implementation/create.project.usecase";
-import { ListProjectUseCase } from "../../../../application/usecases/projects/implementation/list.project.usecase";
-import { ProjectController } from "../../../../presentation/http/controllers/project.controller";
+
 
 export const PROJECT_TYPE = {
 	ProjectController: Symbol.for("ProjectController"),

@@ -7,7 +7,11 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon --exec tsx src/presentation/express/settings/index.ts",
 		"build": "tsc",
-		"start": "node dist/presentation/express/settings/index.js"
+		"start": "node dist/presentation/express/settings/index.js",
+		"lint": "biome lint .",
+		"format": "biome format .",
+		"check": "biome check .",
+		"lint:fix": "biome lint --write ."
 	},
 	"keywords": [],
 	"author": "",

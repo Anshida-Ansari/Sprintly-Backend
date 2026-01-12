@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 import { inject, injectable } from "inversify";
 
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";

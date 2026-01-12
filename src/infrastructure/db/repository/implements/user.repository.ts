@@ -1,15 +1,14 @@
 import { inject, injectable } from "inversify";
-import { type Model, model, models } from "mongoose";
+import type { Model, } from "mongoose";
 import type { UserEntity } from "../../../../domain/entities/user.entities";
 import { USER_TYPES } from "../../../di/types/user/user.types";
-import { UserMapper, type UserPersistenceMapper } from "../../../mappers/user.percistance.mapper";
+import type { UserPersistenceMapper } from "../../../mappers/user.percistance.mapper";
 import type { IUserRepository } from "../interface/user.interface";
 import { BaseRepository } from "./base.repository";
 
 
 @injectable()
 export class UserRepository extends BaseRepository<UserEntity> implements IUserRepository {
-    private readonly userPersistenceMapper: UserPersistenceMapper;
 
     constructor(
         @inject(USER_TYPES.userModel)

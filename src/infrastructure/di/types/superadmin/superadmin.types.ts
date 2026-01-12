@@ -1,4 +1,4 @@
-import { GetDetailPageUseCase } from "../../../../application/usecases/superadmin/implementation/get.detailpage.usecase";
+
 
 export const SUPERADMIN_TYPES = {
 	IListCompanyUseCase: Symbol.for("IListCompanyUseCase"),

@@ -18,7 +18,7 @@ export class PasswordMatchConstraint implements ValidatorConstraintInterface {
 		return obj.newPassword === confirmPassword;
 	}
 
-	defaultMessage(args: ValidationArguments) {
+	defaultMessage(_args: ValidationArguments) {
 		return "Confirm password must match the new password";
 	}
 }

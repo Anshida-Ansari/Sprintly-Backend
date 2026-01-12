@@ -1,4 +1,4 @@
-import e, { type NextFunction, type Request, type Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import env from "../../../infrastructure/providers/env/env.validation";
 import type { IRegisterAdminUseCase } from "../../../application/usecases/auth/interface/admin.register.interface";

@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import type { InviteMemberDTO } from "@application/dtos/admin/invite.member.dto";
 import type { IInviteMemberUseCase } from "@application/usecases/admin/interface/invite.member.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";

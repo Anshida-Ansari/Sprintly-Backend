@@ -1,7 +1,6 @@
 import { Exclude, Expose, Type } from "class-transformer";
 import {
   IsString,
-  IsNotEmpty,
   IsOptional,
   MinLength,
   MaxLength,

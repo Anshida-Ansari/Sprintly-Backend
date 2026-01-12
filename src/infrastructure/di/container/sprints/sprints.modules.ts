@@ -1,16 +1,16 @@
 import { ContainerModule } from "inversify";
-import { Model } from "mongoose";
-import { ISprints } from "@infrastructure/db/interface/sprints.interface";
-import { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { Model } from "mongoose";
+import type { ISprints } from "@infrastructure/db/interface/sprints.interface";
+import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
 import { SprintsRepository } from "@infrastructure/db/repository/implements/sprints.repository";
 import { SprintModel } from "@infrastructure/db/models/sprints.model";
 import { SprintPersistenceMapper } from "@infrastructure/mappers/sprints.mapper";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
-import { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
+import type { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
 import { CreateSprintUseCase } from "@application/usecases/sprints/implementation/create.sprints.usecase";
-import { IListSprintsUseCase } from "@application/usecases/sprints/interface/list.sprints.interface";
+import type { IListSprintsUseCase } from "@application/usecases/sprints/interface/list.sprints.interface";
 import { ListSprintsUseCase } from "@application/usecases/sprints/implementation/list.sprints.usecase";
-import { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
+import type { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
 import { EditSprintUseCase } from "@application/usecases/sprints/implementation/edit.sprints.usecase";
 import { SprintController } from "@presentation/http/controllers/sprint.controller";
 

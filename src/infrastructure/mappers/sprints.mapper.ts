@@ -1,5 +1,5 @@
 import { SprintEntity } from "../../domain/entities/sptint.entities";
-import { SprintStatus } from "../../domain/enum/sprints/sprints.status";
+import type { SprintStatus } from "../../domain/enum/sprints/sprints.status";
 
 export class SprintPersistenceMapper {
     toMongo(sprint: SprintEntity) {

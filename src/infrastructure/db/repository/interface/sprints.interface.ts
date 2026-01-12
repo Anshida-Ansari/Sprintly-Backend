@@ -1,6 +1,6 @@
-import { string } from "zod";
-import { SprintEntity } from "../../../../domain/entities/sptint.entities";
-import { IBaseRepository } from "./base.repository";
+
+import type { SprintEntity } from "../../../../domain/entities/sptint.entities";
+import type { IBaseRepository } from "./base.repository";
 
 export interface ISprintReposiotry extends IBaseRepository<SprintEntity>{
     findActiveSprintByProject(projectId: string): Promise<SprintEntity | null>;
