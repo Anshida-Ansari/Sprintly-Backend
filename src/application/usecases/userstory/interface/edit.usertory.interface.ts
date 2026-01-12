@@ -14,7 +14,6 @@ export interface IEditUserstoryUseCase {
 		description: string;
 		priority: PriorityStatus;
 		status: UserStoryStatus;
-		sprintId?: string;
 		updatedAt?: Date;
 	}>;
 }

@@ -29,11 +29,6 @@ export class CreateUserStoryDTO {
 
 	@Expose()
 	@IsOptional()
-	@IsString({ message: "Sprint ID must be a string" })
-	sprintId?: string;
-
-	@Expose()
-	@IsOptional()
 	@IsEnum(UserStoryStatus, { message: "Invalid status value" })
 	status?: UserStoryStatus;
 }

@@ -34,9 +34,4 @@ export class EditUserStoryDTO {
 	@IsOptional()
 	@IsEnum(UserStoryStatus, { message: "Invalid status value" })
 	status?: UserStoryStatus;
-
-	@Expose()
-	@IsOptional()
-	@IsString({ message: "Sprint ID must be a string" })
-	sprintId?: string;
 }

@@ -52,7 +52,6 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
             title: dto.title,
             description: dto.description,
             priority: dto.priority,
-            sprintId: dto.sprintId
         })
 
         const created = await this._userstoryReposiotry.create(userstory)
@@ -63,7 +62,6 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
             description: created.description,
             priority: created.priority,
             status: created.status,
-            sprintId: created.sprintId!,
             createdAt: created.createdAt,
         }
 
