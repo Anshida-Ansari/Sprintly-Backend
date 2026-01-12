@@ -59,6 +59,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
             description: dto.description,
             priority: dto.priority,
             status: dto.status,
+            sprintId: dto.sprintId
         })
 
         const updatedUserstory = await this._userStoryReposiotry.update(userstoryId, userStory)
@@ -73,6 +74,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
             description: updatedUserstory.description,
             priority: updatedUserstory.priority,
             status: updatedUserstory.status,
+            sprintId: updatedUserstory.sprintId,
             updatedAt: updatedUserstory.updatedAt,
         };
 

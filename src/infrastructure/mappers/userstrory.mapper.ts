@@ -10,6 +10,7 @@ export class UserStoryPersisitanceMapper {
 			description: userStory.description,
 			status: userStory.status,
 			priority: userStory.priority,
+			sprintId: userStory.sprintId,
 			createdAt: userStory.createdAt,
 			updatedAt: userStory.updatedAt,
 		};
@@ -23,6 +24,8 @@ export class UserStoryPersisitanceMapper {
 			title: doc.title,
 			description: doc.description,
 			priority: doc.priority,
+			sprintId: doc.sprintId?.toString(),
+
 		});
 	}
 }

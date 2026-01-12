@@ -9,6 +9,7 @@ export class UserStoryEntity {
 	private _description: string;
 	private _status: UserStoryStatus;
 	private _priority: PriorityStatus;
+	private _sprintId?: string;
 	private readonly _createdAt: Date;
 	private _updatedAt?: Date;
 
@@ -20,6 +21,7 @@ export class UserStoryEntity {
 		description: string;
 		status: UserStoryStatus;
 		priority: PriorityStatus;
+		sprintId?: string;
 		createdAt?: Date;
 		updatedAt?: Date;
 	}) {
@@ -30,6 +32,7 @@ export class UserStoryEntity {
 		this._description = props.description;
 		this._status = props.status;
 		this._priority = props.priority;
+		this._sprintId = props.sprintId;
 		this._createdAt = props.createdAt || new Date();
 		this._updatedAt = props.updatedAt;
 	}
@@ -41,6 +44,7 @@ export class UserStoryEntity {
 		title: string;
 		description: string;
 		priority?: PriorityStatus;
+		sprintId?: string;
 	}): UserStoryEntity {
 		if (!props.title?.trim()) throw new Error("User story title is required");
 
@@ -51,6 +55,8 @@ export class UserStoryEntity {
 			companyId: props.companyId,
 			status: UserStoryStatus.IN_PENDING,
 			priority: PriorityStatus.MEDIUM,
+			sprintId: props.sprintId,
+
 		});
 	}
 
@@ -60,6 +66,7 @@ export class UserStoryEntity {
 			description: string;
 			status: UserStoryStatus;
 			priority: PriorityStatus;
+			sprintId: string;
 		}>,
 	) {
 		if (props.title !== undefined) this._title = props.title.trim();
@@ -67,10 +74,11 @@ export class UserStoryEntity {
 			this._description = props.description?.trim();
 		if (props.status !== undefined) this._status = props.status;
 		if (props.priority !== undefined) this._priority = props.priority;
+		if (props.sprintId !== undefined) this._sprintId = props.sprintId;
 
 		this._updatedAt = new Date();
 	}
-	
+
 	moveToBacklog() {
 		this._updatedAt = new Date()
 	}
@@ -96,6 +104,9 @@ export class UserStoryEntity {
 	}
 	get priority() {
 		return this._priority;
+	}
+	get sprintId() { 
+		return this._sprintId; 
 	}
 	get createdAt() {
 		return this._createdAt;

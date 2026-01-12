@@ -13,6 +13,9 @@ import type { IUserStroyRepository } from "../../../db/repository/interface/user
 import { UserStoryPersisitanceMapper } from "../../../mappers/userstrory.mapper";
 import { UserstoryController } from "../../../../presentation/http/controllers/userstory.controller";
 import { USERSTORY_TYPE } from "../../types/userstory/userstory";
+import { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import { AssignUserStoryToSprintUseCase } from "@application/usecases/userstory/implementation/assign.userstory.to.sprints.usecase";
 
 export const UserStoryModule = new ContainerModule(({ bind }) => {
 	// bind<IUserStroyRepository>(USERSTORY_TYPE.IUserStroyRepository).to()
@@ -37,4 +40,7 @@ export const UserStoryModule = new ContainerModule(({ bind }) => {
 	bind<IListUserstoryUseCase>(USERSTORY_TYPE.IListUserstoryUseCase).to(
 		ListUserstoryUseCase,
 	);
+	bind<IAssignUserStoriesToSprintUseCase>(USERSTORY_TYPE.IAssignUserStoriesToSprintUseCase).to(
+		AssignUserStoryToSprintUseCase,
+	)
 });

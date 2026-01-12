@@ -7,6 +7,7 @@ import { EditUserStoryDTO } from "@application/dtos/userstory/edit.userstory";
 import type { UserstoryController } from "@presentation/http/controllers/userstory.controller";
 import type { AuthGurd } from "@presentation/express/middleware/auth.gurd";
 import { validateDTO } from "@presentation/express/middleware/validate.dto.middlware";
+import { AssignUserStoryToSprintDTO } from "@application/dtos/userstory/assign.userstory.to.sprints.dto";
 const router = Router();
 
 const userstoryController = container.get<UserstoryController>(
@@ -31,4 +32,10 @@ router.get(
 	authGurd.authorize(["admin"]),
 	(req, res, next) => userstoryController.listUserstory(req, res, next),
 );
+router.post(
+	"/:projectId/assign-sprint",
+	authGurd.authorize(["admin"]),
+	validateDTO(AssignUserStoryToSprintDTO),
+	(req, res, next) => userstoryController.assigningToMembers(req, res, next)
+)
 export { router as userstoryRouter };

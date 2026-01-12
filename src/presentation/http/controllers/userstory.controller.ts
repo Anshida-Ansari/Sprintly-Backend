@@ -5,6 +5,7 @@ import type { IEditUserstoryUseCase } from "../../../application/usecases/userst
 import type { IListUserstoryUseCase } from "../../../application/usecases/userstory/interface/list.userstory.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { USERSTORY_TYPE } from "../../../infrastructure/di/types/userstory/userstory";
+import { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
 
 @injectable()
 export class UserstoryController {
@@ -14,7 +15,9 @@ export class UserstoryController {
         @inject(USERSTORY_TYPE.IEditUserstoryUseCase)
         private _editUserstoryUserCaase: IEditUserstoryUseCase,
         @inject(USERSTORY_TYPE.IListUserstoryUseCase)
-        private _listUserstoryUseCase: IListUserstoryUseCase
+        private _listUserstoryUseCase: IListUserstoryUseCase,
+        @inject(USERSTORY_TYPE.IAssignUserStoriesToSprintUseCase)
+        private _assignUserstoryToSprints: IAssignUserStoriesToSprintUseCase
     ) { }
 
     async createUserstory(req: Request, res: Response, next: NextFunction) {
@@ -85,4 +88,22 @@ export class UserstoryController {
             next(error)
         }
     }
+    async assigningToMembers(req:Request, res:Response, next:NextFunction){
+        try {
+            const companyId  = req.user.companyId
+            const {projectId}= req.params
+
+            const result = await this._assignUserstoryToSprints.execute(req.body,companyId,projectId)
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                ...result
+            })
+            
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    
 }
