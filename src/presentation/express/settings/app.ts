@@ -11,6 +11,7 @@ import { projectRouter } from "../router/projects/project.router";
 import { superadminRouter } from "../router/superadmin/superadmin.router";
 import { userstoryRouter } from "../router/userstory/userstory.router";
 import { sprintRouter } from "../router/sprints/sprints.router";
+import { subTaskRouter } from "../router/subtask/subtask.router";
 
 app.use(
 	cors({
@@ -28,6 +29,7 @@ app.use("/api/superadmin", superadminRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/projects", userstoryRouter);
 app.use("/api/project",sprintRouter);
+app.use("/api/userstory",subTaskRouter)
 
 
 export default app;
