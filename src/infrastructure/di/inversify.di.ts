@@ -7,6 +7,7 @@ import { SuperAdminModule } from "./container/superadmin/superadmin.modules";
 import { UserModule } from "./container/user/user.modules";
 import { UserStoryModule } from "./container/userstory/userstory.modules";
 import { SprintModule } from "./container/sprints/sprints.modules";
+import { SubtaskModule } from "./container/subtask/subtask.modules";
 
 const container = new Container({
 	defaultScope: "Singleton",
@@ -22,6 +23,7 @@ container.load(
 	ProjectModule,
 	UserStoryModule,
 	SprintModule,
+	SubtaskModule,
 );
 
 export { container };
