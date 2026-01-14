@@ -6,6 +6,8 @@ import type { IListUserstoryUseCase } from "../../../application/usecases/userst
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { USERSTORY_TYPE } from "../../../infrastructure/di/types/userstory/userstory";
 import { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
+import { IUpdateStatusOfUserStoryInterface } from "@application/usecases/userstory/interface/update.userstory.status.interface";
+import { Role } from "@domain/enum/role.enum";
 
 @injectable()
 export class UserstoryController {
@@ -17,7 +19,9 @@ export class UserstoryController {
         @inject(USERSTORY_TYPE.IListUserstoryUseCase)
         private _listUserstoryUseCase: IListUserstoryUseCase,
         @inject(USERSTORY_TYPE.IAssignUserStoriesToSprintUseCase)
-        private _assignUserstoryToSprints: IAssignUserStoriesToSprintUseCase
+        private _assignUserstoryToSprints: IAssignUserStoriesToSprintUseCase,
+        @inject(USERSTORY_TYPE.IUpdateStatusOfUserStoryInterface)
+        private _updateStatusofUserStory: IUpdateStatusOfUserStoryInterface
     ) { }
 
     async createUserstory(req: Request, res: Response, next: NextFunction) {
@@ -88,22 +92,45 @@ export class UserstoryController {
             next(error)
         }
     }
-    async assigningToMembers(req:Request, res:Response, next:NextFunction){
+    async assigningToMembers(req: Request, res: Response, next: NextFunction) {
         try {
-            const companyId  = req.user.companyId
-            const {projectId}= req.params
+            const companyId = req.user.companyId
+            const { projectId } = req.params
 
-            const result = await this._assignUserstoryToSprints.execute(req.body,companyId,projectId)
+            const result = await this._assignUserstoryToSprints.execute(req.body, companyId, projectId)
 
             return res.status(SuccessStatus.OK).json({
                 success: true,
                 ...result
             })
-            
+
         } catch (error) {
             next(error)
         }
     }
+    async updateStatus(req: Request, res: Response, next: NextFunction) {
+        try {
+            console.log("PARAM FROM URL:", req.params); 
+        console.log("USER FROM TOKEN:", req.user.companyId);
 
-    
+            const { companyId, role } = req.user
+            const { userstoryId } = req.params
+            const { status } = req.body
+
+            const result = await this._updateStatusofUserStory.execute(companyId, userstoryId , status, role as Role)
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: "User story status updated successfully",
+                data: result
+            });
+
+
+        } catch (error) {
+
+            next(error)
+
+        }
+    }
+
 }

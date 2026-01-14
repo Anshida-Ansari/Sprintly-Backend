@@ -3,7 +3,9 @@ export const SUBTASK_TYPE = {
     SubTaskPersisitanceMapper: Symbol.for('SubTaskPersisitanceMapper'),
     ISubTaskRepository: Symbol.for('ISubTaskRepository'),
     ICreateSubTaskUseCase: Symbol.for('ICreateSubTaskUseCase'),
-    SubTaskController: Symbol.for("SubTaskController")
+    SubTaskController: Symbol.for("SubTaskController"),
+    IUpdateSubtaskStatusUseCase: Symbol.for("IUpdateSubtaskStatusUseCase"),
+    IListSubtasksByStoryUseCase: Symbol.for("IListSubtasksByStoryUseCase")
     
 
 }

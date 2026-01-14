@@ -7,7 +7,7 @@ export class SubTaskPersisitanceMapper {
             userStoryId: subTask.userStoryId,
             companyId: subTask.companyId,
             title: subTask.title,
-            isDone: subTask.isDone,
+            status: subTask.status,
             assignedTo: subTask.assignedTo,
             createdAt: subTask.createdAt,
             updatedAt: subTask.updatedAt,
@@ -20,7 +20,7 @@ export class SubTaskPersisitanceMapper {
             userStoryId: doc.userStoryId.toString(),
             companyId: doc.companyId.toString(),
             title: doc.title,
-            isDone: doc.isDone, // Added this
+            status: doc.status, 
             assignedTo: doc.assignedTo?.toString(),
         });
     }

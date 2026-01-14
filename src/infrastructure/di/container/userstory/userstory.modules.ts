@@ -16,6 +16,8 @@ import { USERSTORY_TYPE } from "../../types/userstory/userstory";
 import { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { AssignUserStoryToSprintUseCase } from "@application/usecases/userstory/implementation/assign.userstory.to.sprints.usecase";
+import { UpdateUserStoryUseCase } from "@application/usecases/userstory/implementation/update.userstory.status.usecase";
+import { IUpdateStatusOfUserStoryInterface } from "@application/usecases/userstory/interface/update.userstory.status.interface";
 
 export const UserStoryModule = new ContainerModule(({ bind }) => {
 	// bind<IUserStroyRepository>(USERSTORY_TYPE.IUserStroyRepository).to()
@@ -43,4 +45,9 @@ export const UserStoryModule = new ContainerModule(({ bind }) => {
 	bind<IAssignUserStoriesToSprintUseCase>(USERSTORY_TYPE.IAssignUserStoriesToSprintUseCase).to(
 		AssignUserStoryToSprintUseCase,
 	)
+	bind<IUpdateStatusOfUserStoryInterface>(USERSTORY_TYPE.IUpdateStatusOfUserStoryInterface).to(
+		UpdateUserStoryUseCase
+	)
+
 });
+

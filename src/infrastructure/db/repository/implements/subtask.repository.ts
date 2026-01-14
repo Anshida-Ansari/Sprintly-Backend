@@ -30,7 +30,7 @@ export class SubtaskRepository extends BaseRepository<SubTaskEntity> implements 
 
     async update(id: string, entity: SubTaskEntity): Promise<SubTaskEntity | null> {
         const payload = this._subtaskMapper.toMongo(entity);
-        const result = await this.model.findByIdAndUpdate(id, payload, { new: true });
+        const result = await this.model.findByIdAndUpdate(id, payload, { new: true , runValidators: true});
         return result ? this._subtaskMapper.fromMongo(result) : null;
     }
 

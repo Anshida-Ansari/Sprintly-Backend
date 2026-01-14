@@ -1,3 +1,4 @@
+import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
 import mongoose from "mongoose";
 
 export const subTaskSchema = new mongoose.Schema(
@@ -17,9 +18,10 @@ export const subTaskSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
-        isDone: {
-            type: Boolean,
-            default: false,
+        status: {
+            type: String, 
+            enum: Object.values(SubTaskStatus), 
+            default: SubTaskStatus.PENDING,
         },
         assignedTo: {
             type: mongoose.Schema.Types.ObjectId,

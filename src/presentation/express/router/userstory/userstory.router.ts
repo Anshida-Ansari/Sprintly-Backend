@@ -38,4 +38,10 @@ router.post(
 	validateDTO(AssignUserStoryToSprintDTO),
 	(req, res, next) => userstoryController.assigningToMembers(req, res, next)
 )
+router.patch(
+	"/:userstoryId/status",
+	authGurd.authorize(["admin","developers"]),
+	(req,res,next)=> userstoryController.updateStatus(req,res,next)
+
+)
 export { router as userstoryRouter };

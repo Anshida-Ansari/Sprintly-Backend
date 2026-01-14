@@ -1,5 +1,9 @@
 import { CreateSubTaskUseCase } from "@application/usecases/subtask/implementation/create.subtask.usecase";
+import { ListSubtasksByStoryUseCase } from "@application/usecases/subtask/implementation/list.subtask.usecase";
+import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecasets";
 import { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
+import { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
+import { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
 import { ISubtTask } from "@infrastructure/db/interface/subtask.interface";
 import { SubTaskModel } from "@infrastructure/db/models/subtask.model";
 import { SubtaskRepository } from "@infrastructure/db/repository/implements/subtask.repository";
@@ -25,6 +29,12 @@ export const SubtaskModule = new ContainerModule(({bind})=>{
     )
     bind<SubTaskController>(SUBTASK_TYPE.SubTaskController).to(
         SubTaskController
+    )
+    bind<IUpdateSubtaskStatusUseCase>(SUBTASK_TYPE.IUpdateSubtaskStatusUseCase).to(
+        UpdateSubtaskStatusUseCase
+    )
+    bind<IListSubtasksByStoryUseCase>(SUBTASK_TYPE.IListSubtasksByStoryUseCase).to(
+        ListSubtasksByStoryUseCase
     )
     
 })

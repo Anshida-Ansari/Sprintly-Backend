@@ -23,4 +23,16 @@ router.post(
     (req,res,next)=> subtaskController.createSubTask(req,res,next)
 )
 
+router.patch(
+    "/:subtaskId/status",
+    authGurd.authorize(["developers"]),
+    (req,res,next)=> subtaskController.updateStatus(req,res,next)
+)
+
+router.get(
+    "/subtask/:userStoryId",
+    authGurd.authorize(["admin","developers"]),
+    (req,res,next)=>subtaskController.listSubtask(req,res,next)
+)
+
 export {router as subTaskRouter}
