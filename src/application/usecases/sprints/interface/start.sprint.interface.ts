@@ -1,9 +1,3 @@
-export interface IStartInterface{
-    execute(
-        sprintId: string,
-        projectId: string,
-        companyId: string
-    ): Promise<{
-        message: string
-    }>
+export interface IStartSprintUseCase{
+    execute(companyId: string, sprintId: string):Promise<void>
 }

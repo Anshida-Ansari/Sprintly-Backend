@@ -6,6 +6,7 @@ import type { IListSprintsUseCase } from "@application/usecases/sprints/interfac
 import type { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
 
 @injectable()
 export class SprintController {
@@ -15,7 +16,9 @@ export class SprintController {
         @inject(SPRINTS_TYPE.IListSprintsUseCase)
         private _listSprintsUseCase: IListSprintsUseCase,
         @inject(SPRINTS_TYPE.IEditSprintUseCase)
-        private _editSprintUseCase: IEditSprintUseCase
+        private _editSprintUseCase: IEditSprintUseCase,
+        @inject(SPRINTS_TYPE.IStartSprintUseCase)
+        private _startSprintUseCase: IStartSprintUseCase
     ) { }
 
     async createSprints(req: Request, res: Response, next: NextFunction) {
@@ -89,10 +92,27 @@ export class SprintController {
                 data: result
             })
 
-
-
         } catch (error) {
             next(error)
+        }
+    }
+    async startSprint(req: Request, res: Response, next: NextFunction){
+        try {
+            const {companyId} = req.user
+            const {sprintId} = req.params
+
+            const result = await this._startSprintUseCase.execute(companyId,sprintId)
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Start sprinted Successfully',
+                data: result
+            })
+            
+        } catch (error) {
+
+            next(error)
+            
         }
     }
 }

@@ -37,5 +37,10 @@ router.patch(
     (req,res,next)=>sprintsController.editSprints(req,res,next)
 )
 
+router.patch(
+    "/:sprintId/start",
+    authGurd.authorize(["admin"]),
+    (req,res,next)=>sprintsController.startSprint(req,res,next)
+)
 export { router as sprintRouter}
 

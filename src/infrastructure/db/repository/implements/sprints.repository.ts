@@ -42,15 +42,12 @@ export class SprintsRepository extends BaseRepository<SprintEntity> implements I
     }
 
 
-    async findActiveSprintByProject(
-        projectId: string
-    ): Promise<SprintEntity | null> {
-        const result = await this.model.findOne({
+    async findActiveByProject(projectId: string): Promise<SprintEntity[]> {
+        const docs = await this.model.find({
             projectId,
-            status: SprintStatus.ACTIVE,
+            status: SprintStatus.ACTIVE
         });
-
-        return result ? this._sprintsMapper.fromMongo(result) : null;
+        return docs.map(doc => this._sprintsMapper.fromMongo(doc));
     }
 
     async hasActiveSprint(projectId: string): Promise<boolean> {
