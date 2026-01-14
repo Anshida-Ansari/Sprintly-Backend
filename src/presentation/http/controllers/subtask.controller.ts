@@ -6,6 +6,8 @@ import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
 import { Role } from "@domain/enum/role.enum";
 import { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
+import { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
+import { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
 
 @injectable()
 export class SubTaskController {
@@ -15,7 +17,11 @@ export class SubTaskController {
         @inject(SUBTASK_TYPE.IUpdateSubtaskStatusUseCase)
         private _updateSubTaskUseCase: IUpdateSubtaskStatusUseCase,
         @inject(SUBTASK_TYPE.IListSubtasksByStoryUseCase)
-        private _listSubtaskUseCase: IListSubtasksByStoryUseCase
+        private _listSubtaskUseCase: IListSubtasksByStoryUseCase,
+        @inject(SUBTASK_TYPE.IAssignSubtaskUseCase)
+        private _assignSubtaskUseCase: IAssignSubtaskUseCase,
+        @inject(SUBTASK_TYPE.IDeleteSubtaskUseCase)
+        private _delteSubtaskUseCase: IDeleteSubtaskUseCase
     ) { }
 
     async createSubTask(req: Request, res: Response, next: NextFunction) {
@@ -74,6 +80,42 @@ export class SubTaskController {
 
             next(error)
 
+        }
+    }
+
+    async assignMembers(req: Request, res: Response, next: NextFunction){
+        try {
+            const {companyId} = req.user
+            const {subtaskId} = req.params
+            const {developerId} = req.body
+
+            const result = await this._assignSubtaskUseCase.execute(subtaskId,developerId,companyId)
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Subtask is Assigned to developer',
+                data: result
+            })
+            
+        } catch (error) {
+            next(error)
+        }
+    }
+    async  deleteSubtask(req:Request, res:Response, next:NextFunction){
+        try {
+            const {companyId} = req.user
+            const {subtaskId} = req.params
+
+            const result = await this._delteSubtaskUseCase.execute(subtaskId,companyId)
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Subtask is deleted Successfully',
+                data: result
+            })
+
+        } catch (error) {
+            next(error)            
         }
     }
 }

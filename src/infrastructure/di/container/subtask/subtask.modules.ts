@@ -1,7 +1,11 @@
+import { AssignSubtaskUseCase } from "@application/usecases/subtask/implementation/assign.subtask.usecase";
 import { CreateSubTaskUseCase } from "@application/usecases/subtask/implementation/create.subtask.usecase";
+import { DeleteSubtaskUseCase } from "@application/usecases/subtask/implementation/delete.subtask.usecase";
 import { ListSubtasksByStoryUseCase } from "@application/usecases/subtask/implementation/list.subtask.usecase";
 import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecasets";
+import { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
 import { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
+import { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
 import { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
 import { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
 import { ISubtTask } from "@infrastructure/db/interface/subtask.interface";
@@ -35,6 +39,12 @@ export const SubtaskModule = new ContainerModule(({bind})=>{
     )
     bind<IListSubtasksByStoryUseCase>(SUBTASK_TYPE.IListSubtasksByStoryUseCase).to(
         ListSubtasksByStoryUseCase
+    )
+    bind<IAssignSubtaskUseCase>(SUBTASK_TYPE.IAssignSubtaskUseCase).to(
+        AssignSubtaskUseCase
+    )
+    bind<IDeleteSubtaskUseCase>(SUBTASK_TYPE.IDeleteSubtaskUseCase).to(
+        DeleteSubtaskUseCase
     )
     
 })

@@ -35,4 +35,15 @@ router.get(
     (req,res,next)=>subtaskController.listSubtask(req,res,next)
 )
 
+router.patch(
+    "/:subtaskId/assign-members",
+    authGurd.authorize(["admin"]),
+    (req,res,next)=>subtaskController.assignMembers(req,res,next)
+)
+
+router.delete(
+    "/:subtaskId",
+    authGurd.authorize(["admin"]),
+    (req,res,next)=>subtaskController.deleteSubtask(req,res,next)
+)
 export {router as subTaskRouter}

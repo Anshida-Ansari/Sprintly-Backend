@@ -5,7 +5,9 @@ export const SUBTASK_TYPE = {
     ICreateSubTaskUseCase: Symbol.for('ICreateSubTaskUseCase'),
     SubTaskController: Symbol.for("SubTaskController"),
     IUpdateSubtaskStatusUseCase: Symbol.for("IUpdateSubtaskStatusUseCase"),
-    IListSubtasksByStoryUseCase: Symbol.for("IListSubtasksByStoryUseCase")
+    IListSubtasksByStoryUseCase: Symbol.for("IListSubtasksByStoryUseCase"),
+    IAssignSubtaskUseCase: Symbol.for("IAssignSubtaskUseCase"),
+    IDeleteSubtaskUseCase: Symbol.for("IDeleteSubtaskUseCase")
     
 
 }
