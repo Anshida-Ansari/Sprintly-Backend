@@ -26,7 +26,7 @@ router.post(
 
 router.get(
     "/:projectId/sprints",
-    authGurd.authorize(["admin"]),
+    authGurd.authorize(["admin","developers"]),
     (req,res,next)=>sprintsController.listSprints(req,res,next)
 )
 

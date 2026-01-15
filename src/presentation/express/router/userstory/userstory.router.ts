@@ -29,7 +29,7 @@ router.post(
 );
 router.get(
 	"/:projectId/user-stories",
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","developers"]),
 	(req, res, next) => userstoryController.listUserstory(req, res, next),
 );
 router.post(
