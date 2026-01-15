@@ -7,6 +7,7 @@ import type { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
+import { ICompleteSprintUseCase } from "@application/usecases/sprints/interface/complete.sprints.interface";
 
 @injectable()
 export class SprintController {
@@ -18,7 +19,9 @@ export class SprintController {
         @inject(SPRINTS_TYPE.IEditSprintUseCase)
         private _editSprintUseCase: IEditSprintUseCase,
         @inject(SPRINTS_TYPE.IStartSprintUseCase)
-        private _startSprintUseCase: IStartSprintUseCase
+        private _startSprintUseCase: IStartSprintUseCase,
+        @inject(SPRINTS_TYPE.ICompleteSprintUseCase)
+        private _completeSprintsUseCase: ICompleteSprintUseCase
     ) { }
 
     async createSprints(req: Request, res: Response, next: NextFunction) {
@@ -96,23 +99,44 @@ export class SprintController {
             next(error)
         }
     }
-    async startSprint(req: Request, res: Response, next: NextFunction){
+    async startSprint(req: Request, res: Response, next: NextFunction) {
         try {
-            const {companyId} = req.user
-            const {sprintId} = req.params
+            const { companyId } = req.user
+            const { sprintId } = req.params
 
-            const result = await this._startSprintUseCase.execute(companyId,sprintId)
+            const result = await this._startSprintUseCase.execute(companyId, sprintId)
 
             return res.status(SuccessStatus.OK).json({
                 success: true,
                 message: 'Start sprinted Successfully',
                 data: result
             })
-            
+
         } catch (error) {
 
             next(error)
-            
+
+        }
+    }
+    async completeSprint(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            const { companyId } = req.user
+            const { sprintId } = req.params
+
+            const result = await this._completeSprintsUseCase.execute(sprintId, companyId)
+
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Sprint completed successfully. Unfinished stories have been moved to the backlog.',
+                data: result
+            })
+
+        } catch (error) {
+
+            next(error)
+
         }
     }
 }

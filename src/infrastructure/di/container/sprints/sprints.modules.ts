@@ -15,6 +15,8 @@ import { EditSprintUseCase } from "@application/usecases/sprints/implementation/
 import { SprintController } from "@presentation/http/controllers/sprint.controller";
 import { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
 import { StartSprtintsUseCase } from "@application/usecases/sprints/implementation/start.sprits.usecase";
+import { ICompleteSprintUseCase } from "@application/usecases/sprints/interface/complete.sprints.interface";
+import { CompleteSprintUseCase } from "@application/usecases/sprints/implementation/complete.sprints.usecase";
 
 export const SprintModule = new ContainerModule(({bind})=>{
     bind<Model<ISprints>>(SPRINTS_TYPE.SprintModel).toConstantValue(SprintModel)
@@ -25,5 +27,6 @@ export const SprintModule = new ContainerModule(({bind})=>{
     bind<IListSprintsUseCase>(SPRINTS_TYPE.IListSprintsUseCase).to(ListSprintsUseCase)
     bind<IEditSprintUseCase>(SPRINTS_TYPE.IEditSprintUseCase).to(EditSprintUseCase)
     bind<IStartSprintUseCase>(SPRINTS_TYPE.IStartSprintUseCase).to(StartSprtintsUseCase)
+    bind<ICompleteSprintUseCase>(SPRINTS_TYPE.ICompleteSprintUseCase).to(CompleteSprintUseCase)
 
 })
