@@ -48,5 +48,11 @@ router.patch(
     authGurd.authorize(["admin"]),
     (req,res,next)=>sprintsController.completeSprint(req,res,next)
 )
+
+router.patch(
+    "/:sprintId/delete",
+    authGurd.authorize(["admin"]),
+    (req,res,next)=>sprintsController.deleteSprint(req,res,next)
+)
 export { router as sprintRouter}
 

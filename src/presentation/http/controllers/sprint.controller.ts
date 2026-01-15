@@ -8,6 +8,7 @@ import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
 import { ICompleteSprintUseCase } from "@application/usecases/sprints/interface/complete.sprints.interface";
+import { IDeleteSprintUseCase } from "@application/usecases/sprints/interface/delete.sprints.interface";
 
 @injectable()
 export class SprintController {
@@ -21,7 +22,9 @@ export class SprintController {
         @inject(SPRINTS_TYPE.IStartSprintUseCase)
         private _startSprintUseCase: IStartSprintUseCase,
         @inject(SPRINTS_TYPE.ICompleteSprintUseCase)
-        private _completeSprintsUseCase: ICompleteSprintUseCase
+        private _completeSprintsUseCase: ICompleteSprintUseCase,
+        @inject(SPRINTS_TYPE.IDeleteSprintUseCase)
+        private _deleteSprintUseCase: IDeleteSprintUseCase
     ) { }
 
     async createSprints(req: Request, res: Response, next: NextFunction) {
@@ -137,6 +140,16 @@ export class SprintController {
 
             next(error)
 
+        }
+    }
+    async deleteSprint(req: Request, res:Response, next:NextFunction){
+        try {
+            const {companyId} = req.user
+            const {sprintId} = req.params
+
+            const result = await this._deleteSprintUseCase.execute(sprintId,companyId)
+        } catch (error) {
+            
         }
     }
 }

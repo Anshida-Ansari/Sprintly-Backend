@@ -7,6 +7,7 @@ export const SPRINTS_TYPE = {
     IListSprintsUseCase: Symbol.for('IListSprintsUseCase'),
     IEditSprintUseCase:Symbol.for('IEditSprintUseCase'),
     IStartSprintUseCase: Symbol.for("IStartSprintUseCase"),
-    ICompleteSprintUseCase: Symbol.for("ICompleteSprintUseCase")
+    ICompleteSprintUseCase: Symbol.for("ICompleteSprintUseCase"),
+    IDeleteSprintUseCase: Symbol.for("IDeleteSprintUseCase")
     
 }
