@@ -23,4 +23,5 @@ export interface ISprintReposiotry extends IBaseRepository<SprintEntity> {
     data: SprintEntity[]
     total: number
   }>
+  findActiveSprintByProject(projectId: string): Promise<SprintEntity | null>;
 }

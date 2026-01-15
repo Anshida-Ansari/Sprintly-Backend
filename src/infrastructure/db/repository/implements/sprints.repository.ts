@@ -119,4 +119,14 @@ export class SprintsRepository extends BaseRepository<SprintEntity> implements I
             total
         }
     }
+    async findActiveSprintByProject(
+        projectId: string
+    ): Promise<SprintEntity | null> {
+        const result = await this.model.findOne({
+            projectId,
+            status: SprintStatus.ACTIVE,
+        });
+
+        return result ? this._sprintsMapper.fromMongo(result) : null;
+    }
 }
