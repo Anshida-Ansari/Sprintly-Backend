@@ -20,7 +20,8 @@ export class CreateSprintUseCase implements ICreateSprintUseCase{
         @inject(SPRINTS_TYPE.ISprintReposiotry)
         private _sprintRepository: ISprintReposiotry,
         @inject(PROJECT_TYPE.IProjectRepository)
-        private _projectReposiotry: IProjectReposiotory
+        private _projectReposiotry: IProjectReposiotory,
+
     ){}
 
     async execute(dto: CreateSprintDTO, projectId: string, companyId: string): Promise<{ id: string; name: string; goal: string; status: SprintStatus; createdAt: Date; }> {
@@ -32,6 +33,18 @@ export class CreateSprintUseCase implements ICreateSprintUseCase{
         if(project.companyId.toString() !== companyId.toString()){
             throw new ForbiddenError(ErrorMessage.FORBIDDEN)
         }
+
+        const sprintStart = new Date(dto.startDate)
+        const sprintEnd = new Date(dto.endDate)
+        const projectStart = new Date(project.startDate)
+        const projectEnd = new Date(project.endDate)
+
+        if (sprintStart < projectStart || sprintEnd > projectEnd) {
+            throw new ConflictError(
+                `Sprint dates must be within the project duration: ${projectStart.toDateString()} to ${projectEnd.toDateString()}`
+            );
+        }
+
 
         const activeSprints = await this._sprintRepository.findActiveSprintByProject(projectId)
 
@@ -45,6 +58,7 @@ export class CreateSprintUseCase implements ICreateSprintUseCase{
         if(overlappingSprint){
             throw new ConflictError(SprintErrorMessage.SPRINTS_OVERLAP)
         }
+
 
         const sprint = SprintEntity.create({
             projectId,
