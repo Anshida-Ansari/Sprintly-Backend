@@ -8,6 +8,7 @@ import { UserModule } from "./container/user/user.modules";
 import { UserStoryModule } from "./container/userstory/userstory.modules";
 import { SprintModule } from "./container/sprints/sprints.modules";
 import { SubtaskModule } from "./container/subtask/subtask.modules";
+import { StandupModule } from "./container/standup/standup.modules";
 
 const container = new Container({
 	defaultScope: "Singleton",
@@ -24,6 +25,7 @@ container.load(
 	UserStoryModule,
 	SprintModule,
 	SubtaskModule,
+	StandupModule
 );
 
 export { container };

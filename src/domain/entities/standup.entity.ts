@@ -59,7 +59,7 @@ export class StandupEntity {
             text: string;
             createdAt: Date;
         }>;
-        createdAt: Date
+        createdAt?: Date
     }): StandupEntity {
         if (!props.yesterday || !props.today) {
             throw new Error("Standup updates for Yesterday and Today are required");
@@ -67,11 +67,11 @@ export class StandupEntity {
         return new StandupEntity(props);
     }
 
-    // update(props: Partial<{ yesterday: string; today: string; blockers: string }>) {
-    //     if (props.yesterday !== undefined) this._yesterday = props.yesterday.trim();
-    //     if (props.today !== undefined) this._today = props.today.trim();
-    //     if (props.blockers !== undefined) this._blockers = props.blockers.trim();
-    // }
+    update(props: Partial<{ yesterday: string; today: string; blockers: string }>) {
+        if (props.yesterday !== undefined) this._yesterday = props.yesterday.trim();
+        if (props.today !== undefined) this._today = props.today.trim();
+        if (props.blockers !== undefined) this._blockers = props.blockers.trim();
+    }
 
     addComment(userId: string, userName: string, text: string) {
         this._comments.push({
