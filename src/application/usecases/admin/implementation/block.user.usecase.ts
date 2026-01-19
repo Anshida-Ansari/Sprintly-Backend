@@ -5,7 +5,7 @@ import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.err
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { AUTH_TYPES } from "@infrastructure/di/types/auth/auth.types";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
-import type { TokenBlacklistService } from "@infrastructure/providers/token.blacklist.service";
+import type { ITokenBlacklistService } from "@domain/interface/token.blacklist.interface";
 import type { IBlockUserUseCase } from "../interface/block.user.interface";
 
 @injectable()
@@ -13,8 +13,8 @@ export class BlockUserUseCase implements IBlockUserUseCase {
     constructor(
         @inject(USER_TYPES.IUserRepository)
         private _userRepository: IUserRepository,
-        @inject(AUTH_TYPES.TokenBlacklistService)
-        private _tokenBlacklistService: TokenBlacklistService
+        @inject(AUTH_TYPES.ITokenBlacklistService)
+        private _tokenBlacklistService: ITokenBlacklistService
     ) { }
 
     async execute(userId: string, status: UserStatus): Promise<{ message: string }> {

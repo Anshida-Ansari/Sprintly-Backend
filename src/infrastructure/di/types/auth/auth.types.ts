@@ -20,7 +20,7 @@ export const AUTH_TYPES = {
 	ILogoutUseCase: Symbol.for("ILogoutUseCase"),
 
 	//Services
-	TokenBlacklistService: Symbol.for("TokenBlacklistService"),
+	ITokenBlacklistService: Symbol.for("ITokenBlacklistService"),
 
 	//Providers
 };
