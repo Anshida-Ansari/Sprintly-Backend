@@ -1,6 +1,10 @@
 import { AddStandupCommentUseCase } from "@application/usecases/standup/implementaion/add.standup.comment.usecase";
+import { GetTodayStandupUseCase } from "@application/usecases/standup/implementaion/get.today.standup.usecase";
+import { ListStandupsUseCase } from "@application/usecases/standup/implementaion/list.standup.usecase";
 import { SubmitStandupUseCase } from "@application/usecases/standup/implementaion/submit.standup.usecase";
 import { IAddStandupCommentUseCase } from "@application/usecases/standup/interface/add.standup.comment.interface";
+import { IGetTodayStandupUseCase } from "@application/usecases/standup/interface/get.today.standup.interface";
+import { IListStandupsUseCase } from "@application/usecases/standup/interface/list.standup.interface";
 import { ISubmitStandupUseCase } from "@application/usecases/standup/interface/submit.standup.interface";
 import { IStandup } from "@infrastructure/db/interface/standup.interface";
 import { StandupModel } from "@infrastructure/db/models/standup.model";
@@ -19,4 +23,6 @@ export const StandupModule = new ContainerModule(({bind})=>{
     bind<IAddStandupCommentUseCase>(STANDUP_TYPES.IAddStandupCommentUseCase).to(AddStandupCommentUseCase)
     bind<ISubmitStandupUseCase>(STANDUP_TYPES.ISubmitStandupUseCase).to(SubmitStandupUseCase)
     bind<StandupController>(STANDUP_TYPES.StandupController).to(StandupController)
+    bind<IListStandupsUseCase>(STANDUP_TYPES.IListStandupsUseCase).to(ListStandupsUseCase)
+    bind<IGetTodayStandupUseCase>(STANDUP_TYPES.IGetTodayStandupUseCase).to(GetTodayStandupUseCase)
 })

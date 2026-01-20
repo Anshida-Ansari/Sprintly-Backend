@@ -1,3 +1,4 @@
+
 import { ContainerModule } from "inversify";
 import type { Model } from "mongoose";
 import type { IUser } from "../../../db/interface/user.interface";
@@ -12,5 +13,6 @@ export const UserModule = new ContainerModule(({ bind }) => {
 	bind<UserPersistenceMapper>(USER_TYPES.UserPersistenceMapper).to(
 		UserPersistenceMapper,
 	);
+	// bind<IUserMapper>(USER_TYPES.IUserMapper).to(UserPersistenceMapper)
 	bind<Model<IUser>>(USER_TYPES.userModel).toConstantValue(userModel);
 });

@@ -32,4 +32,17 @@ router.post(
     
 );
 
+router.get(
+    "/:projectId/:sprintId/standups",
+    authGurd.authorize(["admin","developer"]),
+    (req,res,next)=>standupController.listStandups(req,res,next)
+)
+
+router.post(
+    "/:projectId/:sprintId/standups/today",
+    authGurd.authorize(["admin","developer"]),
+    (req,res,next)=>standupController.getMyTodayStandup(req,res,next)
+)
+
+
 export {router as standupRouter}

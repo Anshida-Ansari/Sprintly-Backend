@@ -1,7 +1,6 @@
-// import { UserEntity } from "src/domain/entities/user.entities";
-// import { IUser } from "src/infrastructure/db/interface/user.interface";
+import { UserEntity } from "../../../domain/entities/user.entities";
 
-// export interface IUserMapper{
-//     toMongo(user:UserEntity)
-//     fromMongo(doc:IUser):UserEntity
-// }
+export interface IUserMapper {
+    toMongo(user: UserEntity): any; 
+    fromMongo(doc: any): UserEntity;
+}

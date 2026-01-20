@@ -4,6 +4,7 @@ export const STANDUP_TYPES = {
     StandupPersistanceMapper: Symbol.for('StandupPersistanceMapper'),
     IAddStandupCommentUseCase: Symbol.for('IAddStandupCommentUseCase'),
     ISubmitStandupUseCase: Symbol.for('ISubmitStandupUseCase'),
-    StandupController: Symbol.for('StandupController')
-
+    StandupController: Symbol.for('StandupController'),
+    IListStandupsUseCase: Symbol.for('IListStandupsUseCase'),
+    IGetTodayStandupUseCase: Symbol.for('IGetTodayStandupUseCase')
 }

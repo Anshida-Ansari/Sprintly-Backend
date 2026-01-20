@@ -2,9 +2,9 @@ import { inject, injectable } from "inversify";
 import type { Model, } from "mongoose";
 import type { UserEntity } from "../../../../domain/entities/user.entities";
 import { USER_TYPES } from "../../../di/types/user/user.types";
-import type { UserPersistenceMapper } from "../../../mappers/user.percistance.mapper";
 import type { IUserRepository } from "../interface/user.interface";
 import { BaseRepository } from "./base.repository";
+import { UserPersistenceMapper } from "@infrastructure/mappers/user.percistance.mapper";
 
 
 @injectable()
@@ -15,10 +15,12 @@ export class UserRepository extends BaseRepository<UserEntity> implements IUserR
         model: Model<UserEntity>,
         @inject(USER_TYPES.UserPersistenceMapper)
         private readonly _userMapper: UserPersistenceMapper,
+        // @inject(USER_TYPES.IUserMapper)
+        // private readonly _userMapper: IUserMapper
 
     ) {
         super(model)
-        this._userMapper = _userMapper
+        // this._userMapper = _userMapper
 
     }
 
