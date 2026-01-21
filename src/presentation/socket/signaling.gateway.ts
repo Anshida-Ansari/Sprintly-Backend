@@ -1,42 +1,67 @@
 import { Server, Socket } from "socket.io";
 
 export class SignalingGateway {
-    private io: Server;
+    private static io: Server;
+    private static userSockets: Map<string, string> = new Map(); // userId -> socketId
 
     constructor(io: Server) {
-        this.io = io;
+        SignalingGateway.io = io;
+    }
+
+    public static sendNotification(userId: string, event: string, data: any) {
+        const socketId = this.userSockets.get(userId);
+        if (socketId && this.io) {
+            this.io.to(socketId).emit(event, data);
+        }
     }
 
     public initialize() {
-        this.io.on("connection", (socket: Socket) => {
+        const roomUsers: Record<string, string[]> = {}; 
+
+        SignalingGateway.io.on("connection", (socket: Socket) => {
             console.log(`User connected: ${socket.id}`);
 
-            socket.on("join-room", (roomId: string, userId: string) => {
-                socket.join(roomId);
-                console.log(`User ${userId} joined room ${roomId}`);
-                socket.to(roomId).emit("user-connected", userId);
-
-                socket.on("disconnect", () => {
-                    console.log(`User ${userId} disconnected from room ${roomId}`);
-                    socket.to(roomId).emit("user-disconnected", userId);
-                });
+            socket.on("register-user", (userId: string) => {
+                SignalingGateway.userSockets.set(userId, socket.id);
+                console.log(`User ${userId} registered with socket ${socket.id}`);
             });
 
-            socket.on("offer", (payload: any) => {
-         
-                if (payload.to) {
-                    socket.to(payload.roomId).emit("offer", payload);
-                } else {
-                    socket.to(payload.roomId).emit("offer", payload);
+            socket.on("disconnect", () => {
+                for (const [userId, sid] of SignalingGateway.userSockets.entries()) {
+                    if (sid === socket.id) {
+                        SignalingGateway.userSockets.delete(userId);
+                        break;
+                    }
                 }
             });
 
-            socket.on("answer", (payload: any) => {
-                socket.to(payload.roomId).emit("answer", payload);
+            socket.on("join-room", (roomId: string, userId: string) => {
+                socket.join(roomId);
+
+                if (!roomUsers[roomId]) roomUsers[roomId] = [];
+                socket.to(roomId).emit("user-joined", { socketId: socket.id, userId });
+
+                const others = roomUsers[roomId].map(id => ({ socketId: id }));
+                socket.emit("existing-users", others);
+
+                roomUsers[roomId].push(socket.id);
+
+                socket.on("disconnect", () => {
+                    roomUsers[roomId] = roomUsers[roomId].filter(id => id !== socket.id);
+                    socket.to(roomId).emit("user-left", socket.id);
+                });
             });
 
-            socket.on("ice-candidate", (payload: any) => {
-                socket.to(payload.roomId).emit("ice-candidate", payload);
+            socket.on("offer", (payload: { to: string; offer: RTCSessionDescriptionInit; roomId: string }) => {
+                SignalingGateway.io.to(payload.to).emit("offer", { from: socket.id, offer: payload.offer });
+            });
+
+            socket.on("answer", (payload: { to: string; answer: RTCSessionDescriptionInit; roomId: string }) => {
+                SignalingGateway.io.to(payload.to).emit("answer", { from: socket.id, answer: payload.answer });
+            });
+
+            socket.on("ice-candidate", (payload: { to: string; candidate: RTCIceCandidate; roomId: string }) => {
+                SignalingGateway.io.to(payload.to).emit("ice-candidate", { from: socket.id, candidate: payload.candidate });
             });
         });
     }

@@ -5,7 +5,7 @@ export class MeetingEntity {
     private _projectId: string;
     private _title: string;
     private _link?: string;
-    private _roomId: string; 
+    private _roomId: string;
     private _date: Date;
     private _type: "single" | "group";
     private _createdBy: string;
@@ -47,7 +47,7 @@ export class MeetingEntity {
         projectId: string;
         title: string;
         link?: string;
-        roomId?: string; 
+        roomId?: string;
         date: Date;
         type: "single" | "group";
         createdBy: string;
@@ -59,7 +59,7 @@ export class MeetingEntity {
         if (!data.title?.trim()) throw new Error("Meeting title is required");
         if (!data.projectId) throw new Error("ProjectId is required");
 
-       
+
         const generatedRoomId = data.roomId || Math.random().toString(36).substring(2, 12);
 
         return new MeetingEntity({
@@ -69,7 +69,7 @@ export class MeetingEntity {
         });
     }
 
-   
+
     get id(): string | undefined {
         return this._id;
     }
@@ -118,7 +118,7 @@ export class MeetingEntity {
         return this._updatedAt;
     }
 
-   
+
     updateStatus(status: MeetingStatus) {
         this._status = status;
         this._updatedAt = new Date();
@@ -133,5 +133,22 @@ export class MeetingEntity {
             });
             this._updatedAt = new Date();
         }
+    }
+
+    toJSON() {
+        return {
+            id: this._id,
+            projectId: this._projectId,
+            title: this._title,
+            link: this._link,
+            roomId: this._roomId,
+            date: this._date,
+            type: this._type,
+            createdBy: this._createdBy,
+            status: this._status,
+            participants: this._participants,
+            createdAt: this._createdAt,
+            updatedAt: this._updatedAt
+        };
     }
 }

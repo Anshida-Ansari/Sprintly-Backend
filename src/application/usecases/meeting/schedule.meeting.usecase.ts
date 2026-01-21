@@ -3,9 +3,12 @@ import { MeetingEntity } from "../../../domain/entities/meeting.entity";
 import type { IMeetingRepository } from "../../../infrastructure/db/repository/interface/meeting.interface";
 import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
 import { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
+import { SignalingGateway } from "../../../presentation/socket/signaling.gateway";
+
+import { IScheduleMeetingUseCase } from "./interface/schedule.meeting.interface";
 
 @injectable()
-export class ScheduleMeetingUseCase {
+export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
     constructor(
         @inject(MEETING_TYPES.IMeetingRepository)
         private readonly meetingRepository: IMeetingRepository
@@ -21,16 +24,27 @@ export class ScheduleMeetingUseCase {
         participants?: string[];
     }): Promise<MeetingEntity> {
         const meeting = MeetingEntity.create({
-             projectId: data.projectId,
-                title: data.title,
-                date: new Date(data.date),
-                createdBy: data.createdBy!,
-                link: data.link,
-                type: data.type,
-                status: MeetingStatus.SCHEDULED
+            projectId: data.projectId,
+            title: data.title,
+            date: new Date(data.date),
+            createdBy: data.createdBy!,
+            link: data.link,
+            type: data.type,
+            status: MeetingStatus.SCHEDULED,
+            participants: data.participants?.map(userId => ({ userId }))
         });
 
-        
-        return await this.meetingRepository.create(meeting);
+        const savedMeeting = await this.meetingRepository.create(meeting);
+
+        data.participants?.forEach(userId => {
+            SignalingGateway.sendNotification(userId, "meeting-scheduled", {
+                meetingId: savedMeeting.id,
+                title: savedMeeting.title,
+                date: savedMeeting.date,
+                roomId: savedMeeting.roomId
+            });
+        });
+
+        return savedMeeting;
     }
 }

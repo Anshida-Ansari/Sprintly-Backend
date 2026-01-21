@@ -3,8 +3,10 @@ import type { MeetingEntity } from "../../../domain/entities/meeting.entity";
 import type { IMeetingRepository } from "../../../infrastructure/db/repository/interface/meeting.interface";
 import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
 
+import { IGetProjectMeetingsUseCase } from "./interface/get.project.meetings.interface";
+
 @injectable()
-export class GetProjectMeetingsUseCase {
+export class GetProjectMeetingsUseCase implements IGetProjectMeetingsUseCase {
     constructor(
         @inject(MEETING_TYPES.IMeetingRepository)
         private readonly meetingRepository: IMeetingRepository

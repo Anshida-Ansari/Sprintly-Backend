@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { ScheduleMeetingUseCase } from "../../../application/usecases/meeting/schedule.meeting.usecase";
-import { GetProjectMeetingsUseCase } from "../../../application/usecases/meeting/get.project.meetings.usecase";
-import { UpdateMeetingStatusUseCase } from "../../../application/usecases/meeting/update.meeting.status.usecase";
+import { IScheduleMeetingUseCase } from "../../../application/usecases/meeting/interface/schedule.meeting.interface";
+import { IGetProjectMeetingsUseCase } from "../../../application/usecases/meeting/interface/get.project.meetings.interface";
+import { IUpdateMeetingStatusUseCase } from "../../../application/usecases/meeting/interface/update.meeting.status.interface";
 import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
 import { MeetingStatus } from "../../../domain/enum/meeting/meeting.status.enum";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
@@ -11,11 +11,11 @@ import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 export class MeetingController {
     constructor(
         @inject(MEETING_TYPES.ScheduleMeetingUseCase)
-        private scheduleMeetingUseCase: ScheduleMeetingUseCase,
+        private scheduleMeetingUseCase: IScheduleMeetingUseCase,
         @inject(MEETING_TYPES.GetProjectMeetingsUseCase)
-        private getProjectMeetingsUseCase: GetProjectMeetingsUseCase,
+        private getProjectMeetingsUseCase: IGetProjectMeetingsUseCase,
         @inject(MEETING_TYPES.UpdateMeetingStatusUseCase)
-        private updateMeetingStatusUseCase: UpdateMeetingStatusUseCase
+        private updateMeetingStatusUseCase: IUpdateMeetingStatusUseCase
     ) { }
 
     async schedule(req: Request, res: Response, next: NextFunction) {
