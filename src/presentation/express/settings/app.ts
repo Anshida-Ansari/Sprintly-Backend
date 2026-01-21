@@ -13,6 +13,7 @@ import { userstoryRouter } from "../router/userstory/userstory.router";
 import { sprintRouter } from "../router/sprints/sprints.router";
 import { subTaskRouter } from "../router/subtask/subtask.router";
 import { standupRouter } from "../router/standup/standup.router";
+import meetingRouter from "../router/meeting/meeting.router";
 
 app.use(
 	cors({
@@ -29,9 +30,10 @@ app.use("/api/admin", adminRouter);
 app.use("/api/superadmin", superadminRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/projects", userstoryRouter);
-app.use("/api/project",sprintRouter);
-app.use("/api/userstory",subTaskRouter)
-app.use("/api/project/sprint",standupRouter)
+app.use("/api/project", sprintRouter);
+app.use("/api/userstory", subTaskRouter)
+app.use("/api/project/sprint", standupRouter)
+app.use("/api/meeting", meetingRouter);
 
 
 export default app;

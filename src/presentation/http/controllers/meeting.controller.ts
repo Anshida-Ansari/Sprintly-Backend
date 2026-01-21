@@ -1,0 +1,64 @@
+import type { NextFunction, Request, Response } from "express";
+import { inject, injectable } from "inversify";
+import { ScheduleMeetingUseCase } from "../../../application/usecases/meeting/schedule.meeting.usecase";
+import { GetProjectMeetingsUseCase } from "../../../application/usecases/meeting/get.project.meetings.usecase";
+import { UpdateMeetingStatusUseCase } from "../../../application/usecases/meeting/update.meeting.status.usecase";
+import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
+import { MeetingStatus } from "../../../domain/enum/meeting/meeting.status.enum";
+import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
+
+@injectable()
+export class MeetingController {
+    constructor(
+        @inject(MEETING_TYPES.ScheduleMeetingUseCase)
+        private scheduleMeetingUseCase: ScheduleMeetingUseCase,
+        @inject(MEETING_TYPES.GetProjectMeetingsUseCase)
+        private getProjectMeetingsUseCase: GetProjectMeetingsUseCase,
+        @inject(MEETING_TYPES.UpdateMeetingStatusUseCase)
+        private updateMeetingStatusUseCase: UpdateMeetingStatusUseCase
+    ) { }
+
+    async schedule(req: Request, res: Response, next: NextFunction) {
+        try {
+            const meeting = await this.scheduleMeetingUseCase.execute(req.body);
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Meeting sheduled Successfully',
+                data: meeting
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getProjectMeetings(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { projectId } = req.params;
+
+            const meetings = await this.getProjectMeetingsUseCase.execute(projectId);
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Getting project Successfully',
+                data: meetings
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updateStatus(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
+            await this.updateMeetingStatusUseCase.execute(id, status as MeetingStatus);
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                message: 'Meeting status updated',
+
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+}
