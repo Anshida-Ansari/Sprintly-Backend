@@ -38,4 +38,10 @@ router.patch(
 	(req, res, next) => adminController.blockUser(req, res, next),
 );
 
+router.get(
+	"/stats",
+	authGurd.authorize(["admin"]),
+	(req, res, next) => adminController.getDashboardStats(req, res, next),
+);
+
 export { router as adminRouter };

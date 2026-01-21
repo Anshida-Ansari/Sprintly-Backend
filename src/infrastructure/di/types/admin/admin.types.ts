@@ -7,4 +7,5 @@ export const ADMIN_TYPES = {
 	IVerifyInvitationUseCase: Symbol.for("IVerifyInvitationUseCase"),
 	IListMembersUseCase: Symbol.for("IListMembersUseCase"),
 	IBlockUserUseCase: Symbol.for("IBlockUserUseCase"),
+	IGetDashboardStatsUseCase: Symbol.for("IGetDashboardStatsUseCase"),
 };

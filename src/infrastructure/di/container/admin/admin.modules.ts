@@ -9,6 +9,8 @@ import type { IBlockUserUseCase } from "../../../../application/usecases/admin/i
 import { BlockUserUseCase } from "../../../../application/usecases/admin/implementation/block.user.usecase";
 import { AuthGurd } from "../../../../presentation/express/middleware/auth.gurd";
 import { AdminController } from "../../../../presentation/http/controllers/admin.controller";
+import { GetDashboardStatsUseCase } from "../../../../application/usecases/admin/implementation/get.dashboard.stats.usecase";
+import type { IGetDashboardStatsUseCase } from "../../../../application/usecases/admin/interface/get.dashboard.stats.interface";
 import { ADMIN_TYPES } from "../../types/admin/admin.types";
 
 export const InviteModule = new ContainerModule(({ bind }) => {
@@ -25,5 +27,8 @@ export const InviteModule = new ContainerModule(({ bind }) => {
 	);
 	bind<IBlockUserUseCase>(ADMIN_TYPES.IBlockUserUseCase).to(
 		BlockUserUseCase,
+	);
+	bind<IGetDashboardStatsUseCase>(ADMIN_TYPES.IGetDashboardStatsUseCase).to(
+		GetDashboardStatsUseCase,
 	);
 });

@@ -5,6 +5,7 @@ import type { IInviteMemberUseCase } from "../../../application/usecases/admin/i
 import type { IListMembersUseCase } from "../../../application/usecases/admin/interface/list.members.interface";
 import type { IVerifyInvitationUseCase } from "../../../application/usecases/admin/interface/verify.member.interface";
 import type { IBlockUserUseCase } from "../../../application/usecases/admin/interface/block.user.interface";
+import type { IGetDashboardStatsUseCase } from "../../../application/usecases/admin/interface/get.dashboard.stats.interface";
 import { ErrorMessage } from "../../../domain/enum/messages/error.message.enum";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
@@ -21,7 +22,9 @@ export class AdminController {
         @inject(ADMIN_TYPES.IListMembersUseCase)
         private _listUserUseCase: IListMembersUseCase,
         @inject(ADMIN_TYPES.IBlockUserUseCase)
-        private _blockUserUseCase: IBlockUserUseCase
+        private _blockUserUseCase: IBlockUserUseCase,
+        @inject(ADMIN_TYPES.IGetDashboardStatsUseCase)
+        private _getDashboardStatsUseCase: IGetDashboardStatsUseCase
     ) { }
 
     async inviteMember(req: Request, res: Response, next: NextFunction) {
@@ -127,6 +130,27 @@ export class AdminController {
             })
         } catch (error) {
             next(error)
+        }
+    }
+
+    async getDashboardStats(req: Request, res: Response, next: NextFunction) {
+        try {
+            const companyId = req.user.companyId;
+            if (!companyId) {
+                return res.status(ClientErrorStatus.NOT_FOUND).json({
+                    success: false,
+                    message: ErrorMessage.COMPANY_NOT_FOUND,
+                });
+            }
+
+            const stats = await this._getDashboardStatsUseCase.execute(companyId);
+
+            return res.status(SuccessStatus.OK).json({
+                success: true,
+                data: stats,
+            });
+        } catch (error) {
+            next(error);
         }
     }
 
