@@ -4,6 +4,7 @@ import type { IBaseRepository } from "./base.repository";
 export interface IUserStroyRepository extends IBaseRepository<UserStoryEntity> {
 	findByProjectId(projectId: string): Promise<UserStoryEntity[]>;
 	findBySprintId(sprintId: string): Promise<UserStoryEntity[]>;
+	findByIds(ids: string[]): Promise<UserStoryEntity[]>;
 	listByProject(params: {
 		projectId: string;
 		companyId: string;

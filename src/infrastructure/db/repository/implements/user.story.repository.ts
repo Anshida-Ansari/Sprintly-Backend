@@ -43,7 +43,7 @@ export class UserStoryRepository extends BaseRepository<UserStoryEntity> impleme
     }
     async update(id: string, entity: UserStoryEntity): Promise<UserStoryEntity | null> {
         const payload = this._userstoryMapper.toMongo(entity)
-        const result = await this.model.findByIdAndUpdate(id, payload, { new: true , runValidators: true})
+        const result = await this.model.findByIdAndUpdate(id, payload, { new: true, runValidators: true })
         return result ? this._userstoryMapper.fromMongo(result) : null
     }
 
@@ -89,4 +89,8 @@ export class UserStoryRepository extends BaseRepository<UserStoryEntity> impleme
     }
 
 
+    async findByIds(ids: string[]): Promise<UserStoryEntity[]> {
+        const docs = await this.model.find({ _id: { $in: ids } });
+        return docs.map((doc) => this._userstoryMapper.fromMongo(doc));
+    }
 }

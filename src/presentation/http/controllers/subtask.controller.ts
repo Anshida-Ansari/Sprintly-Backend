@@ -75,38 +75,35 @@ export class SubTaskController {
                 data: result
             })
 
-
         } catch (error) {
-
             next(error)
-
         }
     }
 
-    async assignMembers(req: Request, res: Response, next: NextFunction){
+    async assignMembers(req: Request, res: Response, next: NextFunction) {
         try {
-            const {companyId} = req.user
-            const {subtaskId} = req.params
-            const {developerId} = req.body
+            const { companyId } = req.user
+            const { subtaskId } = req.params
+            const { developerId } = req.body
 
-            const result = await this._assignSubtaskUseCase.execute(subtaskId,developerId,companyId)
+            const result = await this._assignSubtaskUseCase.execute(subtaskId, developerId, companyId)
 
             return res.status(SuccessStatus.OK).json({
                 success: true,
                 message: 'Subtask is Assigned to developer',
                 data: result
             })
-            
+
         } catch (error) {
             next(error)
         }
     }
-    async  deleteSubtask(req:Request, res:Response, next:NextFunction){
+    async deleteSubtask(req: Request, res: Response, next: NextFunction) {
         try {
-            const {companyId} = req.user
-            const {subtaskId} = req.params
+            const { companyId } = req.user
+            const { subtaskId } = req.params
 
-            const result = await this._delteSubtaskUseCase.execute(subtaskId,companyId)
+            const result = await this._delteSubtaskUseCase.execute(subtaskId, companyId)
 
             return res.status(SuccessStatus.OK).json({
                 success: true,
@@ -115,7 +112,7 @@ export class SubTaskController {
             })
 
         } catch (error) {
-            next(error)            
+            next(error)
         }
     }
 }

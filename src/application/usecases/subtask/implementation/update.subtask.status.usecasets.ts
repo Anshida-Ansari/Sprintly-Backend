@@ -25,6 +25,7 @@ export class UpdateSubtaskStatusUseCase implements IUpdateSubtaskStatusUseCase {
     async execute(subtaskId: string, companyId: string, newStatus: SubTaskStatus, role: Role): Promise<SubTaskEntity> {
 
         const subtask = await this._subtaskrepository.findById(subtaskId)
+
         if (!subtask) {
             throw new NotFoundError(ErrorMessage.NOT_FOUND)
         }

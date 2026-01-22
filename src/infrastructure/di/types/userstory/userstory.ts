@@ -7,5 +7,7 @@ export const USERSTORY_TYPE = {
 	IEditUserstoryUseCase: Symbol.for("IEditUserstoryUseCase"),
 	IListUserstoryUseCase: Symbol.for("IListUserstoryUseCase"),
 	IAssignUserStoriesToSprintUseCase: Symbol.for("IAssignUserStoriesToSprintUseCase"),
-	IUpdateStatusOfUserStoryInterface: Symbol.for("IUpdateStatusOfUserStoryInterface")
+	// IAssignUserStoriesToSprintUseCase: Symbol.for("IAssignUserStoriesToSprintUseCase"),
+	IUpdateStatusOfUserStoryInterface: Symbol.for("IUpdateStatusOfUserStoryInterface"),
+	IGetMyUserStoriesUseCase: Symbol.for("IGetMyUserStoriesUseCase"),
 };

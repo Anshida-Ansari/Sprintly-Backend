@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 
 export class SignalingGateway {
     private static io: Server;
-    private static userSockets: Map<string, string> = new Map(); // userId -> socketId
+    private static userSockets: Map<string, string> = new Map(); 
 
     constructor(io: Server) {
         SignalingGateway.io = io;

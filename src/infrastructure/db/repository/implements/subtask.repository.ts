@@ -7,13 +7,13 @@ import { SubTaskPersisitanceMapper } from "@infrastructure/mappers/subtask.mappe
 import { ISubTaskRepository } from "../interface/subtask.interface";
 
 @injectable()
-export class SubtaskRepository extends BaseRepository<SubTaskEntity> implements ISubTaskRepository{
+export class SubtaskRepository extends BaseRepository<SubTaskEntity> implements ISubTaskRepository {
     constructor(
         @inject(SUBTASK_TYPE.SubTaskModel)
         model: Model<SubTaskEntity>,
         @inject(SUBTASK_TYPE.SubTaskPersisitanceMapper)
         private readonly _subtaskMapper: SubTaskPersisitanceMapper
-    ){
+    ) {
         super(model)
     }
 
@@ -30,7 +30,7 @@ export class SubtaskRepository extends BaseRepository<SubTaskEntity> implements 
 
     async update(id: string, entity: SubTaskEntity): Promise<SubTaskEntity | null> {
         const payload = this._subtaskMapper.toMongo(entity);
-        const result = await this.model.findByIdAndUpdate(id, payload, { new: true , runValidators: true});
+        const result = await this.model.findByIdAndUpdate(id, payload, { new: true, runValidators: true });
         return result ? this._subtaskMapper.fromMongo(result) : null;
     }
 
@@ -44,5 +44,13 @@ export class SubtaskRepository extends BaseRepository<SubTaskEntity> implements 
         return docs.map(doc => this._subtaskMapper.fromMongo(doc));
     }
 
+    async findByAssignedTo(userId: string): Promise<SubTaskEntity[]> {
+        const docs = await this.model.find({ assignedTo: userId });
+        return docs.map(doc => this._subtaskMapper.fromMongo(doc));
+    }
 
+    async findByUserStoryIds(userStoryIds: string[]): Promise<SubTaskEntity[]> {
+        const docs = await this.model.find({ userStoryId: { $in: userStoryIds } });
+        return docs.map(doc => this._subtaskMapper.fromMongo(doc));
+    }
 }

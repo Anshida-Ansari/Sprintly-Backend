@@ -29,7 +29,7 @@ router.post(
 );
 router.get(
 	"/:projectId/user-stories",
-	authGurd.authorize(["admin","developers"]),
+	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => userstoryController.listUserstory(req, res, next),
 );
 router.post(
@@ -40,8 +40,16 @@ router.post(
 )
 router.patch(
 	"/:userstoryId/status",
-	authGurd.authorize(["admin","developers"]),
-	(req,res,next)=> userstoryController.updateStatus(req,res,next)
+	authGurd.authorize(["admin", "developers"]),
+	(req, res, next) => userstoryController.updateStatus(req, res, next)
 
 )
+
+
+router.get(
+	"/my-tasks",
+	authGurd.authorize(["admin", "developers"]),
+	(req, res, next) => userstoryController.getMyTasks(req, res, next)
+)
+
 export { router as userstoryRouter };
