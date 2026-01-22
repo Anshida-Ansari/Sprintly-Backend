@@ -14,6 +14,7 @@ export class StandupEntity {
         createdAt: Date
     }>
     private _createdAt: Date;
+    private _userData?: { name: string; email: string; };
 
     private constructor(props: {
         id?: string;
@@ -31,6 +32,7 @@ export class StandupEntity {
             createdAt: Date
         }>
         createdAt?: Date;
+        userData?: { name: string; email: string; };
     }) {
         this._id = props.id;
         this._userId = props.userId;
@@ -42,6 +44,7 @@ export class StandupEntity {
         this._blockers = props.blockers?.trim() || "None";
         this._comments = props.comments ?? [];
         this._createdAt = props.createdAt ?? new Date();
+        this._userData = props.userData;
     }
 
     static create(props: {
@@ -53,13 +56,14 @@ export class StandupEntity {
         yesterday: string;
         today: string;
         blockers?: string;
-        comments?: Array<{       
+        comments?: Array<{
             userId: string;
             userName: string;
             text: string;
             createdAt: Date;
         }>;
-        createdAt?: Date
+        createdAt?: Date;
+        userData?: { name: string; email: string; };
     }): StandupEntity {
         if (!props.yesterday || !props.today) {
             throw new Error("Standup updates for Yesterday and Today are required");
@@ -82,7 +86,7 @@ export class StandupEntity {
         });
     }
 
-    
+
     get id() { return this._id; }
     get userId() { return this._userId; }
     get projectId() { return this._projectId; }
@@ -91,6 +95,27 @@ export class StandupEntity {
     get yesterday() { return this._yesterday; }
     get today() { return this._today; }
     get blockers() { return this._blockers; }
-    get comments() { return [...this._comments]; } 
+    get comments() { return [...this._comments]; }
     get createdAt() { return this._createdAt; }
+    get userData() { return this._userData; }
+
+    toJSON() {
+        return {
+            _id: this._id,
+            userId: this._userId,
+            projectId: this._projectId,
+            sprintId: this._sprintId,
+            companyId: this._companyId,
+            yesterday: this._yesterday,
+            today: this._today,
+            blockers: this._blockers,
+            comments: this._comments,
+            createdAt: this._createdAt,
+            user: this._userData ? {
+                _id: this._userId,
+                name: this._userData.name,
+                email: this._userData.email
+            } : undefined
+        }
+    }
 }

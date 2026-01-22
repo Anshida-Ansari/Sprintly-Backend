@@ -15,23 +15,18 @@ export class GetMyUserStoriesUseCase implements IGetMyUserStoriesUseCase {
     ) { }
 
     async execute(userId: string): Promise<any[]> {
-        // Step 1: Find all subtasks assigned to this user
-        const mySubtasks = await this._subTaskRepository.findByAssignedTo(userId);
+    const mySubtasks = await this._subTaskRepository.findByAssignedTo(userId);
 
         if (mySubtasks.length === 0) {
             return [];
         }
 
-        // Step 2: Get unique user story IDs from those subtasks
         const userStoryIds = [...new Set(mySubtasks.map((s) => s.userStoryId))];
 
-        // Step 3: Fetch the user stories
         const userStories = await this._userStoryRepository.findByIds(userStoryIds);
 
-        // Step 4: Fetch ALL subtasks for these user stories (for context)
         const allSubtasks = await this._subTaskRepository.findByUserStoryIds(userStoryIds);
 
-        // Step 5: Map user stories with their subtasks
         const result = userStories.map((story) => {
             const storySubtasks = allSubtasks.filter(
                 (st) => st.userStoryId.toString() === story.id?.toString()

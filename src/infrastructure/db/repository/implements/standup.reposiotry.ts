@@ -18,6 +18,18 @@ export class StandupRepository extends BaseRepository<StandupEntity> implements 
         super(model)
     }
 
+    async create(entity: StandupEntity): Promise<StandupEntity> {
+        const payload = this._standupMapper.toMongo(entity)
+        const result = await this.model.create(payload)
+        return this._standupMapper.fromMongo(result)
+    }
+
+    async update(id: string, entity: StandupEntity): Promise<StandupEntity | null> {
+        const payload = this._standupMapper.toMongo(entity)
+        const result = await this.model.findByIdAndUpdate(id, payload, { new: true })
+        return result ? this._standupMapper.fromMongo(result) : null
+    }
+
     async findById(id: string): Promise<StandupEntity | null> {
         const result = this.model.findById(id)
         return result ? this._standupMapper.fromMongo(result) : null
@@ -52,7 +64,7 @@ export class StandupRepository extends BaseRepository<StandupEntity> implements 
         const docs = await this.model.find({
             sprintId,
             createdAt: { $gte: startOfDate, $lte: endOfDate }
-        }).sort({ createdAt: 1 });
+        }).populate('userId').sort({ createdAt: 1 });
 
         return docs.map(doc => this._standupMapper.fromMongo(doc));
     }

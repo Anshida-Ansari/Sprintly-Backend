@@ -12,27 +12,31 @@ import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.err
 
 import type { IGetDetailProjectUseCase } from "@application/usecases/projects/interface/get.detail.project.interface";
 
+import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+
 @injectable()
 export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
     constructor(
         @inject(PROJECT_TYPE.IProjectRepository)
-        private _projectrepsository: IProjectReposiotory
+        private _projectrepsository: IProjectReposiotory,
+        @inject(SPRINTS_TYPE.ISprintReposiotry)
+        private _sprintRepository: ISprintReposiotry
     ) { }
 
-    async execute(companyId: string, proejctId: string): Promise<{ id: string; name: string; description?: string; status: ProjectStatus; startDate?: Date; endDate?: Date; gitRepoUrl?: string; members?: string[]; createdAt: Date; updatedAt: Date; }> {
+    async execute(companyId: string, proejctId: string): Promise<{ id: string; name: string; description?: string; status: ProjectStatus; startDate?: Date; endDate?: Date; gitRepoUrl?: string; members?: string[]; createdAt: Date; updatedAt: Date; activeSprintId?: string }> {
         const project = await this._projectrepsository.findById(proejctId)
 
         if (!project) {
             throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND)
         }
-        console.log('project.companyId:', project.companyId.toString());
-        console.log('user.companyId:', companyId.toString());
 
         if (project.companyId.toString() !== companyId.toString()) {
             throw new ForbiddenError(ErrorMessage.FORBIDDEN)
         }
 
-
+        const sprints = await this._sprintRepository.findByProject(proejctId);
+        const activeSprint = sprints.find(s => s.status === 'ACTIVE');
 
         return {
             id: project.id!,
@@ -44,7 +48,8 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
             gitRepoUrl: project.gitRepoUrl,
             members: project.members,
             createdAt: project.createdAt,
-            updatedAt: project.updatedAt!
+            updatedAt: project.updatedAt!,
+            activeSprintId: activeSprint ? activeSprint.id : undefined
         }
     }
 }
