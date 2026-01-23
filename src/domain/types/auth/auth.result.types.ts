@@ -1,5 +1,3 @@
-
-
 export type AuthResult = {
 	message: string;
 	user?: {

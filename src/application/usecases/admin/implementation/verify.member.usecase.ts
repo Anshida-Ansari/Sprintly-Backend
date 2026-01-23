@@ -6,7 +6,6 @@ import type { IVerifyInvitationUseCase } from "@application/usecases/admin/inter
 
 @injectable()
 export class VerifyInvitationUseCase implements IVerifyInvitationUseCase {
-
 	async execute(
 		token: string,
 	): Promise<{ name: string; email: string; companyId: string }> {

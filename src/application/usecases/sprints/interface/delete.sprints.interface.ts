@@ -1,3 +1,3 @@
-export interface IDeleteSprintUseCase{
-    execute(sprintId: string, companyId: string):Promise<void>
+export interface IDeleteSprintUseCase {
+	execute(sprintId: string, companyId: string): Promise<void>;
 }

@@ -6,150 +6,151 @@ import type { IListSprintsUseCase } from "@application/usecases/sprints/interfac
 import type { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
-import { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
-import { ICompleteSprintUseCase } from "@application/usecases/sprints/interface/complete.sprints.interface";
-import { IDeleteSprintUseCase } from "@application/usecases/sprints/interface/delete.sprints.interface";
+import type { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
+import type { ICompleteSprintUseCase } from "@application/usecases/sprints/interface/complete.sprints.interface";
+import type { IDeleteSprintUseCase } from "@application/usecases/sprints/interface/delete.sprints.interface";
 
 @injectable()
 export class SprintController {
-    constructor(
-        @inject(SPRINTS_TYPE.ICreateSprintUseCase)
-        private _createSprintsUseCase: ICreateSprintUseCase,
-        @inject(SPRINTS_TYPE.IListSprintsUseCase)
-        private _listSprintsUseCase: IListSprintsUseCase,
-        @inject(SPRINTS_TYPE.IEditSprintUseCase)
-        private _editSprintUseCase: IEditSprintUseCase,
-        @inject(SPRINTS_TYPE.IStartSprintUseCase)
-        private _startSprintUseCase: IStartSprintUseCase,
-        @inject(SPRINTS_TYPE.ICompleteSprintUseCase)
-        private _completeSprintsUseCase: ICompleteSprintUseCase,
-        @inject(SPRINTS_TYPE.IDeleteSprintUseCase)
-        private _deleteSprintUseCase: IDeleteSprintUseCase
-    ) { }
+	constructor(
+		@inject(SPRINTS_TYPE.ICreateSprintUseCase)
+		private _createSprintsUseCase: ICreateSprintUseCase,
+		@inject(SPRINTS_TYPE.IListSprintsUseCase)
+		private _listSprintsUseCase: IListSprintsUseCase,
+		@inject(SPRINTS_TYPE.IEditSprintUseCase)
+		private _editSprintUseCase: IEditSprintUseCase,
+		@inject(SPRINTS_TYPE.IStartSprintUseCase)
+		private _startSprintUseCase: IStartSprintUseCase,
+		@inject(SPRINTS_TYPE.ICompleteSprintUseCase)
+		private _completeSprintsUseCase: ICompleteSprintUseCase,
+		@inject(SPRINTS_TYPE.IDeleteSprintUseCase)
+		private _deleteSprintUseCase: IDeleteSprintUseCase,
+	) {}
 
-    async createSprints(req: Request, res: Response, next: NextFunction) {
-        try {
+	async createSprints(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { companyId } = req.user;
+			const { projectId } = req.params;
 
+			const result = await this._createSprintsUseCase.execute(
+				req.body,
+				projectId,
+				companyId,
+			);
 
-            const { companyId } = req.user
-            const { projectId } = req.params
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Sprint Created Successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 
-            const result = await this._createSprintsUseCase.execute(req.body, projectId, companyId)
+	async listSprints(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { companyId } = req.user;
+			const { projectId } = req.params;
 
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: 'Sprint Created Successfully',
-                data: result
-            })
+			const { page, limit, search, status } = req.query;
 
-        } catch (error) {
+			const query = {
+				page: page ? Number(page) : 1,
+				limit: limit ? Number(limit) : 10,
+				search: search ? String(search) : "",
+				status: status ? (status as SprintStatus) : undefined,
+			};
 
-            next(error)
+			const result = await this._listSprintsUseCase.execute(
+				query,
+				companyId,
+				projectId,
+			);
 
-        }
-    }
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				...result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 
-    async listSprints(req: Request, res: Response, next: NextFunction) {
-        try {
+	async editSprints(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { companyId } = req.user;
+			console.log("teh companyId", companyId);
 
-            const { companyId } = req.user
-            const { projectId } = req.params
+			const { projectId, sprintId } = req.params;
 
-            const { page, limit, search, status } = req.query
+			console.log("the projectId", projectId);
+			console.log("the sprintId", sprintId);
 
-            const query = {
-                page: page ? Number(page) : 1,
-                limit: limit ? Number(limit) : 10,
-                search: search ? String(search) : "",
-                status: status ? (status as SprintStatus) : undefined
-            }
+			const result = await this._editSprintUseCase.execute(
+				req.body,
+				sprintId,
+				projectId,
+				companyId,
+			);
 
-            const result = await this._listSprintsUseCase.execute(query, companyId, projectId)
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Sprint edited  Successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async startSprint(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { companyId } = req.user;
+			const { sprintId } = req.params;
 
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                ...result
-            })
+			const result = await this._startSprintUseCase.execute(
+				companyId,
+				sprintId,
+			);
 
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Start sprinted Successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async completeSprint(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { companyId } = req.user;
+			const { sprintId } = req.params;
 
+			const result = await this._completeSprintsUseCase.execute(
+				sprintId,
+				companyId,
+			);
 
-        } catch (error) {
-            next(error)
-        }
-    }
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message:
+					"Sprint completed successfully. Unfinished stories have been moved to the backlog.",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async deleteSprint(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { companyId } = req.user;
+			const { sprintId } = req.params;
 
-    async editSprints(req: Request, res: Response, next: NextFunction) {
-
-        try {
-
-            const { companyId } = req.user
-            console.log('teh companyId', companyId);
-
-            const { projectId, sprintId } = req.params
-
-            console.log('the projectId', projectId)
-            console.log('the sprintId', sprintId)
-
-            const result = await this._editSprintUseCase.execute(req.body, sprintId, projectId, companyId)
-
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: 'Sprint edited  Successfully',
-                data: result
-            })
-
-        } catch (error) {
-            next(error)
-        }
-    }
-    async startSprint(req: Request, res: Response, next: NextFunction) {
-        try {
-            const { companyId } = req.user
-            const { sprintId } = req.params
-
-            const result = await this._startSprintUseCase.execute(companyId, sprintId)
-
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: 'Start sprinted Successfully',
-                data: result
-            })
-
-        } catch (error) {
-
-            next(error)
-
-        }
-    }
-    async completeSprint(req: Request, res: Response, next: NextFunction) {
-        try {
-
-            const { companyId } = req.user
-            const { sprintId } = req.params
-
-            const result = await this._completeSprintsUseCase.execute(sprintId, companyId)
-
-
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: 'Sprint completed successfully. Unfinished stories have been moved to the backlog.',
-                data: result
-            })
-
-        } catch (error) {
-
-            next(error)
-
-        }
-    }
-    async deleteSprint(req: Request, res:Response, next:NextFunction){
-        try {
-            const {companyId} = req.user
-            const {sprintId} = req.params
-
-            const result = await this._deleteSprintUseCase.execute(sprintId,companyId)
-        } catch (error) {
-            
-        }
-    }
+			const result = await this._deleteSprintUseCase.execute(
+				sprintId,
+				companyId,
+			);
+		} catch (error) {}
+	}
 }

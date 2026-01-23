@@ -20,8 +20,10 @@ router.post(
 	validateDTO(CreateProjectDTO),
 	(req, res, next) => projectController.createProject(req, res, next),
 );
-router.get("/projects", authGurd.authorize(["admin","developers"]), (req, res, next) =>
-	projectController.listProject(req, res, next),
+router.get(
+	"/projects",
+	authGurd.authorize(["admin", "developers"]),
+	(req, res, next) => projectController.listProject(req, res, next),
 );
 router.patch(
 	"/update-project/:projectId",
@@ -30,7 +32,7 @@ router.patch(
 );
 router.get(
 	"/get-projects/:projectId",
-	authGurd.authorize(["admin","developers"]),
+	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => projectController.getProjectDetail(req, res, next),
 );
 

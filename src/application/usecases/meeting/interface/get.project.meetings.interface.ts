@@ -1,6 +1,5 @@
-
-import { MeetingEntity } from "../../../../domain/entities/meeting.entity";
+import type { MeetingEntity } from "../../../../domain/entities/meeting.entity";
 
 export interface IGetProjectMeetingsUseCase {
-    execute(projectId: string): Promise<MeetingEntity[]>;
+	execute(projectId: string): Promise<MeetingEntity[]>;
 }

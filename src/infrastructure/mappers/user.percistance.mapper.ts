@@ -1,5 +1,3 @@
-
-
 import { UserEntity } from "../../domain/entities/user.entities";
 import type { UserStatus } from "../../domain/enum/status.enum";
 

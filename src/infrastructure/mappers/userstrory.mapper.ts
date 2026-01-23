@@ -25,7 +25,6 @@ export class UserStoryPersisitanceMapper {
 			description: doc.description,
 			priority: doc.priority,
 			sprintId: doc.sprintId?.toString(),
-
 		});
 	}
 }

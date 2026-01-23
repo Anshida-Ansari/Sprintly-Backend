@@ -14,42 +14,43 @@ import type { ResetPasswordDTO } from "@application/dtos/auth/reset.password.dto
 import type { IResetPasswordUseCase } from "@application/usecases/auth/interface/reset.password.interface";
 
 @injectable()
-export class ResetPasswordUsecase implements IResetPasswordUseCase{
-    constructor(
-        @inject(USER_TYPES.IUserRepository)
-        private _userRepository:IUserRepository
-    ){}
+export class ResetPasswordUsecase implements IResetPasswordUseCase {
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) {}
 
-    async execute({email,newPassword,confirmPassword}: ResetPasswordDTO): Promise<{ message: string; }> {
-       
-            if(newPassword !== confirmPassword){
-                throw new validationError(ErrorMessage.PASSWORDS_DO_NOT_MATCH)
-            }
+	async execute({
+		email,
+		newPassword,
+		confirmPassword,
+	}: ResetPasswordDTO): Promise<{ message: string }> {
+		if (newPassword !== confirmPassword) {
+			throw new validationError(ErrorMessage.PASSWORDS_DO_NOT_MATCH);
+		}
 
-            const user = await this._userRepository.findByEmail(email)
-            if(!user){
-                throw new NotFoundError(ErrorMessage.USER_NOT_FOUND)
-            }
+		const user = await this._userRepository.findByEmail(email);
+		if (!user) {
+			throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
+		}
 
-            const userEntity = UserEntity.create({
-                id:user.id,
-                name:user.name,
-                email:user.email,
-                password:newPassword,
-                role:user.role,
-                status:user.status,
-                companyId:user.companyId,
-                adminId:user.adminId
+		const userEntity = UserEntity.create({
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			password: newPassword,
+			role: user.role,
+			status: user.status,
+			companyId: user.companyId,
+			adminId: user.adminId,
+		});
 
-            })
+		const hashedPassword = await userEntity.getHashedPassword();
+		userEntity.setPassword(hashedPassword);
 
-            const hashedPassword = await userEntity.getHashedPassword()
-            userEntity.setPassword(hashedPassword)
-
-            await this._userRepository.updatePassword(user.id!,userEntity.password)
-            return{
-                message:SuccessMessage.PASSWORD_RESET
-            }
-      
-    }
+		await this._userRepository.updatePassword(user.id!, userEntity.password);
+		return {
+			message: SuccessMessage.PASSWORD_RESET,
+		};
+	}
 }

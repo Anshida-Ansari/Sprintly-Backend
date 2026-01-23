@@ -15,71 +15,80 @@ import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.er
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
 
 @injectable()
-export class CreateSprintUseCase implements ICreateSprintUseCase{
-    constructor(
-        @inject(SPRINTS_TYPE.ISprintReposiotry)
-        private _sprintRepository: ISprintReposiotry,
-        @inject(PROJECT_TYPE.IProjectRepository)
-        private _projectReposiotry: IProjectReposiotory,
+export class CreateSprintUseCase implements ICreateSprintUseCase {
+	constructor(
+		@inject(SPRINTS_TYPE.ISprintReposiotry)
+		private _sprintRepository: ISprintReposiotry,
+		@inject(PROJECT_TYPE.IProjectRepository)
+		private _projectReposiotry: IProjectReposiotory,
+	) {}
 
-    ){}
+	async execute(
+		dto: CreateSprintDTO,
+		projectId: string,
+		companyId: string,
+	): Promise<{
+		id: string;
+		name: string;
+		goal: string;
+		status: SprintStatus;
+		createdAt: Date;
+	}> {
+		const project = await this._projectReposiotry.findById(projectId);
+		if (!project) {
+			throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND);
+		}
 
-    async execute(dto: CreateSprintDTO, projectId: string, companyId: string): Promise<{ id: string; name: string; goal: string; status: SprintStatus; createdAt: Date; }> {
-        const project = await this._projectReposiotry.findById(projectId)
-        if(!project){
-            throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND)
-        }
+		if (project.companyId.toString() !== companyId.toString()) {
+			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
+		}
 
-        if(project.companyId.toString() !== companyId.toString()){
-            throw new ForbiddenError(ErrorMessage.FORBIDDEN)
-        }
+		const sprintStart = new Date(dto.startDate);
+		const sprintEnd = new Date(dto.endDate);
+		const projectStart = new Date(project.startDate);
+		const projectEnd = new Date(project.endDate);
 
-        const sprintStart = new Date(dto.startDate)
-        const sprintEnd = new Date(dto.endDate)
-        const projectStart = new Date(project.startDate)
-        const projectEnd = new Date(project.endDate)
+		if (sprintStart < projectStart || sprintEnd > projectEnd) {
+			throw new ConflictError(
+				`Sprint dates must be within the project duration: ${projectStart.toDateString()} to ${projectEnd.toDateString()}`,
+			);
+		}
 
-        if (sprintStart < projectStart || sprintEnd > projectEnd) {
-            throw new ConflictError(
-                `Sprint dates must be within the project duration: ${projectStart.toDateString()} to ${projectEnd.toDateString()}`
-            );
-        }
+		const activeSprints =
+			await this._sprintRepository.findActiveSprintByProject(projectId);
 
+		if (activeSprints) {
+			throw new ConflictError(SprintErrorMessage.ACTIVE_SPRINT);
+		}
 
-        const activeSprints = await this._sprintRepository.findActiveSprintByProject(projectId)
+		const overlappingSprint = await this._sprintRepository.hasOverlappingSprint(
+			projectId,
+			dto.startDate,
+			dto.endDate,
+		);
 
-        if(activeSprints){
-            throw new ConflictError(SprintErrorMessage.ACTIVE_SPRINT)
+		if (overlappingSprint) {
+			throw new ConflictError(SprintErrorMessage.SPRINTS_OVERLAP);
+		}
 
-        }
+		const sprint = SprintEntity.create({
+			projectId,
+			companyId,
+			name: dto.name,
+			goal: dto.goal,
+			startDate: dto.startDate,
+			endDate: dto.endDate,
+			status: SprintStatus.PLANNED,
+		});
 
-        const overlappingSprint = await this._sprintRepository.hasOverlappingSprint(projectId,dto.startDate,dto.endDate)
+		const createdSprint = await this._sprintRepository.create(sprint);
 
-        if(overlappingSprint){
-            throw new ConflictError(SprintErrorMessage.SPRINTS_OVERLAP)
-        }
-
-
-        const sprint = SprintEntity.create({
-            projectId,
-            companyId,
-            name:dto.name,
-            goal:dto.goal,
-            startDate:dto.startDate,
-            endDate:dto.endDate,
-            status:SprintStatus.PLANNED
-        })
-
-        const createdSprint = await this._sprintRepository.create(sprint)
-
-        return{
-            id: createdSprint.id!,
-            name: createdSprint.name,
-            goal: createdSprint.goal!,
-            status: createdSprint.status,
-            createdAt: createdSprint.createdAt
-
-        }
-
-    }
+		return {
+			id: createdSprint.id!,
+			name: createdSprint.name,
+			goal: createdSprint.goal!,
+			status: createdSprint.status,
+			createdAt: createdSprint.createdAt,
+		};
+	}
 }

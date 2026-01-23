@@ -24,93 +24,93 @@ import { validationError } from "@shared/utils/error-handling/errors/validation.
 import type { VerifyOtpDTO } from "@application/dtos/auth/verify.admin.dto";
 import type { IVerifyOtpUseCase } from "@application/usecases/auth/interface/verifyadmin.otp.interface";
 
-
 @injectable()
 export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
-  constructor(
-    @inject(USER_TYPES.IUserRepository)
-    private readonly _userRepository: IUserRepository,
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private readonly _userRepository: IUserRepository,
 
-    @inject(USER_TYPES.UserPersistenceMapper)
-    private readonly _userPersistance: UserPersistenceMapper,
+		@inject(USER_TYPES.UserPersistenceMapper)
+		private readonly _userPersistance: UserPersistenceMapper,
 
-    @inject(COMPANY_TYPES.ICompanyRepository)
-    private readonly _companyRepository: ICompanyRepository,
+		@inject(COMPANY_TYPES.ICompanyRepository)
+		private readonly _companyRepository: ICompanyRepository,
 
-    @inject(COMPANY_TYPES.CompanyPersistenceMapper)
-    private readonly _companyPersistance: CompanyPersistenceMapper
-  ) { }
+		@inject(COMPANY_TYPES.CompanyPersistenceMapper)
+		private readonly _companyPersistance: CompanyPersistenceMapper,
+	) {}
 
-  async execute(dto: VerifyOtpDTO): Promise<{ message: string; user: { id?: string; name: string; email: string; }; company: { id?: string; name: string; }; }> {
-    
-      const key = `admin.otp:${dto.token}`
-      const data = await redisClient.get(key)
+	async execute(
+		dto: VerifyOtpDTO,
+	): Promise<{
+		message: string;
+		user: { id?: string; name: string; email: string };
+		company: { id?: string; name: string };
+	}> {
+		const key = `admin.otp:${dto.token}`;
+		const data = await redisClient.get(key);
 
-      if (!data) {
-        throw new NotFoundError(ErrorMessage.OTP_EXPIRED)
-      }
+		if (!data) {
+			throw new NotFoundError(ErrorMessage.OTP_EXPIRED);
+		}
 
-      const parsed = JSON.parse(data)
+		const parsed = JSON.parse(data);
 
-      if (parsed.otp.toString() !== dto.otp.toString()) {
-        throw new validationError(ErrorMessage.OTP_INVALID)
-      }
+		if (parsed.otp.toString() !== dto.otp.toString()) {
+			throw new validationError(ErrorMessage.OTP_INVALID);
+		}
 
-      const tempCompanyId = new mongoose.Types.ObjectId().toString();
+		const tempCompanyId = new mongoose.Types.ObjectId().toString();
 
-      const adminEntity = UserEntity.create({
-        name: parsed.name,
-        email: parsed.email,
-        password: parsed.password,
-        role: Role.ADMIN,
-        status: UserStatus.ACTIVE,
-        companyId: tempCompanyId,
-        adminId: undefined,
-      });
+		const adminEntity = UserEntity.create({
+			name: parsed.name,
+			email: parsed.email,
+			password: parsed.password,
+			role: Role.ADMIN,
+			status: UserStatus.ACTIVE,
+			companyId: tempCompanyId,
+			adminId: undefined,
+		});
 
-      console.log('adminEntity', adminEntity)
+		console.log("adminEntity", adminEntity);
 
+		const adminMongo = this._userPersistance.toMongo(adminEntity);
+		const newAdmin = await this._userRepository.create(adminMongo);
+		console.log("DATA GOING TO MONGO:");
 
-      const adminMongo = this._userPersistance.toMongo(adminEntity)
-      const newAdmin = await this._userRepository.create(adminMongo);
-      console.log("DATA GOING TO MONGO:");
+		if (!newAdmin.id) throw new InternalServerError("Failed to create admin");
 
-      if (!newAdmin.id) throw new InternalServerError("Failed to create admin");
+		const companyEntity = CompanyEnitiy.create({
+			companyName: parsed.companyName,
+			adminId: newAdmin.id.toString(),
+			status: Status.PENDING,
+		});
 
-      const companyEntity = CompanyEnitiy.create({
-        companyName: parsed.companyName,
-        adminId: newAdmin.id.toString(),
-        status: Status.PENDING, 
-      });
+		const companyMongo = this._companyPersistance.toMongo(companyEntity);
+		const newCompany = await this._companyRepository.create(companyMongo);
 
-      const companyMongo = this._companyPersistance.toMongo(companyEntity)
-      const newCompany = await this._companyRepository.create(companyMongo);
+		if (!newCompany.id)
+			throw new InternalServerError(ErrorMessage.COMPANY_CREATION_FAILED);
 
-      if (!newCompany.id) throw new InternalServerError(ErrorMessage.COMPANY_CREATION_FAILED);
+		await this._userRepository.update(newAdmin.id, {
+			companyId: newCompany.id.toString(),
+		});
 
-      await this._userRepository.update(newAdmin.id, {
-        companyId: newCompany.id.toString(),
-      });
+		console.log("new compnay", newCompany);
+		await redisClient.del(key);
+		console.log("admin", adminEntity);
 
-      console.log('new compnay', newCompany);
-      await redisClient.del(key);
-      console.log('admin', adminEntity)
-
-
-      return {
-        message: "Admin registered successfully",
-        user: {
-          id: newAdmin.id?.toString(),
-          name: newAdmin.name,
-          email: newAdmin.email
-        },
-        company: {
-          id: newCompany.id?.toString(),
-          name: newCompany.companyName
-        }
-      };
-  }
-
-
-
+		return {
+			message: "Admin registered successfully",
+			user: {
+				id: newAdmin.id?.toString(),
+				name: newAdmin.name,
+				email: newAdmin.email,
+			},
+			company: {
+				id: newCompany.id?.toString(),
+				name: newCompany.companyName,
+			},
+		};
+	}
 }

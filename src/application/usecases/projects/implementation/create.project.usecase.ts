@@ -16,48 +16,49 @@ import type { CreateProjectResponse } from "@application/usecases/projects/imple
 
 @injectable()
 export class CreateProjectUseCase implements ICreateProjectUseCase {
-    constructor(
-        @inject(PROJECT_TYPE.IProjectRepository)
-        private _projectRepsitory: IProjectReposiotory
-    ) { }
+	constructor(
+		@inject(PROJECT_TYPE.IProjectRepository)
+		private _projectRepsitory: IProjectReposiotory,
+	) {}
 
-    async execute(dto: CreateProjectDTO, adminId: string, companyId: string): Promise<CreateProjectResponse> {
+	async execute(
+		dto: CreateProjectDTO,
+		adminId: string,
+		companyId: string,
+	): Promise<CreateProjectResponse> {
+		const exisitingProjeect = await this._projectRepsitory.findOne({
+			name: dto.name,
+			companyId,
+		});
 
-        const exisitingProjeect = await this._projectRepsitory.findOne({
-            name: dto.name,
-            companyId
-        })
+		if (exisitingProjeect) {
+			throw new ConflictError(ProjectErrorMessage.PROJECT_ALREADY_EXIST);
+		}
 
-    
-        if (exisitingProjeect) {
-            throw new ConflictError(ProjectErrorMessage.PROJECT_ALREADY_EXIST)
-        }
+		const startDate = new Date(dto.startDate);
+		const endDate = new Date(dto.endDate);
 
-        const startDate = new Date(dto.startDate);
-        const endDate = new Date(dto.endDate);
+		const Project = ProjectEntity.create({
+			name: dto.name,
+			description: dto.description,
+			startDate,
+			endDate,
+			createdBy: adminId,
+			companyId,
+			status: ProjectStatus.ACTIVE,
+			gitRepoUrl: dto.gitRepoUrl,
+			members: [],
+		});
 
-        const Project = ProjectEntity.create({
-            name: dto.name,
-            description: dto.description,
-            startDate,
-            endDate,
-            createdBy: adminId,
-            companyId,
-            status: ProjectStatus.ACTIVE,
-            gitRepoUrl: dto.gitRepoUrl,
-            members: []
+		const savedProject = await this._projectRepsitory.create(Project);
 
-        })
-
-        const savedProject = await this._projectRepsitory.create(Project)
-
-        return {
-            id: savedProject.id!,
-            name: savedProject.name,
-            description: savedProject.description,
-            startDate: savedProject.startDate,
-            endDate: savedProject.endDate,
-            gitRepoUrl: savedProject.gitRepoUrl
-        }
-    }
+		return {
+			id: savedProject.id!,
+			name: savedProject.name,
+			description: savedProject.description,
+			startDate: savedProject.startDate,
+			endDate: savedProject.endDate,
+			gitRepoUrl: savedProject.gitRepoUrl,
+		};
+	}
 }

@@ -1,52 +1,53 @@
 import { inject, injectable } from "inversify";
-import { IGetMyUserStoriesUseCase } from "../interface/get.my.userstories.interface";
+import type { IGetMyUserStoriesUseCase } from "../interface/get.my.userstories.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
-import { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
+import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 
 @injectable()
 export class GetMyUserStoriesUseCase implements IGetMyUserStoriesUseCase {
-    constructor(
-        @inject(SUBTASK_TYPE.ISubTaskRepository)
-        private _subTaskRepository: ISubTaskRepository,
-        @inject(USERSTORY_TYPE.IUserStroyRepository)
-        private _userStoryRepository: IUserStroyRepository
-    ) { }
+	constructor(
+		@inject(SUBTASK_TYPE.ISubTaskRepository)
+		private _subTaskRepository: ISubTaskRepository,
+		@inject(USERSTORY_TYPE.IUserStroyRepository)
+		private _userStoryRepository: IUserStroyRepository,
+	) {}
 
-    async execute(userId: string): Promise<any[]> {
-    const mySubtasks = await this._subTaskRepository.findByAssignedTo(userId);
+	async execute(userId: string): Promise<any[]> {
+		const mySubtasks = await this._subTaskRepository.findByAssignedTo(userId);
 
-        if (mySubtasks.length === 0) {
-            return [];
-        }
+		if (mySubtasks.length === 0) {
+			return [];
+		}
 
-        const userStoryIds = [...new Set(mySubtasks.map((s) => s.userStoryId))];
+		const userStoryIds = [...new Set(mySubtasks.map((s) => s.userStoryId))];
 
-        const userStories = await this._userStoryRepository.findByIds(userStoryIds);
+		const userStories = await this._userStoryRepository.findByIds(userStoryIds);
 
-        const allSubtasks = await this._subTaskRepository.findByUserStoryIds(userStoryIds);
+		const allSubtasks =
+			await this._subTaskRepository.findByUserStoryIds(userStoryIds);
 
-        const result = userStories.map((story) => {
-            const storySubtasks = allSubtasks.filter(
-                (st) => st.userStoryId.toString() === story.id?.toString()
-            );
+		const result = userStories.map((story) => {
+			const storySubtasks = allSubtasks.filter(
+				(st) => st.userStoryId.toString() === story.id?.toString(),
+			);
 
-            return {
-                id: story.id,
-                title: story.title,
-                description: story.description,
-                status: story.status,
-                priority: story.priority,
-                projectId: story.projectId,
-                companyId: story.companyId,
-                sprintId: story.sprintId,
-                createdAt: story.createdAt,
-                updatedAt: story.updatedAt,
-                subtasks: storySubtasks
-            };
-        });
+			return {
+				id: story.id,
+				title: story.title,
+				description: story.description,
+				status: story.status,
+				priority: story.priority,
+				projectId: story.projectId,
+				companyId: story.companyId,
+				sprintId: story.sprintId,
+				createdAt: story.createdAt,
+				updatedAt: story.updatedAt,
+				subtasks: storySubtasks,
+			};
+		});
 
-        return result;
-    }
+		return result;
+	}
 }

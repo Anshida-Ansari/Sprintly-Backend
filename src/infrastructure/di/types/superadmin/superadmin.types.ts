@@ -1,5 +1,3 @@
-
-
 export const SUPERADMIN_TYPES = {
 	IListCompanyUseCase: Symbol.for("IListCompanyUseCase"),
 	SuperAdminController: Symbol.for("SuperAdminController"),

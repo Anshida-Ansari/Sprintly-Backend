@@ -10,28 +10,24 @@ import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.err
 import type { IGetDetailPageUseCase } from "@application/usecases/superadmin/interface/get.detailpage.interface";
 
 @injectable()
-export class GetDetailPageUseCase implements IGetDetailPageUseCase{
-    constructor(
-        @inject(COMPANY_TYPES.ICompanyRepository)
-        private _companyrepository:ICompanyRepository
-    ){}
+export class GetDetailPageUseCase implements IGetDetailPageUseCase {
+	constructor(
+		@inject(COMPANY_TYPES.ICompanyRepository)
+		private _companyrepository: ICompanyRepository,
+	) {}
 
-    async execute(companyId: string): Promise<any> {
-            
-            const company = await this._companyrepository.findByCompanyId(companyId)
-            
+	async execute(companyId: string): Promise<any> {
+		const company = await this._companyrepository.findByCompanyId(companyId);
 
-            if(!company){
-                return new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
-            }
+		if (!company) {
+			return new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND);
+		}
 
-            return {
-                id:company.id,
-                companyName:company.companyName,
-                status:company.status,
-                adminId:company.adminId,
-                
-            }
-
-    }
+		return {
+			id: company.id,
+			companyName: company.companyName,
+			status: company.status,
+			adminId: company.adminId,
+		};
+	}
 }

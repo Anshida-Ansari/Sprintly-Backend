@@ -4,7 +4,7 @@ import type { ITokenBlacklistService } from "@domain/interface/token.blacklist.i
 
 @injectable()
 export class TokenBlacklistService implements ITokenBlacklistService {
-    async revokeUserRefreshTokens(email: string): Promise<void> {
-        await redisClient.del(`refresh:${email}`);
-    }
+	async revokeUserRefreshTokens(email: string): Promise<void> {
+		await redisClient.del(`refresh:${email}`);
+	}
 }

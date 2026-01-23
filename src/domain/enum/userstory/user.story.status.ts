@@ -4,4 +4,3 @@ export enum UserStoryStatus {
 	IN_PENDING = "In pending",
 	DONE = "Done",
 }
- 

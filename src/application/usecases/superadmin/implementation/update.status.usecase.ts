@@ -10,23 +10,26 @@ import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.err
 import type { IUpdateStatusInterface } from "@application/usecases/superadmin/interface/update.status.interface";
 
 @injectable()
-export class UpdateStatusUseCase implements IUpdateStatusInterface{
-    constructor(
-        @inject(COMPANY_TYPES.ICompanyRepository)
-        private _companyRepository:ICompanyRepository
-    ){}
+export class UpdateStatusUseCase implements IUpdateStatusInterface {
+	constructor(
+		@inject(COMPANY_TYPES.ICompanyRepository)
+		private _companyRepository: ICompanyRepository,
+	) {}
 
-    async execute(companyId: string, status: string): Promise<{ message: string; }> {
-            const company = await this._companyRepository.findById(companyId)
+	async execute(
+		companyId: string,
+		status: string,
+	): Promise<{ message: string }> {
+		const company = await this._companyRepository.findById(companyId);
 
-            if(!company){
-                throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND)
-            }
+		if (!company) {
+			throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND);
+		}
 
-            await this._companyRepository.update(companyId,{status})
+		await this._companyRepository.update(companyId, { status });
 
-            return {
-                message:`company status is updated to ${status}`
-            }
-    }
+		return {
+			message: `company status is updated to ${status}`,
+		};
+	}
 }

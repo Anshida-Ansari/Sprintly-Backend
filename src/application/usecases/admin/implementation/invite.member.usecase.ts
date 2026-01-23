@@ -12,50 +12,48 @@ import { sendInviteEmail } from "@shared/utils/send.invitaion.util";
 
 @injectable()
 export class InviteMemberUseCase implements IInviteMemberUseCase {
-    constructor(
-        @inject(USER_TYPES.IUserRepository)
-        private _userRepository: IUserRepository
-    ) { }
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) {}
 
-    async execute(dto: InviteMemberDTO, companyId: string, adminId: string): Promise<{ message: string; inviteLink: string; }> {
+	async execute(
+		dto: InviteMemberDTO,
+		companyId: string,
+		adminId: string,
+	): Promise<{ message: string; inviteLink: string }> {
+		const existing = await this._userRepository.findOne({ email: dto.email });
+		if (existing) {
+			throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS);
+		}
 
-        const existing = await this._userRepository.findOne({ email: dto.email })
-        if (existing) {
-            throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS)
-        }
+		const token = crypto.randomBytes(20).toString("hex");
 
-        const token = crypto.randomBytes(20).toString("hex")
+		const key = `member.invite:${token}`;
 
-        const key = `member.invite:${token}`
+		await redisClient.set(
+			key,
+			JSON.stringify({
+				name: dto.name,
+				email: dto.email,
+				companyId,
+				adminId,
+			}),
 
+			"EX",
+			172800,
+		);
 
-        await redisClient.set(
-            key,
-            JSON.stringify({
-                name: dto.name,
-                email: dto.email,
-                companyId,
-                adminId
-            }),
+		const frontendUrl = env.FRONTENT_URL || "http://localhost:5173";
 
-            "EX",
-            172800
-        )
+		const inviteLink = `${frontendUrl}/member/accept?token=${token}`;
+		console.log(inviteLink);
 
-        const frontendUrl = env.FRONTENT_URL || "http://localhost:5173";
+		await sendInviteEmail(dto.email, inviteLink);
 
-        const inviteLink = `${frontendUrl}/member/accept?token=${token}`;
-        console.log(inviteLink);
-
-
-        await sendInviteEmail(dto.email, inviteLink)
-
-        return {
-            message: "Invitation  send successfully",
-            inviteLink: inviteLink
-        }
-
-
-
-    }
+		return {
+			message: "Invitation  send successfully",
+			inviteLink: inviteLink,
+		};
+	}
 }

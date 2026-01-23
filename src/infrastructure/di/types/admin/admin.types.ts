@@ -1,5 +1,3 @@
-
-
 export const ADMIN_TYPES = {
 	AdminController: Symbol.for("AdminController"),
 	IInviteMemberUseCase: Symbol.for("IInviteMemberUseCase"),

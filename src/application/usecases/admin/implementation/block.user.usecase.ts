@@ -10,28 +10,31 @@ import type { IBlockUserUseCase } from "../interface/block.user.interface";
 
 @injectable()
 export class BlockUserUseCase implements IBlockUserUseCase {
-    constructor(
-        @inject(USER_TYPES.IUserRepository)
-        private _userRepository: IUserRepository,
-        @inject(AUTH_TYPES.ITokenBlacklistService)
-        private _tokenBlacklistService: ITokenBlacklistService
-    ) { }
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+		@inject(AUTH_TYPES.ITokenBlacklistService)
+		private _tokenBlacklistService: ITokenBlacklistService,
+	) {}
 
-    async execute(userId: string, status: UserStatus): Promise<{ message: string }> {
-        const user = await this._userRepository.findById(userId);
+	async execute(
+		userId: string,
+		status: UserStatus,
+	): Promise<{ message: string }> {
+		const user = await this._userRepository.findById(userId);
 
-        if (!user) {
-            throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
-        }
+		if (!user) {
+			throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
+		}
 
-        await this._userRepository.update(userId, { status });
+		await this._userRepository.update(userId, { status });
 
-        if (status === UserStatus.BLOCK) {
-            await this._tokenBlacklistService.revokeUserRefreshTokens(user.email);
-        }
+		if (status === UserStatus.BLOCK) {
+			await this._tokenBlacklistService.revokeUserRefreshTokens(user.email);
+		}
 
-        return {
-            message: `User status updated to ${status}`
-        };
-    }
+		return {
+			message: `User status updated to ${status}`,
+		};
+	}
 }

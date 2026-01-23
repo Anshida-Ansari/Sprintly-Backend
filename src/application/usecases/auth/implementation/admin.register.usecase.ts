@@ -17,47 +17,41 @@ import type { IRegisterAdminUseCase } from "@application/usecases/auth/interface
 
 @injectable()
 export class RegisterAdminUseCase implements IRegisterAdminUseCase {
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) {}
 
-    constructor(
-        @inject(USER_TYPES.IUserRepository) private _userRepository: IUserRepository
-    ) { }
+	async execute(
+		dto: AdminRegisterDTO,
+	): Promise<{ message: string; token: string }> {
+		const existing = await this._userRepository.findByEmail(dto.email);
+		if (existing) throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS);
 
-    async execute(dto: AdminRegisterDTO): Promise<{ message: string, token: string }> {
+		const hashed = await hash(dto.password);
 
-        const existing = await this._userRepository.findByEmail(dto.email)
-        if (existing) throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS)
+		const otp = generateOTP();
+		const token = randomBytes(32).toString("hex");
 
+		await redisClient.setex(
+			`admin.otp:${token}`,
+			3 * 60,
 
-        const hashed = await hash(dto.password)
+			JSON.stringify({
+				name: dto.name,
+				email: dto.email,
+				password: hashed,
+				companyName: dto.companyName,
+				otp,
+			}),
+		);
 
-        const otp = generateOTP()
-        const token = randomBytes(32).toString('hex')
+		await sendOtpEmail(dto.email, otp);
+		console.log(otp);
 
-        await redisClient.setex(
-            `admin.otp:${token}`,
-            3 * 60,
-
-            JSON.stringify({
-                name: dto.name,
-                email: dto.email,
-                password: hashed,
-                companyName: dto.companyName,
-                otp
-            })
-
-        )
-
-
-
-        await sendOtpEmail(dto.email, otp)
-        console.log(otp);
-
-        return {
-            message: "OTP sent successfully",
-            token: token
-        }
-
-
-    }
-
+		return {
+			message: "OTP sent successfully",
+			token: token,
+		};
+	}
 }

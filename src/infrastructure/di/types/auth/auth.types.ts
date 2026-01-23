@@ -1,4 +1,3 @@
-
 export const AUTH_TYPES = {
 	userModel: Symbol.for("UserModel"),
 	CompanyModel: Symbol.for("CompanyModel"),
@@ -15,7 +14,9 @@ export const AUTH_TYPES = {
 	ISetPassWordUseCase: Symbol.for("ISetPassWordUseCase"),
 	IForgotPasswordUseCase: Symbol.for("IForgotPasswordUseCase"),
 	IResetPasswordUseCase: Symbol.for("IResetPasswordUseCase"),
-	IVerifyForgotPasswordOtpUseCase: Symbol.for("IVerifyForgotPasswordOtpUseCase"),
+	IVerifyForgotPasswordOtpUseCase: Symbol.for(
+		"IVerifyForgotPasswordOtpUseCase",
+	),
 	IResendAdminOtpUseCase: Symbol.for("IResendAdminOtpUseCase"),
 	ILogoutUseCase: Symbol.for("ILogoutUseCase"),
 

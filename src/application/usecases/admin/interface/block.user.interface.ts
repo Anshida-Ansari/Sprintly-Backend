@@ -1,5 +1,5 @@
 import type { UserStatus } from "@domain/enum/status.enum";
 
 export interface IBlockUserUseCase {
-    execute(userId: string, status: UserStatus): Promise<{ message: string }>;
+	execute(userId: string, status: UserStatus): Promise<{ message: string }>;
 }

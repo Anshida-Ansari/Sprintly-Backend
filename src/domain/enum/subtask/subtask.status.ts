@@ -1,4 +1,4 @@
 export enum SubTaskStatus {
-    PENDING = "pending",
-    COMPLETED = "completed"
+	PENDING = "pending",
+	COMPLETED = "completed",
 }

@@ -1,6 +1,5 @@
-
-import { MeetingEntity } from "../../../../domain/entities/meeting.entity";
+import type { MeetingEntity } from "../../../../domain/entities/meeting.entity";
 
 export interface IScheduleMeetingUseCase {
-    execute(data: any): Promise<MeetingEntity>;
+	execute(data: any): Promise<MeetingEntity>;
 }

@@ -16,38 +16,52 @@ import type { IListUserstoryUseCase } from "@application/usecases/userstory/inte
 
 @injectable()
 export class ListUserstoryUseCase implements IListUserstoryUseCase {
-    constructor(
-        @inject(USERSTORY_TYPE.IUserStroyRepository)
-        private _userstoryrepository: IUserStroyRepository,
-        @inject(PROJECT_TYPE.IProjectRepository)
-        private _projectreposioty: IProjectReposiotory
-    ) { }
+	constructor(
+		@inject(USERSTORY_TYPE.IUserStroyRepository)
+		private _userstoryrepository: IUserStroyRepository,
+		@inject(PROJECT_TYPE.IProjectRepository)
+		private _projectreposioty: IProjectReposiotory,
+	) {}
 
-    async execute(query: { page: number; limit: number; search?: string; sprintId?: string; status?: string; }, companyId: string, projectId: string): Promise<{ data: any[]; total: number; page: number; limit: number; totalPages: number; }> {
-        const project = await this._projectreposioty.findById(projectId)
-        if (!project) {
-            throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND)
-        }
-        if (project.companyId.toString() !== companyId.toString()) {
-            throw new ForbiddenError(ErrorMessage.FORBIDDEN)
-        }
+	async execute(
+		query: {
+			page: number;
+			limit: number;
+			search?: string;
+			sprintId?: string;
+			status?: string;
+		},
+		companyId: string,
+		projectId: string,
+	): Promise<{
+		data: any[];
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
+	}> {
+		const project = await this._projectreposioty.findById(projectId);
+		if (!project) {
+			throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND);
+		}
+		if (project.companyId.toString() !== companyId.toString()) {
+			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
+		}
 
-        const { page, limit } = query
+		const { page, limit } = query;
 
-        const { data, total } = await this._userstoryrepository.listByProject({
-            projectId,
-            companyId,
-            ...query
-        })
+		const { data, total } = await this._userstoryrepository.listByProject({
+			projectId,
+			companyId,
+			...query,
+		});
 
-
-        return {
-            data,
-            total,
-            page,
-            limit,
-            totalPages: Math.ceil(total / limit)
-        }
-    }
-
+		return {
+			data,
+			total,
+			page,
+			limit,
+			totalPages: Math.ceil(total / limit),
+		};
+	}
 }

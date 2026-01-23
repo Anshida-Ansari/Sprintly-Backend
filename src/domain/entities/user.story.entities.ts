@@ -56,7 +56,6 @@ export class UserStoryEntity {
 			status: UserStoryStatus.IN_PENDING,
 			priority: PriorityStatus.MEDIUM,
 			sprintId: props.sprintId,
-
 		});
 	}
 
@@ -80,9 +79,8 @@ export class UserStoryEntity {
 	}
 
 	moveToBacklog() {
-		this._updatedAt = new Date()
+		this._updatedAt = new Date();
 	}
-
 
 	get id() {
 		return this._id;
@@ -105,8 +103,8 @@ export class UserStoryEntity {
 	get priority() {
 		return this._priority;
 	}
-	get sprintId() { 
-		return this._sprintId; 
+	get sprintId() {
+		return this._sprintId;
 	}
 	get createdAt() {
 		return this._createdAt;

@@ -14,194 +14,174 @@ import type { IVerifyOtpUseCase } from "../../../application/usecases/auth/inter
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { AUTH_TYPES } from "../../../infrastructure/di/types/auth/auth.types";
 
-
 @injectable()
 export class AuthController {
-    constructor(
-        @inject(AUTH_TYPES.IRegisterAdminUseCase)
-        private _registerAdminUseCase: IRegisterAdminUseCase,
-        @inject(AUTH_TYPES.IVerifyOtpUseCase)
-        private _verifyAdminUseCase: IVerifyOtpUseCase,
-        @inject(AUTH_TYPES.ILoginUseCase)
-        private _loginUseCase: ILoginUseCase,
-        @inject(AUTH_TYPES.IRefreshUseCase)
-        private _refreshUseCase: IRefreshUseCase,
-        @inject(AUTH_TYPES.ISetPassWordUseCase)
-        private _setPasswrodUseCase: ISetPassWordUseCase,
-        @inject(AUTH_TYPES.IForgotPasswordUseCase)
-        private _forgotPasswordUseCase: IForgotPasswordUseCase,
-        @inject(AUTH_TYPES.IVerifyForgotPasswordOtpUseCase)
-        private _verifyForgotOtpUseCase: IVerifyForgotPasswordOtpUseCase,
-        @inject(AUTH_TYPES.IResetPasswordUseCase)
-        private _resetPassWordUseCase: IResetPasswordUseCase,
-        @inject(AUTH_TYPES.IResendAdminOtpUseCase)
-        private _resendAdminOtpUseCase: IResendAdminOtpUseCase,
-        @inject(AUTH_TYPES.ILogoutUseCase)
-        private _logoutUseCase: ILogoutUseCase
-    ) { }
+	constructor(
+		@inject(AUTH_TYPES.IRegisterAdminUseCase)
+		private _registerAdminUseCase: IRegisterAdminUseCase,
+		@inject(AUTH_TYPES.IVerifyOtpUseCase)
+		private _verifyAdminUseCase: IVerifyOtpUseCase,
+		@inject(AUTH_TYPES.ILoginUseCase)
+		private _loginUseCase: ILoginUseCase,
+		@inject(AUTH_TYPES.IRefreshUseCase)
+		private _refreshUseCase: IRefreshUseCase,
+		@inject(AUTH_TYPES.ISetPassWordUseCase)
+		private _setPasswrodUseCase: ISetPassWordUseCase,
+		@inject(AUTH_TYPES.IForgotPasswordUseCase)
+		private _forgotPasswordUseCase: IForgotPasswordUseCase,
+		@inject(AUTH_TYPES.IVerifyForgotPasswordOtpUseCase)
+		private _verifyForgotOtpUseCase: IVerifyForgotPasswordOtpUseCase,
+		@inject(AUTH_TYPES.IResetPasswordUseCase)
+		private _resetPassWordUseCase: IResetPasswordUseCase,
+		@inject(AUTH_TYPES.IResendAdminOtpUseCase)
+		private _resendAdminOtpUseCase: IResendAdminOtpUseCase,
+		@inject(AUTH_TYPES.ILogoutUseCase)
+		private _logoutUseCase: ILogoutUseCase,
+	) {}
 
+	async register(req: Request, res: Response, next: NextFunction) {
+		try {
+			const admin = await this._registerAdminUseCase.execute(req.body);
 
-    async register(req: Request, res: Response, next: NextFunction) {
+			return res.status(SuccessStatus.OK).json({
+				message: SuccessStatus.CREATED,
+				data: admin,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 
-        try {
-            const admin = await this._registerAdminUseCase.execute(req.body)
+	async verifyOTP(req: Request, res: Response, next: NextFunction) {
+		try {
+			const result = await this._verifyAdminUseCase.execute(req.body);
+			return res.status(SuccessStatus.OK).json({
+				message: "Admin registerd Successfully",
+				data: {
+					user: result.user,
+				},
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async login(req: Request, res: Response, next: NextFunction) {
+		try {
+			const result = await this._loginUseCase.execute(req.body);
 
-            return res.status(SuccessStatus.OK).json({
-                message: SuccessStatus.CREATED,
-                data: admin
-            })
+			res.cookie("refreshToken", result.refreshToken, {
+				httpOnly: true,
+				sameSite: "lax",
+				path: "/",
+				secure: false,
+				maxAge: env.REFRESH_TOKEN_MAX_AGE * 1000,
+			});
 
-        } catch (error) {
-            next(error)
-        }
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: result.message,
+				data: {
+					accessToken: result.accessToken,
+					role: result.user?.role,
+					user: result.user,
+				},
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 
-    }
+	async refreshToken(req: Request, res: Response, next: NextFunction) {
+		try {
+			const refreshToken = req.cookies?.refreshToken;
 
-    async verifyOTP(req: Request, res: Response, next: NextFunction) {
-        try {
+			const result = await this._refreshUseCase.execute(refreshToken);
 
-            const result = await this._verifyAdminUseCase.execute(req.body)
-            return res.status(SuccessStatus.OK).json({
-                message: 'Admin registerd Successfully',
-                data: {
-                    user: result.user
-                }
-            })
+			return res.status(SuccessStatus.OK).json({
+				message: result.message,
+				data: {
+					accessToken: result.accessToken,
+				},
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async setPassword(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { token, password, confirmPassword } = req.body;
 
-        } catch (error) {
-            next(error)
-        }
-    }
-    async login(req: Request, res: Response, next: NextFunction) {
+			const response = await this._setPasswrodUseCase.execute(
+				token,
+				password,
+				confirmPassword,
+			);
 
-        try {
+			return res.status(SuccessStatus.CREATED).json({
+				success: true,
+				message: response.message,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async forgotPasswrod(req: Request, res: Response, next: NextFunction) {
+		try {
+			const result = await this._forgotPasswordUseCase.execute(req.body);
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: result.message,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 
-            const result = await this._loginUseCase.execute(req.body)
+	async verifyForgotOTP(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { email, otp } = req.body;
+			const result = await this._verifyForgotOtpUseCase.execute(email, otp);
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: result.message,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async resetPassword(req: Request, res: Response, next: NextFunction) {
+		try {
+			const result = await this._resetPassWordUseCase.execute(req.body);
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: result.message,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 
+	async resendOtp(req: Request, res: Response, next: NextFunction) {
+		try {
+			const result = await this._resendAdminOtpUseCase.execute(req.body);
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: result.message,
+			});
+		} catch (error: any) {
+			next(error);
+		}
+	}
+	async logout(req: Request, res: Response, next: NextFunction) {
+		try {
+			const refreshToken = req.cookies.refreshToken;
+			const result = await this._logoutUseCase.execute(refreshToken);
 
-            res.cookie("refreshToken", result.refreshToken, {
-                httpOnly: true,
-                sameSite: "lax",
-                path: "/",
-                secure: false,
-                maxAge: env.REFRESH_TOKEN_MAX_AGE * 1000
-            });
+			res.clearCookie("refreshToken");
 
-
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: result.message,
-                data: {
-                    accessToken: result.accessToken,
-                    role: result.user?.role,
-                    user: result.user
-                }
-            })
-
-
-        } catch (error) {
-            next(error)
-
-        }
-    }
-
-    async refreshToken(req: Request, res: Response, next: NextFunction) {
-        try {
-
-            const refreshToken = req.cookies?.refreshToken
-
-            const result = await this._refreshUseCase.execute(refreshToken)
-
-            return res.status(SuccessStatus.OK).json({
-                message: result.message,
-                data: {
-                    accessToken: result.accessToken
-                }
-            })
-
-        } catch (error) {
-            next(error)
-        }
-    }
-    async setPassword(req: Request, res: Response, next: NextFunction) {
-        try {
-
-
-            const { token, password, confirmPassword } = req.body
-
-            const response = await this._setPasswrodUseCase.execute(token, password, confirmPassword)
-
-            return res.status(SuccessStatus.CREATED).json({
-                success: true,
-                message: response.message
-            })
-
-
-
-
-        } catch (error) {
-            next(error)
-        }
-    }
-    async forgotPasswrod(req: Request, res: Response, next: NextFunction) {
-        try {
-            const result = await this._forgotPasswordUseCase.execute(req.body)
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: result.message
-            })
-
-        } catch (error) {
-            next(error)
-        }
-    }
-
-    async verifyForgotOTP(req: Request, res: Response, next: NextFunction) {
-        try {
-            const { email, otp } = req.body;
-            const result = await this._verifyForgotOtpUseCase.execute(email, otp);
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: result.message
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
-    async resetPassword(req: Request, res: Response, next: NextFunction) {
-        try {
-            const result = await this._resetPassWordUseCase.execute(req.body)
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: result.message
-            })
-        } catch (error) {
-            next(error)
-        }
-    }
-
-    async resendOtp(req: Request, res: Response, next: NextFunction) {
-        try {
-            const result = await this._resendAdminOtpUseCase.execute(req.body)
-            return res.status(SuccessStatus.OK).json({
-                success: true,
-                message: result.message
-            })
-        } catch (error: any) {
-            next(error)
-        }
-    }
-    async logout(req: Request, res: Response, next: NextFunction) {
-        try {
-            const refreshToken = req.cookies.refreshToken
-            const result = await this._logoutUseCase.execute(refreshToken)
-
-            res.clearCookie("refreshToken")
-
-            res.json(result)
-
-        } catch (error) {
-            next(error)
-        }
-    }
+			res.json(result);
+		} catch (error) {
+			next(error);
+		}
+	}
 }

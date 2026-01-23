@@ -36,20 +36,18 @@ router.post(
 	"/:projectId/assign-sprint",
 	authGurd.authorize(["admin"]),
 	validateDTO(AssignUserStoryToSprintDTO),
-	(req, res, next) => userstoryController.assigningToMembers(req, res, next)
-)
+	(req, res, next) => userstoryController.assigningToMembers(req, res, next),
+);
 router.patch(
 	"/:userstoryId/status",
 	authGurd.authorize(["admin", "developers"]),
-	(req, res, next) => userstoryController.updateStatus(req, res, next)
-
-)
-
+	(req, res, next) => userstoryController.updateStatus(req, res, next),
+);
 
 router.get(
 	"/my-tasks",
 	authGurd.authorize(["admin", "developers"]),
-	(req, res, next) => userstoryController.getMyTasks(req, res, next)
-)
+	(req, res, next) => userstoryController.getMyTasks(req, res, next),
+);
 
 export { router as userstoryRouter };

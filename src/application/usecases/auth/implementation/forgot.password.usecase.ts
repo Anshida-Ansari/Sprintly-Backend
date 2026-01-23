@@ -15,35 +15,32 @@ import type { IForgotPasswordUseCase } from "@application/usecases/auth/interfac
 
 @injectable()
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
-    constructor(
-        @inject(USER_TYPES.IUserRepository)
-        private _userRepository: IUserRepository
-    ) { }
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) {}
 
-    async execute({ email }: ForgotPasswordDTO): Promise<{ message: string; }> {
-        const user = await this._userRepository.findByEmail(email)
-        if (!user) {
-            throw new NotFoundError(ErrorMessage.USER_NOT_FOUND)
-        }
+	async execute({ email }: ForgotPasswordDTO): Promise<{ message: string }> {
+		const user = await this._userRepository.findByEmail(email);
+		if (!user) {
+			throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
+		}
 
+		const otp = generateOTP();
+		const expiryTime = 3 * 60;
 
-        const otp = generateOTP()
-        const expiryTime = 3 * 60
+		await redisClient.setex(
+			`forgot-otp:${email}`,
+			expiryTime,
+			JSON.stringify({ otp }),
+		);
 
-        await redisClient.setex(
-            `forgot-otp:${email}`,
-            expiryTime,
-            JSON.stringify({ otp })
-        )
+		console.log(email, otp);
 
-        console.log(email, otp);
+		await sendOtpEmail(email, otp);
 
-        await sendOtpEmail(email, otp)
-
-        return {
-            message: 'forgot password otp is sended'
-        }
-
-
-    }
+		return {
+			message: "forgot password otp is sended",
+		};
+	}
 }

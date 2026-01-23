@@ -1,4 +1,4 @@
-import { InferSchemaType } from "mongoose";
-import { standupSchema } from "../schema/standup.schema";
+import type { InferSchemaType } from "mongoose";
+import type { standupSchema } from "../schema/standup.schema";
 
-export type IStandup = InferSchemaType<typeof standupSchema>
+export type IStandup = InferSchemaType<typeof standupSchema>;

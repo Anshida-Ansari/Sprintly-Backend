@@ -1,3 +1,3 @@
 export interface ICompleteSprintUseCase {
-    execute(sprintId: string, companyId: string): Promise<void>;
+	execute(sprintId: string, companyId: string): Promise<void>;
 }

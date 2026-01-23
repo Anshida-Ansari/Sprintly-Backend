@@ -1,36 +1,45 @@
 import { inject, injectable } from "inversify";
-import { IAddStandupCommentUseCase } from "../interface/add.standup.comment.interface";
+import type { IAddStandupCommentUseCase } from "../interface/add.standup.comment.interface";
 import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
-import { IStandupRepository } from "@infrastructure/db/repository/interface/standup.interface";
-import { AddStandupCommentDTO } from "@application/dtos/standup/add.standup.comment.dto";
+import type { IStandupRepository } from "@infrastructure/db/repository/interface/standup.interface";
+import type { AddStandupCommentDTO } from "@application/dtos/standup/add.standup.comment.dto";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 
 @injectable()
 export class AddStandupCommentUseCase implements IAddStandupCommentUseCase {
-    constructor(
-        @inject(STANDUP_TYPES.IStandupRepository)
-        private _standupRepository:IStandupRepository
-    ) { }
+	constructor(
+		@inject(STANDUP_TYPES.IStandupRepository)
+		private _standupRepository: IStandupRepository,
+	) {}
 
-    async execute(dto: AddStandupCommentDTO, userId: string, userName: string, companyId: string, sprintId: string, projectId: string, standupId: string,): Promise<void> {
-        const standup = await this._standupRepository.findById(standupId);
+	async execute(
+		dto: AddStandupCommentDTO,
+		userId: string,
+		userName: string,
+		companyId: string,
+		sprintId: string,
+		projectId: string,
+		standupId: string,
+	): Promise<void> {
+		const standup = await this._standupRepository.findById(standupId);
 
-        if (!standup) {
-            throw new NotFoundError("Standup report not found");
-        }
+		if (!standup) {
+			throw new NotFoundError("Standup report not found");
+		}
 
-        if (
-            standup.companyId.toString() !== companyId.toString() ||
-            standup.sprintId.toString() !== sprintId.toString()
-        ) {
-            throw new ForbiddenError("You do not have permission to comment on this standup");
-        }
+		if (
+			standup.companyId.toString() !== companyId.toString() ||
+			standup.sprintId.toString() !== sprintId.toString()
+		) {
+			throw new ForbiddenError(
+				"You do not have permission to comment on this standup",
+			);
+		}
 
-        standup.addComment(userId, userName, dto.text);
+		standup.addComment(userId, userName, dto.text);
 
-        await this._standupRepository.update(standupId, standup);
-
-    }
+		await this._standupRepository.update(standupId, standup);
+	}
 }

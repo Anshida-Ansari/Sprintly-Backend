@@ -1,3 +1,3 @@
 export interface ITokenBlacklistService {
-    revokeUserRefreshTokens(email: string): Promise<void>;
+	revokeUserRefreshTokens(email: string): Promise<void>;
 }

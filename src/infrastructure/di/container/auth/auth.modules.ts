@@ -51,13 +51,15 @@ export const AuthModule = new ContainerModule(({ bind }) => {
 	bind<IResendAdminOtpUseCase>(AUTH_TYPES.IResendAdminOtpUseCase).to(
 		ResendAdminOtpUseCase,
 	);
-	bind<IVerifyForgotPasswordOtpUseCase>(AUTH_TYPES.IVerifyForgotPasswordOtpUseCase).to(
-		VerifyForgotPasswordOtpUseCase,
-	);
+	bind<IVerifyForgotPasswordOtpUseCase>(
+		AUTH_TYPES.IVerifyForgotPasswordOtpUseCase,
+	).to(VerifyForgotPasswordOtpUseCase);
 	bind<ILogoutUseCase>(AUTH_TYPES.ILogoutUseCase).to(LogoutUseCase);
 
 	//services
-	bind<ITokenBlacklistService>(AUTH_TYPES.ITokenBlacklistService).to(TokenBlacklistService);
+	bind<ITokenBlacklistService>(AUTH_TYPES.ITokenBlacklistService).to(
+		TokenBlacklistService,
+	);
 
 	//controllers
 });

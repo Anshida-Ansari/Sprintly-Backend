@@ -27,7 +27,7 @@ container.load(
 	SprintModule,
 	SubtaskModule,
 	StandupModule,
-	MeetingModule
+	MeetingModule,
 );
 
 export { container };

@@ -7,30 +7,39 @@ import type { IListCompanyUseCase } from "@application/usecases/superadmin/inter
 
 @injectable()
 export class ListCompanyUseCase implements IListCompanyUseCase {
-    constructor(
-        @inject(COMPANY_TYPES.ICompanyRepository)
-        private _companyrepository: ICompanyRepository
-    ) { }
-    async execute(query: { page: number; limit: number; search?: string; }): Promise<{ data: any[]; total: number; page: number; limit: number; totalPages: number; }> {
-            const { page, limit, search } = query
-            const filter: any = {}
-            if (search) {
-                filter.companyName = { $regex: search, $options: "i" }
-            }
-            const skip = (page - 1) * limit
+	constructor(
+		@inject(COMPANY_TYPES.ICompanyRepository)
+		private _companyrepository: ICompanyRepository,
+	) {}
+	async execute(query: {
+		page: number;
+		limit: number;
+		search?: string;
+	}): Promise<{
+		data: any[];
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
+	}> {
+		const { page, limit, search } = query;
+		const filter: any = {};
+		if (search) {
+			filter.companyName = { $regex: search, $options: "i" };
+		}
+		const skip = (page - 1) * limit;
 
-            const [companies, count] = await Promise.all([
-                this._companyrepository.find(filter, { skip, limit }),
-                this._companyrepository.count(filter)
-            ])
+		const [companies, count] = await Promise.all([
+			this._companyrepository.find(filter, { skip, limit }),
+			this._companyrepository.count(filter),
+		]);
 
-            return {
-                data: companies,
-                total: count,
-                page,
-                limit,
-                totalPages: Math.ceil(count / limit)
-            }
-    }
-
+		return {
+			data: companies,
+			total: count,
+			page,
+			limit,
+			totalPages: Math.ceil(count / limit),
+		};
+	}
 }

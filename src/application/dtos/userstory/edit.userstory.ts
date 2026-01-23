@@ -38,5 +38,5 @@ export class EditUserStoryDTO {
 	@Expose()
 	@IsOptional()
 	@IsString({ message: "Sprint ID must be a string" })
-	sprintId?: string
+	sprintId?: string;
 }

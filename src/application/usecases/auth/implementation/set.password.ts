@@ -14,52 +14,51 @@ import { validationError } from "@shared/utils/error-handling/errors/validation.
 
 import type { ISetPassWordUseCase } from "@application/usecases/auth/interface/set.password.interface";
 
-
 @injectable()
 export class SetPasswrodUseCase implements ISetPassWordUseCase {
-    constructor(
-        @inject(USER_TYPES.IUserRepository)
-        private _userRepository: IUserRepository
-    ) { }
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) {}
 
-    async execute(token: string, password: string, confirmPassword: string): Promise<{ message: string; }> {
+	async execute(
+		token: string,
+		password: string,
+		confirmPassword: string,
+	): Promise<{ message: string }> {
+		const key = `member.invite:${token}`;
+		const inviteData = await redisClient.get(key);
 
-        const key = `member.invite:${token}`
-        const inviteData = await redisClient.get(key)
+		if (!inviteData) {
+			throw new NotFoundError(ErrorMessage.INVITATION_EXPIRED_OR_INVALID);
+		}
 
+		if (password !== confirmPassword) {
+			throw new validationError(ErrorMessage.PASSWORDS_DO_NOT_MATCH);
+		}
 
-        if (!inviteData) {
-            throw new NotFoundError(ErrorMessage.INVITATION_EXPIRED_OR_INVALID)
-        }
+		const { name, email, companyId, adminId } = JSON.parse(inviteData);
 
-        if (password !== confirmPassword) {
-            throw new validationError(ErrorMessage.PASSWORDS_DO_NOT_MATCH)
-        }
+		const existingUser = await this._userRepository.findByEmail(email);
+		if (existingUser) {
+			throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS);
+		}
 
-        const { name, email, companyId, adminId } = JSON.parse(inviteData)
+		const hashedPassword = await hash(password);
 
-        const existingUser = await this._userRepository.findByEmail(email)
-        if (existingUser) {
-            throw new ConflictError(ErrorMessage.EMAIL_ALREADY_EXISTS)
-        }
+		await this._userRepository.create({
+			name,
+			email,
+			companyId,
+			adminId,
+			password: hashedPassword,
+			role: Role.DEVELOPERS,
+		});
 
-        const hashedPassword = await hash(password)
+		await redisClient.del(key);
 
-        await this._userRepository.create({
-            name,
-            email,
-            companyId,
-            adminId,
-            password: hashedPassword,
-            role: Role.DEVELOPERS
-        })
-
-        await redisClient.del(key)
-
-        return {
-            message: 'Password set successfully'
-        }
-
-
-    }
+		return {
+			message: "Password set successfully",
+		};
+	}
 }

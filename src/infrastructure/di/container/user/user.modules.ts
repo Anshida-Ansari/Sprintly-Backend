@@ -1,4 +1,3 @@
-
 import { ContainerModule } from "inversify";
 import type { Model } from "mongoose";
 import type { IUser } from "../../../db/interface/user.interface";

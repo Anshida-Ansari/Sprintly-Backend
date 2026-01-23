@@ -18,44 +18,38 @@ import type { IRefreshUseCase } from "@application/usecases/auth/interface/refre
 
 @injectable()
 export class RefreshUseCase implements IRefreshUseCase {
-    constructor(
-        @inject(USER_TYPES.IUserRepository)
-        private _userRepository: IUserRepository
-    ) { }
+	constructor(
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) {}
 
-    async execute(refreshToken: string): Promise<RefreshResult> {
+	async execute(refreshToken: string): Promise<RefreshResult> {
+		if (!refreshToken) throw new validationError("Refresh token missing");
 
-        
+		const decoded: any = verifyToken(refreshToken, "refresh");
+		if (!decoded) throw new Unauthorized("Invalid or expired refresh token");
 
-        if (!refreshToken) throw new validationError('Refresh token missing')
+		const storedToken = await redisClient.get(`refresh:${decoded.email}`);
+		if (!storedToken || storedToken !== refreshToken) {
+			throw new Unauthorized("Refresh token expired or revoked");
+		}
 
-        const decoded: any = verifyToken(refreshToken, "refresh")
-        if (!decoded) throw new Unauthorized('Invalid or expired refresh token')
+		const user = await this._userRepository.findByEmail(decoded.email);
+		if (!user) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
 
-        const storedToken = await redisClient.get(`refresh:${decoded.email}`)
-        if (!storedToken || storedToken !== refreshToken) {
-            throw new Unauthorized('Refresh token expired or revoked')
-        }
+		if (user.status === UserStatus.BLOCK) {
+			throw new ForbiddenError(ErrorMessage.ADMIN_BLOCKED);
+		}
 
-        const user = await this._userRepository.findByEmail(decoded.email)
-        if (!user) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND)
+		const newAccessToken = generateAccessToken({
+			id: user.id?.toString(),
+			email: user.email,
+			role: user.role,
+		});
 
-
-        if (user.status === UserStatus.BLOCK) {
-            throw new ForbiddenError(ErrorMessage.ADMIN_BLOCKED)
-        }
-
-        const newAccessToken = generateAccessToken({
-            id: user.id?.toString(),
-            email: user.email,
-            role: user.role
-        })
-
-
-        return {
-            accessToken: newAccessToken,
-            message: 'Access tocken refreshed successfully'
-        }
-
-    }
+		return {
+			accessToken: newAccessToken,
+			message: "Access tocken refreshed successfully",
+		};
+	}
 }

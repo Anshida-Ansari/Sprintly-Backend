@@ -10,24 +10,25 @@ import { validationError } from "@shared/utils/error-handling/errors/validation.
 import type { IVerifyForgotPasswordOtpUseCase } from "@application/usecases/auth/interface/verify.forgot.otp.interface";
 
 @injectable()
-export class VerifyForgotPasswordOtpUseCase implements IVerifyForgotPasswordOtpUseCase {
-    async execute(email: string, otp: string): Promise<{ message: string }> {
-        const key = `forgot-otp:${email}`;
-        const data = await redisClient.get(key);
+export class VerifyForgotPasswordOtpUseCase
+	implements IVerifyForgotPasswordOtpUseCase
+{
+	async execute(email: string, otp: string): Promise<{ message: string }> {
+		const key = `forgot-otp:${email}`;
+		const data = await redisClient.get(key);
 
-        if (!data) {
-            throw new NotFoundError(ErrorMessage.OTP_EXPIRED);
-        }
+		if (!data) {
+			throw new NotFoundError(ErrorMessage.OTP_EXPIRED);
+		}
 
-        const parsed = JSON.parse(data);
+		const parsed = JSON.parse(data);
 
-        if (parsed.otp.toString() !== otp.toString()) {
-            throw new validationError(ErrorMessage.OTP_INVALID);
-        }
+		if (parsed.otp.toString() !== otp.toString()) {
+			throw new validationError(ErrorMessage.OTP_INVALID);
+		}
 
-
-        return {
-            message: "OTP verified successfully",
-        };
-    }
+		return {
+			message: "OTP verified successfully",
+		};
+	}
 }

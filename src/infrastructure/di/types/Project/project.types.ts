@@ -1,5 +1,3 @@
-
-
 export const PROJECT_TYPE = {
 	ProjectController: Symbol.for("ProjectController"),
 	IProjectRepository: Symbol.for("IProjectRepository"),

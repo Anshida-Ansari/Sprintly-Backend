@@ -20,16 +20,12 @@ router.post(
 	(req, res, next) => adminController.inviteMember(req, res, next),
 );
 
-router.get(
-	"/members",
-	authGurd.authorize(["admin"]),
-	(req, res, next) => adminController.listUsers(req, res, next)
+router.get("/members", authGurd.authorize(["admin"]), (req, res, next) =>
+	adminController.listUsers(req, res, next),
+);
 
-)
-
-router.post(
-	"/verify-invitation",
-	(req, res, next) => adminController.verifyInvitation(req, res, next),
+router.post("/verify-invitation", (req, res, next) =>
+	adminController.verifyInvitation(req, res, next),
 );
 
 router.patch(
@@ -38,10 +34,8 @@ router.patch(
 	(req, res, next) => adminController.blockUser(req, res, next),
 );
 
-router.get(
-	"/stats",
-	authGurd.authorize(["admin"]),
-	(req, res, next) => adminController.getDashboardStats(req, res, next),
+router.get("/stats", authGurd.authorize(["admin"]), (req, res, next) =>
+	adminController.getDashboardStats(req, res, next),
 );
 
 export { router as adminRouter };

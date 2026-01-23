@@ -1,4 +1,4 @@
-import { InferSchemaType } from "mongoose";
-import { subTaskSchema } from "../schema/subtask.schema";
+import type { InferSchemaType } from "mongoose";
+import type { subTaskSchema } from "../schema/subtask.schema";
 
-export type ISubtTask = InferSchemaType<typeof subTaskSchema>
+export type ISubtTask = InferSchemaType<typeof subTaskSchema>;

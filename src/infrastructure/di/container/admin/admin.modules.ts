@@ -25,9 +25,7 @@ export const InviteModule = new ContainerModule(({ bind }) => {
 	bind<IListMembersUseCase>(ADMIN_TYPES.IListMembersUseCase).to(
 		ListUserUseCase,
 	);
-	bind<IBlockUserUseCase>(ADMIN_TYPES.IBlockUserUseCase).to(
-		BlockUserUseCase,
-	);
+	bind<IBlockUserUseCase>(ADMIN_TYPES.IBlockUserUseCase).to(BlockUserUseCase);
 	bind<IGetDashboardStatsUseCase>(ADMIN_TYPES.IGetDashboardStatsUseCase).to(
 		GetDashboardStatsUseCase,
 	);
