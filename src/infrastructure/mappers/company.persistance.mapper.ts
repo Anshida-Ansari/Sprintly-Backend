@@ -15,6 +15,7 @@ export class CompanyPersistenceMapper {
 			companyName: doc.companyName,
 			status: doc.status,
 			adminId: doc.adminId?.toString(),
+			createdAt: doc.createdAt,
 		});
 	}
 }
