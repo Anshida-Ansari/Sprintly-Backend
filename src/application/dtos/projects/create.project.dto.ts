@@ -34,6 +34,11 @@ export class CreateProjectDTO {
 	@IsString({ message: "Git repository URL must be a string" })
 	gitRepoUrl?: string;
 
+	@Expose()
+	@IsOptional()
+	@IsString()
+	leadId?: string;
+
 	constructor() {
 		this.name = "";
 		this.description = "";

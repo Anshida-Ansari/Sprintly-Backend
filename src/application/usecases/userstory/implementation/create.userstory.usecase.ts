@@ -27,12 +27,13 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		private _userstoryReposiotry: IUserStroyRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectReposiotory: IProjectReposiotory,
-	) {}
+	) { }
 
 	async execute(
 		dto: CreateUserStoryDTO,
 		companyId: string,
 		projectId: string,
+		role: string,
 	): Promise<{
 		id: string;
 		title: string;
@@ -43,8 +44,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		createdAt: Date;
 	}> {
 		const project = await this._projectReposiotory.findById(projectId);
-		console.log("companyId", companyId);
-		console.log("project company Id", project?.companyId);
+		
 
 		if (!project) {
 			throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND);
@@ -54,6 +54,10 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
 		}
 
+		if (role !== "lead" && role !== "superadmin" && role !== "admin") {
+			throw new ForbiddenError("Only Leads can create User Stories");
+		}
+
 		const userstory = UserStoryEntity.create({
 			projectId,
 			companyId,
@@ -61,6 +65,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 			description: dto.description,
 			priority: dto.priority,
 			sprintId: dto.sprintId,
+			assignedTo: dto.assignedTo,
 		});
 
 		const created = await this._userstoryReposiotry.create(userstory);

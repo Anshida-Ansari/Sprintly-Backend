@@ -22,17 +22,18 @@ export class SubTaskController {
 		private _assignSubtaskUseCase: IAssignSubtaskUseCase,
 		@inject(SUBTASK_TYPE.IDeleteSubtaskUseCase)
 		private _delteSubtaskUseCase: IDeleteSubtaskUseCase,
-	) {}
+	) { }
 
 	async createSubTask(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { companyId } = req.user;
+			const { companyId, role } = req.user;
 			const { userStoryId } = req.params;
 
 			const result = await this._createSubTaskUseCase.execute(
 				req.body,
 				companyId,
 				userStoryId,
+				role,
 			);
 
 			return res.status(SuccessStatus.OK).json({

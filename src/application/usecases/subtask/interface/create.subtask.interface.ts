@@ -6,5 +6,6 @@ export interface ICreateSubTaskUseCase {
 		dto: CreateSubTaskDTO,
 		companyId: string,
 		userStoryId: string,
+		role: string,
 	): Promise<SubTaskEntity>;
 }

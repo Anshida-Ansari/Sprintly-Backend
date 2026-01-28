@@ -9,6 +9,7 @@ export class ProjectEntity {
 	private _endDate: Date;
 	private _createdBy: string;
 	private _companyId: string;
+	private _leadId?: string;
 	private _members: string[];
 	private _gitRepoUrl?: string;
 	private readonly _createdAt: Date;
@@ -23,6 +24,7 @@ export class ProjectEntity {
 		endDate: Date;
 		createdBy: string;
 		companyId: string;
+		leadId?: string;
 		members?: string[];
 		gitRepoUrl?: string;
 		createdAt?: Date;
@@ -36,6 +38,7 @@ export class ProjectEntity {
 		this._endDate = props.endDate;
 		this._createdBy = props.createdBy;
 		this._companyId = props.companyId;
+		this._leadId = props.leadId;
 		this._members = props.members || [];
 		this._gitRepoUrl = props.gitRepoUrl;
 		this._createdAt = props.createdAt || new Date();
@@ -51,6 +54,7 @@ export class ProjectEntity {
 		status: ProjectStatus;
 		createdBy: string;
 		companyId: string;
+		leadId?: string;
 		members?: string[];
 		gitRepoUrl?: string;
 		createdAt?: Date;
@@ -68,6 +72,7 @@ export class ProjectEntity {
 			name: props.name.trim(),
 			description: props.description?.trim() || "",
 			status: props.status || ProjectStatus.ACTIVE,
+			leadId: props.leadId,
 		});
 	}
 
@@ -79,6 +84,7 @@ export class ProjectEntity {
 			endDate: Date;
 			gitRepoUrl: string;
 			status: ProjectStatus;
+			leadId: string;
 		}>,
 	) {
 		if (props.name !== undefined) this._name = props.name.trim();
@@ -86,9 +92,9 @@ export class ProjectEntity {
 			this._description = props.description?.trim();
 		if (props.startDate !== undefined) this._startDate = props.startDate;
 		if (props.endDate !== undefined) this._endDate = props.endDate;
-		if (props.endDate !== undefined) this._endDate = props.endDate;
 		if (props.gitRepoUrl !== undefined) this._gitRepoUrl = props.gitRepoUrl;
 		if (props.status !== undefined) this._status = props.status;
+		if (props.leadId !== undefined) this._leadId = props.leadId;
 
 		this._updatedAt = new Date();
 	}
@@ -138,6 +144,9 @@ export class ProjectEntity {
 	}
 	get companyId() {
 		return this._companyId;
+	}
+	get leadId() {
+		return this._leadId;
 	}
 	get members() {
 		return this._members;

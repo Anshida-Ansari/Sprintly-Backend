@@ -17,13 +17,17 @@ export class CreateSubTaskUseCase implements ICreateSubTaskUseCase {
 		private _subtaskrepository: ISubTaskRepository,
 		@inject(USERSTORY_TYPE.IUserStroyRepository)
 		private _userstoryrepository: IUserStroyRepository,
-	) {}
+	) { }
 
 	async execute(
 		dto: CreateSubTaskDTO,
 		companyId: string,
 		userStoryId: string,
+		role: string,
 	): Promise<SubTaskEntity> {
+		if (role !== "developers") {
+			throw new ForbiddenError("Only Developers can create Subtasks");
+		}
 		const userstory = await this._userstoryrepository.findById(userStoryId);
 		if (!userstory) {
 			throw new NotFoundError(ErrorMessage.NOT_FOUND);

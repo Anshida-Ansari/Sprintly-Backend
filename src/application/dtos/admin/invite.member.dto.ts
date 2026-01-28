@@ -14,4 +14,8 @@ export class InviteMemberDTO {
 	@IsEmail({}, { message: "Invalid email format" })
 	@IsNotEmpty({ message: "Email is required" })
 	email!: string;
+
+	@Expose()
+	@IsNotEmpty({ message: "Role is required" })
+	role!: string;
 }

@@ -40,6 +40,10 @@ export const projectSchema = new mongoose.Schema(
 			ref: "Companies",
 			required: true,
 		},
+		leadId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Users",
+		},
 		members: [
 			{
 				type: mongoose.Schema.Types.ObjectId,

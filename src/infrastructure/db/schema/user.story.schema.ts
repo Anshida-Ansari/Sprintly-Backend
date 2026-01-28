@@ -14,6 +14,12 @@ export const userStorySchema = new mongoose.Schema(
 			required: true,
 			trim: true,
 		},
+		assignedTo: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Users",
+			},
+		],
 		description: {
 			type: String,
 			default: "",

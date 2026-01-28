@@ -36,4 +36,9 @@ export class CreateUserStoryDTO {
 	@IsOptional()
 	@IsEnum(UserStoryStatus, { message: "Invalid status value" })
 	status?: UserStoryStatus;
+
+	@Expose()
+	@IsOptional()
+	@IsString({ each: true })
+	assignedTo?: string[];
 }

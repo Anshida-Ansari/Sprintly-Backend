@@ -25,17 +25,18 @@ export class UserstoryController {
 		private _updateStatusofUserStory: IUpdateStatusOfUserStoryInterface,
 		@inject(USERSTORY_TYPE.IGetMyUserStoriesUseCase)
 		private _getMyUserStoriesUseCase: IGetMyUserStoriesUseCase,
-	) {}
+	) { }
 
 	async createUserstory(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { companyId } = req.user;
+			const { companyId, role } = req.user;
 			const { projectId } = req.params;
 
 			const result = await this._createUserstoryUseCase.execute(
 				req.body,
 				companyId,
 				projectId,
+				role,
 			);
 
 			return res.status(SuccessStatus.OK).json({

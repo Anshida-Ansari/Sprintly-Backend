@@ -15,7 +15,7 @@ export class InviteMemberUseCase implements IInviteMemberUseCase {
 	constructor(
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
-	) {}
+	) { }
 
 	async execute(
 		dto: InviteMemberDTO,
@@ -36,6 +36,7 @@ export class InviteMemberUseCase implements IInviteMemberUseCase {
 			JSON.stringify({
 				name: dto.name,
 				email: dto.email,
+				role: dto.role,
 				companyId,
 				adminId,
 			}),

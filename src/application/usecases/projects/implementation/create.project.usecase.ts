@@ -19,7 +19,7 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
 	constructor(
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectRepsitory: IProjectReposiotory,
-	) {}
+	) { }
 
 	async execute(
 		dto: CreateProjectDTO,
@@ -47,6 +47,7 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
 			companyId,
 			status: ProjectStatus.ACTIVE,
 			gitRepoUrl: dto.gitRepoUrl,
+			leadId: dto.leadId,
 			members: [],
 		});
 
