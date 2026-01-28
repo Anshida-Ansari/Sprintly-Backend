@@ -8,6 +8,8 @@ import { EditSprintDTO } from "@application/dtos/sprints/edit.sprints.dto";
 import type { AuthGurd } from "@presentation/express/middleware/auth.gurd";
 import { validateDTO } from "@presentation/express/middleware/validate.dto.middlware";
 
+import { SPRINT_ROUTES } from "@shared/constants/sprints.routes.constants";
+
 const router = Router();
 
 const sprintsController = container.get<SprintController>(
@@ -17,39 +19,39 @@ const sprintsController = container.get<SprintController>(
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
-	"/:projectId/sprints",
+	SPRINT_ROUTES.CREATE_SPRINT,
 	authGurd.authorize(["admin"]),
 	validateDTO(CreateSprintDTO),
 	(req, res, next) => sprintsController.createSprints(req, res, next),
 );
 
 router.get(
-	"/:projectId/sprints",
+	SPRINT_ROUTES.LIST_SPRINT,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => sprintsController.listSprints(req, res, next),
 );
 
 router.patch(
-	"/:projectId/sprints/:sprintId",
+	SPRINT_ROUTES.EDIT_SPRINT,
 	authGurd.authorize(["admin"]),
 	validateDTO(EditSprintDTO),
 	(req, res, next) => sprintsController.editSprints(req, res, next),
 );
 
 router.patch(
-	"/:sprintId/start",
+	SPRINT_ROUTES.START_SPRINT,
 	authGurd.authorize(["admin"]),
 	(req, res, next) => sprintsController.startSprint(req, res, next),
 );
 
 router.patch(
-	"/:sprintId/complete",
+	SPRINT_ROUTES.COMPLETE_SPRINT,
 	authGurd.authorize(["admin"]),
 	(req, res, next) => sprintsController.completeSprint(req, res, next),
 );
 
 router.patch(
-	"/:sprintId/delete",
+	SPRINT_ROUTES.DELETE_SPRINT,
 	authGurd.authorize(["admin"]),
 	(req, res, next) => sprintsController.deleteSprint(req, res, next),
 );

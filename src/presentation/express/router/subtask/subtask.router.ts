@@ -7,6 +7,8 @@ import { validateDTO } from "@presentation/express/middleware/validate.dto.middl
 import type { SubTaskController } from "@presentation/http/controllers/subtask.controller";
 import { Router } from "express";
 
+import { SUBTASK } from "@shared/constants/subtask.constants";
+
 const router = Router();
 const subtaskController = container.get<SubTaskController>(
 	SUBTASK_TYPE.SubTaskController,
@@ -15,31 +17,31 @@ const subtaskController = container.get<SubTaskController>(
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
-	"/:userStoryId/subtask",
+	SUBTASK.CREATE_SUBTASK,
 	authGurd.authorize(["admin"]),
 	validateDTO(CreateSubTaskDTO),
 	(req, res, next) => subtaskController.createSubTask(req, res, next),
 );
 
 router.patch(
-	"/:subtaskId/status",
+	SUBTASK.UPDATE_STATUS,
 	authGurd.authorize(["developers"]),
 	(req, res, next) => subtaskController.updateStatus(req, res, next),
 );
 
 router.get(
-	"/subtask/:userStoryId",
+	SUBTASK.LIST_SUBTASK,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => subtaskController.listSubtask(req, res, next),
 );
 
 router.patch(
-	"/:subtaskId/assign-members",
+	SUBTASK.ASSIGN_MEMBER,
 	authGurd.authorize(["admin"]),
 	(req, res, next) => subtaskController.assignMembers(req, res, next),
 );
 
-router.delete("/:subtaskId", authGurd.authorize(["admin"]), (req, res, next) =>
+router.delete(SUBTASK.DELETE_SUBTASK, authGurd.authorize(["admin"]), (req, res, next) =>
 	subtaskController.deleteSubtask(req, res, next),
 );
 export { router as subTaskRouter };

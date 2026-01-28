@@ -15,37 +15,39 @@ const userstoryController = container.get<UserstoryController>(
 );
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
+import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
+
 router.post(
-	"/:projectId/user-stories",
+	USER_STORIES.CREATE_USERSTORY,
 	authGurd.authorize(["admin"]),
 	validateDTO(CreateUserStoryDTO),
 	(req, res, next) => userstoryController.createUserstory(req, res, next),
 );
 router.post(
-	"/:projectId/user-stories/:userstoryId",
+	USER_STORIES.EDIT_USERSTORY,
 	authGurd.authorize(["admin"]),
 	validateDTO(EditUserStoryDTO),
 	(req, res, next) => userstoryController.editUserstory(req, res, next),
 );
 router.get(
-	"/:projectId/user-stories",
+	USER_STORIES.LIST_USERSTORY,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => userstoryController.listUserstory(req, res, next),
 );
 router.post(
-	"/:projectId/assign-sprint",
+	USER_STORIES.ASSIGN_MEMBERS,
 	authGurd.authorize(["admin"]),
 	validateDTO(AssignUserStoryToSprintDTO),
 	(req, res, next) => userstoryController.assigningToMembers(req, res, next),
 );
 router.patch(
-	"/:userstoryId/status",
+	USER_STORIES.UPDATE_STATUS,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => userstoryController.updateStatus(req, res, next),
 );
 
 router.get(
-	"/my-tasks",
+	USER_STORIES.GET_MY_TASK,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => userstoryController.getMyTasks(req, res, next),
 );

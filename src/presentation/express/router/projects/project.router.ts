@@ -7,6 +7,8 @@ import type { AuthGurd } from "../../middleware/auth.gurd";
 import { validateDTO } from "../../middleware/validate.dto.middlware";
 import type { ProjectController } from "../../../http/controllers/project.controller";
 
+import { PROJECT_ROUTES } from "@shared/constants/project.routes.constants";
+
 const router = Router();
 
 const projectController = container.get<ProjectController>(
@@ -15,23 +17,23 @@ const projectController = container.get<ProjectController>(
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
-	"/create-project",
+	PROJECT_ROUTES.CREATE_PROJECT,
 	authGurd.authorize(["admin"]),
 	validateDTO(CreateProjectDTO),
 	(req, res, next) => projectController.createProject(req, res, next),
 );
 router.get(
-	"/projects",
+	PROJECT_ROUTES.LIST_PROJECT,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => projectController.listProject(req, res, next),
 );
 router.patch(
-	"/update-project/:projectId",
+	PROJECT_ROUTES.EDIT_PROJECT,
 	authGurd.authorize(["admin"]),
 	(req, res, next) => projectController.editProject(req, res, next),
 );
 router.get(
-	"/get-projects/:projectId",
+	PROJECT_ROUTES.PROJECT_DETAIL_PAGE,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => projectController.getProjectDetail(req, res, next),
 );

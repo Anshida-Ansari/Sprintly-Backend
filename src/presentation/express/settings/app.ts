@@ -25,14 +25,16 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/auth", authRouter);
-app.use("/api/admin", adminRouter);
-app.use("/api/superadmin", superadminRouter);
-app.use("/api/project", projectRouter);
-app.use("/api/projects", userstoryRouter);
-app.use("/api/project", sprintRouter);
-app.use("/api/userstory", subTaskRouter);
-app.use("/api/project/sprint", standupRouter);
-app.use("/api/meeting", meetingRouter);
+import { BASE_API } from "@shared/constants/base/base.routes.constants";
+
+app.use(BASE_API.AUTH, authRouter);
+app.use(BASE_API.ADMIN, adminRouter);
+app.use(BASE_API.SUPERADMIN, superadminRouter);
+app.use(BASE_API.PROJECT, projectRouter);
+app.use(BASE_API.USER_STORY, userstoryRouter);
+app.use(BASE_API.SPRINT, sprintRouter);
+app.use(BASE_API.SUBTASK, subTaskRouter);
+app.use(BASE_API.STANDUP, standupRouter);
+app.use(BASE_API.MEETING, meetingRouter);
 
 export default app;

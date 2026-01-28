@@ -10,6 +10,8 @@ import { Router } from "express";
 
 import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
 
+import { STANDUP } from "@shared/constants/standup.routes.constants";
+
 const router = Router();
 const standupController = container.get<StandupController>(
 	STANDUP_TYPES.StandupController,
@@ -18,27 +20,27 @@ const standupController = container.get<StandupController>(
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
-	"/:projectId/:sprintId/standups",
+	STANDUP.SUBMIT_STANDUP,
 	authGurd.authorize(["admin", "developers"]),
 	validateDTO(SubmitStandupDTO),
 	(req, res, next) => standupController.submitStandup(req, res, next),
 );
 
 router.post(
-	"/:projectId/:sprintId/standups/:standupId/comments",
+	STANDUP.ADD_STANDUP,
 	authGurd.authorize(["admin", "developers"]),
 	validateDTO(AddStandupCommentDTO),
 	(req, res, next) => standupController.addStandup(req, res, next),
 );
 
 router.get(
-	"/:projectId/:sprintId/standups",
+	STANDUP.LIST_STANDUP,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => standupController.listStandups(req, res, next),
 );
 
 router.post(
-	"/:projectId/:sprintId/standups/today",
+	STANDUP.TODAY_STANDUP,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => standupController.getMyTodayStandup(req, res, next),
 );
