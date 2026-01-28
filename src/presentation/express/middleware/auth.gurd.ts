@@ -11,7 +11,7 @@ export class AuthGurd {
 	constructor(
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
-	) {}
+	) { }
 	authorize(allowedRoles: string[]) {
 		return async (req: Request, res: Response, next: NextFunction) => {
 			try {
@@ -65,6 +65,8 @@ export class AuthGurd {
 
 				req.user = {
 					id: decoded.id,
+					userId: decoded.id,
+					userName: user.name,
 					email: decoded.email,
 					role: decoded.role,
 					companyId: user.companyId ?? "",

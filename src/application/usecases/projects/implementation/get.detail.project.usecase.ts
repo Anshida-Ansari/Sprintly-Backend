@@ -50,7 +50,7 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
 		}
 
-		const sprints = await this._sprintRepository.findByProject(proejctId);
+		const sprints = await this._sprintRepository.findByProject(proejctId,companyId);
 		const activeSprint = sprints.find((s) => s.status === "ACTIVE");
 
 		return {
