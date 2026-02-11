@@ -1,12 +1,21 @@
 import { config } from "dotenv";
-import app from "./app.js"
-import connectDB from "src/infrastructure/db/mongoose/connect.db.js";
-config()
-const PORT = process.env.PORT
 
+config();
+import connectDB from "@infrastructure/db/mongoose/connect.db.js";
+import env from "@infrastructure/providers/env/env.validation.js";
 
-connectDB()
+import app from "./app.js";
 
-app.listen(PORT,()=>{
-    console.log(`server is running http://localhost:${PORT}`);
-})
+import { createServer } from "http";
+import { SocketServer } from "../../socket/socket.server.js";
+
+const PORT = env.PORT;
+
+connectDB();
+
+const httpServer = createServer(app);
+new SocketServer(httpServer);
+
+httpServer.listen(PORT, () => {
+	console.log(`server is running http://localhost:${PORT}`);
+});

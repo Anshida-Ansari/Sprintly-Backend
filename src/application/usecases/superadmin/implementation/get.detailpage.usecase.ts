@@ -1,0 +1,47 @@
+import { inject, injectable } from "inversify";
+
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+
+import type { IGetDetailPageUseCase } from "../interface/get.detailpage.interface";
+import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+
+@injectable()
+export class GetDetailPageUseCase implements IGetDetailPageUseCase {
+	constructor(
+		@inject(COMPANY_TYPES.ICompanyRepository)
+		private _companyrepository: ICompanyRepository,
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) { }
+
+	async execute(companyId: string): Promise<any> {
+		const company = await this._companyrepository.findByCompanyId(companyId);
+
+		if (!company) {
+			return new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND);
+		}
+
+		let email = "";
+		if (company.adminId) {
+			const user = await this._userRepository.findById(company.adminId);
+			if (user) {
+				email = user.email;
+			}
+		}
+
+		return {
+			_id: company.id,
+			companyName: company.companyName,
+			status: company.status,
+			adminId: company.adminId,
+			createdAt: company.createdAt,
+			email: email,
+		};
+	}
+}

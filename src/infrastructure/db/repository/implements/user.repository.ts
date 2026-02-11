@@ -1,0 +1,34 @@
+import { inject, injectable } from "inversify";
+import type { Model } from "mongoose";
+import type { UserEntity } from "../../../../domain/entities/user.entities";
+import { USER_TYPES } from "../../../di/types/user/user.types";
+import type { IUserRepository } from "../interface/user.interface";
+import { BaseRepository } from "./base.repository";
+import type { UserPersistenceMapper } from "@infrastructure/mappers/user.percistance.mapper";
+
+@injectable()
+export class UserRepository
+	extends BaseRepository<UserEntity>
+	implements IUserRepository
+{
+	constructor(
+		@inject(USER_TYPES.userModel)
+		model: Model<UserEntity>,
+		@inject(USER_TYPES.UserPersistenceMapper)
+		private readonly _userMapper: UserPersistenceMapper,
+		// @inject(USER_TYPES.IUserMapper)
+		// private readonly _userMapper: IUserMapper
+	) {
+		super(model);
+		// this._userMapper = _userMapper
+	}
+
+	async findByEmail(email: string): Promise<UserEntity | null> {
+		const doc = await this.findOne({ email });
+		return doc ? this._userMapper.fromMongo(doc) : null;
+	}
+
+	async updatePassword(userId: string, password: string): Promise<void> {
+		await this.update(userId, { password });
+	}
+}

@@ -1,0 +1,47 @@
+import { AssignSubtaskUseCase } from "@application/usecases/subtask/implementation/assign.subtask.usecase";
+import { CreateSubTaskUseCase } from "@application/usecases/subtask/implementation/create.subtask.usecase";
+import { DeleteSubtaskUseCase } from "@application/usecases/subtask/implementation/delete.subtask.usecase";
+import { ListSubtasksByStoryUseCase } from "@application/usecases/subtask/implementation/list.subtask.usecase";
+import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecasets";
+import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
+import type { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
+import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
+import type { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
+import type { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
+import type { ISubtTask } from "@infrastructure/db/interface/subtask.interface";
+import { SubTaskModel } from "@infrastructure/db/models/subtask.model";
+import { SubtaskRepository } from "@infrastructure/db/repository/implements/subtask.repository";
+import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
+import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
+import { SubTaskPersisitanceMapper } from "@infrastructure/mappers/subtask.mapper";
+import { SubTaskController } from "@presentation/http/controllers/subtask.controller";
+import { ContainerModule } from "inversify";
+import type { Model } from "mongoose";
+
+export const SubtaskModule = new ContainerModule(({ bind }) => {
+	bind<Model<ISubtTask>>(SUBTASK_TYPE.SubTaskModel).toConstantValue(
+		SubTaskModel,
+	);
+	bind<SubTaskPersisitanceMapper>(SUBTASK_TYPE.SubTaskPersisitanceMapper).to(
+		SubTaskPersisitanceMapper,
+	);
+	bind<ISubTaskRepository>(SUBTASK_TYPE.ISubTaskRepository).to(
+		SubtaskRepository,
+	);
+	bind<ICreateSubTaskUseCase>(SUBTASK_TYPE.ICreateSubTaskUseCase).to(
+		CreateSubTaskUseCase,
+	);
+	bind<SubTaskController>(SUBTASK_TYPE.SubTaskController).to(SubTaskController);
+	bind<IUpdateSubtaskStatusUseCase>(
+		SUBTASK_TYPE.IUpdateSubtaskStatusUseCase,
+	).to(UpdateSubtaskStatusUseCase);
+	bind<IListSubtasksByStoryUseCase>(
+		SUBTASK_TYPE.IListSubtasksByStoryUseCase,
+	).to(ListSubtasksByStoryUseCase);
+	bind<IAssignSubtaskUseCase>(SUBTASK_TYPE.IAssignSubtaskUseCase).to(
+		AssignSubtaskUseCase,
+	);
+	bind<IDeleteSubtaskUseCase>(SUBTASK_TYPE.IDeleteSubtaskUseCase).to(
+		DeleteSubtaskUseCase,
+	);
+});
