@@ -19,7 +19,7 @@ export class SetPasswrodUseCase implements ISetPassWordUseCase {
 	constructor(
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
-	) {}
+	) { }
 
 	async execute(
 		token: string,
@@ -37,7 +37,7 @@ export class SetPasswrodUseCase implements ISetPassWordUseCase {
 			throw new validationError(ErrorMessage.PASSWORDS_DO_NOT_MATCH);
 		}
 
-		const { name, email, companyId, adminId } = JSON.parse(inviteData);
+		const { name, email, companyId, adminId, role } = JSON.parse(inviteData);
 
 		const existingUser = await this._userRepository.findByEmail(email);
 		if (existingUser) {
@@ -52,7 +52,7 @@ export class SetPasswrodUseCase implements ISetPassWordUseCase {
 			companyId,
 			adminId,
 			password: hashedPassword,
-			role: Role.DEVELOPERS,
+			role: role || Role.DEVELOPERS,
 		});
 
 		await redisClient.del(key);

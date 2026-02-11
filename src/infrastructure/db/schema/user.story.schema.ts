@@ -37,17 +37,27 @@ export const userStorySchema = new mongoose.Schema(
 		},
 		companyId: {
 			type: mongoose.Schema.Types.ObjectId,
-			res: "Companies",
+			ref: "Companies",
 			required: true,
 		},
 		adminId: {
 			type: mongoose.Schema.Types.ObjectId,
-			res: "Users",
+			ref: "Users",
 		},
 		sprintId: {
 			type: mongoose.Schema.Types.ObjectId,
-			res: "Sprints",
+			ref: "Sprints",
 		},
+		estimationPoints: {
+			type: Number,
+			default: 0,
+		},
+		acceptanceCriteria: [
+			{
+				type: String,
+				trim: true,
+			},
+		],
 	},
 	{
 		timestamps: true,

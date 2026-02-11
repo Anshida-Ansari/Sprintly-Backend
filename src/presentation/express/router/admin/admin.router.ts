@@ -22,7 +22,7 @@ router.post(
 	(req, res, next) => adminController.inviteMember(req, res, next),
 );
 
-router.get(ADMIN_ROUTES.LIST, authGurd.authorize(["admin"]), (req, res, next) =>
+router.get(ADMIN_ROUTES.LIST, authGurd.authorize(["admin", "lead"]), (req, res, next) =>
 	adminController.listUsers(req, res, next),
 );
 
@@ -36,7 +36,7 @@ router.patch(
 	(req, res, next) => adminController.blockUser(req, res, next),
 );
 
-router.get(ADMIN_ROUTES.DASHBOARD, authGurd.authorize(["admin"]), (req, res, next) =>
+router.get(ADMIN_ROUTES.DASHBOARD, authGurd.authorize(["admin", "lead"]), (req, res, next) =>
 	adminController.getDashboardStats(req, res, next),
 );
 

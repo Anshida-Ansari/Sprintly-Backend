@@ -4,10 +4,12 @@ import { CreateProjectUseCase } from "../../../../application/usecases/projects/
 import { EditProjectUseCase } from "../../../../application/usecases/projects/implementation/edit.project.usecase";
 import { GetDetailProjectUseCase } from "../../../../application/usecases/projects/implementation/get.detail.project.usecase";
 import { ListProjectUseCase } from "../../../../application/usecases/projects/implementation/list.project.usecase";
+import { AddMemberToProjectUseCase } from "../../../../application/usecases/projects/implementation/add.member.project.usecase";
 import type { ICreateProjectUseCase } from "../../../../application/usecases/projects/interface/create.project.interface";
 import type { IEditProjectUsecase } from "../../../../application/usecases/projects/interface/edit.project.interface";
 import type { IGetDetailProjectUseCase } from "../../../../application/usecases/projects/interface/get.detail.project.interface";
 import type { IListProjectUseCase } from "../../../../application/usecases/projects/interface/list.project.interface";
+import type { IAddMemberToProjectUseCase } from "../../../../application/usecases/projects/interface/add.member.project.interface";
 import type { IProject } from "../../../db/interface/project.interface";
 import { ProjectModel } from "../../../db/models/project.model";
 import { ProjectRepository } from "../../../db/repository/implements/project.reposioty";
@@ -38,5 +40,8 @@ export const ProjectModule = new ContainerModule(({ bind }) => {
 	);
 	bind<IGetDetailProjectUseCase>(PROJECT_TYPE.IGetDetailProjectUseCase).to(
 		GetDetailProjectUseCase,
+	);
+	bind<IAddMemberToProjectUseCase>(PROJECT_TYPE.AddMemberToProjectUseCase).to(
+		AddMemberToProjectUseCase,
 	);
 });

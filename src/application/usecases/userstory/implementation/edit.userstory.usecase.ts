@@ -26,7 +26,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 		private _userStoryReposiotry: IUserStroyRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectRepository: IProjectReposiotory,
-	) {}
+	) { }
 
 	async execute(
 		dto: EditUserStoryDTO,
@@ -39,6 +39,9 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 		description: string;
 		priority: PriorityStatus;
 		status: UserStoryStatus;
+		assignedTo?: string[];
+		estimationPoints?: number;
+		acceptanceCriteria?: string[];
 		sprintId?: string;
 		updatedAt?: Date;
 	}> {
@@ -65,12 +68,23 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
 		}
 
+		
+		if (dto.assignedTo && dto.assignedTo.length > 0) {
+			const uniqueMembers = new Set(dto.assignedTo);
+			if (uniqueMembers.size !== dto.assignedTo.length) {
+				throw new ForbiddenError("Duplicate assignee not allowed");
+			}
+		}
+
 		userStory.update({
 			title: dto.title,
 			description: dto.description,
 			priority: dto.priority,
 			status: dto.status,
 			sprintId: dto.sprintId,
+			assignedTo: dto.assignedTo,
+			estimationPoints: dto.estimationPoints,
+			acceptanceCriteria: dto.acceptanceCriteria,
 		});
 
 		const updatedUserstory = await this._userStoryReposiotry.update(
@@ -89,6 +103,9 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 			priority: updatedUserstory.priority,
 			status: updatedUserstory.status,
 			sprintId: updatedUserstory.sprintId,
+			assignedTo: updatedUserstory.assignedTo,
+			estimationPoints: updatedUserstory.estimationPoints,
+			acceptanceCriteria: updatedUserstory.acceptanceCriteria,
 			updatedAt: updatedUserstory.updatedAt,
 		};
 	}

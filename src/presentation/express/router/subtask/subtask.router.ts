@@ -18,20 +18,20 @@ const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
 	SUBTASK.CREATE_SUBTASK,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["lead"]),
 	validateDTO(CreateSubTaskDTO),
 	(req, res, next) => subtaskController.createSubTask(req, res, next),
 );
 
 router.patch(
 	SUBTASK.UPDATE_STATUS,
-	authGurd.authorize(["developers"]),
+	authGurd.authorize(["lead"]),
 	(req, res, next) => subtaskController.updateStatus(req, res, next),
 );
 
 router.get(
 	SUBTASK.LIST_SUBTASK,
-	authGurd.authorize(["admin", "developers"]),
+	authGurd.authorize(["admin", "developers","lead"]),
 	(req, res, next) => subtaskController.listSubtask(req, res, next),
 );
 

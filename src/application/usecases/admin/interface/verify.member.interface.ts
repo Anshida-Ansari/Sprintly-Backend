@@ -3,5 +3,6 @@ export interface IVerifyInvitationUseCase {
 		name: string;
 		email: string;
 		companyId: string;
+		role: string;
 	}>;
 }

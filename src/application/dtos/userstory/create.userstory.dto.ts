@@ -41,4 +41,13 @@ export class CreateUserStoryDTO {
 	@IsOptional()
 	@IsString({ each: true })
 	assignedTo?: string[];
+
+	@Expose()
+	@IsOptional()
+	estimationPoints?: number;
+
+	@Expose()
+	@IsOptional()
+	@IsString({ each: true })
+	acceptanceCriteria?: string[];
 }

@@ -39,4 +39,17 @@ export class EditUserStoryDTO {
 	@IsOptional()
 	@IsString({ message: "Sprint ID must be a string" })
 	sprintId?: string;
+
+	@Expose()
+	@IsOptional()
+	estimationPoints?: number;
+
+	@Expose()
+	@IsOptional()
+	@IsString({ each: true })
+	acceptanceCriteria?: string[];
+
+	@Expose()
+	@IsOptional()
+	assignedTo?: string[];
 }

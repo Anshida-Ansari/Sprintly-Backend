@@ -8,7 +8,7 @@ import type { IVerifyInvitationUseCase } from "@application/usecases/admin/inter
 export class VerifyInvitationUseCase implements IVerifyInvitationUseCase {
 	async execute(
 		token: string,
-	): Promise<{ name: string; email: string; companyId: string }> {
+	): Promise<{ name: string; email: string; companyId: string; role: string }> {
 		const key = `member.invite:${token}`;
 
 		const data = await redisClient.get(key);
@@ -23,6 +23,7 @@ export class VerifyInvitationUseCase implements IVerifyInvitationUseCase {
 			name: parsed.name,
 			email: parsed.email,
 			companyId: parsed.companyId,
+			role: parsed.role,
 		};
 	}
 }

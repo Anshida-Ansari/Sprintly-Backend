@@ -24,7 +24,7 @@ router.post(
 );
 router.get(
 	PROJECT_ROUTES.LIST_PROJECT,
-	authGurd.authorize(["admin", "developers"]),
+	authGurd.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => projectController.listProject(req, res, next),
 );
 router.patch(
@@ -34,8 +34,14 @@ router.patch(
 );
 router.get(
 	PROJECT_ROUTES.PROJECT_DETAIL_PAGE,
-	authGurd.authorize(["admin", "developers"]),
+	authGurd.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => projectController.getProjectDetail(req, res, next),
+);
+
+router.patch(
+	PROJECT_ROUTES.ADD_MEMBER,
+	authGurd.authorize(["lead","admin"]),
+	(req, res, next) => projectController.addMember(req, res, next),
 );
 
 export { router as projectRouter };

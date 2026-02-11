@@ -7,4 +7,5 @@ export const PROJECT_TYPE = {
 	IListProjectUseCase: Symbol.for("IListProjectUseCase "),
 	IEditProjectUsecase: Symbol.for("IEditProjectUsecase"),
 	IGetDetailProjectUseCase: Symbol.for("IGetDetailProjectUseCase"),
+	AddMemberToProjectUseCase: Symbol.for("AddMemberToProjectUseCase"),
 };

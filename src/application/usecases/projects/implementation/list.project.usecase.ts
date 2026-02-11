@@ -14,7 +14,7 @@ export class ListProjectUseCase implements IListProjectUseCase {
 
 	async execute(
 		query: { page: number; limit: number; search?: string },
-		companyId: string,
+		companyId: string, userId: string, userRole: string
 	): Promise<{
 		data: any[];
 		total: number;

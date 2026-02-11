@@ -14,6 +14,9 @@ export interface IEditUserstoryUseCase {
 		description: string;
 		priority: PriorityStatus;
 		status: UserStoryStatus;
+		assignedTo?: string[];
+		estimationPoints?: number;
+		acceptanceCriteria?: string[];
 		updatedAt?: Date;
 	}>;
 }

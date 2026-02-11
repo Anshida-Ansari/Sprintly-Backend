@@ -20,39 +20,39 @@ const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
 	SPRINT_ROUTES.CREATE_SPRINT,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	validateDTO(CreateSprintDTO),
 	(req, res, next) => sprintsController.createSprints(req, res, next),
 );
 
 router.get(
 	SPRINT_ROUTES.LIST_SPRINT,
-	authGurd.authorize(["admin", "developers"]),
+	authGurd.authorize(["admin", "developers","lead"]),
 	(req, res, next) => sprintsController.listSprints(req, res, next),
 );
 
 router.patch(
 	SPRINT_ROUTES.EDIT_SPRINT,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	validateDTO(EditSprintDTO),
 	(req, res, next) => sprintsController.editSprints(req, res, next),
 );
 
 router.patch(
 	SPRINT_ROUTES.START_SPRINT,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	(req, res, next) => sprintsController.startSprint(req, res, next),
 );
 
 router.patch(
 	SPRINT_ROUTES.COMPLETE_SPRINT,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	(req, res, next) => sprintsController.completeSprint(req, res, next),
 );
 
 router.patch(
 	SPRINT_ROUTES.DELETE_SPRINT,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	(req, res, next) => sprintsController.deleteSprint(req, res, next),
 );
 export { router as sprintRouter };

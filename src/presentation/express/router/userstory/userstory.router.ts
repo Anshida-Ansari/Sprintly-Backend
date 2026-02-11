@@ -19,30 +19,30 @@ import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
 
 router.post(
 	USER_STORIES.CREATE_USERSTORY,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	validateDTO(CreateUserStoryDTO),
 	(req, res, next) => userstoryController.createUserstory(req, res, next),
 );
 router.post(
 	USER_STORIES.EDIT_USERSTORY,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	validateDTO(EditUserStoryDTO),
 	(req, res, next) => userstoryController.editUserstory(req, res, next),
 );
 router.get(
 	USER_STORIES.LIST_USERSTORY,
-	authGurd.authorize(["admin", "developers"]),
+	authGurd.authorize(["admin", "lead","developers"]),
 	(req, res, next) => userstoryController.listUserstory(req, res, next),
 );
 router.post(
 	USER_STORIES.ASSIGN_MEMBERS,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	validateDTO(AssignUserStoryToSprintDTO),
 	(req, res, next) => userstoryController.assigningToMembers(req, res, next),
 );
 router.patch(
 	USER_STORIES.UPDATE_STATUS,
-	authGurd.authorize(["admin", "developers"]),
+	authGurd.authorize(["admin", "lead" ,"developers"]),
 	(req, res, next) => userstoryController.updateStatus(req, res, next),
 );
 
