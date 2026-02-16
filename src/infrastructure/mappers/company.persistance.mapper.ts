@@ -6,6 +6,12 @@ export class CompanyPersistenceMapper {
 			companyName: company.companyName,
 			status: company.status,
 			adminId: company.adminId,
+			githubAccessToken: company.githubAccessToken,
+			githubRefreshToken: company.githubRefreshToken,
+			githubInstallationId: company.githubInstallationId,
+			githubConnectedAt: company.githubConnectedAt,
+			githubUsername: company.githubUsername,
+			githubOrganization: company.githubOrganization,
 		};
 	}
 
@@ -16,6 +22,12 @@ export class CompanyPersistenceMapper {
 			status: doc.status,
 			adminId: doc.adminId?.toString(),
 			createdAt: doc.createdAt,
+			githubAccessToken: doc.githubAccessToken,
+			githubRefreshToken: doc.githubRefreshToken,
+			githubInstallationId: doc.githubInstallationId,
+			githubConnectedAt: doc.githubConnectedAt,
+			githubUsername: doc.githubUsername,
+			githubOrganization: doc.githubOrganization,
 		});
 	}
 }

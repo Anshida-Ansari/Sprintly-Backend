@@ -14,6 +14,7 @@ import { sprintRouter } from "../router/sprints/sprints.router";
 import { subTaskRouter } from "../router/subtask/subtask.router";
 import { standupRouter } from "../router/standup/standup.router";
 import meetingRouter from "../router/meeting/meeting.router";
+import githubRouter from "../router/github/github.router";
 
 app.use(
 	cors({
@@ -36,5 +37,6 @@ app.use(BASE_API.SPRINT, sprintRouter);
 app.use(BASE_API.SUBTASK, subTaskRouter);
 app.use(BASE_API.STANDUP, standupRouter);
 app.use(BASE_API.MEETING, meetingRouter);
+app.use(BASE_API.GITHUB, githubRouter);
 
 export default app;

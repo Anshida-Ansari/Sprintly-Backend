@@ -10,6 +10,7 @@ import { SprintModule } from "./container/sprints/sprints.modules";
 import { SubtaskModule } from "./container/subtask/subtask.modules";
 import { StandupModule } from "./container/standup/standup.modules";
 import { MeetingModule } from "./container/meeting/meeting.modules";
+import { GitHubModule } from "./container/github/github.modules";
 
 const container = new Container({
 	defaultScope: "Singleton",
@@ -28,6 +29,7 @@ container.load(
 	SubtaskModule,
 	StandupModule,
 	MeetingModule,
+	GitHubModule,
 );
 
 export { container };

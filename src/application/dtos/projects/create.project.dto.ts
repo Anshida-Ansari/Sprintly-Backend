@@ -1,5 +1,6 @@
 import { Exclude, Expose } from "class-transformer";
 import {
+	IsBoolean,
 	IsDateString,
 	IsOptional,
 	IsString,
@@ -39,11 +40,17 @@ export class CreateProjectDTO {
 	@IsString()
 	leadId?: string;
 
+	@Expose()
+	@IsOptional()
+	@IsBoolean()
+	createGitHubRepo?: boolean;
+
 	constructor() {
 		this.name = "";
 		this.description = "";
 		this.startDate = "";
 		this.endDate = "";
 		this.gitRepoUrl = "";
+		this.createGitHubRepo = true;
 	}
 }

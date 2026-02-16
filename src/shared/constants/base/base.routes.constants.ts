@@ -7,6 +7,9 @@ export const BASE_API = {
     SPRINT: "/api/project",
     SUBTASK: "/api/userstory",
     STANDUP: "/api/project/sprint",
-    MEETING: "/api/meeting"
+    MEETING: "/api/meeting",
+    GITHUB: "/api/github",
+
+
 
 }

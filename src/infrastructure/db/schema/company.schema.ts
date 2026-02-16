@@ -22,6 +22,30 @@ export const companySchema = new mongoose.Schema(
 			ref: "Users",
 			required: true,
 		},
+		githubAccessToken: {
+			type: String,
+			default: null,
+		},
+		githubRefreshToken: {
+			type: String,
+			default: null,
+		},
+		githubInstallationId: {
+			type: String,
+			default: null,
+		},
+		githubConnectedAt: {
+			type: Date,
+			default: null,
+		},
+		githubUsername: {
+			type: String,
+			default: null,
+		},
+		githubOrganization: {
+			type: String,
+			default: null,
+		},
 	},
 	{
 		timestamps: true,
