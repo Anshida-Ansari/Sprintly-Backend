@@ -17,9 +17,7 @@ export class DisconnectGitHubUseCase implements IDisconnectGitHubUseCase {
             throw new NotFoundError("Company not found");
         }
 
-        company.disconnectGitHub();
-
-        const companyData = {
+        const updateData = {
             githubAccessToken: null,
             githubRefreshToken: null,
             githubInstallationId: null,
@@ -27,7 +25,8 @@ export class DisconnectGitHubUseCase implements IDisconnectGitHubUseCase {
             githubOrganization: null,
             githubConnectedAt: null,
         };
-        await this._companyRepository.update(companyId, companyData);
+
+        await this._companyRepository.update(companyId, updateData);
 
         return { success: true };
     }

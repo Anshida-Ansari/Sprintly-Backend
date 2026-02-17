@@ -18,8 +18,10 @@ export class GetGitHubStatusUseCase implements IGetGitHubStatusUseCase {
             throw new NotFoundError("Company not found");
         }
 
+        const isConnected = !!company.githubAccessToken;
+
         return {
-            isConnected: company.isGitHubConnected,
+            isConnected: isConnected,
             githubUsername: company.githubUsername,
             githubOrganization: company.githubOrganization,
             connectedAt: company.githubConnectedAt,

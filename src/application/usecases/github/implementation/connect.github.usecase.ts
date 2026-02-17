@@ -43,7 +43,7 @@ export class ConnectGitHubUseCase implements IConnectGitHubUseCase {
             githubAccessToken: encryptedAccessToken,
             githubRefreshToken: encryptedRefreshToken,
             githubUsername: userInfo.username,
-            githubOrganization: undefined,
+            githubOrganization: userInfo.organization,
             githubConnectedAt: new Date(),
         };
 

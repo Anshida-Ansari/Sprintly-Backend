@@ -3,6 +3,7 @@ export interface GitHubUserInfo {
     email: string;
     name: string;
     avatarUrl: string;
+    organization?: string;
 }
 
 export interface GitHubOAuthTokens {
@@ -13,7 +14,7 @@ export interface GitHubOAuthTokens {
 }
 
 export interface IGitHubOAuthService {
-   
+
     getAuthorizationUrl(state: string): string;
 
     exchangeCodeForToken(code: string): Promise<GitHubOAuthTokens>;

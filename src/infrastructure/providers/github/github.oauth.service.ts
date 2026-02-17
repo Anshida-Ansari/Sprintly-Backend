@@ -70,11 +70,17 @@ export class GitHubOAuthService implements IGitHubOAuthService {
             const primaryEmail =
                 emails.find((email) => email.primary)?.email || user.email || "";
 
+            const { data: orgs } = await octokit.rest.orgs.listForAuthenticatedUser();
+            console.log('Fetched organizations:', orgs);
+            const organization = orgs.length > 0 ? orgs[0].login : undefined;
+            console.log('Selected organization:', organization);
+
             return {
                 username: user.login,
                 email: primaryEmail,
                 name: user.name || user.login,
                 avatarUrl: user.avatar_url,
+                organization: organization,
             };
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : String(error);
