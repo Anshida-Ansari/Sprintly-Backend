@@ -12,8 +12,14 @@ export interface IGetDetailProjectUseCase {
 		startDate?: Date;
 		endDate?: Date;
 		gitRepoUrl?: string;
-		members?: string[];
+		members?: {
+			id: string;
+			name: string;
+			email: string;
+			role: string;
+		}[];
 		createdAt: Date;
 		updatedAt: Date;
+		activeSprintId?: string;
 	}>;
 }

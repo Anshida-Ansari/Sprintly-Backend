@@ -1,6 +1,7 @@
 import { Exclude, Expose } from "class-transformer";
 import {
 	IsEnum,
+	IsNumber,
 	IsOptional,
 	IsString,
 	MaxLength,
@@ -44,6 +45,7 @@ export class CreateUserStoryDTO {
 
 	@Expose()
 	@IsOptional()
+	@IsNumber({}, { message: "Estimation points must be a number" })
 	estimationPoints?: number;
 
 	@Expose()

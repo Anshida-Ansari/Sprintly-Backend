@@ -14,6 +14,8 @@ import type { IGetDetailProjectUseCase } from "@application/usecases/projects/in
 
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 
 @injectable()
 export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
@@ -22,7 +24,9 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 		private _projectrepsository: IProjectReposiotory,
 		@inject(SPRINTS_TYPE.ISprintReposiotry)
 		private _sprintRepository: ISprintReposiotry,
-	) {}
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+	) { }
 
 	async execute(
 		companyId: string,
@@ -35,11 +39,17 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 		startDate?: Date;
 		endDate?: Date;
 		gitRepoUrl?: string;
-		members?: string[];
+		members?: {
+			id: string;
+			name: string;
+			email: string;
+			role: string;
+		}[];
 		createdAt: Date;
 		updatedAt: Date;
 		activeSprintId?: string;
 	}> {
+
 		const project = await this._projectrepsository.findById(proejctId);
 
 		if (!project) {
@@ -50,8 +60,26 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
 		}
 
-		const sprints = await this._sprintRepository.findByProject(proejctId,companyId);
+		const sprints = await this._sprintRepository.findByProject(proejctId, companyId);
 		const activeSprint = sprints.find((s) => s.status === "ACTIVE");
+
+		let detailedMembers: any[] = [];
+		if (project.members && project.members.length > 0) {
+			
+			try {
+				
+				const memberPromises = project.members.map(memberId => this._userRepository.findById(memberId));
+				const members = await Promise.all(memberPromises);
+				detailedMembers = members.filter(m => m !== null).map(m => ({
+					id: m!.id!,
+					name: m!.name,
+					email: m!.email,
+					role: m!.role
+				}));
+			} catch (error) {
+				console.error("Error fetching project members", error);
+			}
+		}
 
 		return {
 			id: project.id!,
@@ -61,7 +89,7 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 			startDate: project.startDate,
 			endDate: project.endDate,
 			gitRepoUrl: project.gitRepoUrl,
-			members: project.members,
+			members: detailedMembers,
 			createdAt: project.createdAt,
 			updatedAt: project.updatedAt!,
 			activeSprintId: activeSprint ? activeSprint.id : undefined,

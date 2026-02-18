@@ -44,7 +44,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		createdAt: Date;
 	}> {
 		const project = await this._projectReposiotory.findById(projectId);
-		
+
 
 		if (!project) {
 			throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND);
@@ -66,6 +66,8 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 			priority: dto.priority,
 			sprintId: dto.sprintId,
 			assignedTo: dto.assignedTo,
+			estimationPoints: dto.estimationPoints,
+			acceptanceCriteria: dto.acceptanceCriteria,
 		});
 
 		const created = await this._userstoryReposiotry.create(userstory);
