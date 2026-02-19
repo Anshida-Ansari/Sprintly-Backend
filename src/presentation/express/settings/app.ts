@@ -7,14 +7,14 @@ import cors from "cors";
 import env from "../../../infrastructure/providers/env/env.validation";
 import { adminRouter } from "../router/admin/admin.router";
 import { authRouter } from "../router/auth/auth.router";
+import githubRouter from "../router/github/github.router";
+import meetingRouter from "../router/meeting/meeting.router";
 import { projectRouter } from "../router/projects/project.router";
+import { sprintRouter } from "../router/sprints/sprints.router";
+import { standupRouter } from "../router/standup/standup.router";
+import { subTaskRouter } from "../router/subtask/subtask.router";
 import { superadminRouter } from "../router/superadmin/superadmin.router";
 import { userstoryRouter } from "../router/userstory/userstory.router";
-import { sprintRouter } from "../router/sprints/sprints.router";
-import { subTaskRouter } from "../router/subtask/subtask.router";
-import { standupRouter } from "../router/standup/standup.router";
-import meetingRouter from "../router/meeting/meeting.router";
-import githubRouter from "../router/github/github.router";
 
 app.use(
 	cors({

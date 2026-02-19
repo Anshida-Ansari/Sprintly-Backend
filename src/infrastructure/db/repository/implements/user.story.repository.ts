@@ -101,4 +101,9 @@ export class UserStoryRepository
 		const docs = await this.model.find({ _id: { $in: ids } });
 		return docs.map((doc) => this._userstoryMapper.fromMongo(doc));
 	}
+
+	async findByAssignedTo(userId: string): Promise<UserStoryEntity[]> {
+		const docs = await this.model.find({ assignedTo: userId });
+		return docs.map((doc) => this._userstoryMapper.fromMongo(doc));
+	}
 }

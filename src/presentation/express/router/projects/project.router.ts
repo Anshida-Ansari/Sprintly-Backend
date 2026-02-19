@@ -1,13 +1,12 @@
+import { PROJECT_ROUTES } from "@shared/constants/project.routes.constants";
 import { Router } from "express";
 import { CreateProjectDTO } from "../../../../application/dtos/projects/create.project.dto";
 import { container } from "../../../../infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
 import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
+import type { ProjectController } from "../../../http/controllers/project.controller";
 import type { AuthGurd } from "../../middleware/auth.gurd";
 import { validateDTO } from "../../middleware/validate.dto.middlware";
-import type { ProjectController } from "../../../http/controllers/project.controller";
-
-import { PROJECT_ROUTES } from "@shared/constants/project.routes.constants";
 
 const router = Router();
 
@@ -40,7 +39,7 @@ router.get(
 
 router.patch(
 	PROJECT_ROUTES.ADD_MEMBER,
-	authGurd.authorize(["lead","admin"]),
+	authGurd.authorize(["lead", "admin"]),
 	(req, res, next) => projectController.addMember(req, res, next),
 );
 

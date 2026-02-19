@@ -1,5 +1,5 @@
 import { Exclude, Expose } from "class-transformer";
-import { IsString, MinLength, MaxLength, IsOptional } from "class-validator";
+import { IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 @Exclude()
 export class SubmitStandupDTO {

@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import { BaseRepository } from "./base.repository";
 import type { StandupEntity } from "@domain/entities/standup.entity";
-import { type Model, model } from "mongoose";
 import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
 import type { StandupPersistanceMapper } from "@infrastructure/mappers/standup.sprints";
+import { inject, injectable } from "inversify";
+import { type Model, model } from "mongoose";
 import type { IStandupRepository } from "../interface/standup.interface";
+import { BaseRepository } from "./base.repository";
 
 @injectable()
 export class StandupRepository

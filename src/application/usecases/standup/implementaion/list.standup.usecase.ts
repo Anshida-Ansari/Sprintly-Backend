@@ -1,7 +1,7 @@
-import { inject, injectable } from "inversify";
-import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
-import type { IStandupRepository } from "@infrastructure/db/repository/interface/standup.interface";
 import type { StandupEntity } from "@domain/entities/standup.entity";
+import type { IStandupRepository } from "@infrastructure/db/repository/interface/standup.interface";
+import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
+import { inject, injectable } from "inversify";
 import type { IListStandupsUseCase } from "../interface/list.standup.interface";
 
 @injectable()

@@ -1,3 +1,4 @@
+import { AUTH_ROUTES } from "@shared/constants/auth.routes.constants";
 import { Router } from "express";
 import { AdminRegisterDTO } from "../../../../application/dtos/auth/admin.register.dto";
 import { ForgotPasswordDTO } from "../../../../application/dtos/auth/forgot.password.dto";
@@ -9,10 +10,8 @@ import { SetPasswordDTO } from "../../../../application/dtos/auth/set.password.d
 import { VerifyOtpDTO } from "../../../../application/dtos/auth/verify.admin.dto";
 import { container } from "../../../../infrastructure/di/inversify.di";
 import { AUTH_TYPES } from "../../../../infrastructure/di/types/auth/auth.types";
-import { validateDTO } from "../../middleware/validate.dto.middlware";
 import type { AuthController } from "../../../http/controllers/auth.controller";
-
-import { AUTH_ROUTES } from "@shared/constants/auth.routes.constants";
+import { validateDTO } from "../../middleware/validate.dto.middlware";
 
 const router = Router();
 
@@ -23,8 +22,10 @@ router.post(
 	validateDTO(AdminRegisterDTO),
 	(req, res, next) => authController.register(req, res, next),
 );
-router.post(AUTH_ROUTES.VERIFY_OTP, validateDTO(VerifyOtpDTO), (req, res, next) =>
-	authController.verifyOTP(req, res, next),
+router.post(
+	AUTH_ROUTES.VERIFY_OTP,
+	validateDTO(VerifyOtpDTO),
+	(req, res, next) => authController.verifyOTP(req, res, next),
 );
 router.post(AUTH_ROUTES.LOGIN, validateDTO(LoginDTO), (req, res, next) =>
 	authController.login(req, res, next),
@@ -32,8 +33,10 @@ router.post(AUTH_ROUTES.LOGIN, validateDTO(LoginDTO), (req, res, next) =>
 router.post(AUTH_ROUTES.REFRESH, (req, res, next) =>
 	authController.refreshToken(req, res, next),
 );
-router.post(AUTH_ROUTES.SET_PASSWORD, validateDTO(SetPasswordDTO), (req, res, next) =>
-	authController.setPassword(req, res, next),
+router.post(
+	AUTH_ROUTES.SET_PASSWORD,
+	validateDTO(SetPasswordDTO),
+	(req, res, next) => authController.setPassword(req, res, next),
 );
 router.post(
 	AUTH_ROUTES.FORGOT_PASSWORD,
@@ -48,8 +51,10 @@ router.post(
 	validateDTO(ResetPasswordDTO),
 	(req, res, next) => authController.resetPassword(req, res, next),
 );
-router.post(AUTH_ROUTES.RESEND_OTP, validateDTO(ResendAdminOtpDTO), (req, res, next) =>
-	authController.resendOtp(req, res, next),
+router.post(
+	AUTH_ROUTES.RESEND_OTP,
+	validateDTO(ResendAdminOtpDTO),
+	(req, res, next) => authController.resendOtp(req, res, next),
 );
 router.post(AUTH_ROUTES.LOGOUT, validateDTO(LogoutDTO), (req, res, next) =>
 	authController.logout(req, res, next),

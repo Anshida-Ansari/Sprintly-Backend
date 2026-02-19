@@ -11,7 +11,7 @@ export class AuthGurd {
 	constructor(
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
-	) { }
+	) {}
 	authorize(allowedRoles: string[]) {
 		return async (req: Request, res: Response, next: NextFunction) => {
 			try {

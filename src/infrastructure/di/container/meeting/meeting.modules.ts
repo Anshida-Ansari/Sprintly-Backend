@@ -1,18 +1,18 @@
+import type { IMeeting } from "@infrastructure/db/interface/meeting.interface";
+import { MeetingModel } from "@infrastructure/db/models/meeting.model";
 import { ContainerModule } from "inversify";
 import type { Model } from "mongoose";
+import { GetProjectMeetingsUseCase } from "../../../../application/usecases/meeting/get.project.meetings.usecase";
+import type { IGetProjectMeetingsUseCase } from "../../../../application/usecases/meeting/interface/get.project.meetings.interface";
+import type { IScheduleMeetingUseCase } from "../../../../application/usecases/meeting/interface/schedule.meeting.interface";
+import type { IUpdateMeetingStatusUseCase } from "../../../../application/usecases/meeting/interface/update.meeting.status.interface";
+import { ScheduleMeetingUseCase } from "../../../../application/usecases/meeting/schedule.meeting.usecase";
+import { UpdateMeetingStatusUseCase } from "../../../../application/usecases/meeting/update.meeting.status.usecase";
+import { MeetingController } from "../../../../presentation/http/controllers/meeting.controller";
 import { MeetingRepository } from "../../../db/repository/implements/meeting.repository";
 import type { IMeetingRepository } from "../../../db/repository/interface/meeting.interface";
 import { MeetingPersistenceMapper } from "../../../mappers/meeting.persistence.mapper";
 import { MEETING_TYPES } from "../../types/meeting/meeting.types";
-import type { IMeeting } from "@infrastructure/db/interface/meeting.interface";
-import { MeetingModel } from "@infrastructure/db/models/meeting.model";
-import { ScheduleMeetingUseCase } from "../../../../application/usecases/meeting/schedule.meeting.usecase";
-import { GetProjectMeetingsUseCase } from "../../../../application/usecases/meeting/get.project.meetings.usecase";
-import { UpdateMeetingStatusUseCase } from "../../../../application/usecases/meeting/update.meeting.status.usecase";
-import type { IScheduleMeetingUseCase } from "../../../../application/usecases/meeting/interface/schedule.meeting.interface";
-import type { IGetProjectMeetingsUseCase } from "../../../../application/usecases/meeting/interface/get.project.meetings.interface";
-import type { IUpdateMeetingStatusUseCase } from "../../../../application/usecases/meeting/interface/update.meeting.status.interface";
-import { MeetingController } from "../../../../presentation/http/controllers/meeting.controller";
 
 export const MeetingModule = new ContainerModule(({ bind }) => {
 	bind<IMeetingRepository>(MEETING_TYPES.IMeetingRepository).to(

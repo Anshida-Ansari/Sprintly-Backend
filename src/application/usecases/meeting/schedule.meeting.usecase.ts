@@ -1,8 +1,8 @@
+import { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { inject, injectable } from "inversify";
 import { MeetingEntity } from "../../../domain/entities/meeting.entity";
 import type { IMeetingRepository } from "../../../infrastructure/db/repository/interface/meeting.interface";
 import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
-import { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { SignalingGateway } from "../../../presentation/socket/signaling.gateway";
 
 import type { IScheduleMeetingUseCase } from "./interface/schedule.meeting.interface";

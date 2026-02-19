@@ -1,9 +1,8 @@
-import { inject, injectable } from "inversify";
+import type { IListProjectUseCase } from "@application/usecases/projects/interface/list.project.interface";
 
 import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
-
-import type { IListProjectUseCase } from "@application/usecases/projects/interface/list.project.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class ListProjectUseCase implements IListProjectUseCase {
@@ -14,7 +13,9 @@ export class ListProjectUseCase implements IListProjectUseCase {
 
 	async execute(
 		query: { page: number; limit: number; search?: string },
-		companyId: string, userId: string, userRole: string
+		companyId: string,
+		userId: string,
+		userRole: string,
 	): Promise<{
 		data: any[];
 		total: number;
@@ -24,6 +25,11 @@ export class ListProjectUseCase implements IListProjectUseCase {
 	}> {
 		const { page, limit, search } = query;
 		const filter: any = { companyId };
+
+		if (userRole === "developers" || userRole === "developer") {
+			filter.members = userId;
+		}
+
 		if (search) {
 			filter.name = { $regex: search, $options: "i" };
 		}

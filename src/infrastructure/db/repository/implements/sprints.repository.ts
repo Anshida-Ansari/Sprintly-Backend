@@ -1,11 +1,11 @@
-import { inject, injectable } from "inversify";
-import type { Model } from "mongoose";
-import { BaseRepository } from "@infrastructure/db/repository/implements/base.repository";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
 import type { SprintEntity } from "@domain/entities/sptint.entities";
 import { SprintStatus } from "@domain/enum/sprints/sprints.status";
+import { BaseRepository } from "@infrastructure/db/repository/implements/base.repository";
+import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import type { SprintPersistenceMapper } from "@infrastructure/mappers/sprints.mapper";
+import { inject, injectable } from "inversify";
+import type { Model } from "mongoose";
 
 @injectable()
 export class SprintsRepository

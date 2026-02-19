@@ -1,3 +1,8 @@
+import type { IAssignUserStoryUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.member.interface";
+import type { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
+import type { IGetMyUserStoriesUseCase } from "@application/usecases/userstory/interface/get.my.userstories.interface";
+import type { IUpdateStatusOfUserStoryInterface } from "@application/usecases/userstory/interface/update.userstory.status.interface";
+import type { Role } from "@domain/enum/role.enum";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import type { ICreateUserstoryUsecase } from "../../../application/usecases/userstory/interface/create.userstory.interface";
@@ -5,10 +10,6 @@ import type { IEditUserstoryUseCase } from "../../../application/usecases/userst
 import type { IListUserstoryUseCase } from "../../../application/usecases/userstory/interface/list.userstory.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { USERSTORY_TYPE } from "../../../infrastructure/di/types/userstory/userstory";
-import type { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
-import type { IUpdateStatusOfUserStoryInterface } from "@application/usecases/userstory/interface/update.userstory.status.interface";
-import type { IGetMyUserStoriesUseCase } from "@application/usecases/userstory/interface/get.my.userstories.interface";
-import type { Role } from "@domain/enum/role.enum";
 
 @injectable()
 export class UserstoryController {
@@ -25,7 +26,9 @@ export class UserstoryController {
 		private _updateStatusofUserStory: IUpdateStatusOfUserStoryInterface,
 		@inject(USERSTORY_TYPE.IGetMyUserStoriesUseCase)
 		private _getMyUserStoriesUseCase: IGetMyUserStoriesUseCase,
-	) { }
+		@inject(USERSTORY_TYPE.IAssignUserStoryUseCase)
+		private _assignuserstoryUseCase: IAssignUserStoryUseCase,
+	) {}
 
 	async createUserstory(req: Request, res: Response, next: NextFunction) {
 		try {
@@ -153,6 +156,27 @@ export class UserstoryController {
 			return res.status(SuccessStatus.OK).json({
 				success: true,
 				message: "Fetched my tasks successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async assignUserstory(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { userStoryId } = req.params;
+			const { companyId } = req.user;
+			const { developerId } = req.body;
+
+			const result = await this._assignuserstoryUseCase.execute(
+				userStoryId,
+				developerId,
+				companyId,
+			);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Userstory is Assigned to developer",
 				data: result,
 			});
 		} catch (error) {

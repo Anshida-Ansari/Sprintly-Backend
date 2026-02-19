@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
+import type { MeetingStatus } from "../../../domain/enum/meeting/meeting.status.enum";
 import type { IMeetingRepository } from "../../../infrastructure/db/repository/interface/meeting.interface";
 import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
-import type { MeetingStatus } from "../../../domain/enum/meeting/meeting.status.enum";
 
 import type { IUpdateMeetingStatusUseCase } from "./interface/update.meeting.status.interface";
 

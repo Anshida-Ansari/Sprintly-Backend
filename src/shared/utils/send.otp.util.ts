@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer";
 import env from "@infrastructure/providers/env/env.validation";
+import nodemailer from "nodemailer";
 
 export const sendOtpEmail = async (email: string, otp: number) => {
 	const transporter = nodemailer.createTransport({

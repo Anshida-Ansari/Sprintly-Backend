@@ -9,13 +9,13 @@
 		"resolveJsonModule": true,
 		"outDir": "./dist",
 		"rootDir": "./src",
-		"baseUrl": "./src",
+		"baseUrl": ".",
 		"paths": {
-			"@application/*": ["application/*"],
-			"@domain/*": ["domain/*"],
-			"@infrastructure/*": ["infrastructure/*"],
-			"@presentation/*": ["presentation/*"],
-			"@shared/*": ["shared/*"]
+			"@application/*": ["src/application/*"],
+			"@domain/*": ["src/domain/*"],
+			"@infrastructure/*": ["src/infrastructure/*"],
+			"@presentation/*": ["src/presentation/*"],
+			"@shared/*": ["src/shared/*"]
 		},
 		"types": ["node"],
 		"experimentalDecorators": true,

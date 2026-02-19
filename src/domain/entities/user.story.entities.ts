@@ -52,6 +52,7 @@ export class UserStoryEntity {
 		companyId: string;
 		title: string;
 		description: string;
+		status?: UserStoryStatus;
 		priority?: PriorityStatus;
 		sprintId?: string;
 		assignedTo?: string[];
@@ -65,8 +66,8 @@ export class UserStoryEntity {
 			title: props.title.trim(),
 			description: props.description?.trim() || "",
 			companyId: props.companyId,
-			status: UserStoryStatus.IN_PENDING,
-			priority: PriorityStatus.MEDIUM,
+			status: props.status || UserStoryStatus.IN_PENDING,
+			priority: props.priority || PriorityStatus.MEDIUM,
 			sprintId: props.sprintId,
 			assignedTo: props.assignedTo,
 			estimationPoints: props.estimationPoints,
@@ -93,9 +94,10 @@ export class UserStoryEntity {
 		if (props.priority !== undefined) this._priority = props.priority;
 		if (props.sprintId !== undefined) this._sprintId = props.sprintId;
 		if (props.assignedTo !== undefined) this._assignedTo = props.assignedTo;
-		if (props.estimationPoints !== undefined) this._estimationPoints = props.estimationPoints;
-		if (props.acceptanceCriteria !== undefined) this._acceptanceCriteria = props.acceptanceCriteria;
-
+		if (props.estimationPoints !== undefined)
+			this._estimationPoints = props.estimationPoints;
+		if (props.acceptanceCriteria !== undefined)
+			this._acceptanceCriteria = props.acceptanceCriteria;
 
 		this._updatedAt = new Date();
 	}

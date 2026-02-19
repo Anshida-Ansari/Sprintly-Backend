@@ -1,13 +1,13 @@
-import type { NextFunction, Request, Response } from "express";
-import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
-import { inject, injectable } from "inversify";
+import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
 import type { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
-import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
+import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
+import type { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
 import type { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
 import type { Role } from "@domain/enum/role.enum";
-import type { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
-import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
-import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
+import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
+import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
+import type { NextFunction, Request, Response } from "express";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class SubTaskController {
@@ -22,7 +22,7 @@ export class SubTaskController {
 		private _assignSubtaskUseCase: IAssignSubtaskUseCase,
 		@inject(SUBTASK_TYPE.IDeleteSubtaskUseCase)
 		private _delteSubtaskUseCase: IDeleteSubtaskUseCase,
-	) { }
+	) {}
 
 	async createSubTask(req: Request, res: Response, next: NextFunction) {
 		try {

@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify";
+import type { IUpdateStatusInterface } from "@application/usecases/superadmin/interface/update.status.interface";
 
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 
@@ -6,8 +6,7 @@ import type { ICompanyRepository } from "@infrastructure/db/repository/interface
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-
-import type { IUpdateStatusInterface } from "@application/usecases/superadmin/interface/update.status.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class UpdateStatusUseCase implements IUpdateStatusInterface {

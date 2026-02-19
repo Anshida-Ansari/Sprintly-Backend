@@ -1,6 +1,5 @@
-import { inject, injectable } from "inversify";
-
-import env from "@infrastructure/providers/env/env.validation";
+import type { LoginDTO } from "@application/dtos/auth/login.dto";
+import type { ILoginUseCase } from "@application/usecases/auth/interface/login.interface";
 
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { SuccessMessage } from "@domain/enum/messages/success.message.enum";
@@ -12,8 +11,8 @@ import type { ICompanyRepository } from "@infrastructure/db/repository/interface
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import env from "@infrastructure/providers/env/env.validation";
 import { redisClient } from "@infrastructure/providers/redis/redis.provider";
-
 import { validateEmail } from "@shared/utils/email.validate.util";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
@@ -24,9 +23,7 @@ import {
 	generateRefreshToken,
 } from "@shared/utils/jwt.util";
 import { verify } from "@shared/utils/password.hash.util";
-
-import type { LoginDTO } from "@application/dtos/auth/login.dto";
-import type { ILoginUseCase } from "@application/usecases/auth/interface/login.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class LoginUseCase implements ILoginUseCase {

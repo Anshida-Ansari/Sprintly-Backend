@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import env from "@infrastructure/providers/env/env.validation";
+import mongoose from "mongoose";
 
 const connectDB = async (): Promise<void> => {
 	try {

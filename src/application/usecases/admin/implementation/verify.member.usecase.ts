@@ -1,8 +1,8 @@
-import { injectable } from "inversify";
+import type { IVerifyInvitationUseCase } from "@application/usecases/admin/interface/verify.member.interface";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { redisClient } from "@infrastructure/providers/redis/redis.provider";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-import type { IVerifyInvitationUseCase } from "@application/usecases/admin/interface/verify.member.interface";
+import { injectable } from "inversify";
 
 @injectable()
 export class VerifyInvitationUseCase implements IVerifyInvitationUseCase {

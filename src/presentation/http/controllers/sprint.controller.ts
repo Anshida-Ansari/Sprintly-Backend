@@ -1,14 +1,14 @@
-import type { NextFunction, Request, Response } from "express";
-import { inject, injectable } from "inversify";
+import type { ICompleteSprintUseCase } from "@application/usecases/sprints/interface/complete.sprints.interface";
 import type { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
+import type { IDeleteSprintUseCase } from "@application/usecases/sprints/interface/delete.sprints.interface";
 import type { IEditSprintUseCase } from "@application/usecases/sprints/interface/edit.sprints.interface";
 import type { IListSprintsUseCase } from "@application/usecases/sprints/interface/list.sprints.interface";
+import type { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
 import type { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
-import type { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
-import type { ICompleteSprintUseCase } from "@application/usecases/sprints/interface/complete.sprints.interface";
-import type { IDeleteSprintUseCase } from "@application/usecases/sprints/interface/delete.sprints.interface";
+import type { NextFunction, Request, Response } from "express";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class SprintController {

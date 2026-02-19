@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify";
+import type { IRefreshUseCase } from "@application/usecases/auth/interface/refresh.interface";
 
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { UserStatus } from "@domain/enum/status.enum";
@@ -13,8 +13,7 @@ import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.err
 import { Unauthorized } from "@shared/utils/error-handling/errors/unauthorized.error";
 import { validationError } from "@shared/utils/error-handling/errors/validation.error";
 import { generateAccessToken, verifyToken } from "@shared/utils/jwt.util";
-
-import type { IRefreshUseCase } from "@application/usecases/auth/interface/refresh.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class RefreshUseCase implements IRefreshUseCase {

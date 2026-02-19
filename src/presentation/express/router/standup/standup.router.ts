@@ -2,15 +2,13 @@ import { AddStandupCommentDTO } from "@application/dtos/standup/add.standup.comm
 import { SubmitStandupDTO } from "@application/dtos/standup/submit.standup.dto";
 import { container } from "@infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "@infrastructure/di/types/admin/admin.types";
+import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import type { AuthGurd } from "@presentation/express/middleware/auth.gurd";
 import { validateDTO } from "@presentation/express/middleware/validate.dto.middlware";
 import type { StandupController } from "@presentation/http/controllers/standup.controller";
-import { Router } from "express";
-
-import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
-
 import { STANDUP } from "@shared/constants/standup.routes.constants";
+import { Router } from "express";
 
 const router = Router();
 const standupController = container.get<StandupController>(

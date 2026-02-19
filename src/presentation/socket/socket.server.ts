@@ -1,6 +1,6 @@
+import env from "@infrastructure/providers/env/env.validation";
 import type { Server as HttpServer } from "http";
 import { Server } from "socket.io";
-import env from "@infrastructure/providers/env/env.validation";
 import { SignalingGateway } from "./signaling.gateway";
 
 export class SocketServer {

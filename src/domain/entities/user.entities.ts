@@ -1,7 +1,7 @@
-import { hash } from "@shared/utils/password.hash.util";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import type { Role } from "@domain/enum/role.enum";
 import { UserStatus } from "@domain/enum/status.enum";
+import { hash } from "@shared/utils/password.hash.util";
 
 export class UserEntity {
 	private readonly _id?: string;

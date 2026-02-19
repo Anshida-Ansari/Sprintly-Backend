@@ -1,17 +1,17 @@
-import { inject, injectable } from "inversify";
-import type { IUpdateSubtaskStatusUseCase } from "../interface/update.subtask.status.interface";
-import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import type { SubTaskEntity } from "@domain/entities/subtask.entity";
-import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
-import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { Role } from "@domain/enum/role.enum";
 import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
-import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
-import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
+import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
+import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
+import { inject, injectable } from "inversify";
+import type { IUpdateSubtaskStatusUseCase } from "../interface/update.subtask.status.interface";
 
 @injectable()
 export class UpdateSubtaskStatusUseCase implements IUpdateSubtaskStatusUseCase {
@@ -66,18 +66,18 @@ export class UpdateSubtaskStatusUseCase implements IUpdateSubtaskStatusUseCase {
 			let storyNewStatus = parentUserstory.status;
 
 			if (totalSubtask > 0 && completedTask === totalSubtask) {
-				storyNewStatus = UserStoryStatus.DONE;
+				storyNewStatus = UserStoryStatus.IN_REVIEW;
 			} else if (
 				completedTask > 0 &&
 				parentUserstory.status === UserStoryStatus.IN_PENDING
 			) {
-				storyNewStatus = UserStoryStatus.IN_PROGREDD;
+				storyNewStatus = UserStoryStatus.IN_PROGRESS;
 			} else if (
 				completedTask < totalSubtask &&
 				newStatus === SubTaskStatus.PENDING &&
 				parentUserstory.status === UserStoryStatus.DONE
 			) {
-				storyNewStatus = UserStoryStatus.IN_PROGREDD;
+				storyNewStatus = UserStoryStatus.IN_PROGRESS;
 			}
 
 			if (storyNewStatus !== parentUserstory.status) {

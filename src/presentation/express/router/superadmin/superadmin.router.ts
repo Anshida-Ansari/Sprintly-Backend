@@ -1,11 +1,10 @@
+import { SUPERADMIN_ROUTES } from "@shared/constants/superadmin.routes.constants";
 import { Router } from "express";
 import { container } from "../../../../infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
 import { SUPERADMIN_TYPES } from "../../../../infrastructure/di/types/superadmin/superadmin.types";
-import type { AuthGurd } from "../../middleware/auth.gurd";
 import type { SuperAdminController } from "../../../http/controllers/superadmin.controller";
-
-import { SUPERADMIN_ROUTES } from "@shared/constants/superadmin.routes.constants";
+import type { AuthGurd } from "../../middleware/auth.gurd";
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 export class GitHubStatusResponse {
-    isConnected!: boolean;
-    githubUsername?: string;
-    githubOrganization?: string;
-    connectedAt?: Date;
+	isConnected!: boolean;
+	githubUsername?: string;
+	githubOrganization?: string;
+	connectedAt?: Date;
 }

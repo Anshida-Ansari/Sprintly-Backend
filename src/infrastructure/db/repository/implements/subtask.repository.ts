@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import { BaseRepository } from "./base.repository";
 import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
-import type { Model } from "mongoose";
 import type { SubTaskPersisitanceMapper } from "@infrastructure/mappers/subtask.mapper";
+import { inject, injectable } from "inversify";
+import type { Model } from "mongoose";
 import type { ISubTaskRepository } from "../interface/subtask.interface";
+import { BaseRepository } from "./base.repository";
 
 @injectable()
 export class SubtaskRepository

@@ -1,11 +1,11 @@
+import type { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { inject, injectable } from "inversify";
-import { Types, type Model } from "mongoose";
+import { type Model, Types } from "mongoose";
 import type { MeetingEntity } from "../../../../domain/entities/meeting.entity";
 import { MEETING_TYPES } from "../../../di/types/meeting/meeting.types";
 import type { MeetingPersistenceMapper } from "../../../mappers/meeting.persistence.mapper";
 import type { IMeetingRepository } from "../interface/meeting.interface";
 import { BaseRepository } from "./base.repository";
-import type { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 
 @injectable()
 export class MeetingRepository

@@ -8,9 +8,4 @@ export class CreateSubTaskDTO {
 	@MinLength(3, { message: "Title must be at least 3 characters" })
 	@MaxLength(150, { message: "Title cannot exceed 150 characters" })
 	title: string;
-
-	@Expose()
-	@IsOptional()
-	@IsString({ message: "Assigned member ID must be a string" })
-	assignedTo?: string;
 }

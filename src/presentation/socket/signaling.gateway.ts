@@ -17,6 +17,7 @@ export class SignalingGateway {
 
 	public initialize() {
 		const roomUsers: Record<string, string[]> = {};
+		const socketRoomMap: Map<string, string> = new Map();
 
 		SignalingGateway.io.on("connection", (socket: Socket) => {
 			console.log(`User connected: ${socket.id}`);
@@ -26,34 +27,66 @@ export class SignalingGateway {
 				console.log(`User ${userId} registered with socket ${socket.id}`);
 			});
 
+			socket.on("join-room", (roomId: string, userId: string) => {
+				// Leave previous room if any (though usually one connection = one room)
+				const previousRoom = socketRoomMap.get(socket.id);
+				if (previousRoom && previousRoom !== roomId) {
+					socket.leave(previousRoom);
+					if (roomUsers[previousRoom]) {
+						roomUsers[previousRoom] = roomUsers[previousRoom].filter(
+							(id) => id !== socket.id,
+						);
+						socket.to(previousRoom).emit("user-left", socket.id);
+					}
+				}
+
+				socket.join(roomId);
+				socketRoomMap.set(socket.id, roomId);
+
+				if (!roomUsers[roomId]) roomUsers[roomId] = [];
+
+				// Notify others in the room
+				socket.to(roomId).emit("user-joined", { socketId: socket.id, userId });
+
+				// Send existing users to the new joiner
+				const others = roomUsers[roomId].map((id) => ({ socketId: id }));
+				socket.emit("existing-users", others);
+
+				// Add to room list
+				if (!roomUsers[roomId].includes(socket.id)) {
+					roomUsers[roomId].push(socket.id);
+				}
+			});
+
+			// Handle disconnect globally
 			socket.on("disconnect", () => {
+				console.log(`User disconnected: ${socket.id}`);
+
+				// Remove from userSockets map
 				for (const [userId, sid] of SignalingGateway.userSockets.entries()) {
 					if (sid === socket.id) {
 						SignalingGateway.userSockets.delete(userId);
 						break;
 					}
 				}
-			});
 
-			socket.on("join-room", (roomId: string, userId: string) => {
-				socket.join(roomId);
-
-				if (!roomUsers[roomId]) roomUsers[roomId] = [];
-				socket.to(roomId).emit("user-joined", { socketId: socket.id, userId });
-
-				const others = roomUsers[roomId].map((id) => ({ socketId: id }));
-				socket.emit("existing-users", others);
-
-				roomUsers[roomId].push(socket.id);
-
-				socket.on("disconnect", () => {
+				// Remove from room and notify others
+				const roomId = socketRoomMap.get(socket.id);
+				if (roomId && roomUsers[roomId]) {
 					roomUsers[roomId] = roomUsers[roomId].filter(
 						(id) => id !== socket.id,
 					);
-					socket.to(roomId).emit("user-left", socket.id);
-				});
+					socket.to(roomId).emit("user-left", socket.id); // Notify room
+					socketRoomMap.delete(socket.id);
+
+					// Cleanup empty room if needed (optional)
+					if (roomUsers[roomId].length === 0) {
+						delete roomUsers[roomId];
+					}
+				}
 			});
 
+			// Signaling events
 			socket.on(
 				"offer",
 				(payload: {

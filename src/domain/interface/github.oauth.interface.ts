@@ -1,23 +1,22 @@
 export interface GitHubUserInfo {
-    username: string;
-    email: string;
-    name: string;
-    avatarUrl: string;
-    organization?: string;
+	username: string;
+	email: string;
+	name: string;
+	avatarUrl: string;
+	organization?: string;
 }
 
 export interface GitHubOAuthTokens {
-    accessToken: string;
-    refreshToken?: string;
-    expiresIn?: number;
-    refreshTokenExpiresIn?: number;
+	accessToken: string;
+	refreshToken?: string;
+	expiresIn?: number;
+	refreshTokenExpiresIn?: number;
 }
 
 export interface IGitHubOAuthService {
+	getAuthorizationUrl(state: string): string;
 
-    getAuthorizationUrl(state: string): string;
+	exchangeCodeForToken(code: string): Promise<GitHubOAuthTokens>;
 
-    exchangeCodeForToken(code: string): Promise<GitHubOAuthTokens>;
-
-    getUserInfo(accessToken: string): Promise<GitHubUserInfo>;
+	getUserInfo(accessToken: string): Promise<GitHubUserInfo>;
 }

@@ -1,6 +1,5 @@
-import { inject, injectable } from "inversify";
-
 import type { EditUserStoryDTO } from "@application/dtos/userstory/edit.userstory";
+import type { IEditUserstoryUseCase } from "@application/usecases/userstory/interface/edit.usertory.interface";
 
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
@@ -16,8 +15,7 @@ import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-
-import type { IEditUserstoryUseCase } from "@application/usecases/userstory/interface/edit.usertory.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class EditUserStoryUseCase implements IEditUserstoryUseCase {
@@ -26,7 +24,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 		private _userStoryReposiotry: IUserStroyRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectRepository: IProjectReposiotory,
-	) { }
+	) {}
 
 	async execute(
 		dto: EditUserStoryDTO,
@@ -68,7 +66,6 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
 		}
 
-		
 		if (dto.assignedTo && dto.assignedTo.length > 0) {
 			const uniqueMembers = new Set(dto.assignedTo);
 			if (uniqueMembers.size !== dto.assignedTo.length) {

@@ -1,11 +1,11 @@
+import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import type { IScheduleMeetingUseCase } from "../../../application/usecases/meeting/interface/schedule.meeting.interface";
 import type { IGetProjectMeetingsUseCase } from "../../../application/usecases/meeting/interface/get.project.meetings.interface";
+import type { IScheduleMeetingUseCase } from "../../../application/usecases/meeting/interface/schedule.meeting.interface";
 import type { IUpdateMeetingStatusUseCase } from "../../../application/usecases/meeting/interface/update.meeting.status.interface";
-import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
 import type { MeetingStatus } from "../../../domain/enum/meeting/meeting.status.enum";
-import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
+import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
 
 @injectable()
 export class MeetingController {

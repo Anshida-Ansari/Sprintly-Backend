@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import env from "../../../infrastructure/providers/env/env.validation";
 import type { IRegisterAdminUseCase } from "../../../application/usecases/auth/interface/admin.register.interface";
 import type { IForgotPasswordUseCase } from "../../../application/usecases/auth/interface/forgot.password.interface";
 import type { ILoginUseCase } from "../../../application/usecases/auth/interface/login.interface";
@@ -13,6 +12,7 @@ import type { IVerifyForgotPasswordOtpUseCase } from "../../../application/useca
 import type { IVerifyOtpUseCase } from "../../../application/usecases/auth/interface/verifyadmin.otp.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { AUTH_TYPES } from "../../../infrastructure/di/types/auth/auth.types";
+import env from "../../../infrastructure/providers/env/env.validation";
 
 @injectable()
 export class AuthController {

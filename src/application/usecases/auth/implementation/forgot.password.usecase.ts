@@ -1,17 +1,14 @@
-import { inject, injectable } from "inversify";
-
-import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import type { ForgotPasswordDTO } from "@application/dtos/auth/forgot.password.dto";
+import type { IForgotPasswordUseCase } from "@application/usecases/auth/interface/forgot.password.interface";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { redisClient } from "@infrastructure/providers/redis/redis.provider";
-
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { generateOTP } from "@shared/utils/otp.generate.util";
 import { sendOtpEmail } from "@shared/utils/send.otp.util";
-
-import type { ForgotPasswordDTO } from "@application/dtos/auth/forgot.password.dto";
-import type { IForgotPasswordUseCase } from "@application/usecases/auth/interface/forgot.password.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {

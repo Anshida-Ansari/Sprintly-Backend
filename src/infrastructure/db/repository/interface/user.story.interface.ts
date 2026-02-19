@@ -17,4 +17,5 @@ export interface IUserStroyRepository extends IBaseRepository<UserStoryEntity> {
 		data: UserStoryEntity[];
 		total: number;
 	}>;
+	findByAssignedTo(userId: string): Promise<UserStoryEntity[]>;
 }

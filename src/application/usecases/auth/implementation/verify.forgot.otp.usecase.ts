@@ -1,4 +1,4 @@
-import { injectable } from "inversify";
+import type { IVerifyForgotPasswordOtpUseCase } from "@application/usecases/auth/interface/verify.forgot.otp.interface";
 
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 
@@ -6,8 +6,7 @@ import { redisClient } from "@infrastructure/providers/redis/redis.provider";
 
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { validationError } from "@shared/utils/error-handling/errors/validation.error";
-
-import type { IVerifyForgotPasswordOtpUseCase } from "@application/usecases/auth/interface/verify.forgot.otp.interface";
+import { injectable } from "inversify";
 
 @injectable()
 export class VerifyForgotPasswordOtpUseCase

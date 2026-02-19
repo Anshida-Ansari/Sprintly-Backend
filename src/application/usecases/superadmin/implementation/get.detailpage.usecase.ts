@@ -1,15 +1,11 @@
-import { inject, injectable } from "inversify";
-
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
-
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
-import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
-
-import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-
-import type { IGetDetailPageUseCase } from "../interface/get.detailpage.interface";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { inject, injectable } from "inversify";
+import type { IGetDetailPageUseCase } from "../interface/get.detailpage.interface";
 
 @injectable()
 export class GetDetailPageUseCase implements IGetDetailPageUseCase {
@@ -18,7 +14,7 @@ export class GetDetailPageUseCase implements IGetDetailPageUseCase {
 		private _companyrepository: ICompanyRepository,
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
-	) { }
+	) {}
 
 	async execute(companyId: string): Promise<any> {
 		const company = await this._companyrepository.findByCompanyId(companyId);

@@ -1,6 +1,5 @@
-import { inject, injectable } from "inversify";
-
 import type { CreateUserStoryDTO } from "@application/dtos/userstory/create.userstory.dto";
+import type { ICreateUserstoryUsecase } from "@application/usecases/userstory/interface/create.userstory.interface";
 
 import { UserStoryEntity } from "@domain/entities/user.story.entities";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
@@ -17,8 +16,7 @@ import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-
-import type { ICreateUserstoryUsecase } from "@application/usecases/userstory/interface/create.userstory.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
@@ -27,7 +25,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		private _userstoryReposiotry: IUserStroyRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectReposiotory: IProjectReposiotory,
-	) { }
+	) {}
 
 	async execute(
 		dto: CreateUserStoryDTO,
@@ -44,7 +42,6 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		createdAt: Date;
 	}> {
 		const project = await this._projectReposiotory.findById(projectId);
-
 
 		if (!project) {
 			throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND);

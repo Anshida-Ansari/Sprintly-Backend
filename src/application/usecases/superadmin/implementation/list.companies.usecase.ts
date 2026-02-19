@@ -1,9 +1,8 @@
-import { inject, injectable } from "inversify";
+import type { IListCompanyUseCase } from "@application/usecases/superadmin/interface/list.companies.interface";
 
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
-
-import type { IListCompanyUseCase } from "@application/usecases/superadmin/interface/list.companies.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class ListCompanyUseCase implements IListCompanyUseCase {

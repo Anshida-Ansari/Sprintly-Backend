@@ -11,6 +11,7 @@ export class UserStoryPersisitanceMapper {
 			status: userStory.status,
 			priority: userStory.priority,
 			sprintId: userStory.sprintId,
+			assignedTo: userStory.assignedTo,
 			estimationPoints: userStory.estimationPoints,
 			acceptanceCriteria: userStory.acceptanceCriteria,
 			createdAt: userStory.createdAt,
@@ -27,6 +28,8 @@ export class UserStoryPersisitanceMapper {
 			description: doc.description,
 			priority: doc.priority,
 			sprintId: doc.sprintId?.toString(),
+			assignedTo: doc.assignedTo?.toString(),
+			status: doc.status,
 			estimationPoints: doc.estimationPoints,
 			acceptanceCriteria: doc.acceptanceCriteria,
 		});

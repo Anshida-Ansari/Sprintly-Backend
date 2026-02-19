@@ -1,5 +1,5 @@
-import { inject, injectable } from "inversify";
-import mongoose from "mongoose";
+import type { VerifyOtpDTO } from "@application/dtos/auth/verify.admin.dto";
+import type { IVerifyOtpUseCase } from "@application/usecases/auth/interface/verifyadmin.otp.interface";
 
 import { CompanyEnitiy } from "@domain/entities/company.enities";
 import { UserEntity } from "@domain/entities/user.entities";
@@ -20,9 +20,8 @@ import { redisClient } from "@infrastructure/providers/redis/redis.provider";
 import { InternalServerError } from "@shared/utils/error-handling/errors/internal.server.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { validationError } from "@shared/utils/error-handling/errors/validation.error";
-
-import type { VerifyOtpDTO } from "@application/dtos/auth/verify.admin.dto";
-import type { IVerifyOtpUseCase } from "@application/usecases/auth/interface/verifyadmin.otp.interface";
+import { inject, injectable } from "inversify";
+import mongoose from "mongoose";
 
 @injectable()
 export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
@@ -40,9 +39,7 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 		private readonly _companyPersistance: CompanyPersistenceMapper,
 	) {}
 
-	async execute(
-		dto: VerifyOtpDTO,
-	): Promise<{
+	async execute(dto: VerifyOtpDTO): Promise<{
 		message: string;
 		user: { id?: string; name: string; email: string };
 		company: { id?: string; name: string };

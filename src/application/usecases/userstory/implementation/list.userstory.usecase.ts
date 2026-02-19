@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify";
+import type { IListUserstoryUseCase } from "@application/usecases/userstory/interface/list.userstory.interface";
 
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
@@ -11,8 +11,7 @@ import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-
-import type { IListUserstoryUseCase } from "@application/usecases/userstory/interface/list.userstory.interface";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class ListUserstoryUseCase implements IListUserstoryUseCase {
