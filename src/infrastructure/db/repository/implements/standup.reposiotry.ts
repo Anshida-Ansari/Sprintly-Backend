@@ -7,9 +7,7 @@ import type { IStandupRepository } from "../interface/standup.interface";
 import { BaseRepository } from "./base.repository";
 
 @injectable()
-export class StandupRepository
-	extends BaseRepository<StandupEntity>
-	implements IStandupRepository
+export class StandupRepository extends BaseRepository<StandupEntity>implements IStandupRepository
 {
 	constructor(
 		@inject(STANDUP_TYPES.StandupModel)

@@ -1,5 +1,5 @@
 import { model } from "mongoose";
-import { IUserProfieModel } from "../interface/user.model.profile";
+import { IUserProfile } from "../interface/user.profile.model";
 import { userProfileSchema } from "../schema/user.profile.schema";
 
-export const userProfileModel = model<IUserProfieModel>("UserProfile", userProfileSchema)
+export const UserProfileModel = model<IUserProfile>("UserProfile", userProfileSchema)
