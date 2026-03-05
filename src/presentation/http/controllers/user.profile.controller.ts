@@ -1,0 +1,37 @@
+import { IUpdateProfileUseCase } from "@application/usecases/userprofile/interface/update.profile.usecase.interface";
+import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
+import { USER_PROFILE_TYPE } from "@infrastructure/di/types/userprofile/user.profile";
+import type { NextFunction, Request, Response } from "express";
+import { inject, injectable } from "inversify";
+
+@injectable()
+export class UserProfileController{
+    constructor(
+        @inject(USER_PROFILE_TYPE.IUpdateProfileUseCase)
+        private _updateProfileUseCase: IUpdateProfileUseCase
+    ){}
+
+    async updateProfile(req: Request, res: Response, next: NextFunction){
+        try {
+            const {companyId} = req.params
+            
+
+            const userId = req.user.id
+
+            const result = await this._updateProfileUseCase.execute(
+                req.body,
+                companyId,
+                userId
+            )
+
+            return res.status(SuccessStatus.OK).json({
+                        success: true,
+                        message: "User profile Updated",
+                        data: result,
+                        });
+            
+        } catch (error) {
+            next(error)
+        }
+    }
+}

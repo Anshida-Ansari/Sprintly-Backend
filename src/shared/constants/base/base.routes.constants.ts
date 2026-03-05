@@ -9,4 +9,5 @@ export const BASE_API = {
 	STANDUP: "/api/project/sprint",
 	MEETING: "/api/meeting",
 	GITHUB: "/api/github",
+	USER_PROFILE:"/api/companies"
 };

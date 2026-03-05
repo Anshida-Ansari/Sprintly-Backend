@@ -17,9 +17,32 @@ export class UserProfileReposiotry extends BaseRepository<UserProfileEntity> imp
         super(model)
     }
 
-    async findByUserId(userId: string): Promise<UserProfileEntity | null> {
-        const doc = await this.model.findOne({ userId });
+    async create(entity: UserProfileEntity): Promise<UserProfileEntity> {
+		const payload = this._userProfileMapper.toMongo(entity);
+		const result = await this.model.create(payload);
+		return this._userProfileMapper.fromMongo(result);
+	}
 
-		return doc ? this._userProfileMapper.fromMongo(doc) : null;
-    }
+	async update(
+		id: string,
+		entity: UserProfileEntity
+	): Promise<UserProfileEntity | null> {
+		const payload = this._userProfileMapper.toMongo(entity);
+
+		const result = await this.model.findByIdAndUpdate(id, payload, {
+			new: true,
+		});
+
+		return result
+			? this._userProfileMapper.fromMongo(result)
+			: null;
+	}
+
+	async findByUserId(userId: string): Promise<UserProfileEntity | null> {
+		const doc = await this.model.findOne({ userId });
+
+		return doc
+			? this._userProfileMapper.fromMongo(doc)
+			: null;
+	}
 }

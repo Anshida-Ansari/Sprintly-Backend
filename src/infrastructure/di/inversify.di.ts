@@ -11,6 +11,7 @@ import { SubtaskModule } from "./container/subtask/subtask.modules";
 import { SuperAdminModule } from "./container/superadmin/superadmin.modules";
 import { UserModule } from "./container/user/user.modules";
 import { UserStoryModule } from "./container/userstory/userstory.modules";
+import { UserProfileModule } from "./container/userprofile/user.profile.modules";
 
 const container = new Container({
 	defaultScope: "Singleton",
@@ -30,6 +31,8 @@ container.load(
 	StandupModule,
 	MeetingModule,
 	GitHubModule,
+	UserProfileModule
+
 );
 
 export { container };

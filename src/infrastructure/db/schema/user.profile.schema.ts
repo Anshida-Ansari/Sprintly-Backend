@@ -9,6 +9,10 @@ export const userProfileSchema = new mongoose.Schema(
 			unique: true, 
 			index: true,
 		},
+		companyId: {   
+			type: String,
+			required: true,
+		},
 
 		phoneNumber: {
 			type: String,

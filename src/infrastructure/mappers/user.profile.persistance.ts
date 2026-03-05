@@ -4,6 +4,7 @@ export class UserProfilePersistenceMapper{
     toMongo(entity: UserProfileEntity){
         return{
             userId: entity.userId,
+			companyId: entity.companyId,
 			phoneNumber: entity.phoneNumber,
 			address: entity.address,
 			bio: entity.bio,
@@ -20,6 +21,7 @@ export class UserProfilePersistenceMapper{
         return UserProfileEntity.create({
             id: doc._id?.toString(),
 			userId: doc.userId?.toString(),
+			companyId: doc.companyId.toString(),
 			phoneNumber: doc.phoneNumber,
 			address: doc.address,
 			bio: doc.bio,

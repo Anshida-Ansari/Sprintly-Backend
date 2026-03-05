@@ -27,6 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 import { BASE_API } from "@shared/constants/base/base.routes.constants";
+import { userprofileRotuer } from "../router/userprofile/user.profile.router";
 
 app.use(BASE_API.AUTH, authRouter);
 app.use(BASE_API.ADMIN, adminRouter);
@@ -38,5 +39,6 @@ app.use(BASE_API.SUBTASK, subTaskRouter);
 app.use(BASE_API.STANDUP, standupRouter);
 app.use(BASE_API.MEETING, meetingRouter);
 app.use(BASE_API.GITHUB, githubRouter);
+app.use(BASE_API.USER_PROFILE, userprofileRotuer)
 
 export default app;

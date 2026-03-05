@@ -1,6 +1,7 @@
 export class UserProfileEntity {
 	private readonly _id?: string;
 	private readonly _userId: string;
+	private readonly _companyId: string;
 	private _phoneNumber?: string;
 	private _address?: string;
 	private _bio?: string;
@@ -14,6 +15,7 @@ export class UserProfileEntity {
 	constructor(props: {
 		id?: string;
 		userId: string;
+		companyId: string; 
 		phoneNumber?: string;
 		address?: string;
 		bio?: string;
@@ -26,6 +28,7 @@ export class UserProfileEntity {
 	}) {
 		this._id = props.id;
 		this._userId = props.userId;
+		this._companyId = props.companyId;
 		this._phoneNumber = props.phoneNumber;
 		this._address = props.address;
 		this._bio = props.bio;
@@ -42,6 +45,7 @@ export class UserProfileEntity {
 	static create(props: {
 		id?: string;
 		userId: string;
+		companyId: string;
 		phoneNumber?: string;
 		address?: string;
 		bio?: string;
@@ -56,29 +60,36 @@ export class UserProfileEntity {
 	}
 
 	private validate() {
-		if (!this._userId) {
-			throw new Error("UserId is required");
-		}
-
-		if (this._bio && this._bio.length > 500) {
-			throw new Error("Bio cannot exceed 500 characters");
-		}
-
-		if (this._skills.length > 20) {
-			throw new Error("Skills cannot exceed 20 items");
-		}
-
-		const uniqueSkills = new Set(this._skills);
-		if (uniqueSkills.size !== this._skills.length) {
-			throw new Error("Duplicate skills are not allowed");
-		}
+	if (!this._userId) {
+		throw new Error("UserId is required");
 	}
+
+	if (!this._companyId) {
+		throw new Error("CompanyId is required");
+	}
+
+	if (this._bio && this._bio.length > 500) {
+		throw new Error("Bio cannot exceed 500 characters");
+	}
+
+	if (this._skills.length > 20) {
+		throw new Error("Skills cannot exceed 20 items");
+	}
+
+	const uniqueSkills = new Set(this._skills);
+	if (uniqueSkills.size !== this._skills.length) {
+		throw new Error("Duplicate skills are not allowed");
+	}
+}
 
 	get id() {
 		return this._id;
 	}
 	get userId() {
 		return this._userId;
+	}
+	get companyId(){
+		return this._companyId
 	}
 	get phoneNumber() {
 		return this._phoneNumber;
