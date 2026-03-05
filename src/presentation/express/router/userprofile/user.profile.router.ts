@@ -22,4 +22,10 @@ router.put(
     (req,res,next) => userprofileController.updateProfile(req,res,next)
 )
 
+router.get(
+    USER_PROFILE.GET_USER_PROFILE,
+    authGurd.authorize(['admin','lead','developer']),
+    (req,res,next) => userprofileController.getProfile(req,res,next)
+)
+
 export {router as userprofileRotuer}

@@ -4,6 +4,7 @@ export const USER_PROFILE_TYPE = {
     IUserProfileRepository: Symbol.for('IUserProfileRepository'),
     UserProfilePersistenceMapper: Symbol.for('UserProfilePersistenceMapper'),
     IUpdateProfileUseCase: Symbol.for('IUpdateProfileUseCase'),
-    UserProfileController: Symbol.for('UserProfileController')
+    UserProfileController: Symbol.for('UserProfileController'),
+    IGetProfileUseCase: Symbol.for('IGetProfileUseCase')
 
 }

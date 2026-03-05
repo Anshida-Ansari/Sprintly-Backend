@@ -1,4 +1,6 @@
+import { GetProfileUseCase } from "@application/usecases/userprofile/imeplementation/get.profile.usecase";
 import { UpdateProfileUseCase } from "@application/usecases/userprofile/imeplementation/update.profile.usecase.usecase";
+import { IGetProfileUseCase } from "@application/usecases/userprofile/interface/get.profile.usecase.interface";
 import { IUpdateProfileUseCase } from "@application/usecases/userprofile/interface/update.profile.usecase.interface";
 import {  IUserProfile } from "@infrastructure/db/interface/user.profile.model";
 import { UserProfileModel } from "@infrastructure/db/models/user.profile.model";
@@ -16,5 +18,6 @@ export const UserProfileModule = new ContainerModule(({bind})=>{
     bind<UserProfilePersistenceMapper>(USER_PROFILE_TYPE.UserProfilePersistenceMapper).to(UserProfilePersistenceMapper)
     bind<IUpdateProfileUseCase>(USER_PROFILE_TYPE.IUpdateProfileUseCase).to(UpdateProfileUseCase)
     bind<UserProfileController>(USER_PROFILE_TYPE.UserProfileController).to(UserProfileController)
+    bind<IGetProfileUseCase>(USER_PROFILE_TYPE.IGetProfileUseCase).to(GetProfileUseCase)
 
 })
