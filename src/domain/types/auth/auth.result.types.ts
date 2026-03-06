@@ -5,6 +5,7 @@ export type AuthResult = {
 		name: string;
 		email: string;
 		role: string;
+		companyId?: string;
 		companyName?: string;
 	};
 	accessToken: string;

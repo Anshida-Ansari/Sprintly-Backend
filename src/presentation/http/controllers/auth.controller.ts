@@ -11,7 +11,9 @@ import type { ISetPassWordUseCase } from "../../../application/usecases/auth/int
 import type { IVerifyForgotPasswordOtpUseCase } from "../../../application/usecases/auth/interface/verify.forgot.otp.interface";
 import type { IVerifyOtpUseCase } from "../../../application/usecases/auth/interface/verifyadmin.otp.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
+import type { ICompanyRepository } from "../../../infrastructure/db/repository/interface/company.interface";
 import { AUTH_TYPES } from "../../../infrastructure/di/types/auth/auth.types";
+import { COMPANY_TYPES } from "../../../infrastructure/di/types/company/company.types";
 import env from "../../../infrastructure/providers/env/env.validation";
 
 @injectable()
@@ -37,7 +39,9 @@ export class AuthController {
 		private _resendAdminOtpUseCase: IResendAdminOtpUseCase,
 		@inject(AUTH_TYPES.ILogoutUseCase)
 		private _logoutUseCase: ILogoutUseCase,
-	) {}
+		@inject(COMPANY_TYPES.ICompanyRepository)
+		private _companyRepository: ICompanyRepository,
+	) { }
 
 	async register(req: Request, res: Response, next: NextFunction) {
 		try {
@@ -180,6 +184,36 @@ export class AuthController {
 			res.clearCookie("refreshToken");
 
 			res.json(result);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getMe(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { id, userId, email, role, companyId } = req.user as any;
+			const resolvedId = id || userId;
+
+			let companyName = "";
+			if (companyId) {
+				const company = await this._companyRepository.findByCompanyId(companyId);
+				companyName = company?.companyName || "";
+			}
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "User fetched",
+				data: {
+					user: {
+						id: resolvedId,
+						name: req.user.userName,
+						email,
+						role,
+						companyId,
+						companyName,
+					},
+				},
+			});
 		} catch (error) {
 			next(error);
 		}

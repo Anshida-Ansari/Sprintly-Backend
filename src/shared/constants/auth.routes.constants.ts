@@ -9,4 +9,5 @@ export const AUTH_ROUTES = {
 	RESET_PASSWORD: "/reset-password",
 	RESEND_OTP: "/resend-otp",
 	LOGOUT: "/logout",
+	GET_ME: "/me",
 };

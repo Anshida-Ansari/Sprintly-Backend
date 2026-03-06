@@ -32,7 +32,7 @@ export class LoginUseCase implements ILoginUseCase {
 		private _userRepository: IUserRepository,
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
-	) {}
+	) { }
 
 	async execute(dto: LoginDTO): Promise<AuthResult> {
 		console.log("reaching the login ");
@@ -52,6 +52,8 @@ export class LoginUseCase implements ILoginUseCase {
 		const isPasswrord = await verify(user.password, password);
 		if (!isPasswrord) throw new validationError(ErrorMessage.INVALID_PASSWORD);
 
+		let company = null;
+
 		if (user.role !== Role.SUPER_ADMIN) {
 			if (user.role === Role.DEVELOPERS && !user.companyId) {
 				throw new ConflictError(ErrorMessage.DEVELOPER_NOT_ASSIGNED_TO_COMPANY);
@@ -65,9 +67,7 @@ export class LoginUseCase implements ILoginUseCase {
 				throw new ConflictError(ErrorMessage.COMPANY_NOT_ASSOCIATED_TO_COMPANY);
 			}
 
-			const company = await this._companyRepository.findByCompanyId(
-				user.companyId,
-			);
+			company = await this._companyRepository.findByCompanyId(user.companyId);
 			if (!company) throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND);
 
 			if (company.status !== Status.APPROVED) {
@@ -100,6 +100,8 @@ export class LoginUseCase implements ILoginUseCase {
 				name: user.name,
 				email: user.email,
 				role: user.role,
+				companyId: company?.id?.toString() || user.companyId,
+				companyName: company?.companyName || "",
 			},
 		};
 	}

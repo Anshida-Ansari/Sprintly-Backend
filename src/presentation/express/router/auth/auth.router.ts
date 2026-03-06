@@ -10,12 +10,15 @@ import { SetPasswordDTO } from "../../../../application/dtos/auth/set.password.d
 import { VerifyOtpDTO } from "../../../../application/dtos/auth/verify.admin.dto";
 import { container } from "../../../../infrastructure/di/inversify.di";
 import { AUTH_TYPES } from "../../../../infrastructure/di/types/auth/auth.types";
+import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
 import type { AuthController } from "../../../http/controllers/auth.controller";
+import type { AuthGurd } from "../../middleware/auth.gurd";
 import { validateDTO } from "../../middleware/validate.dto.middlware";
 
 const router = Router();
 
 const authController = container.get<AuthController>(AUTH_TYPES.AuthController);
+const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
 	AUTH_ROUTES.REGISTER,
@@ -58,6 +61,12 @@ router.post(
 );
 router.post(AUTH_ROUTES.LOGOUT, validateDTO(LogoutDTO), (req, res, next) =>
 	authController.logout(req, res, next),
+);
+
+router.get(
+	AUTH_ROUTES.GET_ME,
+	authGurd.authorize(['admin', 'lead', 'developers', 'superadmin']),
+	(req, res, next) => authController.getMe(req, res, next),
 );
 
 export { router as authRouter };

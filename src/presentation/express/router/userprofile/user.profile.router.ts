@@ -17,14 +17,14 @@ const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd)
 
 router.put(
     USER_PROFILE.UPDATE_USER_PROFILE,
-    authGurd.authorize(['admin','lead','developer']),
+    authGurd.authorize(['admin','lead','developers']),
     validateDTO(UpdateUserProfileDTO),
     (req,res,next) => userprofileController.updateProfile(req,res,next)
 )
 
 router.get(
     USER_PROFILE.GET_USER_PROFILE,
-    authGurd.authorize(['admin','lead','developer']),
+    authGurd.authorize(['admin','lead','developers']),
     (req,res,next) => userprofileController.getProfile(req,res,next)
 )
 
