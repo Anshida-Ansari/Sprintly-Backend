@@ -22,6 +22,10 @@ import { UserStoryRepository } from "../../../db/repository/implements/user.stor
 import type { IUserStroyRepository } from "../../../db/repository/interface/user.story.interface";
 import { UserStoryPersisitanceMapper } from "../../../mappers/userstrory.mapper";
 import { USERSTORY_TYPE } from "../../types/userstory/userstory";
+import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
+import { IAddCommentToUserStoryUseCase } from "@application/usecases/userstory/interface/add.comments.userstory.interface";
+import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
+import { AddCommentToUserStoryUseCase } from "@application/usecases/userstory/implementation/add.comments.userstory.usecase";
 
 export const UserStoryModule = new ContainerModule(({ bind }) => {
 	// bind<IUserStroyRepository>(USERSTORY_TYPE.IUserStroyRepository).to()
@@ -58,4 +62,9 @@ export const UserStoryModule = new ContainerModule(({ bind }) => {
 	bind<IAssignUserStoryUseCase>(USERSTORY_TYPE.IAssignUserStoryUseCase).to(
 		AssignUserStoryUseCase,
 	);
+	bind<IAddCommentToUserStoryUseCase>(USERSTORY_TYPE.IAddCommentToUserStoryUseCase).to(
+		AddCommentToUserStoryUseCase
+	)
+	
+	
 });

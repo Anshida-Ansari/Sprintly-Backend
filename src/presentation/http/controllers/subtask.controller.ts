@@ -1,3 +1,5 @@
+import { AddCommentSubTaskDTO } from "@application/dtos/subtask/add.comment.to.subtask.dto";
+import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
 import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
 import type { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
 import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
@@ -22,6 +24,9 @@ export class SubTaskController {
 		private _assignSubtaskUseCase: IAssignSubtaskUseCase,
 		@inject(SUBTASK_TYPE.IDeleteSubtaskUseCase)
 		private _delteSubtaskUseCase: IDeleteSubtaskUseCase,
+		@inject(SUBTASK_TYPE.IAddCommentToSubtaskUseCase)
+		private _addCommentUseCase: IAddCommentToSubtaskUseCase
+		
 	) {}
 
 	async createSubTask(req: Request, res: Response, next: NextFunction) {
@@ -127,4 +132,31 @@ export class SubTaskController {
 			next(error);
 		}
 	}
+	async addComment(req: Request, res: Response, next:NextFunction){
+		try {
+
+			const {subtaskId} = req.params
+			const {message} = req.body
+			const userId = req.user.id
+
+			const dto = new AddCommentSubTaskDTO({
+						userId,
+						subtaskId,
+						message
+					})
+
+			const result = await this._addCommentUseCase.execute(dto)
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Add Comment Successfully",
+				data: result,
+			});
+
+			
+		} catch (error) {
+			next(error)
+		}
+}
+
 }

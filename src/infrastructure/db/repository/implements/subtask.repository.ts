@@ -62,4 +62,14 @@ export class SubtaskRepository
 		const docs = await this.model.find({ userStoryId: { $in: userStoryIds } });
 		return docs.map((doc) => this._subtaskMapper.fromMongo(doc));
 	}
+	async addComment(subTaskId: string, comment: { userId: string; message: string; createdAt: Date; }): Promise<void> {
+		await this.model.findByIdAndUpdate(
+			subTaskId,
+			{
+				$push: {
+					comments: comment,
+				},
+			}
+		);
+	}
 }

@@ -7,6 +7,11 @@ export class SubTaskEntity {
 	private _title: string;
 	private _status: SubTaskStatus;
 	private _assignedTo?: string;
+	private _comments: Array<{
+		userId: string;
+		message: string;
+		createdAt: Date;
+	}> = [];
 	private readonly _createdAt: Date;
 	private _updatedAt?: Date;
 
@@ -17,6 +22,11 @@ export class SubTaskEntity {
 		title: string;
 		status: SubTaskStatus;
 		assignedTo?: string;
+		comments?: Array<{
+			userId: string;
+			message: string;
+			createdAt: Date;
+		}>;
 		createdAt?: Date;
 		updatedAt?: Date;
 	}) {
@@ -26,6 +36,7 @@ export class SubTaskEntity {
 		this._title = props.title;
 		this._status = props.status;
 		this._assignedTo = props.assignedTo;
+		this._comments = props.comments || [];
 		this._createdAt = props.createdAt || new Date();
 		this._updatedAt = props.updatedAt;
 	}
@@ -37,6 +48,11 @@ export class SubTaskEntity {
 		title: string;
 		status?: SubTaskStatus;
 		assignedTo?: string;
+		comments?: {
+			createdAt: Date;
+			message: string;
+			userId: string;
+		}[];
 	}): SubTaskEntity {
 		if (!props.title?.trim()) throw new Error("Sub-task title is required");
 		if (!props.userStoryId) throw new Error("User Story ID is required");
@@ -47,6 +63,7 @@ export class SubTaskEntity {
 			title: props.title.trim(),
 			status: props.status ?? SubTaskStatus.PENDING,
 			assignedTo: props.assignedTo,
+			comments: props.comments || [],
 		});
 	}
 
@@ -63,8 +80,20 @@ export class SubTaskEntity {
 
 		this._updatedAt = new Date();
 	}
+	addComment(userId: string, message: string) {
+		if (!message.trim()) {
+			throw new Error("Comment cannot be empty");
+		}
 
-	// Getters
+		this._comments.push({
+			userId,
+			message: message.trim(),
+			createdAt: new Date(),
+		});
+
+		this._updatedAt = new Date();
+	}
+
 	get id() {
 		return this._id;
 	}
@@ -82,6 +111,9 @@ export class SubTaskEntity {
 	}
 	get assignedTo() {
 		return this._assignedTo;
+	}
+	get comments() {
+		return this._comments;
 	}
 	get createdAt() {
 		return this._createdAt;

@@ -1,3 +1,4 @@
+import { AddCommentSubTaskDTO } from "@application/dtos/subtask/add.comment.to.subtask.dto";
 import { CreateSubTaskDTO } from "@application/dtos/subtask/create.subtask.dto";
 import { container } from "@infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "@infrastructure/di/types/admin/admin.types";
@@ -45,4 +46,10 @@ router.delete(
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => subtaskController.deleteSubtask(req, res, next),
 );
+router.post(
+	SUBTASK.ADD_COMMENT_SUBTASK,
+	authGurd.authorize(["admin", "developer","lead"]),
+	validateDTO(AddCommentSubTaskDTO),
+	(req,res,next)=>subtaskController.addComment(req,res,next)
+)
 export { router as subTaskRouter };

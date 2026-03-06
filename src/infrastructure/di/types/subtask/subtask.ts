@@ -8,4 +8,5 @@ export const SUBTASK_TYPE = {
 	IListSubtasksByStoryUseCase: Symbol.for("IListSubtasksByStoryUseCase"),
 	IAssignSubtaskUseCase: Symbol.for("IAssignSubtaskUseCase"),
 	IDeleteSubtaskUseCase: Symbol.for("IDeleteSubtaskUseCase"),
+	IAddCommentToSubtaskUseCase: Symbol.for("IAddCommentToSubtaskUseCase")
 };

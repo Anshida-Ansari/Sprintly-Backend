@@ -27,6 +27,22 @@ export const subTaskSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Users",
 		},
+		comments: [
+			{
+				userId: {
+					type: String,
+					required: true
+				},
+				message: {
+					type: String,
+					required: true
+				},
+				createdAt: {
+					type: Date,
+					default: Date.now
+				}
+			}
+		]
 	},
 	{
 		timestamps: true,

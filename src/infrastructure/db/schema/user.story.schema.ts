@@ -20,6 +20,22 @@ export const userStorySchema = new mongoose.Schema(
 				ref: "Users",
 			},
 		],
+		comments: [
+			{
+				userId: {
+					type: String,
+					required: true
+				},
+				message: {
+					type: String,
+					required: true
+				},
+				createdAt: {
+					type: Date,
+					default: Date.now
+				}
+			}
+		],
 		description: {
 			type: String,
 			default: "",

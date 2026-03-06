@@ -1,8 +1,10 @@
+import { AddCommentToSubTaskUseCase } from "@application/usecases/subtask/implementation/add.comment.to.subtask.usecase";
 import { AssignSubtaskUseCase } from "@application/usecases/subtask/implementation/assign.subtask.usecase";
 import { CreateSubTaskUseCase } from "@application/usecases/subtask/implementation/create.subtask.usecase";
 import { DeleteSubtaskUseCase } from "@application/usecases/subtask/implementation/delete.subtask.usecase";
 import { ListSubtasksByStoryUseCase } from "@application/usecases/subtask/implementation/list.subtask.usecase";
 import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecasets";
+import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
 import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
 import type { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
 import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
@@ -44,4 +46,6 @@ export const SubtaskModule = new ContainerModule(({ bind }) => {
 	bind<IDeleteSubtaskUseCase>(SUBTASK_TYPE.IDeleteSubtaskUseCase).to(
 		DeleteSubtaskUseCase,
 	);
+	bind<IAddCommentToSubtaskUseCase>(SUBTASK_TYPE.IAddCommentToSubtaskUseCase).to(AddCommentToSubTaskUseCase)
+	
 });

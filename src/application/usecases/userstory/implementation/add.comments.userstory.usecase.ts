@@ -1,0 +1,32 @@
+import { inject, injectable } from "inversify";
+import { IAddCommentToUserStoryUseCase } from "../interface/add.comments.userstory.interface";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+import { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+
+@injectable()
+export class AddCommentToUserStoryUseCase implements IAddCommentToUserStoryUseCase{
+    constructor(
+        @inject(USERSTORY_TYPE.IUserStroyRepository)
+        private _userStoryRepository: IUserStroyRepository
+    ){}
+
+    async execute(dto: AddCommentDTO): Promise<void> {
+        
+        const userStory = await this._userStoryRepository.findById(dto.userStoryId)
+
+        if(!userStory){
+            throw new NotFoundError(ErrorMessage.NOT_FOUND)
+        }
+
+        userStory.addComment(dto.userStoryId,dto.message)
+
+        await this._userStoryRepository.addComment(dto.userStoryId,{
+            userId: dto.userId,
+            message:dto.message,
+            createdAt:new Date()
+        })
+    }
+}

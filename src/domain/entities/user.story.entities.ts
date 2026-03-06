@@ -11,6 +11,11 @@ export class UserStoryEntity {
 	private _priority: PriorityStatus;
 	private _sprintId?: string;
 	private _assignedTo?: string[];
+	private _comments: Array<{
+		createdAt: Date;
+		message: string;
+		userId: string;
+	}> = [];
 	private _estimationPoints?: number;
 	private _acceptanceCriteria?: string[];
 	private readonly _createdAt: Date;
@@ -26,6 +31,11 @@ export class UserStoryEntity {
 		priority: PriorityStatus;
 		sprintId?: string;
 		assignedTo?: string[];
+		comments?: Array<{
+			createdAt: Date;
+			message: string;
+			userId: string;
+		}>;
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 		createdAt?: Date;
@@ -40,6 +50,7 @@ export class UserStoryEntity {
 		this._priority = props.priority;
 		this._sprintId = props.sprintId;
 		this._assignedTo = props.assignedTo;
+		this._comments = props.comments || [];
 		this._estimationPoints = props.estimationPoints;
 		this._acceptanceCriteria = props.acceptanceCriteria;
 		this._createdAt = props.createdAt || new Date();
@@ -56,6 +67,11 @@ export class UserStoryEntity {
 		priority?: PriorityStatus;
 		sprintId?: string;
 		assignedTo?: string[];
+		comments?: {
+			createdAt: Date;
+			message: string;
+			userId: string;
+		}[]; 
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 	}): UserStoryEntity {
@@ -70,6 +86,7 @@ export class UserStoryEntity {
 			priority: props.priority || PriorityStatus.MEDIUM,
 			sprintId: props.sprintId,
 			assignedTo: props.assignedTo,
+			comments: props.comments || [],
 			estimationPoints: props.estimationPoints,
 			acceptanceCriteria: props.acceptanceCriteria || [],
 		});
@@ -98,6 +115,20 @@ export class UserStoryEntity {
 			this._estimationPoints = props.estimationPoints;
 		if (props.acceptanceCriteria !== undefined)
 			this._acceptanceCriteria = props.acceptanceCriteria;
+
+		this._updatedAt = new Date();
+	}
+
+	addComment(userId: string, message: string) {
+		if (!message.trim()) {
+			throw new Error("Comment cannot be empty");
+		}
+
+		this._comments.push({
+			userId,
+			message: message.trim(),
+			createdAt: new Date()
+		});
 
 		this._updatedAt = new Date();
 	}
@@ -132,6 +163,9 @@ export class UserStoryEntity {
 	}
 	get assignedTo() {
 		return this._assignedTo;
+	}
+	get comments() {
+		return this._comments;
 	}
 	get estimationPoints() {
 		return this._estimationPoints;

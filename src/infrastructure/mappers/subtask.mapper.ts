@@ -9,6 +9,7 @@ export class SubTaskPersisitanceMapper {
 			title: subTask.title,
 			status: subTask.status,
 			assignedTo: subTask.assignedTo,
+			comments:subTask.comments,
 			createdAt: subTask.createdAt,
 			updatedAt: subTask.updatedAt,
 		};
@@ -22,6 +23,7 @@ export class SubTaskPersisitanceMapper {
 			title: doc.title,
 			status: doc.status,
 			assignedTo: doc.assignedTo?.toString(),
+			comments: doc.comments || [],
 		});
 	}
 }

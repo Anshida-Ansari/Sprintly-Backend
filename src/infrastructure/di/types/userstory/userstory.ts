@@ -14,4 +14,5 @@ export const USERSTORY_TYPE = {
 	),
 	IGetMyUserStoriesUseCase: Symbol.for("IGetMyUserStoriesUseCase"),
 	IAssignUserStoryUseCase: Symbol.for("IAssignUserStoryUseCase"),
+	IAddCommentToUserStoryUseCase: Symbol.for("IAddCommentToUserStoryUseCase")
 };

@@ -10,6 +10,8 @@ import type { IEditUserstoryUseCase } from "../../../application/usecases/userst
 import type { IListUserstoryUseCase } from "../../../application/usecases/userstory/interface/list.userstory.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { USERSTORY_TYPE } from "../../../infrastructure/di/types/userstory/userstory";
+import { IAddCommentToUserStoryUseCase } from "@application/usecases/userstory/interface/add.comments.userstory.interface";
+import { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
 
 @injectable()
 export class UserstoryController {
@@ -28,7 +30,9 @@ export class UserstoryController {
 		private _getMyUserStoriesUseCase: IGetMyUserStoriesUseCase,
 		@inject(USERSTORY_TYPE.IAssignUserStoryUseCase)
 		private _assignuserstoryUseCase: IAssignUserStoryUseCase,
-	) {}
+		@inject(USERSTORY_TYPE.IAddCommentToUserStoryUseCase)
+		private _addCommentUseCase: IAddCommentToUserStoryUseCase
+	) { }
 
 	async createUserstory(req: Request, res: Response, next: NextFunction) {
 		try {
@@ -181,6 +185,34 @@ export class UserstoryController {
 			});
 		} catch (error) {
 			next(error);
+		}
+	}
+	async addComment(req: Request, res: Response, next: NextFunction) {
+		try {
+
+			const { userStoryId } = req.params
+			const { message } = req.body
+			const userId = req.user.id
+
+
+			const dto = new AddCommentDTO({
+				userId,
+				userStoryId,
+				message
+			})
+
+			const result = await this._addCommentUseCase.execute(dto)
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Add Comment Successfully",
+				data: result,
+			});
+
+
+
+		} catch (error) {
+			next(error)
 		}
 	}
 }

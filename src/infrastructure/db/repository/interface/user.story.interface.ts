@@ -18,4 +18,9 @@ export interface IUserStroyRepository extends IBaseRepository<UserStoryEntity> {
 		total: number;
 	}>;
 	findByAssignedTo(userId: string): Promise<UserStoryEntity[]>;
+	addComment(userStoryId: string, comment:{
+		userId: string
+		message: string
+		createdAt: Date
+	}):Promise<void>
 }
