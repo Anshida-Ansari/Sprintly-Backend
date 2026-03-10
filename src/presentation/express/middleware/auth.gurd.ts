@@ -47,7 +47,6 @@ export class AuthGurd {
 				}
 
 				const user = await this._userRepository.findById(decoded.id);
-				console.log("user found for token verification ", user);
 
 				if (!user) {
 					return res.status(ClientErrorStatus.UNAUTHORIZED).json({

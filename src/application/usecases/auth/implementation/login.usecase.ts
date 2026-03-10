@@ -35,7 +35,6 @@ export class LoginUseCase implements ILoginUseCase {
 	) { }
 
 	async execute(dto: LoginDTO): Promise<AuthResult> {
-		console.log("reaching the login ");
 
 		const { email, password } = dto;
 
@@ -47,7 +46,6 @@ export class LoginUseCase implements ILoginUseCase {
 
 		user.isBlocked();
 
-		console.log("user", user);
 
 		const isPasswrord = await verify(user.password, password);
 		if (!isPasswrord) throw new validationError(ErrorMessage.INVALID_PASSWORD);

@@ -26,8 +26,18 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  logger.info({
+    method: req.method,
+    url: req.originalUrl,
+  });
+
+  next();
+});
+
 import { BASE_API } from "@shared/constants/base/base.routes.constants";
 import { userprofileRotuer } from "../router/userprofile/user.profile.router";
+import { logger } from "@infrastructure/providers/logger/pino.logger";
 
 app.use(BASE_API.AUTH, authRouter);
 app.use(BASE_API.ADMIN, adminRouter);

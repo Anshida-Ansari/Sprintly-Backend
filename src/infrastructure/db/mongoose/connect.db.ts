@@ -1,15 +1,22 @@
 import env from "@infrastructure/providers/env/env.validation";
+import { logger } from "@infrastructure/providers/logger/pino.logger";
 import mongoose from "mongoose";
 
 const connectDB = async (): Promise<void> => {
 	try {
-		console.log("db is starting");
-
+		logger.info({
+			message: "Database connection starting",
+			service: "database"
+		});
 		const _db = await mongoose.connect(env.MONGO_URI as string);
 
-		console.log("MongoDB Connected Successfully");
+		logger.info({ message: "Server started", url: "http://localhost:2000" });
+
 	} catch (error) {
-		console.log("MongoDB Connection Error:", error);
+		logger.error({
+			message: "MongoDB Connection Error",
+			error
+		});
 		process.exit(1);
 	}
 };

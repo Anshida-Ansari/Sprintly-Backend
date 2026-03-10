@@ -23,4 +23,5 @@ export interface IUserStroyRepository extends IBaseRepository<UserStoryEntity> {
 		message: string
 		createdAt: Date
 	}):Promise<void>
+	// findCountOfUserStories(userStoryId: string):Promise<number>
 }

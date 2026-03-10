@@ -116,4 +116,20 @@ export class UserStoryRepository
 			}
 		);
 	}
+	// async findCountOfUserStories(userStoryId: string,date: Date): Promise<number> {
+		
+	// 	const startDay = new Date()
+	// 	startDay.setHours(0,0,0,0)
+	// 	const endDay = new Date()
+	// 	startDay.setHours(23,59,59,999)
+
+	// 	const count = await this.model.countDocuments(
+	// 		userStoryId,
+	// 		{
+	// 			$gt:startDay,
+	// 			$lt:endDay
+	// 		}
+	// 	)
+	// 	return count
+	// }
 }

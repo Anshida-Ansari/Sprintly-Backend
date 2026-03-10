@@ -11,4 +11,5 @@ export interface ISubTaskRepository extends IBaseRepository<SubTaskEntity> {
 		message: string
 		createdAt: Date
 	}): Promise<void>
+	// countOfUserstory(userStoryId: string):Promise<number>
 }

@@ -69,11 +69,9 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 			adminId: undefined,
 		});
 
-		console.log("adminEntity", adminEntity);
 
 		const adminMongo = this._userPersistance.toMongo(adminEntity);
 		const newAdmin = await this._userRepository.create(adminMongo);
-		console.log("DATA GOING TO MONGO:");
 
 		if (!newAdmin.id) throw new InternalServerError("Failed to create admin");
 
@@ -93,9 +91,7 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 			companyId: newCompany.id.toString(),
 		});
 
-		console.log("new compnay", newCompany);
 		await redisClient.del(key);
-		console.log("admin", adminEntity);
 
 		return {
 			message: "Admin registered successfully",
