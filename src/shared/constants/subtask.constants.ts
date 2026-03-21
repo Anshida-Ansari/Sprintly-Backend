@@ -4,5 +4,6 @@ export const SUBTASK = {
 	LIST_SUBTASK: "/subtask/:userStoryId",
 	ASSIGN_MEMBER: "/:subtaskId/assign-members",
 	DELETE_SUBTASK: "/:subtaskId",
-	ADD_COMMENT_SUBTASK:"/:subtaskId/comments"
+	ADD_COMMENT_SUBTASK:"/:subtaskId/comments",
+	UPDATE_TIME: "/:subtaskId"
 };

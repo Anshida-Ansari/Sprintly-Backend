@@ -27,6 +27,14 @@ export const subTaskSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Users",
 		},
+		estimatedHours: {
+			type: Number,
+			min: 0,
+		},
+		actualHours: {
+			type: Number,
+			min: 0,
+		},
 		comments: [
 			{
 				userId: {
@@ -42,7 +50,27 @@ export const subTaskSchema = new mongoose.Schema(
 					default: Date.now
 				}
 			}
-		]
+		],
+		attachments: [
+			{
+				fileUrl: {
+					type: String,
+					required: true,
+				},
+				fileName: {
+					type: String,
+					required: true,
+				},
+				uploadedBy: {
+					type: String,
+					required: true,
+				},
+				createdAt: {
+					type: Date,
+					default: Date.now,
+				},
+			},
+		],
 	},
 	{
 		timestamps: true,

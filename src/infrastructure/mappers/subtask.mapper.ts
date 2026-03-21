@@ -9,7 +9,10 @@ export class SubTaskPersisitanceMapper {
 			title: subTask.title,
 			status: subTask.status,
 			assignedTo: subTask.assignedTo,
+			estimatedHours:subTask.estimatedHours,
+			actualHours:subTask.actualHours,
 			comments:subTask.comments,
+			attachments:subTask.actualHours,
 			createdAt: subTask.createdAt,
 			updatedAt: subTask.updatedAt,
 		};
@@ -23,7 +26,10 @@ export class SubTaskPersisitanceMapper {
 			title: doc.title,
 			status: doc.status,
 			assignedTo: doc.assignedTo?.toString(),
+			estimatedHours: doc.estimatedHours,
+			actualHours: doc.actualHours,
 			comments: doc.comments || [],
+			attachments:doc.attachments
 		});
 	}
 }

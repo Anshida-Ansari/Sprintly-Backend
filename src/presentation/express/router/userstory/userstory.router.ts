@@ -62,7 +62,6 @@ router.patch(
 router.post(
 	USER_STORIES.ADD_COMMENT_USERSTORY,
 	authGurd.authorize(["admin", "developer","lead"]),
-	validateDTO(AddCommentDTO),
 	(req,res,next)=>userstoryController.addComment(req,res,next)
 )
 export { router as userstoryRouter };

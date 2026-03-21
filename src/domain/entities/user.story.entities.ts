@@ -71,11 +71,21 @@ export class UserStoryEntity {
 			createdAt: Date;
 			message: string;
 			userId: string;
-		}[]; 
+		}[];
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 	}): UserStoryEntity {
 		if (!props.title?.trim()) throw new Error("User story title is required");
+		const allowedPoints = [1, 2, 3, 5, 8, 13];
+
+		if (
+			props.estimationPoints !== undefined &&
+			!allowedPoints.includes(props.estimationPoints)
+		) {
+			throw new Error(
+				"Invalid story points. Allowed values: 1, 2, 3, 5, 8, 13"
+			);
+		}
 
 		return new UserStoryEntity({
 			...props,
@@ -111,8 +121,17 @@ export class UserStoryEntity {
 		if (props.priority !== undefined) this._priority = props.priority;
 		if (props.sprintId !== undefined) this._sprintId = props.sprintId;
 		if (props.assignedTo !== undefined) this._assignedTo = props.assignedTo;
-		if (props.estimationPoints !== undefined)
+		if (props.estimationPoints !== undefined) {
+			const allowedPoints = [1, 2, 3, 5, 8, 13];
+
+			if (!allowedPoints.includes(props.estimationPoints)) {
+				throw new Error(
+					"Invalid story points. Allowed values: 1, 2, 3, 5, 8, 13"
+				);
+			}
+
 			this._estimationPoints = props.estimationPoints;
+		}
 		if (props.acceptanceCriteria !== undefined)
 			this._acceptanceCriteria = props.acceptanceCriteria;
 

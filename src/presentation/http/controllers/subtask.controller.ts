@@ -1,5 +1,7 @@
 import { AddCommentSubTaskDTO } from "@application/dtos/subtask/add.comment.to.subtask.dto";
+import { UpdateSubtaskTimeDTO } from "@application/dtos/subtask/update.subtask.time.dto";
 import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
+import type { IUpdateSubtaskTimeUseCase } from "@application/usecases/subtask/interface/update.subtask.time.interface";
 import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
 import type { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
 import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
@@ -25,7 +27,9 @@ export class SubTaskController {
 		@inject(SUBTASK_TYPE.IDeleteSubtaskUseCase)
 		private _delteSubtaskUseCase: IDeleteSubtaskUseCase,
 		@inject(SUBTASK_TYPE.IAddCommentToSubtaskUseCase)
-		private _addCommentUseCase: IAddCommentToSubtaskUseCase
+		private _addCommentUseCase: IAddCommentToSubtaskUseCase,
+		@inject(SUBTASK_TYPE.IUpdateSubtaskTimeUseCase)
+		private _updateSubtaskTimeUseCase: IUpdateSubtaskTimeUseCase
 		
 	) {}
 
@@ -152,11 +156,34 @@ export class SubTaskController {
 				message: "Add Comment Successfully",
 				data: result,
 			});
-
-			
 		} catch (error) {
-			next(error)
+			next(error);
 		}
-}
+	}
 
+	async updateTime(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { companyId, role } = req.user;
+			const { subtaskId } = req.params;
+
+			const dto = new UpdateSubtaskTimeDTO();
+			dto.estimatedHours = req.body.estimatedHours;
+			dto.actualHours = req.body.actualHours;
+
+			const result = await this._updateSubtaskTimeUseCase.execute(
+				subtaskId,
+				companyId,
+				dto,
+				role as Role,
+			);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Subtask time updated successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 }

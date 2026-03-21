@@ -48,8 +48,12 @@ router.delete(
 );
 router.post(
 	SUBTASK.ADD_COMMENT_SUBTASK,
-	authGurd.authorize(["admin", "developer","lead"]),
-	validateDTO(AddCommentSubTaskDTO),
+	authGurd.authorize(["admin", "developers","lead"]),
 	(req,res,next)=>subtaskController.addComment(req,res,next)
 )
+router.patch(
+	SUBTASK.UPDATE_TIME,
+	authGurd.authorize(["developers", "lead", "admin"]),
+	(req, res, next) => subtaskController.updateTime(req, res, next),
+);
 export { router as subTaskRouter };

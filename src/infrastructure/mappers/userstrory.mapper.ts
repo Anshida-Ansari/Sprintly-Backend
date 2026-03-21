@@ -21,6 +21,15 @@ export class UserStoryPersisitanceMapper {
 	}
 
 	fromMongo(doc: any): UserStoryEntity {
+		const allowedPoints = [1, 2, 3, 5, 8, 13];
+		let parsedEstimationPoints = doc.estimationPoints;
+		
+		if (parsedEstimationPoints !== undefined && !allowedPoints.includes(parsedEstimationPoints)) {
+			parsedEstimationPoints = allowedPoints.reduce((prev, curr) => 
+				Math.abs(curr - parsedEstimationPoints) < Math.abs(prev - parsedEstimationPoints) ? curr : prev
+			);
+		}
+
 		return UserStoryEntity.create({
 			id: doc._id.toString(),
 			projectId: doc.projectId.toString(),
@@ -32,7 +41,7 @@ export class UserStoryPersisitanceMapper {
 			assignedTo: doc.assignedTo?.toString(),
 			comments: doc.comments || [],
 			status: doc.status,
-			estimationPoints: doc.estimationPoints,
+			estimationPoints: parsedEstimationPoints,
 			acceptanceCriteria: doc.acceptanceCriteria,
 		});
 	}

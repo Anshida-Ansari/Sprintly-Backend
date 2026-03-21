@@ -43,6 +43,7 @@ export class CreateSubTaskUseCase implements ICreateSubTaskUseCase {
 			title: dto.title,
 			userStoryId: userStoryId,
 			companyId: companyId,
+			estimatedHours: dto.estimatedHours,
 		});
 
 		return await this._subtaskrepository.create(subTask);

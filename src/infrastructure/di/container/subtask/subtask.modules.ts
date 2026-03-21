@@ -4,12 +4,14 @@ import { CreateSubTaskUseCase } from "@application/usecases/subtask/implementati
 import { DeleteSubtaskUseCase } from "@application/usecases/subtask/implementation/delete.subtask.usecase";
 import { ListSubtasksByStoryUseCase } from "@application/usecases/subtask/implementation/list.subtask.usecase";
 import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecasets";
+import { UpdateSubtaskTimeUseCase } from "@application/usecases/subtask/implementation/update.subtask.time.usecase";
 import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
 import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
 import type { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
 import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
 import type { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
 import type { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
+import { IUpdateSubtaskTimeUseCase } from "@application/usecases/subtask/interface/update.subtask.time.interface";
 import type { ISubtTask } from "@infrastructure/db/interface/subtask.interface";
 import { SubTaskModel } from "@infrastructure/db/models/subtask.model";
 import { SubtaskRepository } from "@infrastructure/db/repository/implements/subtask.repository";
@@ -47,5 +49,8 @@ export const SubtaskModule = new ContainerModule(({ bind }) => {
 		DeleteSubtaskUseCase,
 	);
 	bind<IAddCommentToSubtaskUseCase>(SUBTASK_TYPE.IAddCommentToSubtaskUseCase).to(AddCommentToSubTaskUseCase)
+	bind<IUpdateSubtaskTimeUseCase>(SUBTASK_TYPE.IUpdateSubtaskTimeUseCase).to(
+		UpdateSubtaskTimeUseCase
+	)
 	
 });
