@@ -14,6 +14,11 @@ export interface ICreateUserstoryUsecase {
 		description: string;
 		priority: PriorityStatus;
 		status: UserStoryStatus;
+		sprintId?: string;
+		assignedTo?: string[];
+		comments?: any[];
+		estimationPoints?: number;
+		acceptanceCriteria?: string[];
 		createdAt: Date;
 	}>;
 }

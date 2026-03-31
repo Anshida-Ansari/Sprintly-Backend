@@ -61,19 +61,22 @@ export class StandupRepository extends BaseRepository<StandupEntity>implements I
 
 	async findBySprintAndDate(
 		sprintId: string,
-		date: Date,
+		date?: Date,
 	): Promise<StandupEntity[]> {
-		const startOfDate = new Date(date);
-		startOfDate.setHours(0, 0, 0, 0);
+		const query: any = { sprintId };
 
-		const endOfDate = new Date(date);
-		endOfDate.setHours(23, 59, 59, 999);
+		if (date) {
+			const startOfDate = new Date(date);
+			startOfDate.setHours(0, 0, 0, 0);
+
+			const endOfDate = new Date(date);
+			endOfDate.setHours(23, 59, 59, 999);
+
+			query.createdAt = { $gte: startOfDate, $lte: endOfDate };
+		}
 
 		const docs = await this.model
-			.find({
-				sprintId,
-				createdAt: { $gte: startOfDate, $lte: endOfDate },
-			})
+			.find(query)
 			.populate("userId")
 			.sort({ createdAt: 1 });
 

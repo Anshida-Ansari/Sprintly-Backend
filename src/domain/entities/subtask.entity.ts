@@ -13,6 +13,7 @@ export class SubTaskEntity {
 
 	private _comments: Array<{
 		userId: string;
+		userName?: string;
 		message: string;
 		createdAt: Date;
 	}> = [];
@@ -38,6 +39,7 @@ export class SubTaskEntity {
 		actualHours?: number;
 		comments?: Array<{
 			userId: string;
+			userName?: string;
 			message: string;
 			createdAt: Date;
 		}>;
@@ -76,6 +78,7 @@ export class SubTaskEntity {
 		comments?: {
 			createdAt: Date;
 			message: string;
+			userName?: string;
 			userId: string;
 		}[];
 		attachments?: {
@@ -139,13 +142,14 @@ export class SubTaskEntity {
 		this._updatedAt = new Date();
 	}
 
-	addComment(userId: string, message: string) {
+	addComment(userId: string, userName: string, message: string) {
 		if (!message.trim()) {
 			throw new Error("Comment cannot be empty");
 		}
 
 		this._comments.push({
 			userId,
+			userName: userName || "",
 			message: message.trim(),
 			createdAt: new Date(),
 		});
@@ -218,5 +222,22 @@ export class SubTaskEntity {
 
 	get completed() {
 		return this._status === SubTaskStatus.COMPLETED;
+	}
+
+	toJSON() {
+		return {
+			id: this._id,
+			userStoryId: this._userStoryId,
+			companyId: this._companyId,
+			title: this._title,
+			status: this._status,
+			assignedTo: this._assignedTo,
+			estimatedHours: this._estimatedHours,
+			actualHours: this._actualHours,
+			comments: this._comments,
+			attachments: this._attachments,
+			createdAt: this._createdAt,
+			updatedAt: this._updatedAt,
+		};
 	}
 }

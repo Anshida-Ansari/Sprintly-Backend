@@ -1,9 +1,10 @@
 export class AddCommentSubTaskDTO {
 	userId: string;
+	userName: string;
 	subtaskId: string;
 	message: string;
 
-	constructor(data: { userId: string; subtaskId: string; message: string }) {
+	constructor(data: { userId: string; userName: string; subtaskId: string; message: string }) {
 		if (!data.userId) {
 			throw new Error("UserId is required");
 		}
@@ -17,6 +18,7 @@ export class AddCommentSubTaskDTO {
 		}
 
 		this.userId = data.userId;
+		this.userName = data.userName || "";
 		this.subtaskId = data.subtaskId;
 		this.message = data.message.trim();
 	}

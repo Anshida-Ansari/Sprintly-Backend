@@ -142,9 +142,11 @@ export class SubTaskController {
 			const {subtaskId} = req.params
 			const {message} = req.body
 			const userId = req.user.id
+			const userName = req.user.userName || ""
 
 			const dto = new AddCommentSubTaskDTO({
 						userId,
+						userName,
 						subtaskId,
 						message
 					})

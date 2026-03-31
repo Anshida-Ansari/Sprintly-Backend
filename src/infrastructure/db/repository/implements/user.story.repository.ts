@@ -106,7 +106,7 @@ export class UserStoryRepository
 		return docs.map((doc) => this._userstoryMapper.fromMongo(doc));
 	}
 
-	async addComment(userStoryId: string, comment: { userId: string; message: string; createdAt: Date; }): Promise<void> {
+	async addComment(userStoryId: string, comment: { userId: string; userName: string; message: string; createdAt: Date; }): Promise<void> {
 		await this.model.findByIdAndUpdate(
 			userStoryId,
 			{

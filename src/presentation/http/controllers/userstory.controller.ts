@@ -193,10 +193,12 @@ export class UserstoryController {
 			const { userStoryId } = req.params
 			const { message } = req.body
 			const userId = req.user.id
+			const userName = req.user.userName || ""
 
 
 			const dto = new AddCommentDTO({
 				userId,
+				userName,
 				userStoryId,
 				message
 			})

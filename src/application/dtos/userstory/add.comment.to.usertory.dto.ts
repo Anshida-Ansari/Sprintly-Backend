@@ -1,9 +1,10 @@
 export class AddCommentDTO {
 	userId: string;
+	userName: string;
 	userStoryId: string;
 	message: string;
 
-	constructor(data: { userId: string; userStoryId: string; message: string }) {
+	constructor(data: { userId: string; userName: string; userStoryId: string; message: string }) {
 		if (!data.userId) {
 			throw new Error("UserId is required");
 		}
@@ -17,6 +18,7 @@ export class AddCommentDTO {
 		}
 
 		this.userId = data.userId;
+		this.userName = data.userName || "";
 		this.userStoryId = data.userStoryId;
 		this.message = data.message.trim();
 	}

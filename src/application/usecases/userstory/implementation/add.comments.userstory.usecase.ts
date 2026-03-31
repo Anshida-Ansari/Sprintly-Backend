@@ -21,10 +21,11 @@ export class AddCommentToUserStoryUseCase implements IAddCommentToUserStoryUseCa
             throw new NotFoundError(ErrorMessage.NOT_FOUND)
         }
 
-        userStory.addComment(dto.userStoryId,dto.message)
+        userStory.addComment(dto.userId, dto.userName, dto.message)
 
         await this._userStoryRepository.addComment(dto.userStoryId,{
             userId: dto.userId,
+            userName: dto.userName,
             message:dto.message,
             createdAt:new Date()
         })

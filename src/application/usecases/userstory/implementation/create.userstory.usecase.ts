@@ -39,6 +39,10 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		priority: PriorityStatus;
 		status: UserStoryStatus;
 		sprintId?: string;
+		assignedTo?: string[];
+		comments?: any[];
+		estimationPoints?: number;
+		acceptanceCriteria?: string[];
 		createdAt: Date;
 	}> {
 		const project = await this._projectReposiotory.findById(projectId);
@@ -78,7 +82,11 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 			description: created.description,
 			priority: created.priority,
 			status: created.status,
-			sprintId: created.sprintId!,
+			sprintId: created.sprintId,
+			assignedTo: created.assignedTo,
+			comments: created.comments || [],
+			estimationPoints: created.estimationPoints,
+			acceptanceCriteria: created.acceptanceCriteria,
 			createdAt: created.createdAt,
 		};
 	}

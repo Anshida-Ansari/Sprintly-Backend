@@ -14,6 +14,7 @@ export class UserStoryEntity {
 	private _comments: Array<{
 		createdAt: Date;
 		message: string;
+		userName?: string;
 		userId: string;
 	}> = [];
 	private _estimationPoints?: number;
@@ -34,6 +35,7 @@ export class UserStoryEntity {
 		comments?: Array<{
 			createdAt: Date;
 			message: string;
+			userName?: string;
 			userId: string;
 		}>;
 		estimationPoints?: number;
@@ -70,6 +72,7 @@ export class UserStoryEntity {
 		comments?: {
 			createdAt: Date;
 			message: string;
+			userName?: string;
 			userId: string;
 		}[];
 		estimationPoints?: number;
@@ -138,13 +141,14 @@ export class UserStoryEntity {
 		this._updatedAt = new Date();
 	}
 
-	addComment(userId: string, message: string) {
+	addComment(userId: string, userName: string, message: string) {
 		if (!message.trim()) {
 			throw new Error("Comment cannot be empty");
 		}
 
 		this._comments.push({
 			userId,
+			userName: userName || "",
 			message: message.trim(),
 			createdAt: new Date()
 		});
@@ -197,5 +201,24 @@ export class UserStoryEntity {
 	}
 	get updatedAt() {
 		return this._updatedAt;
+	}
+
+	toJSON() {
+		return {
+			id: this._id,
+			projectId: this._projectId,
+			companyId: this._companyId,
+			title: this._title,
+			description: this._description,
+			status: this._status,
+			priority: this._priority,
+			sprintId: this._sprintId,
+			assignedTo: this._assignedTo,
+			comments: this._comments,
+			estimationPoints: this._estimationPoints,
+			acceptanceCriteria: this._acceptanceCriteria,
+			createdAt: this._createdAt,
+			updatedAt: this._updatedAt,
+		};
 	}
 }

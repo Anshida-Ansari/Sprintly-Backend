@@ -45,7 +45,10 @@ export class UpdateSubtaskTimeUseCase implements IUpdateSubtaskTimeUseCase {
 			actualHours: dto.actualHours,
 		});
 
+	
+
 		const updatedSubtask = await this._subtaskRepository.update(subtask.id as string, subtask);
+	
         if (!updatedSubtask) {
             throw new Error("Failed to update subtask time");
         }

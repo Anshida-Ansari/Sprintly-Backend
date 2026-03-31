@@ -24,10 +24,11 @@ export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
             throw new NotFoundError(ErrorMessage.NOT_FOUND)
         }
 
-        subtask.addComment(dto.subtaskId, dto.message)
+        subtask.addComment(dto.userId, dto.userName, dto.message)
 
         await this._subtaskReposiotory.addComment(dto.subtaskId, {
             userId: dto.userId,
+            userName: dto.userName,
             message: dto.message,
             createdAt: new Date()
         })

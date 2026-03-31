@@ -38,6 +38,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 		priority: PriorityStatus;
 		status: UserStoryStatus;
 		assignedTo?: string[];
+		comments?: any[];
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 		sprintId?: string;
@@ -101,6 +102,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 			status: updatedUserstory.status,
 			sprintId: updatedUserstory.sprintId,
 			assignedTo: updatedUserstory.assignedTo,
+			comments: updatedUserstory.comments || [],
 			estimationPoints: updatedUserstory.estimationPoints,
 			acceptanceCriteria: updatedUserstory.acceptanceCriteria,
 			updatedAt: updatedUserstory.updatedAt,

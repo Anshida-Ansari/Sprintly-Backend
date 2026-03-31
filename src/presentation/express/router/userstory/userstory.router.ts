@@ -56,12 +56,12 @@ router.get(
 
 router.patch(
 	USER_STORIES.ASSIGN_TO_MEMBERS,
-	authGurd.authorize(["admin", "developer","lead"]),
+	authGurd.authorize(["admin", "developers","lead"]),
 	(req, res, next) => userstoryController.assignUserstory(req, res, next),
 );
 router.post(
 	USER_STORIES.ADD_COMMENT_USERSTORY,
-	authGurd.authorize(["admin", "developer","lead"]),
+	authGurd.authorize(["admin", "developers","lead"]),
 	(req,res,next)=>userstoryController.addComment(req,res,next)
 )
 export { router as userstoryRouter };

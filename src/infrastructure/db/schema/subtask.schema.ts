@@ -41,6 +41,10 @@ export const subTaskSchema = new mongoose.Schema(
 					type: String,
 					required: true
 				},
+				userName: {
+					type: String,
+					default: ""
+				},
 				message: {
 					type: String,
 					required: true

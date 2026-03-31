@@ -8,6 +8,7 @@ export interface ISubTaskRepository extends IBaseRepository<SubTaskEntity> {
 	findByUserStoryIds(userStoryIds: string[]): Promise<SubTaskEntity[]>;
 	addComment(userStoryId: string, comment: {
 		userId: string
+		userName: string
 		message: string
 		createdAt: Date
 	}): Promise<void>
