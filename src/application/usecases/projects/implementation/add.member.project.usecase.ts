@@ -7,8 +7,11 @@ import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { NotificationType } from "@domain/enum/notification/notification.types";
+import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { inject, injectable } from "inversify";
-import type { IAddMemberToProjectUseCase } from "../interface/add.member.project.interface";
+import { IAddMemberToProjectUseCase } from "../interface/add.member.project.interface";
 
 @injectable()
 export class AddMemberToProjectUseCase implements IAddMemberToProjectUseCase {
@@ -17,6 +20,8 @@ export class AddMemberToProjectUseCase implements IAddMemberToProjectUseCase {
 		private _projectRepository: IProjectReposiotory,
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
+		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
+		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
 
 	async execute(
@@ -54,5 +59,14 @@ export class AddMemberToProjectUseCase implements IAddMemberToProjectUseCase {
 		project.addMember(memberId);
 
 		await this._projectRepository.updateProject(projectId, project);
+
+		// Trigger Notification
+		await this._createNotificationUseCase.execute(
+			memberId,
+			NotificationType.USER_ADDED_TO_PROJECT,
+			`You have been added as a member to project: ${project.name}`,
+			projectId,
+			"PROJECT",
+		);
 	}
 }

@@ -12,6 +12,9 @@ import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
+import { NotificationType } from "@domain/enum/notification/notification.types";
+import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { inject, injectable } from "inversify";
 
 @injectable()
@@ -21,6 +24,8 @@ export class CreateSprintUseCase implements ICreateSprintUseCase {
 		private _sprintRepository: ISprintReposiotry,
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectReposiotry: IProjectReposiotory,
+		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
+		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
 
 	async execute(
@@ -82,6 +87,17 @@ export class CreateSprintUseCase implements ICreateSprintUseCase {
 		});
 
 		const createdSprint = await this._sprintRepository.create(sprint);
+
+		// Trigger Notifications for all project members
+		for (const memberId of project.members) {
+			this._createNotificationUseCase.execute(
+				memberId,
+				NotificationType.SPRINT_CREATED,
+				`A new sprint "${createdSprint.name}" has been created in your project.`,
+				createdSprint.id!,
+				"SPRINT",
+			).catch(err => console.error("Failed to send notification:", err));
+		}
 
 		return {
 			id: createdSprint.id!,

@@ -7,6 +7,9 @@ import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
+import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
+import { NotificationType } from "@domain/enum/notification/notification.types";
 import { inject, injectable } from "inversify";
 import type { IUpdateStatusOfUserStoryInterface } from "../interface/update.userstory.status.interface";
 
@@ -17,6 +20,8 @@ export class UpdateUserStoryUseCase
 	constructor(
 		@inject(USERSTORY_TYPE.IUserStroyRepository)
 		private _userstoryrepository: IUserStroyRepository,
+		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
+		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
 
 	async execute(
@@ -47,6 +52,18 @@ export class UpdateUserStoryUseCase
 
 		if (!updated) {
 			throw new ServiceUnavailableError(ErrorMessage.CANNOT_EDIT);
+		}
+
+		if (newStatus === UserStoryStatus.DONE && updated.assignedTo && updated.assignedTo.length > 0) {
+			for (const assigneeId of updated.assignedTo) {
+				await this._createNotificationUseCase.execute(
+					assigneeId.toString(),
+					NotificationType.STORY_COMPLETED,
+					`Story marked as completed: ${updated.title}`,
+					updated.id!,
+					"STORY"
+				);
+			}
 		}
 
 		return updated;

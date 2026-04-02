@@ -2,6 +2,9 @@ import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
+import { NotificationType } from "@domain/enum/notification/notification.types";
+import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
@@ -13,6 +16,8 @@ export class AssignSubtaskUseCase implements IAssignSubtaskUseCase {
 	constructor(
 		@inject(SUBTASK_TYPE.ISubTaskRepository)
 		private _subtaskrepository: ISubTaskRepository,
+		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
+		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
 
 	async execute(
@@ -37,6 +42,14 @@ export class AssignSubtaskUseCase implements IAssignSubtaskUseCase {
 		if (!update) {
 			throw new ServiceUnavailableError(ErrorMessage.CANNOT_EDIT);
 		}
+
+		await this._createNotificationUseCase.execute(
+			developerId,
+			NotificationType.SUBTASK_ASSIGNED,
+			`You have been assigned a new subtask: ${update.title}`,
+			subtaskId,
+			"SUBTASK",
+		);
 
 		return update;
 	}

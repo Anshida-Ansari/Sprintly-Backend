@@ -15,6 +15,7 @@ import { standupRouter } from "../router/standup/standup.router";
 import { subTaskRouter } from "../router/subtask/subtask.router";
 import { superadminRouter } from "../router/superadmin/superadmin.router";
 import { userstoryRouter } from "../router/userstory/userstory.router";
+import { notificationRouter } from "../router/notification/notification.router";
 
 app.use(
 	cors({
@@ -50,5 +51,6 @@ app.use(BASE_API.STANDUP, standupRouter);
 app.use(BASE_API.MEETING, meetingRouter);
 app.use(BASE_API.GITHUB, githubRouter);
 app.use(BASE_API.USER_PROFILE, userprofileRotuer)
+app.use(BASE_API.NOTIFICATION, notificationRouter);
 
 export default app;

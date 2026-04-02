@@ -9,5 +9,6 @@ export const BASE_API = {
 	STANDUP: "/api/project/sprint",
 	MEETING: "/api/meeting",
 	GITHUB: "/api/github",
-	USER_PROFILE:"/api/companies"
+	USER_PROFILE: "/api/companies",
+	NOTIFICATION: "/api/notifications",
 };

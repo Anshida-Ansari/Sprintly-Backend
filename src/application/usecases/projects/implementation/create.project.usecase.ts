@@ -12,6 +12,9 @@ import { GITHUB_TYPE } from "@infrastructure/di/types/github/github.types";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { EncryptionUtil } from "@shared/utils/encryption/encryption.util";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
+import { NotificationType } from "@domain/enum/notification/notification.types";
+import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { inject, injectable } from "inversify";
 
 @injectable()
@@ -23,6 +26,8 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
 		private _companyRepository: ICompanyRepository,
 		@inject(GITHUB_TYPE.IGitHubRepositoryService)
 		private _githubRepoService: IGitHubRepositoryService,
+		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
+		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
 
 	async execute(
@@ -86,6 +91,17 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
 		});
 
 		const savedProject = await this._projectRepsitory.create(Project);
+
+		// Trigger Notification for the Lead
+		if (savedProject.leadId) {
+			await this._createNotificationUseCase.execute(
+				savedProject.leadId,
+				NotificationType.PROJECT_ASSIGNED,
+				`You have been assigned as the lead for project: ${savedProject.name}`,
+				savedProject.id!,
+				"PROJECT",
+			);
+		}
 
 		return {
 			id: savedProject.id!,
