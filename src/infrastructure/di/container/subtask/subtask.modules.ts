@@ -2,6 +2,7 @@ import { AddCommentToSubTaskUseCase } from "@application/usecases/subtask/implem
 import { AssignSubtaskUseCase } from "@application/usecases/subtask/implementation/assign.subtask.usecase";
 import { CreateSubTaskUseCase } from "@application/usecases/subtask/implementation/create.subtask.usecase";
 import { DeleteSubtaskUseCase } from "@application/usecases/subtask/implementation/delete.subtask.usecase";
+import { GenrateUploadUrlUseCase } from "@application/usecases/subtask/implementation/generate.upload.url.usecase";
 import { ListSubtasksByStoryUseCase } from "@application/usecases/subtask/implementation/list.subtask.usecase";
 import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecasets";
 import { UpdateSubtaskTimeUseCase } from "@application/usecases/subtask/implementation/update.subtask.time.usecase";
@@ -12,12 +13,19 @@ import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interf
 import type { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
 import type { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
 import { IUpdateSubtaskTimeUseCase } from "@application/usecases/subtask/interface/update.subtask.time.interface";
+import type { IAddAttachementsUseCase } from "@application/usecases/subtask/interface/add.attachements.interface";
+import type { IGenerateUploadURLUseCase } from "@application/usecases/subtask/interface/generate.upload.url.interface";
+import type { IGenerateDownloadUrlUseCase } from "@application/usecases/subtask/interface/generate.download.url.interface";
+import { AddAttachementes } from "@application/usecases/subtask/implementation/add.attachements";
+import { GenerateDownloadUrlUseCase } from "@application/usecases/subtask/implementation/generate.download.url.usecase";
+import { IStorageService } from "@domain/interface/storage.service.interface";
 import type { ISubtTask } from "@infrastructure/db/interface/subtask.interface";
 import { SubTaskModel } from "@infrastructure/db/models/subtask.model";
 import { SubtaskRepository } from "@infrastructure/db/repository/implements/subtask.repository";
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { SubTaskPersisitanceMapper } from "@infrastructure/mappers/subtask.mapper";
+import { StorageService } from "@infrastructure/providers/S3-bucket/storage.service";
 import { SubTaskController } from "@presentation/http/controllers/subtask.controller";
 import { ContainerModule } from "inversify";
 import type { Model } from "mongoose";
@@ -52,5 +60,9 @@ export const SubtaskModule = new ContainerModule(({ bind }) => {
 	bind<IUpdateSubtaskTimeUseCase>(SUBTASK_TYPE.IUpdateSubtaskTimeUseCase).to(
 		UpdateSubtaskTimeUseCase
 	)
+	bind<IStorageService>(SUBTASK_TYPE.IStorageService).to(StorageService)
+	bind<IGenerateUploadURLUseCase>(SUBTASK_TYPE.IGenerateUploadURLUseCase).to(GenrateUploadUrlUseCase)
+	bind<IAddAttachementsUseCase>(SUBTASK_TYPE.IAddAttachementsUseCase).to(AddAttachementes)
+	bind<IGenerateDownloadUrlUseCase>(SUBTASK_TYPE.IGenerateDownloadUrlUseCase).to(GenerateDownloadUrlUseCase)
 	
 });

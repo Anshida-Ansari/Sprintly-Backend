@@ -5,5 +5,8 @@ export const SUBTASK = {
 	ASSIGN_MEMBER: "/:subtaskId/assign-members",
 	DELETE_SUBTASK: "/:subtaskId",
 	ADD_COMMENT_SUBTASK:"/:subtaskId/comments",
-	UPDATE_TIME: "/:subtaskId/time"
+	UPDATE_TIME: "/:subtaskId/time",
+	UPLOAD_URL: "/upload-url",
+	ADD_ATTACHMENT: "/:subtaskId/attachments",
+	DOWNLOAD_URL: "/download-url"
 };

@@ -10,6 +10,9 @@ import type { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/
 import type { Role } from "@domain/enum/role.enum";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
+import type { IGenerateUploadURLUseCase } from "@application/usecases/subtask/interface/generate.upload.url.interface";
+import type { IGenerateDownloadUrlUseCase } from "@application/usecases/subtask/interface/generate.download.url.interface";
+import type { IAddAttachementsUseCase } from "@application/usecases/subtask/interface/add.attachements.interface";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 
@@ -29,9 +32,46 @@ export class SubTaskController {
 		@inject(SUBTASK_TYPE.IAddCommentToSubtaskUseCase)
 		private _addCommentUseCase: IAddCommentToSubtaskUseCase,
 		@inject(SUBTASK_TYPE.IUpdateSubtaskTimeUseCase)
-		private _updateSubtaskTimeUseCase: IUpdateSubtaskTimeUseCase
-		
-	) {}
+		private _updateSubtaskTimeUseCase: IUpdateSubtaskTimeUseCase,
+		@inject(SUBTASK_TYPE.IGenerateUploadURLUseCase)
+		private _generateurk: IGenerateUploadURLUseCase,
+		@inject(SUBTASK_TYPE.IAddAttachementsUseCase)
+		private _addAttachmentsUseCase: IAddAttachementsUseCase,
+		@inject(SUBTASK_TYPE.IGenerateDownloadUrlUseCase)
+		private _generateDownloadUrlUseCase: IGenerateDownloadUrlUseCase
+	) { }
+
+	async generateUploadUrl(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { fileName, fileType } = req.body;
+			
+			const result = await this._generateurk.execute(fileName, fileType);
+			
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Upload URL generated successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async downloadUrl(req: Request, res: Response, next: NextFunction) {
+		try {
+			const fileUrl = req.query.fileUrl as string;
+
+			const result = await this._generateDownloadUrlUseCase.execute(fileUrl);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Download URL generated successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 
 	async createSubTask(req: Request, res: Response, next: NextFunction) {
 		try {
@@ -136,20 +176,20 @@ export class SubTaskController {
 			next(error);
 		}
 	}
-	async addComment(req: Request, res: Response, next:NextFunction){
+	async addComment(req: Request, res: Response, next: NextFunction) {
 		try {
 
-			const {subtaskId} = req.params
-			const {message} = req.body
+			const { subtaskId } = req.params
+			const { message } = req.body
 			const userId = req.user.id
 			const userName = req.user.userName || ""
 
 			const dto = new AddCommentSubTaskDTO({
-						userId,
-						userName,
-						subtaskId,
-						message
-					})
+				userId,
+				userName,
+				subtaskId,
+				message
+			})
 
 			const result = await this._addCommentUseCase.execute(dto)
 
@@ -182,6 +222,28 @@ export class SubTaskController {
 			return res.status(SuccessStatus.OK).json({
 				success: true,
 				message: "Subtask time updated successfully",
+				data: result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+	async uploadFile(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { subtaskId } = req.params;
+			const { fileUrl, fileName } = req.body;
+			const uploadedBy = req.user.id;
+
+			const result = await this._addAttachmentsUseCase.execute(
+				subtaskId,
+				fileUrl,
+				fileName,
+				uploadedBy
+			);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Attachment added successfully",
 				data: result,
 			});
 		} catch (error) {

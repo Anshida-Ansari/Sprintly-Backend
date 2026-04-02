@@ -10,4 +10,8 @@ export const SUBTASK_TYPE = {
 	IDeleteSubtaskUseCase: Symbol.for("IDeleteSubtaskUseCase"),
 	IAddCommentToSubtaskUseCase: Symbol.for("IAddCommentToSubtaskUseCase"),
 	IUpdateSubtaskTimeUseCase: Symbol.for("IUpdateSubtaskTimeUseCase"),
+	IStorageService: Symbol.for("IStorageService"),
+	IGenerateUploadURLUseCase: Symbol.for('IGenerateUploadURLUseCase'),
+	IAddAttachementsUseCase: Symbol.for('IAddAttachementsUseCase'),
+	IGenerateDownloadUrlUseCase: Symbol.for('IGenerateDownloadUrlUseCase')
 };
