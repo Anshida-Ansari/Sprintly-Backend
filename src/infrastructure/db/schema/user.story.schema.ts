@@ -24,21 +24,21 @@ export const userStorySchema = new mongoose.Schema(
 			{
 				userId: {
 					type: String,
-					required: true
+					required: true,
 				},
 				userName: {
 					type: String,
-					default: ""
+					default: "",
 				},
 				message: {
 					type: String,
-					required: true
+					required: true,
 				},
 				createdAt: {
 					type: Date,
-					default: Date.now
-				}
-			}
+					default: Date.now,
+				},
+			},
 		],
 		description: {
 			type: String,

@@ -33,7 +33,7 @@ export const standupSchema = new mongoose.Schema(
 			type: String,
 		},
 		date: {
-			type: String, 
+			type: String,
 			required: true,
 		},
 		comments: [

@@ -29,7 +29,7 @@ export class SubTaskPersisitanceMapper {
 			estimatedHours: doc.estimatedHours,
 			actualHours: doc.actualHours,
 			comments: doc.comments || [],
-			attachments:doc.attachments
+			attachments: doc.attachments,
 		});
 	}
 }

@@ -15,7 +15,7 @@ export class UserProfileEntity {
 	constructor(props: {
 		id?: string;
 		userId: string;
-		companyId: string; 
+		companyId: string;
 		phoneNumber?: string;
 		address?: string;
 		bio?: string;
@@ -60,27 +60,27 @@ export class UserProfileEntity {
 	}
 
 	private validate() {
-	if (!this._userId) {
-		throw new Error("UserId is required");
-	}
+		if (!this._userId) {
+			throw new Error("UserId is required");
+		}
 
-	if (!this._companyId) {
-		throw new Error("CompanyId is required");
-	}
+		if (!this._companyId) {
+			throw new Error("CompanyId is required");
+		}
 
-	if (this._bio && this._bio.length > 500) {
-		throw new Error("Bio cannot exceed 500 characters");
-	}
+		if (this._bio && this._bio.length > 500) {
+			throw new Error("Bio cannot exceed 500 characters");
+		}
 
-	if (this._skills.length > 20) {
-		throw new Error("Skills cannot exceed 20 items");
-	}
+		if (this._skills.length > 20) {
+			throw new Error("Skills cannot exceed 20 items");
+		}
 
-	const uniqueSkills = new Set(this._skills);
-	if (uniqueSkills.size !== this._skills.length) {
-		throw new Error("Duplicate skills are not allowed");
+		const uniqueSkills = new Set(this._skills);
+		if (uniqueSkills.size !== this._skills.length) {
+			throw new Error("Duplicate skills are not allowed");
+		}
 	}
-}
 
 	get id() {
 		return this._id;
@@ -88,8 +88,8 @@ export class UserProfileEntity {
 	get userId() {
 		return this._userId;
 	}
-	get companyId(){
-		return this._companyId
+	get companyId() {
+		return this._companyId;
 	}
 	get phoneNumber() {
 		return this._phoneNumber;
@@ -119,7 +119,6 @@ export class UserProfileEntity {
 		return this._updatedAt;
 	}
 
-
 	updateProfile(props: {
 		phoneNumber?: string;
 		address?: string;
@@ -129,26 +128,19 @@ export class UserProfileEntity {
 		linkedin?: string;
 		github?: string;
 	}) {
-		if (props.phoneNumber !== undefined)
-			this._phoneNumber = props.phoneNumber;
+		if (props.phoneNumber !== undefined) this._phoneNumber = props.phoneNumber;
 
-		if (props.address !== undefined)
-			this._address = props.address;
+		if (props.address !== undefined) this._address = props.address;
 
-		if (props.bio !== undefined)
-			this._bio = props.bio;
+		if (props.bio !== undefined) this._bio = props.bio;
 
-		if (props.skills !== undefined)
-			this._skills = props.skills;
+		if (props.skills !== undefined) this._skills = props.skills;
 
-		if (props.avatarUrl !== undefined)
-			this._avatarUrl = props.avatarUrl;
+		if (props.avatarUrl !== undefined) this._avatarUrl = props.avatarUrl;
 
-		if (props.linkedin !== undefined)
-			this._linkedin = props.linkedin;
+		if (props.linkedin !== undefined) this._linkedin = props.linkedin;
 
-		if (props.github !== undefined)
-			this._github = props.github;
+		if (props.github !== undefined) this._github = props.github;
 
 		this._updatedAt = new Date();
 

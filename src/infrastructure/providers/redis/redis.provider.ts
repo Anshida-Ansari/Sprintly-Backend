@@ -11,18 +11,19 @@ export const redisClient = new Redis({
 redisClient.on("reconnecting", () =>
 	logger.warn({
 		message: "Redis reconnecting...",
-		service: "redis"
-	})
+		service: "redis",
+	}),
 );
 
 redisClient.on("connect", () =>
 	logger.info({
 		message: "Redis Cloud connected",
-		service: "redis"
-	})
-); redisClient.on("error", (error) =>
+		service: "redis",
+	}),
+);
+redisClient.on("error", (error) =>
 	logger.error({
 		message: "Redis Connection Error",
-		error
-	})
+		error,
+	}),
 );

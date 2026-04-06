@@ -41,9 +41,7 @@ export const workLogSchema = new mongoose.Schema(
 			type: Date,
 			required: true,
 			validate: {
-				validator: function(v: Date) {
-					return v <= new Date();
-				},
+				validator: (v: Date) => v <= new Date(),
 				message: "Date cannot be in the future",
 			},
 		},

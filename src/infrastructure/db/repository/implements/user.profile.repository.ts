@@ -1,20 +1,23 @@
-import { inject, injectable } from "inversify";
-import { BaseRepository } from "./base.repository";
-import { UserProfileEntity } from "@domain/entities/user.profile.entities";
-import { IUserProfileRepository } from "../interface/user.profile.interface";
+import type { UserProfileEntity } from "@domain/entities/user.profile.entities";
 import { USER_PROFILE_TYPE } from "@infrastructure/di/types/userprofile/user.profile";
-import { Model } from "mongoose";
-import { UserProfilePersistenceMapper } from "@infrastructure/mappers/user.profile.persistance";
+import type { UserProfilePersistenceMapper } from "@infrastructure/mappers/user.profile.persistance";
+import { inject, injectable } from "inversify";
+import type { Model } from "mongoose";
+import type { IUserProfileRepository } from "../interface/user.profile.interface";
+import { BaseRepository } from "./base.repository";
 
 @injectable()
-export class UserProfileReposiotry extends BaseRepository<UserProfileEntity> implements IUserProfileRepository {
+export class UserProfileReposiotry
+	extends BaseRepository<UserProfileEntity>
+	implements IUserProfileRepository
+{
 	constructor(
 		@inject(USER_PROFILE_TYPE.UserProfileModel)
 		model: Model<UserProfileEntity>,
 		@inject(USER_PROFILE_TYPE.UserProfilePersistenceMapper)
-		private readonly _userProfileMapper: UserProfilePersistenceMapper
+		private readonly _userProfileMapper: UserProfilePersistenceMapper,
 	) {
-		super(model)
+		super(model);
 	}
 
 	async create(entity: UserProfileEntity): Promise<UserProfileEntity> {
@@ -25,7 +28,7 @@ export class UserProfileReposiotry extends BaseRepository<UserProfileEntity> imp
 
 	async update(
 		id: string,
-		entity: UserProfileEntity
+		entity: UserProfileEntity,
 	): Promise<UserProfileEntity | null> {
 		const payload = this._userProfileMapper.toMongo(entity);
 
@@ -33,24 +36,20 @@ export class UserProfileReposiotry extends BaseRepository<UserProfileEntity> imp
 			new: true,
 		});
 
-		return result
-			? this._userProfileMapper.fromMongo(result)
-			: null;
+		return result ? this._userProfileMapper.fromMongo(result) : null;
 	}
 
 	async findByUserId(userId: string): Promise<UserProfileEntity | null> {
 		const doc = await this.model.findOne({ userId });
 
-		return doc
-			? this._userProfileMapper.fromMongo(doc)
-			: null;
+		return doc ? this._userProfileMapper.fromMongo(doc) : null;
 	}
 
-	async findOne(filter: Record<string, unknown>): Promise<UserProfileEntity | null> {
+	async findOne(
+		filter: Record<string, unknown>,
+	): Promise<UserProfileEntity | null> {
 		const doc = await this.model.findOne(filter);
 
-		return doc
-			? this._userProfileMapper.fromMongo(doc)
-			: null;
+		return doc ? this._userProfileMapper.fromMongo(doc) : null;
 	}
 }

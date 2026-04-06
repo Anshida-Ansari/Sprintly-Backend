@@ -1,47 +1,48 @@
 import { NotificationEntity } from "@domain/entities/notification.entites";
-import { NotificationType } from "@domain/enum/notification/notification.types";
-import { INotificationSocketService } from "@domain/interface/notification.socket.service.interface";
-import { INotificationReposiotory } from "@infrastructure/db/repository/interface/notification.interface";
+import type { NotificationType } from "@domain/enum/notification/notification.types";
+import type { INotificationSocketService } from "@domain/interface/notification.socket.service.interface";
+import type { INotificationReposiotory } from "@infrastructure/db/repository/interface/notification.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { inject, injectable } from "inversify";
-import { ICreateNotificationUseCase } from "../interface/create.notification.interface";
+import type { ICreateNotificationUseCase } from "../interface/create.notification.interface";
 
 @injectable()
 export class CreateNotificationUseCase implements ICreateNotificationUseCase {
-  constructor(
-    @inject(NOTIFICATION_TYPE.INotificationReposiotory)
-    private readonly _notificationRepository: INotificationReposiotory,
-    @inject(NOTIFICATION_TYPE.INotificationSocketService)
-    private readonly _notificationSocketService: INotificationSocketService
-  ) {}
+	constructor(
+		@inject(NOTIFICATION_TYPE.INotificationReposiotory)
+		private readonly _notificationRepository: INotificationReposiotory,
+		@inject(NOTIFICATION_TYPE.INotificationSocketService)
+		private readonly _notificationSocketService: INotificationSocketService,
+	) {}
 
-  async execute(
-    receiverId: string,
-    type: string,
-    message: string,
-    entityId: string,
-    entityType: string,
-    senderId?: string,
-    metadata?: Record<string, any>
-  ): Promise<NotificationEntity> {
-    const notificationEntity = NotificationEntity.create({
-      receiverId,
-      type: type as NotificationType,
-      message,
-      entityId,
-      entityType,
-      senderId,
-      meta: metadata,
-    });
+	async execute(
+		receiverId: string,
+		type: string,
+		message: string,
+		entityId: string,
+		entityType: string,
+		senderId?: string,
+		metadata?: Record<string, any>,
+	): Promise<NotificationEntity> {
+		const notificationEntity = NotificationEntity.create({
+			receiverId,
+			type: type as NotificationType,
+			message,
+			entityId,
+			entityType,
+			senderId,
+			meta: metadata,
+		});
 
-    const savedNotification = await this._notificationRepository.create(notificationEntity);
+		const savedNotification =
+			await this._notificationRepository.create(notificationEntity);
 
-    this._notificationSocketService.sendNotification(
-      receiverId,
-      "new-notification",
-      savedNotification
-    );
+		this._notificationSocketService.sendNotification(
+			receiverId,
+			"new-notification",
+			savedNotification,
+		);
 
-    return savedNotification;
-  }
+		return savedNotification;
+	}
 }

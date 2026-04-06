@@ -17,7 +17,7 @@ const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
 	PROJECT_ROUTES.CREATE_PROJECT,
-	authGurd.authorize(["admin","lead"]),
+	authGurd.authorize(["admin", "lead"]),
 	validateDTO(CreateProjectDTO),
 	(req, res, next) => projectController.createProject(req, res, next),
 );

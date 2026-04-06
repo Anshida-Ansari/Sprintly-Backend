@@ -4,12 +4,12 @@ export const userProfileSchema = new mongoose.Schema(
 	{
 		userId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Users", 
+			ref: "Users",
 			required: true,
-			unique: true, 
+			unique: true,
 			index: true,
 		},
-		companyId: {   
+		companyId: {
 			type: String,
 			required: true,
 		},
@@ -53,6 +53,6 @@ export const userProfileSchema = new mongoose.Schema(
 		},
 	},
 	{
-		timestamps: true, 
-	}
+		timestamps: true,
+	},
 );

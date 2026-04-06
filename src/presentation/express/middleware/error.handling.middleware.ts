@@ -1,10 +1,10 @@
+import { PinoLoggerService } from "@infrastructure/providers/logger/logger.service";
 import type { NextFunction, Request, Response } from "express";
 import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
 import AppError from "../../../shared/utils/error-handling/app.errors";
 import { BaseError } from "../../../shared/utils/error-handling/base.error";
-import { PinoLoggerService } from "@infrastructure/providers/logger/logger.service";
 
-const logger = new PinoLoggerService()
+const logger = new PinoLoggerService();
 export const errorMiddleware = (
 	err: unknown,
 	_req: Request,
@@ -13,15 +13,14 @@ export const errorMiddleware = (
 ) => {
 	logger.error({
 		message: "Error caught by middleware",
-		error: err
+		error: err,
 	});
 
 	if (err instanceof AppError) {
-
 		logger.warn({
 			message: "Application error occurred",
 			error: err.message,
-			statusCode: err.statusCode
+			statusCode: err.statusCode,
 		});
 		return res.status(err.statusCode).json({
 			status: false,
@@ -34,7 +33,7 @@ export const errorMiddleware = (
 		logger.warn({
 			message: "Base error occurred",
 			error: err.message,
-			statusCode: err.statusCode
+			statusCode: err.statusCode,
 		});
 		return res.status(err.statusCode).json({
 			status: false,
@@ -43,7 +42,7 @@ export const errorMiddleware = (
 	}
 	logger.error({
 		message: "Unhandled server error",
-		error: err
+		error: err,
 	});
 
 	return res.status(ServerErrorStatus.INTERNAL_SERVER_ERROR).json({

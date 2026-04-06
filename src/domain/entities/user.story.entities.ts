@@ -90,7 +90,7 @@ export class UserStoryEntity {
 			!allowedPoints.includes(props.estimationPoints)
 		) {
 			throw new Error(
-				"Invalid story points. Allowed values: 1, 2, 3, 5, 8, 13"
+				"Invalid story points. Allowed values: 1, 2, 3, 5, 8, 13",
 			);
 		}
 
@@ -133,7 +133,7 @@ export class UserStoryEntity {
 
 			if (!allowedPoints.includes(props.estimationPoints)) {
 				throw new Error(
-					"Invalid story points. Allowed values: 1, 2, 3, 5, 8, 13"
+					"Invalid story points. Allowed values: 1, 2, 3, 5, 8, 13",
 				);
 			}
 
@@ -154,7 +154,7 @@ export class UserStoryEntity {
 			userId,
 			userName: userName || "",
 			message: message.trim(),
-			createdAt: new Date()
+			createdAt: new Date(),
 		});
 
 		this._updatedAt = new Date();

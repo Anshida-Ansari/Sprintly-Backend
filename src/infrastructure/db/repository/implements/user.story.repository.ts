@@ -9,7 +9,8 @@ import { BaseRepository } from "./base.repository";
 @injectable()
 export class UserStoryRepository
 	extends BaseRepository<UserStoryEntity>
-	implements IUserStroyRepository {
+	implements IUserStroyRepository
+{
 	constructor(
 		@inject(USERSTORY_TYPE.UserStoryModel)
 		model: Model<UserStoryEntity>,
@@ -106,18 +107,23 @@ export class UserStoryRepository
 		return docs.map((doc) => this._userstoryMapper.fromMongo(doc));
 	}
 
-	async addComment(userStoryId: string, comment: { userId: string; userName: string; message: string; createdAt: Date; }): Promise<void> {
-		await this.model.findByIdAndUpdate(
-			userStoryId,
-			{
-				$push: {
-					comments: comment,
-				},
-			}
-		);
+	async addComment(
+		userStoryId: string,
+		comment: {
+			userId: string;
+			userName: string;
+			message: string;
+			createdAt: Date;
+		},
+	): Promise<void> {
+		await this.model.findByIdAndUpdate(userStoryId, {
+			$push: {
+				comments: comment,
+			},
+		});
 	}
 	// async findCountOfUserStories(userStoryId: string,date: Date): Promise<number> {
-		
+
 	// 	const startDay = new Date()
 	// 	startDay.setHours(0,0,0,0)
 	// 	const endDay = new Date()

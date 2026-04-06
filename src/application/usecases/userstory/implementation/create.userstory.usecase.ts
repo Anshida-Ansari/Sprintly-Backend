@@ -32,7 +32,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		companyId: string,
 		projectId: string,
 		role: string,
-		adminId: string
+		adminId: string,
 	): Promise<{
 		id: string;
 		title: string;
@@ -60,7 +60,6 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 			throw new ForbiddenError("Only Leads can create User Stories");
 		}
 
-
 		const userstory = UserStoryEntity.create({
 			projectId,
 			companyId,
@@ -75,8 +74,6 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		});
 
 		const created = await this._userstoryReposiotry.create(userstory);
-
-		
 
 		return {
 			id: created.id!,

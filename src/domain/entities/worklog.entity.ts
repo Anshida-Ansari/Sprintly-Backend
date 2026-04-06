@@ -66,11 +66,13 @@ export class WorkLogEntity {
 		});
 	}
 
-	update(props: Partial<{
-		hours: number;
-		description: string;
-		date: Date;
-	}>) {
+	update(
+		props: Partial<{
+			hours: number;
+			description: string;
+			date: Date;
+		}>,
+	) {
 		if (props.hours !== undefined) {
 			if (props.hours <= 0) throw new Error("Hours must be greater than 0");
 			this._hours = props.hours;
@@ -79,23 +81,46 @@ export class WorkLogEntity {
 			this._description = props.description.trim();
 		}
 		if (props.date !== undefined) {
-			if (props.date > new Date()) throw new Error("Date cannot be in the future");
+			if (props.date > new Date())
+				throw new Error("Date cannot be in the future");
 			this._date = props.date;
 		}
 		this._updatedAt = new Date();
 	}
 
-	get id() { return this._id; }
-	get userId() { return this._userId; }
-	get projectId() { return this._projectId; }
-	get sprintId() { return this._sprintId; }
-	get taskId() { return this._taskId; }
-	get subTaskId() { return this._subTaskId; }
-	get hours() { return this._hours; }
-	get description() { return this._description; }
-	get date() { return this._date; }
-	get createdAt() { return this._createdAt; }
-	get updatedAt() { return this._updatedAt; }
+	get id() {
+		return this._id;
+	}
+	get userId() {
+		return this._userId;
+	}
+	get projectId() {
+		return this._projectId;
+	}
+	get sprintId() {
+		return this._sprintId;
+	}
+	get taskId() {
+		return this._taskId;
+	}
+	get subTaskId() {
+		return this._subTaskId;
+	}
+	get hours() {
+		return this._hours;
+	}
+	get description() {
+		return this._description;
+	}
+	get date() {
+		return this._date;
+	}
+	get createdAt() {
+		return this._createdAt;
+	}
+	get updatedAt() {
+		return this._updatedAt;
+	}
 
 	toJSON() {
 		return {

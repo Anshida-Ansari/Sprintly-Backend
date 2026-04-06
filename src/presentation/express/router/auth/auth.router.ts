@@ -9,8 +9,8 @@ import { ResetPasswordDTO } from "../../../../application/dtos/auth/reset.passwo
 import { SetPasswordDTO } from "../../../../application/dtos/auth/set.password.dto";
 import { VerifyOtpDTO } from "../../../../application/dtos/auth/verify.admin.dto";
 import { container } from "../../../../infrastructure/di/inversify.di";
-import { AUTH_TYPES } from "../../../../infrastructure/di/types/auth/auth.types";
 import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
+import { AUTH_TYPES } from "../../../../infrastructure/di/types/auth/auth.types";
 import type { AuthController } from "../../../http/controllers/auth.controller";
 import type { AuthGurd } from "../../middleware/auth.gurd";
 import { validateDTO } from "../../middleware/validate.dto.middlware";
@@ -65,7 +65,7 @@ router.post(AUTH_ROUTES.LOGOUT, validateDTO(LogoutDTO), (req, res, next) =>
 
 router.get(
 	AUTH_ROUTES.GET_ME,
-	authGurd.authorize(['admin', 'lead', 'developers', 'superadmin']),
+	authGurd.authorize(["admin", "lead", "developers", "superadmin"]),
 	(req, res, next) => authController.getMe(req, res, next),
 );
 

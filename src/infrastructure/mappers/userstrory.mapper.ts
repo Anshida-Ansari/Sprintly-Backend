@@ -12,7 +12,7 @@ export class UserStoryPersisitanceMapper {
 			priority: userStory.priority,
 			sprintId: userStory.sprintId,
 			assignedTo: userStory.assignedTo,
-			comments:userStory.comments,
+			comments: userStory.comments,
 			estimationPoints: userStory.estimationPoints,
 			acceptanceCriteria: userStory.acceptanceCriteria,
 			adminId: userStory.adminId,
@@ -24,10 +24,16 @@ export class UserStoryPersisitanceMapper {
 	fromMongo(doc: any): UserStoryEntity {
 		const allowedPoints = [1, 2, 3, 5, 8, 13];
 		let parsedEstimationPoints = doc.estimationPoints;
-		
-		if (parsedEstimationPoints !== undefined && !allowedPoints.includes(parsedEstimationPoints)) {
-			parsedEstimationPoints = allowedPoints.reduce((prev, curr) => 
-				Math.abs(curr - parsedEstimationPoints) < Math.abs(prev - parsedEstimationPoints) ? curr : prev
+
+		if (
+			parsedEstimationPoints !== undefined &&
+			!allowedPoints.includes(parsedEstimationPoints)
+		) {
+			parsedEstimationPoints = allowedPoints.reduce((prev, curr) =>
+				Math.abs(curr - parsedEstimationPoints) <
+				Math.abs(prev - parsedEstimationPoints)
+					? curr
+					: prev,
 			);
 		}
 
@@ -39,7 +45,9 @@ export class UserStoryPersisitanceMapper {
 			description: doc.description,
 			priority: doc.priority,
 			sprintId: doc.sprintId?.toString(),
-			assignedTo: doc.assignedTo ? doc.assignedTo.map((id: any) => id.toString()) : [],
+			assignedTo: doc.assignedTo
+				? doc.assignedTo.map((id: any) => id.toString())
+				: [],
 			comments: doc.comments || [],
 			status: doc.status,
 			estimationPoints: parsedEstimationPoints,

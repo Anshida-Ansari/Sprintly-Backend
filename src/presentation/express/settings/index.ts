@@ -4,14 +4,13 @@ config();
 
 import connectDB from "@infrastructure/db/mongoose/connect.db.js";
 import env from "@infrastructure/providers/env/env.validation.js";
+import { PinoLoggerService } from "@infrastructure/providers/logger/logger.service.js";
 import { createServer } from "http";
+import { MeetingScheduler } from "../../../infrastructure/scheduler/meeting.scheduler.js";
 import { SocketServer } from "../../socket/socket.server.js";
 import app from "./app.js";
-import { PinoLoggerService } from "@infrastructure/providers/logger/logger.service.js";
-import { MeetingScheduler } from "../../../infrastructure/scheduler/meeting.scheduler.js";
 
-const logger = new PinoLoggerService()
-
+const logger = new PinoLoggerService();
 
 const PORT = env.PORT;
 
@@ -26,6 +25,6 @@ meetingScheduler.start();
 httpServer.listen(PORT, () => {
 	logger.info({
 		message: "Server started",
-		url: `http://localhost:${PORT}`
+		url: `http://localhost:${PORT}`,
 	});
 });

@@ -1,5 +1,12 @@
 import { Exclude, Expose } from "class-transformer";
-import { IsOptional, IsString, MaxLength, MinLength, IsNumber, Min } from "class-validator";
+import {
+	IsNumber,
+	IsOptional,
+	IsString,
+	MaxLength,
+	Min,
+	MinLength,
+} from "class-validator";
 
 @Exclude()
 export class CreateSubTaskDTO {

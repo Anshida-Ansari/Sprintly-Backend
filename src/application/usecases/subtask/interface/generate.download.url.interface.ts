@@ -1,3 +1,3 @@
 export interface IGenerateDownloadUrlUseCase {
-    execute(fileUrl: string): Promise<string>;
+	execute(fileUrl: string): Promise<string>;
 }

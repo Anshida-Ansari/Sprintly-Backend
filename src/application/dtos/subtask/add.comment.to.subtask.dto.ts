@@ -4,7 +4,12 @@ export class AddCommentSubTaskDTO {
 	subtaskId: string;
 	message: string;
 
-	constructor(data: { userId: string; userName: string; subtaskId: string; message: string }) {
+	constructor(data: {
+		userId: string;
+		userName: string;
+		subtaskId: string;
+		message: string;
+	}) {
 		if (!data.userId) {
 			throw new Error("UserId is required");
 		}

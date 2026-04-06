@@ -48,9 +48,9 @@ router.delete(
 );
 router.post(
 	SUBTASK.ADD_COMMENT_SUBTASK,
-	authGurd.authorize(["admin", "developers","lead"]),
-	(req,res,next)=>subtaskController.addComment(req,res,next)
-)
+	authGurd.authorize(["admin", "developers", "lead"]),
+	(req, res, next) => subtaskController.addComment(req, res, next),
+);
 router.patch(
 	SUBTASK.UPDATE_TIME,
 	authGurd.authorize(["developers", "lead", "admin"]),
@@ -60,19 +60,19 @@ router.patch(
 router.post(
 	SUBTASK.UPLOAD_URL,
 	authGurd.authorize(["developers", "lead", "admin"]),
-	(req, res, next) => subtaskController.generateUploadUrl(req, res, next)
+	(req, res, next) => subtaskController.generateUploadUrl(req, res, next),
 );
 
 router.post(
 	SUBTASK.ADD_ATTACHMENT,
 	authGurd.authorize(["developers", "lead", "admin"]),
-	(req, res, next) => subtaskController.uploadFile(req, res, next)
+	(req, res, next) => subtaskController.uploadFile(req, res, next),
 );
 
 router.get(
 	SUBTASK.DOWNLOAD_URL,
 	authGurd.authorize(["developers", "lead", "admin"]),
-	(req, res, next) => subtaskController.downloadUrl(req, res, next)
+	(req, res, next) => subtaskController.downloadUrl(req, res, next),
 );
 
 export { router as subTaskRouter };

@@ -12,9 +12,9 @@ const aiController = container.get<AiController>(AI_TYPES.AiController);
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
 router.post(
-  AI_ROUTES.CHAT,
-  authGurd.authorize(["admin", "developers", "lead"]),
-  (req, res, next) => aiController.chat(req, res, next),
+	AI_ROUTES.CHAT,
+	authGurd.authorize(["admin", "developers", "lead"]),
+	(req, res, next) => aiController.chat(req, res, next),
 );
 
 export { router as aiRouter };

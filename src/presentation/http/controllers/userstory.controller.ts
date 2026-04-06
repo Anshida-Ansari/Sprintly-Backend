@@ -1,3 +1,5 @@
+import { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
+import type { IAddCommentToUserStoryUseCase } from "@application/usecases/userstory/interface/add.comments.userstory.interface";
 import type { IAssignUserStoryUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.member.interface";
 import type { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
 import type { IGetMyUserStoriesUseCase } from "@application/usecases/userstory/interface/get.my.userstories.interface";
@@ -10,8 +12,6 @@ import type { IEditUserstoryUseCase } from "../../../application/usecases/userst
 import type { IListUserstoryUseCase } from "../../../application/usecases/userstory/interface/list.userstory.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
 import { USERSTORY_TYPE } from "../../../infrastructure/di/types/userstory/userstory";
-import { IAddCommentToUserStoryUseCase } from "@application/usecases/userstory/interface/add.comments.userstory.interface";
-import { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
 
 @injectable()
 export class UserstoryController {
@@ -31,8 +31,8 @@ export class UserstoryController {
 		@inject(USERSTORY_TYPE.IAssignUserStoryUseCase)
 		private _assignuserstoryUseCase: IAssignUserStoryUseCase,
 		@inject(USERSTORY_TYPE.IAddCommentToUserStoryUseCase)
-		private _addCommentUseCase: IAddCommentToUserStoryUseCase
-	) { }
+		private _addCommentUseCase: IAddCommentToUserStoryUseCase,
+	) {}
 
 	async createUserstory(req: Request, res: Response, next: NextFunction) {
 		try {
@@ -44,7 +44,7 @@ export class UserstoryController {
 				companyId,
 				projectId,
 				role,
-				userId
+				userId,
 			);
 
 			return res.status(SuccessStatus.OK).json({
@@ -190,32 +190,27 @@ export class UserstoryController {
 	}
 	async addComment(req: Request, res: Response, next: NextFunction) {
 		try {
-
-			const { userStoryId } = req.params
-			const { message } = req.body
-			const userId = req.user.id
-			const userName = req.user.userName || ""
-
+			const { userStoryId } = req.params;
+			const { message } = req.body;
+			const userId = req.user.id;
+			const userName = req.user.userName || "";
 
 			const dto = new AddCommentDTO({
 				userId,
 				userName,
 				userStoryId,
-				message
-			})
+				message,
+			});
 
-			const result = await this._addCommentUseCase.execute(dto)
+			const result = await this._addCommentUseCase.execute(dto);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
 				message: "Add Comment Successfully",
 				data: result,
 			});
-
-
-
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	}
 }

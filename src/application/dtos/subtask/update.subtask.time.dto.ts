@@ -1,5 +1,5 @@
 import { Exclude, Expose } from "class-transformer";
-import { IsOptional, IsNumber, Min } from "class-validator";
+import { IsNumber, IsOptional, Min } from "class-validator";
 
 @Exclude()
 export class UpdateSubtaskTimeDTO {

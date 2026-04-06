@@ -1,18 +1,18 @@
 import { AddCommentSubTaskDTO } from "@application/dtos/subtask/add.comment.to.subtask.dto";
 import { UpdateSubtaskTimeDTO } from "@application/dtos/subtask/update.subtask.time.dto";
-import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
-import type { IUpdateSubtaskTimeUseCase } from "@application/usecases/subtask/interface/update.subtask.time.interface";
+import type { IAddAttachementsUseCase } from "@application/usecases/subtask/interface/add.attachements.interface";
+import type { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
 import type { IAssignSubtaskUseCase } from "@application/usecases/subtask/interface/assign.subtask.interface";
 import type { ICreateSubTaskUseCase } from "@application/usecases/subtask/interface/create.subtask.interface";
 import type { IDeleteSubtaskUseCase } from "@application/usecases/subtask/interface/delete.subtask.interface";
+import type { IGenerateDownloadUrlUseCase } from "@application/usecases/subtask/interface/generate.download.url.interface";
+import type { IGenerateUploadURLUseCase } from "@application/usecases/subtask/interface/generate.upload.url.interface";
 import type { IListSubtasksByStoryUseCase } from "@application/usecases/subtask/interface/list.subtask.interface";
 import type { IUpdateSubtaskStatusUseCase } from "@application/usecases/subtask/interface/update.subtask.status.interface";
+import type { IUpdateSubtaskTimeUseCase } from "@application/usecases/subtask/interface/update.subtask.time.interface";
 import type { Role } from "@domain/enum/role.enum";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
-import type { IGenerateUploadURLUseCase } from "@application/usecases/subtask/interface/generate.upload.url.interface";
-import type { IGenerateDownloadUrlUseCase } from "@application/usecases/subtask/interface/generate.download.url.interface";
-import type { IAddAttachementsUseCase } from "@application/usecases/subtask/interface/add.attachements.interface";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 
@@ -38,15 +38,15 @@ export class SubTaskController {
 		@inject(SUBTASK_TYPE.IAddAttachementsUseCase)
 		private _addAttachmentsUseCase: IAddAttachementsUseCase,
 		@inject(SUBTASK_TYPE.IGenerateDownloadUrlUseCase)
-		private _generateDownloadUrlUseCase: IGenerateDownloadUrlUseCase
-	) { }
+		private _generateDownloadUrlUseCase: IGenerateDownloadUrlUseCase,
+	) {}
 
 	async generateUploadUrl(req: Request, res: Response, next: NextFunction) {
 		try {
 			const { fileName, fileType } = req.body;
-			
+
 			const result = await this._generateurk.execute(fileName, fileType);
-			
+
 			return res.status(SuccessStatus.OK).json({
 				success: true,
 				message: "Upload URL generated successfully",
@@ -178,20 +178,19 @@ export class SubTaskController {
 	}
 	async addComment(req: Request, res: Response, next: NextFunction) {
 		try {
-
-			const { subtaskId } = req.params
-			const { message } = req.body
-			const userId = req.user.id
-			const userName = req.user.userName || ""
+			const { subtaskId } = req.params;
+			const { message } = req.body;
+			const userId = req.user.id;
+			const userName = req.user.userName || "";
 
 			const dto = new AddCommentSubTaskDTO({
 				userId,
 				userName,
 				subtaskId,
-				message
-			})
+				message,
+			});
 
-			const result = await this._addCommentUseCase.execute(dto)
+			const result = await this._addCommentUseCase.execute(dto);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
@@ -238,7 +237,7 @@ export class SubTaskController {
 				subtaskId,
 				fileUrl,
 				fileName,
-				uploadedBy
+				uploadedBy,
 			);
 
 			return res.status(SuccessStatus.OK).json({

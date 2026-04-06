@@ -1,12 +1,16 @@
+import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
+import { AddCommentToUserStoryUseCase } from "@application/usecases/userstory/implementation/add.comments.userstory.usecase";
 import { AssignUserStoryUseCase } from "@application/usecases/userstory/implementation/assign.userstory.to.member.usecase";
 import { AssignUserStoryToSprintUseCase } from "@application/usecases/userstory/implementation/assign.userstory.to.sprints.usecase";
 import { GetMyUserStoriesUseCase } from "@application/usecases/userstory/implementation/get.my.userstories.usecase";
 import { UpdateUserStoryUseCase } from "@application/usecases/userstory/implementation/update.userstory.status.usecase";
+import type { IAddCommentToUserStoryUseCase } from "@application/usecases/userstory/interface/add.comments.userstory.interface";
 import type { IAssignUserStoryUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.member.interface";
 import type { IAssignUserStoriesToSprintUseCase } from "@application/usecases/userstory/interface/assign.userstory.to.sprints.interface";
 import type { IGetMyUserStoriesUseCase } from "@application/usecases/userstory/interface/get.my.userstories.interface";
 import type { IUpdateStatusOfUserStoryInterface } from "@application/usecases/userstory/interface/update.userstory.status.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
 import { ContainerModule } from "inversify";
 import type { Model } from "mongoose";
 import { CreateUserstoryUseCase } from "../../../../application/usecases/userstory/implementation/create.userstory.usecase";
@@ -22,10 +26,6 @@ import { UserStoryRepository } from "../../../db/repository/implements/user.stor
 import type { IUserStroyRepository } from "../../../db/repository/interface/user.story.interface";
 import { UserStoryPersisitanceMapper } from "../../../mappers/userstrory.mapper";
 import { USERSTORY_TYPE } from "../../types/userstory/userstory";
-import { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";
-import { IAddCommentToUserStoryUseCase } from "@application/usecases/userstory/interface/add.comments.userstory.interface";
-import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
-import { AddCommentToUserStoryUseCase } from "@application/usecases/userstory/implementation/add.comments.userstory.usecase";
 
 export const UserStoryModule = new ContainerModule(({ bind }) => {
 	// bind<IUserStroyRepository>(USERSTORY_TYPE.IUserStroyRepository).to()
@@ -62,9 +62,7 @@ export const UserStoryModule = new ContainerModule(({ bind }) => {
 	bind<IAssignUserStoryUseCase>(USERSTORY_TYPE.IAssignUserStoryUseCase).to(
 		AssignUserStoryUseCase,
 	);
-	bind<IAddCommentToUserStoryUseCase>(USERSTORY_TYPE.IAddCommentToUserStoryUseCase).to(
-		AddCommentToUserStoryUseCase
-	)
-	
-	
+	bind<IAddCommentToUserStoryUseCase>(
+		USERSTORY_TYPE.IAddCommentToUserStoryUseCase,
+	).to(AddCommentToUserStoryUseCase);
 });

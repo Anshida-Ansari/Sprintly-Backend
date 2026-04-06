@@ -4,7 +4,12 @@ export class AddCommentDTO {
 	userStoryId: string;
 	message: string;
 
-	constructor(data: { userId: string; userName: string; userStoryId: string; message: string }) {
+	constructor(data: {
+		userId: string;
+		userName: string;
+		userStoryId: string;
+		message: string;
+	}) {
 		if (!data.userId) {
 			throw new Error("UserId is required");
 		}

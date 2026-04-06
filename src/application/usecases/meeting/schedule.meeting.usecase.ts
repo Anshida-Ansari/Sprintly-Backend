@@ -1,7 +1,7 @@
+import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
+import { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
-import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
-import { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { inject, injectable } from "inversify";
 import { MeetingEntity } from "../../../domain/entities/meeting.entity";
 import type { IMeetingRepository } from "../../../infrastructure/db/repository/interface/meeting.interface";

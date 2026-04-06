@@ -1,15 +1,14 @@
 import { Exclude, Expose, Type } from "class-transformer";
 import {
+	ArrayMaxSize,
 	IsArray,
 	IsOptional,
 	IsString,
 	MaxLength,
-	ArrayMaxSize
 } from "class-validator";
 
 @Exclude()
 export class UpdateUserProfileDTO {
-
 	@Expose()
 	@IsOptional()
 	@IsString()

@@ -32,10 +32,9 @@ export class LoginUseCase implements ILoginUseCase {
 		private _userRepository: IUserRepository,
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
-	) { }
+	) {}
 
 	async execute(dto: LoginDTO): Promise<AuthResult> {
-
 		const { email, password } = dto;
 
 		const isValidEmail = validateEmail(email);
@@ -45,7 +44,6 @@ export class LoginUseCase implements ILoginUseCase {
 		if (!user) throw new NotFoundError(ErrorMessage.EMAIL_NOT_EXIST);
 
 		user.isBlocked();
-
 
 		const isPasswrord = await verify(user.password, password);
 		if (!isPasswrord) throw new validationError(ErrorMessage.INVALID_PASSWORD);

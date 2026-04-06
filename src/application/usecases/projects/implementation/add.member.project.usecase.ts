@@ -1,17 +1,17 @@
+import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { NotificationType } from "@domain/enum/notification/notification.types";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
 import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-import { NotificationType } from "@domain/enum/notification/notification.types";
-import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
-import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { inject, injectable } from "inversify";
-import { IAddMemberToProjectUseCase } from "../interface/add.member.project.interface";
+import type { IAddMemberToProjectUseCase } from "../interface/add.member.project.interface";
 
 @injectable()
 export class AddMemberToProjectUseCase implements IAddMemberToProjectUseCase {

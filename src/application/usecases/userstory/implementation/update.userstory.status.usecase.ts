@@ -1,15 +1,15 @@
+import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import type { UserStoryEntity } from "@domain/entities/user.story.entities";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { NotificationType } from "@domain/enum/notification/notification.types";
 import type { Role } from "@domain/enum/role.enum";
 import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
-import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
-import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
-import { NotificationType } from "@domain/enum/notification/notification.types";
 import { inject, injectable } from "inversify";
 import type { IUpdateStatusOfUserStoryInterface } from "../interface/update.userstory.status.interface";
 
@@ -54,14 +54,18 @@ export class UpdateUserStoryUseCase
 			throw new ServiceUnavailableError(ErrorMessage.CANNOT_EDIT);
 		}
 
-		if (newStatus === UserStoryStatus.DONE && updated.assignedTo && updated.assignedTo.length > 0) {
+		if (
+			newStatus === UserStoryStatus.DONE &&
+			updated.assignedTo &&
+			updated.assignedTo.length > 0
+		) {
 			for (const assigneeId of updated.assignedTo) {
 				await this._createNotificationUseCase.execute(
 					assigneeId.toString(),
 					NotificationType.STORY_COMPLETED,
 					`Story marked as completed: ${updated.title}`,
 					updated.id!,
-					"STORY"
+					"STORY",
 				);
 			}
 		}

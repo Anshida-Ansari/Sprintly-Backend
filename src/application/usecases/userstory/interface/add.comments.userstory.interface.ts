@@ -1,5 +1,5 @@
-import { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
+import type { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
 
-export interface IAddCommentToUserStoryUseCase{
-    execute(dto: AddCommentDTO):Promise<void>
+export interface IAddCommentToUserStoryUseCase {
+	execute(dto: AddCommentDTO): Promise<void>;
 }

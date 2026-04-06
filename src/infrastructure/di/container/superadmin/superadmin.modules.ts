@@ -1,12 +1,12 @@
 import { ContainerModule } from "inversify";
+import { GetDashboardStatsUseCase } from "../../../../application/usecases/superadmin/implementation/get.dashboard.stats.usecase";
 import { GetDetailPageUseCase } from "../../../../application/usecases/superadmin/implementation/get.detailpage.usecase";
 import { ListCompanyUseCase } from "../../../../application/usecases/superadmin/implementation/list.companies.usecase";
 import { UpdateStatusUseCase } from "../../../../application/usecases/superadmin/implementation/update.status.usecase";
-import { GetDashboardStatsUseCase } from "../../../../application/usecases/superadmin/implementation/get.dashboard.stats.usecase";
+import type { IGetDashboardStatsUseCase } from "../../../../application/usecases/superadmin/interface/get.dashboard.stats.interface";
 import type { IGetDetailPageUseCase } from "../../../../application/usecases/superadmin/interface/get.detailpage.interface";
 import type { IListCompanyUseCase } from "../../../../application/usecases/superadmin/interface/list.companies.interface";
 import type { IUpdateStatusInterface } from "../../../../application/usecases/superadmin/interface/update.status.interface";
-import type { IGetDashboardStatsUseCase } from "../../../../application/usecases/superadmin/interface/get.dashboard.stats.interface";
 import { SuperAdminController } from "../../../../presentation/http/controllers/superadmin.controller";
 import { SUPERADMIN_TYPES } from "../../types/superadmin/superadmin.types";
 
@@ -23,7 +23,7 @@ export const SuperAdminModule = new ContainerModule(({ bind }) => {
 	bind<IGetDetailPageUseCase>(SUPERADMIN_TYPES.IGetDetailPageUseCase).to(
 		GetDetailPageUseCase,
 	);
-	bind<IGetDashboardStatsUseCase>(SUPERADMIN_TYPES.IGetDashboardStatsUseCase).to(
-		GetDashboardStatsUseCase,
-	);
+	bind<IGetDashboardStatsUseCase>(
+		SUPERADMIN_TYPES.IGetDashboardStatsUseCase,
+	).to(GetDashboardStatsUseCase);
 });

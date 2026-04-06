@@ -9,7 +9,7 @@ import { Router } from "express";
 const router = Router();
 
 const analyticsController = container.get<AnalyticsController>(
-	ANALYTICS_TYPES.AnalyticsController
+	ANALYTICS_TYPES.AnalyticsController,
 );
 
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
@@ -17,13 +17,13 @@ const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 router.get(
 	ANALYTICS_ROUTES.SPRINT_BURNDOWN,
 	authGurd.authorize(["admin", "lead", "developers"]),
-	(req, res, next) => analyticsController.getSprintBurndown(req, res, next)
+	(req, res, next) => analyticsController.getSprintBurndown(req, res, next),
 );
 
 router.get(
 	ANALYTICS_ROUTES.USER_BURNDOWN,
 	authGurd.authorize(["developers", "lead"]),
-	(req, res, next) => analyticsController.getUserBurndown(req, res, next)
+	(req, res, next) => analyticsController.getUserBurndown(req, res, next),
 );
 
 export { router as analyticsRouter };

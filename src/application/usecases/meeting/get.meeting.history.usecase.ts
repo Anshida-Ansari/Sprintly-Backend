@@ -14,10 +14,11 @@ export class GetMeetingHistoryUseCase implements IGetMeetingHistoryUseCase {
 
 	async execute(projectId: string): Promise<MeetingEntity[]> {
 		const meetings = await this.meetingRepository.findByProjectId(projectId);
-		
-		return meetings.filter((meeting: MeetingEntity) => 
-			meeting.status === MeetingStatus.COMPLETED || 
-			meeting.status === MeetingStatus.CANCELLED
+
+		return meetings.filter(
+			(meeting: MeetingEntity) =>
+				meeting.status === MeetingStatus.COMPLETED ||
+				meeting.status === MeetingStatus.CANCELLED,
 		);
 	}
 }

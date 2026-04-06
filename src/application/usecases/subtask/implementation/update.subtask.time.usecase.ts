@@ -1,8 +1,8 @@
-import { UpdateSubtaskTimeDTO } from "@application/dtos/subtask/update.subtask.time.dto";
-import { SubTaskEntity } from "@domain/entities/subtask.entity";
+import type { UpdateSubtaskTimeDTO } from "@application/dtos/subtask/update.subtask.time.dto";
+import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import type { Role } from "@domain/enum/role.enum";
-import { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
+import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -45,13 +45,14 @@ export class UpdateSubtaskTimeUseCase implements IUpdateSubtaskTimeUseCase {
 			actualHours: dto.actualHours,
 		});
 
-	
+		const updatedSubtask = await this._subtaskRepository.update(
+			subtask.id as string,
+			subtask,
+		);
 
-		const updatedSubtask = await this._subtaskRepository.update(subtask.id as string, subtask);
-	
-        if (!updatedSubtask) {
-            throw new Error("Failed to update subtask time");
-        }
-        return updatedSubtask;
+		if (!updatedSubtask) {
+			throw new Error("Failed to update subtask time");
+		}
+		return updatedSubtask;
 	}
 }

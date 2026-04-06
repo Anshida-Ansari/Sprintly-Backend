@@ -1,19 +1,17 @@
 import type { VerifyOtpDTO } from "@application/dtos/auth/verify.admin.dto";
 import type { IVerifyOtpUseCase } from "@application/usecases/auth/interface/verifyadmin.otp.interface";
-
+import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { CompanyEnitiy } from "@domain/entities/company.enities";
 import { UserEntity } from "@domain/entities/user.entities";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
+import { NotificationType } from "@domain/enum/notification/notification.types";
 import { Role } from "@domain/enum/role.enum";
 import { UserStatus } from "@domain/enum/status.enum";
 import { Status } from "@domain/enum/user/user.status.enum";
-import { NotificationType } from "@domain/enum/notification/notification.types";
-import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
-import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
-
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 
 import type { CompanyPersistenceMapper } from "@infrastructure/mappers/company.persistance.mapper";
@@ -75,7 +73,6 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 			adminId: undefined,
 		});
 
-
 		const adminMongo = this._userPersistance.toMongo(adminEntity);
 		const newAdmin = await this._userRepository.create(adminMongo);
 
@@ -99,11 +96,10 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 
 		await redisClient.del(key);
 
-	
 		try {
 			const superAdmins = await this._userRepository.find(
 				{ role: Role.SUPER_ADMIN },
-				{ skip: 0, limit: 100 }
+				{ skip: 0, limit: 100 },
 			);
 
 			for (const admin of superAdmins) {
@@ -113,7 +109,7 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 						NotificationType.COMPANY_REGISTERED,
 						`A new company, ${newCompany.companyName}, has registered. Please review the registration.`,
 						newCompany.id?.toString() || "",
-						"Company"
+						"Company",
 					);
 				}
 			}

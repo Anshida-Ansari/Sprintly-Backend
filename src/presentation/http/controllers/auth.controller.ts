@@ -41,7 +41,7 @@ export class AuthController {
 		private _logoutUseCase: ILogoutUseCase,
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
-	) { }
+	) {}
 
 	async register(req: Request, res: Response, next: NextFunction) {
 		try {
@@ -196,7 +196,8 @@ export class AuthController {
 
 			let companyName = "";
 			if (companyId) {
-				const company = await this._companyRepository.findByCompanyId(companyId);
+				const company =
+					await this._companyRepository.findByCompanyId(companyId);
 				companyName = company?.companyName || "";
 			}
 

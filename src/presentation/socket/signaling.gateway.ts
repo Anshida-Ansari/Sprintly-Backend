@@ -16,7 +16,10 @@ export class SignalingGateway {
 	}
 
 	public initialize() {
-		const roomUsers: Record<string, { socketId: string, userId: string, userName: string }[]> = {};
+		const roomUsers: Record<
+			string,
+			{ socketId: string; userId: string; userName: string }[]
+		> = {};
 		const socketRoomMap: Map<string, string> = new Map();
 
 		SignalingGateway.io.on("connection", (socket: Socket) => {
@@ -27,36 +30,45 @@ export class SignalingGateway {
 				console.log(`User ${userId} registered with socket ${socket.id}`);
 			});
 
-			socket.on("join-room", (roomId: string, userId: string, userName: string) => {
-				// Leave previous room if any (though usually one connection = one room)
-				const previousRoom = socketRoomMap.get(socket.id);
-				if (previousRoom && previousRoom !== roomId) {
-					socket.leave(previousRoom);
-					if (roomUsers[previousRoom]) {
-						roomUsers[previousRoom] = roomUsers[previousRoom].filter(
-							(u) => u.socketId !== socket.id,
-						);
-						socket.to(previousRoom).emit("user-left", socket.id);
+			socket.on(
+				"join-room",
+				(roomId: string, userId: string, userName: string) => {
+					// Leave previous room if any (though usually one connection = one room)
+					const previousRoom = socketRoomMap.get(socket.id);
+					if (previousRoom && previousRoom !== roomId) {
+						socket.leave(previousRoom);
+						if (roomUsers[previousRoom]) {
+							roomUsers[previousRoom] = roomUsers[previousRoom].filter(
+								(u) => u.socketId !== socket.id,
+							);
+							socket.to(previousRoom).emit("user-left", socket.id);
+						}
 					}
-				}
 
-				socket.join(roomId);
-				socketRoomMap.set(socket.id, roomId);
+					socket.join(roomId);
+					socketRoomMap.set(socket.id, roomId);
 
-				if (!roomUsers[roomId]) roomUsers[roomId] = [];
+					if (!roomUsers[roomId]) roomUsers[roomId] = [];
 
-				// Notify others in the room
-				socket.to(roomId).emit("user-joined", { socketId: socket.id, userId, userName });
+					// Notify others in the room
+					socket
+						.to(roomId)
+						.emit("user-joined", { socketId: socket.id, userId, userName });
 
-				// Send existing users to the new joiner
-				const others = roomUsers[roomId];
-				socket.emit("existing-users", others);
+					// Send existing users to the new joiner
+					const others = roomUsers[roomId];
+					socket.emit("existing-users", others);
 
-				// Add to room list
-				if (!roomUsers[roomId].some((u) => u.socketId === socket.id)) {
-					roomUsers[roomId].push({ socketId: socket.id, userId, userName: userName || "Participant" });
-				}
-			});
+					// Add to room list
+					if (!roomUsers[roomId].some((u) => u.socketId === socket.id)) {
+						roomUsers[roomId].push({
+							socketId: socket.id,
+							userId,
+							userName: userName || "Participant",
+						});
+					}
+				},
+			);
 
 			// Handle disconnect globally
 			socket.on("disconnect", () => {
@@ -120,51 +132,67 @@ export class SignalingGateway {
 					candidate: RTCIceCandidate;
 					roomId: string;
 				}) => {
-					SignalingGateway.io
-						.to(payload.to)
-						.emit("ice-candidate", {
-							from: socket.id,
-							candidate: payload.candidate,
-						});
+					SignalingGateway.io.to(payload.to).emit("ice-candidate", {
+						from: socket.id,
+						candidate: payload.candidate,
+					});
 				},
 			);
 
 			// Camera toggle — relay to all other room members
-			socket.on("camera-toggle", (payload: { roomId: string; isOn: boolean }) => {
-				socket.to(payload.roomId).emit("peer-camera-toggle", {
-					from: socket.id,
-					isOn: payload.isOn,
-				});
-			});
+			socket.on(
+				"camera-toggle",
+				(payload: { roomId: string; isOn: boolean }) => {
+					socket.to(payload.roomId).emit("peer-camera-toggle", {
+						from: socket.id,
+						isOn: payload.isOn,
+					});
+				},
+			);
 
 			// Chat
-			socket.on("send-chat-message", (payload: { roomId: string, message: string, userName: string }) => {
-				socket.to(payload.roomId).emit("receive-chat-message", {
-					senderId: socket.id,
-					userName: payload.userName,
-					message: payload.message,
-					timestamp: new Date()
-				});
-			});
+			socket.on(
+				"send-chat-message",
+				(payload: { roomId: string; message: string; userName: string }) => {
+					socket.to(payload.roomId).emit("receive-chat-message", {
+						senderId: socket.id,
+						userName: payload.userName,
+						message: payload.message,
+						timestamp: new Date(),
+					});
+				},
+			);
 
 			// Host Controls
-			socket.on("kick-user", (payload: { roomId: string, targetSocketId: string }) => {
-				// We should verify if the sender is an admin/lead
-				// Or if they are the meeting creator.
-				// For now, let's trust the client but we should ideally use a token or role check here.
-				SignalingGateway.io.to(payload.targetSocketId).emit("kicked", { roomId: payload.roomId });
-			});
+			socket.on(
+				"kick-user",
+				(payload: { roomId: string; targetSocketId: string }) => {
+					// We should verify if the sender is an admin/lead
+					// Or if they are the meeting creator.
+					// For now, let's trust the client but we should ideally use a token or role check here.
+					SignalingGateway.io
+						.to(payload.targetSocketId)
+						.emit("kicked", { roomId: payload.roomId });
+				},
+			);
 
-			socket.on("end-meeting", async (payload: { roomId: string, meetingId: string }) => {
-				// Broadcast meeting-ended to all
-				SignalingGateway.io.to(payload.roomId).emit("meeting-ended", { meetingId: payload.meetingId });
-				
-				// Disconnect all sockets in the room
-				const sockets = await SignalingGateway.io.in(payload.roomId).fetchSockets();
-				for (const s of sockets) {
-					s.leave(payload.roomId);
-				}
-			});
+			socket.on(
+				"end-meeting",
+				async (payload: { roomId: string; meetingId: string }) => {
+					// Broadcast meeting-ended to all
+					SignalingGateway.io
+						.to(payload.roomId)
+						.emit("meeting-ended", { meetingId: payload.meetingId });
+
+					// Disconnect all sockets in the room
+					const sockets = await SignalingGateway.io
+						.in(payload.roomId)
+						.fetchSockets();
+					for (const s of sockets) {
+						s.leave(payload.roomId);
+					}
+				},
+			);
 		});
 	}
 }

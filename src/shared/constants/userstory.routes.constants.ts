@@ -6,5 +6,5 @@ export const USER_STORIES = {
 	UPDATE_STATUS: "/:userstoryId/status",
 	GET_MY_TASK: "/my-tasks",
 	ASSIGN_TO_MEMBERS: "/:userStoryId/assign-member",
-	ADD_COMMENT_USERSTORY:"/:userStoryId/comments"
+	ADD_COMMENT_USERSTORY: "/:userStoryId/comments",
 };

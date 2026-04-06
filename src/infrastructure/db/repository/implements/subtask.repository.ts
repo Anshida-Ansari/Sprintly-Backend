@@ -1,7 +1,7 @@
 import type { SubTaskEntity } from "@domain/entities/subtask.entity";
+import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import type { SubTaskPersisitanceMapper } from "@infrastructure/mappers/subtask.mapper";
-import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
 import { inject, injectable } from "inversify";
 import mongoose, { type Model } from "mongoose";
 import type { ISubTaskRepository } from "../interface/subtask.interface";
@@ -63,15 +63,20 @@ export class SubtaskRepository
 		const docs = await this.model.find({ userStoryId: { $in: userStoryIds } });
 		return docs.map((doc) => this._subtaskMapper.fromMongo(doc));
 	}
-	async addComment(subTaskId: string, comment: { userId: string; userName: string; message: string; createdAt: Date; }): Promise<void> {
-		await this.model.findByIdAndUpdate(
-			subTaskId,
-			{
-				$push: {
-					comments: comment,
-				},
-			}
-		);
+	async addComment(
+		subTaskId: string,
+		comment: {
+			userId: string;
+			userName: string;
+			message: string;
+			createdAt: Date;
+		},
+	): Promise<void> {
+		await this.model.findByIdAndUpdate(subTaskId, {
+			$push: {
+				comments: comment,
+			},
+		});
 	}
 
 	async getTopMembers(companyId: string, limit: number): Promise<any[]> {
@@ -80,14 +85,14 @@ export class SubtaskRepository
 				$match: {
 					companyId: new mongoose.Types.ObjectId(companyId),
 					status: SubTaskStatus.COMPLETED,
-					assignedTo: { $exists: true, $ne: null }
-				}
+					assignedTo: { $exists: true, $ne: null },
+				},
 			},
 			{
 				$group: {
 					_id: "$assignedTo",
-					completedCount: { $sum: 1 }
-				}
+					completedCount: { $sum: 1 },
+				},
 			},
 			{ $sort: { completedCount: -1 } },
 			{ $limit: limit },
@@ -96,8 +101,8 @@ export class SubtaskRepository
 					from: "users",
 					localField: "_id",
 					foreignField: "_id",
-					as: "user"
-				}
+					as: "user",
+				},
 			},
 			{ $unwind: "$user" },
 			{
@@ -107,18 +112,20 @@ export class SubtaskRepository
 					name: "$user.name",
 					email: "$user.email",
 					role: "$user.role",
-					completedCount: 1
-				}
-			}
+					completedCount: 1,
+				},
+			},
 		]);
 	}
 
-	async getLiveActivity(companyId: string, limit: number): Promise<SubTaskEntity[]> {
-		const docs = await this.model.find({ companyId })
+	async getLiveActivity(
+		companyId: string,
+		limit: number,
+	): Promise<SubTaskEntity[]> {
+		const docs = await this.model
+			.find({ companyId })
 			.sort({ updatedAt: -1, createdAt: -1 })
 			.limit(limit);
-		return docs.map(doc => this._subtaskMapper.fromMongo(doc));
+		return docs.map((doc) => this._subtaskMapper.fromMongo(doc));
 	}
-	
-
 }

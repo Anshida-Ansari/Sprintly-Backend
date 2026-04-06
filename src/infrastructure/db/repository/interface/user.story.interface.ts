@@ -18,11 +18,14 @@ export interface IUserStroyRepository extends IBaseRepository<UserStoryEntity> {
 		total: number;
 	}>;
 	findByAssignedTo(userId: string): Promise<UserStoryEntity[]>;
-	addComment(userStoryId: string, comment:{
-		userId: string
-		userName: string
-		message: string
-		createdAt: Date
-	}):Promise<void>
+	addComment(
+		userStoryId: string,
+		comment: {
+			userId: string;
+			userName: string;
+			message: string;
+			createdAt: Date;
+		},
+	): Promise<void>;
 	// findCountOfUserStories(userStoryId: string):Promise<number>
 }

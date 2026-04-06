@@ -16,8 +16,8 @@ const userstoryController = container.get<UserstoryController>(
 );
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
-import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
 import { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
+import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
 
 router.post(
 	USER_STORIES.CREATE_USERSTORY,
@@ -50,18 +50,18 @@ router.patch(
 
 router.get(
 	USER_STORIES.GET_MY_TASK,
-	authGurd.authorize(["admin", "developers","lead"]),
+	authGurd.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => userstoryController.getMyTasks(req, res, next),
 );
 
 router.patch(
 	USER_STORIES.ASSIGN_TO_MEMBERS,
-	authGurd.authorize(["admin", "developers","lead"]),
+	authGurd.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => userstoryController.assignUserstory(req, res, next),
 );
 router.post(
 	USER_STORIES.ADD_COMMENT_USERSTORY,
-	authGurd.authorize(["admin", "developers","lead"]),
-	(req,res,next)=>userstoryController.addComment(req,res,next)
-)
+	authGurd.authorize(["admin", "developers", "lead"]),
+	(req, res, next) => userstoryController.addComment(req, res, next),
+);
 export { router as userstoryRouter };

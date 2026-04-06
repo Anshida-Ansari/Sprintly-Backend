@@ -1,9 +1,9 @@
-import { inject, injectable } from "inversify";
-import type { NextFunction, Request, Response } from "express";
-import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
-import { ANALYTICS_TYPES } from "@infrastructure/di/types/analytics/analytics.types";
 import type { GetSprintBurndownUseCase } from "@application/usecases/analytics/get.sprint.burndown.usecase";
 import type { GetUserBurndownUseCase } from "@application/usecases/analytics/get.user.burndown.usecase";
+import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
+import { ANALYTICS_TYPES } from "@infrastructure/di/types/analytics/analytics.types";
+import type { NextFunction, Request, Response } from "express";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class AnalyticsController {
@@ -11,7 +11,7 @@ export class AnalyticsController {
 		@inject(ANALYTICS_TYPES.IGetSprintBurndownUseCase)
 		private readonly getSprintBurndownUseCase: GetSprintBurndownUseCase,
 		@inject(ANALYTICS_TYPES.IGetUserBurndownUseCase)
-		private readonly getUserBurndownUseCase: GetUserBurndownUseCase
+		private readonly getUserBurndownUseCase: GetUserBurndownUseCase,
 	) {}
 
 	async getSprintBurndown(req: Request, res: Response, next: NextFunction) {
@@ -21,7 +21,7 @@ export class AnalyticsController {
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
-				data
+				data,
 			});
 		} catch (error) {
 			next(error);
@@ -32,12 +32,12 @@ export class AnalyticsController {
 		try {
 			const { sprintId } = req.params;
 			const userId = req.user.id;
-			
+
 			const data = await this.getUserBurndownUseCase.execute(sprintId, userId);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
-				data
+				data,
 			});
 		} catch (error) {
 			next(error);

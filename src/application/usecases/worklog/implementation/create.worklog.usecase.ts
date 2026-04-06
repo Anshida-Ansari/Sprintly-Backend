@@ -1,15 +1,15 @@
 import { WorkLogEntity } from "@domain/entities/worklog.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
-import { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
-import { IWorkLogRepository } from "@infrastructure/db/repository/interface/worklog.interface";
+import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
+import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IWorkLogRepository } from "@infrastructure/db/repository/interface/worklog.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 // import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/user.story";
 import { WORKLOG_TYPE } from "@infrastructure/di/types/worklog/worklog";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
 import type { ICreateWorkLogUseCase } from "../interface/worklog.usecase.interface";
-import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 
 @injectable()
 export class CreateWorkLogUseCase implements ICreateWorkLogUseCase {
@@ -22,12 +22,15 @@ export class CreateWorkLogUseCase implements ICreateWorkLogUseCase {
 		private readonly _userStoryRepository: IUserStroyRepository,
 	) {}
 
-	async execute(userId: string, data: {
-		subTaskId: string;
-		hours: number;
-		description: string;
-		date: Date;
-	}): Promise<WorkLogEntity> {
+	async execute(
+		userId: string,
+		data: {
+			subTaskId: string;
+			hours: number;
+			description: string;
+			date: Date;
+		},
+	): Promise<WorkLogEntity> {
 		// 1. Fetch SubTask
 		const subTask = await this._subTaskRepository.findById(data.subTaskId);
 		if (!subTask) {
@@ -35,7 +38,9 @@ export class CreateWorkLogUseCase implements ICreateWorkLogUseCase {
 		}
 
 		// 2. Fetch User Story to get Project and Sprint IDs
-		const userStory = await this._userStoryRepository.findById(subTask.userStoryId);
+		const userStory = await this._userStoryRepository.findById(
+			subTask.userStoryId,
+		);
 		if (!userStory) {
 			throw new NotFoundError("User story (task) not found for this subtask");
 		}

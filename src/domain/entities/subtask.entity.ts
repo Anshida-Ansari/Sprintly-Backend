@@ -119,7 +119,7 @@ export class SubTaskEntity {
 			assignedTo: string;
 			estimatedHours: number;
 			actualHours: number;
-		}>
+		}>,
 	) {
 		if (props.title !== undefined) this._title = props.title.trim();
 		if (props.status !== undefined) this._status = props.status;

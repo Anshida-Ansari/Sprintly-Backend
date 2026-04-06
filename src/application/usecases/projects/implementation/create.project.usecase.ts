@@ -1,7 +1,9 @@
 import type { CreateProjectDTO } from "@application/dtos/projects/create.project.dto";
+import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import type { CreateProjectResponse } from "@application/usecases/projects/implementation/res/create.project.response";
 import type { ICreateProjectUseCase } from "@application/usecases/projects/interface/create.project.interface";
 import { ProjectEntity } from "@domain/entities/project.entities";
+import { NotificationType } from "@domain/enum/notification/notification.types";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
 import { ProjectStatus } from "@domain/enum/project/project.status";
 import type { IGitHubRepositoryService } from "@domain/interface/github.repository.interface";
@@ -9,12 +11,10 @@ import type { ICompanyRepository } from "@infrastructure/db/repository/interface
 import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { GITHUB_TYPE } from "@infrastructure/di/types/github/github.types";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { EncryptionUtil } from "@shared/utils/encryption/encryption.util";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
-import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
-import { NotificationType } from "@domain/enum/notification/notification.types";
-import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { inject, injectable } from "inversify";
 
 @injectable()

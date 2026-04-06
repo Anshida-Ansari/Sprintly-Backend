@@ -20,7 +20,10 @@ export class ListStandupsUseCase implements IListStandupsUseCase {
 			return await this._standupRepository.findBySprintAndDate(sprintId, date);
 		}
 		if (projectId) {
-			return await this._standupRepository.findByProjectAndDate(projectId, date);
+			return await this._standupRepository.findByProjectAndDate(
+				projectId,
+				date,
+			);
 		}
 		return [];
 	}

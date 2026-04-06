@@ -69,7 +69,7 @@ export class StandupController {
 	async listStandups(req: Request, res: Response, next: NextFunction) {
 		try {
 			const { projectId, sprintId } = req.params;
-			const date = req.query.date as string; 
+			const date = req.query.date as string;
 
 			const result = await this._listStandupUseCase.execute(
 				projectId,

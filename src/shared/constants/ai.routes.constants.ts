@@ -1,3 +1,3 @@
 export const AI_ROUTES = {
-  CHAT: "/chat",
+	CHAT: "/chat",
 };

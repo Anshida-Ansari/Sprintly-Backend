@@ -1,12 +1,12 @@
+import type {
+	ICreateWorkLogUseCase,
+	IGetAdminWorkLogsUseCase,
+	IGetUserWorkLogsUseCase,
+} from "@application/usecases/worklog/interface/worklog.usecase.interface";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { WORKLOG_TYPE } from "@infrastructure/di/types/worklog/worklog";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import type { 
-	ICreateWorkLogUseCase, 
-	IGetAdminWorkLogsUseCase, 
-	IGetUserWorkLogsUseCase 
-} from "@application/usecases/worklog/interface/worklog.usecase.interface";
 
 @injectable()
 export class WorkLogController {
@@ -38,7 +38,10 @@ export class WorkLogController {
 		try {
 			const userId = req.user.id;
 			const filters = req.query;
-			const result = await this._getUserWorkLogsUseCase.execute(userId, filters);
+			const result = await this._getUserWorkLogsUseCase.execute(
+				userId,
+				filters,
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
@@ -54,7 +57,10 @@ export class WorkLogController {
 		try {
 			const { companyId } = req.user;
 			const filters = req.query;
-			const result = await this._getAdminWorkLogsUseCase.execute(companyId, filters);
+			const result = await this._getAdminWorkLogsUseCase.execute(
+				companyId,
+				filters,
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,

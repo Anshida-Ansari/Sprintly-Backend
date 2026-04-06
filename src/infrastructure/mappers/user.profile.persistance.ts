@@ -1,9 +1,9 @@
 import { UserProfileEntity } from "@domain/entities/user.profile.entities";
 
-export class UserProfilePersistenceMapper{
-    toMongo(entity: UserProfileEntity){
-        return{
-            userId: entity.userId,
+export class UserProfilePersistenceMapper {
+	toMongo(entity: UserProfileEntity) {
+		return {
+			userId: entity.userId,
 			companyId: entity.companyId,
 			phoneNumber: entity.phoneNumber,
 			address: entity.address,
@@ -14,12 +14,12 @@ export class UserProfilePersistenceMapper{
 			github: entity.github,
 			createdAt: entity.createdAt,
 			updatedAt: entity.updatedAt,
-        }
-    }
+		};
+	}
 
-    fromMongo(doc:any):UserProfileEntity{
-        return UserProfileEntity.create({
-            id: doc._id?.toString(),
+	fromMongo(doc: any): UserProfileEntity {
+		return UserProfileEntity.create({
+			id: doc._id?.toString(),
 			userId: doc.userId?.toString(),
 			companyId: doc.companyId.toString(),
 			phoneNumber: doc.phoneNumber,
@@ -31,6 +31,6 @@ export class UserProfilePersistenceMapper{
 			github: doc.github,
 			createdAt: doc.createdAt,
 			updatedAt: doc.updatedAt,
-        })
-    }
+		});
+	}
 }
