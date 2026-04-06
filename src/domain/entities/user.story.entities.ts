@@ -19,6 +19,7 @@ export class UserStoryEntity {
 	}> = [];
 	private _estimationPoints?: number;
 	private _acceptanceCriteria?: string[];
+	private _adminId?: string;
 	private readonly _createdAt: Date;
 	private _updatedAt?: Date;
 
@@ -40,6 +41,7 @@ export class UserStoryEntity {
 		}>;
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
+		adminId?: string;
 		createdAt?: Date;
 		updatedAt?: Date;
 	}) {
@@ -55,6 +57,7 @@ export class UserStoryEntity {
 		this._comments = props.comments || [];
 		this._estimationPoints = props.estimationPoints;
 		this._acceptanceCriteria = props.acceptanceCriteria;
+		this._adminId = props.adminId;
 		this._createdAt = props.createdAt || new Date();
 		this._updatedAt = props.updatedAt;
 	}
@@ -77,6 +80,7 @@ export class UserStoryEntity {
 		}[];
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
+		adminId?: string;
 	}): UserStoryEntity {
 		if (!props.title?.trim()) throw new Error("User story title is required");
 		const allowedPoints = [1, 2, 3, 5, 8, 13];
@@ -196,6 +200,9 @@ export class UserStoryEntity {
 	get acceptanceCriteria() {
 		return this._acceptanceCriteria;
 	}
+	get adminId() {
+		return this._adminId;
+	}
 	get createdAt() {
 		return this._createdAt;
 	}
@@ -217,6 +224,7 @@ export class UserStoryEntity {
 			comments: this._comments,
 			estimationPoints: this._estimationPoints,
 			acceptanceCriteria: this._acceptanceCriteria,
+			adminId: this._adminId,
 			createdAt: this._createdAt,
 			updatedAt: this._updatedAt,
 		};

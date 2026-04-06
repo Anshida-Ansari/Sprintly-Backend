@@ -15,6 +15,7 @@ export class UserStoryPersisitanceMapper {
 			comments:userStory.comments,
 			estimationPoints: userStory.estimationPoints,
 			acceptanceCriteria: userStory.acceptanceCriteria,
+			adminId: userStory.adminId,
 			createdAt: userStory.createdAt,
 			updatedAt: userStory.updatedAt,
 		};
@@ -38,11 +39,12 @@ export class UserStoryPersisitanceMapper {
 			description: doc.description,
 			priority: doc.priority,
 			sprintId: doc.sprintId?.toString(),
-			assignedTo: doc.assignedTo?.toString(),
+			assignedTo: doc.assignedTo ? doc.assignedTo.map((id: any) => id.toString()) : [],
 			comments: doc.comments || [],
 			status: doc.status,
 			estimationPoints: parsedEstimationPoints,
 			acceptanceCriteria: doc.acceptanceCriteria,
+			adminId: doc.adminId?.toString(),
 		});
 	}
 }

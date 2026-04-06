@@ -5,12 +5,12 @@ export const subTaskSchema = new mongoose.Schema(
 	{
 		userStoryId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "UserStories",
+			ref: "UserStory",
 			required: true,
 		},
 		companyId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Companies",
+			ref: "Company",
 			required: true,
 		},
 		title: {

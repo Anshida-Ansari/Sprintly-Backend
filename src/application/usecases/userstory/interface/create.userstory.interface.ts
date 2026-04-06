@@ -8,6 +8,7 @@ export interface ICreateUserstoryUsecase {
 		companyId: string,
 		projectId: string,
 		role: string,
+		adminId: string
 	): Promise<{
 		id: string;
 		title: string;

@@ -15,6 +15,7 @@ const envSchema = z.object({
 	REFRESH_TOKEN_MAX_AGE: z.string().transform(Number),
 
 	FRONTENT_URL: z.string().url(),
+	GROQ_API_KEY: z.string().nonempty(),
 });
 
 const env = envSchema.parse(process.env);

@@ -13,12 +13,13 @@ export class GetTodayStandupUseCase implements IGetTodayStandupUseCase {
 
 	async execute(
 		userId: string,
-		sprintId: string,
+		projectId: string,
 	): Promise<StandupEntity | null> {
+		const todayStr = new Date().toISOString().split("T")[0];
 		return await this._standupRepository.findUserStandupForDate(
 			userId,
-			sprintId,
-			new Date(),
+			projectId,
+			todayStr,
 		);
 	}
 }

@@ -13,6 +13,9 @@ import { UserModule } from "./container/user/user.modules";
 import { UserStoryModule } from "./container/userstory/userstory.modules";
 import { UserProfileModule } from "./container/userprofile/user.profile.modules";
 import { NotificationModule } from "./container/notification/notification.modules";
+import { AiModule } from "./container/ai/ai.modules";
+import { WorkLogModule } from "./container/worklog/worklog.modules.js";
+import { AnalyticsModule } from "./container/analytics/analytics.modules";
 
 const container = new Container({
 	defaultScope: "Singleton",
@@ -33,7 +36,10 @@ container.load(
 	MeetingModule,
 	GitHubModule,
 	UserProfileModule,
-	NotificationModule
+	NotificationModule,
+	AiModule,
+	WorkLogModule,
+	AnalyticsModule
 );
 
 export { container };

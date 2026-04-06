@@ -37,7 +37,7 @@ export const projectSchema = new mongoose.Schema(
 		},
 		companyId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Companies",
+			ref: "Company",
 			required: true,
 		},
 		leadId: {

@@ -5,5 +5,6 @@ export const MEETING_TYPES = {
 	ScheduleMeetingUseCase: Symbol.for("ScheduleMeetingUseCase"),
 	GetProjectMeetingsUseCase: Symbol.for("GetProjectMeetingsUseCase"),
 	UpdateMeetingStatusUseCase: Symbol.for("UpdateMeetingStatusUseCase"),
+	GetMeetingHistoryUseCase: Symbol.for("GetMeetingHistoryUseCase"),
 	MeetingController: Symbol.for("MeetingController"),
 };

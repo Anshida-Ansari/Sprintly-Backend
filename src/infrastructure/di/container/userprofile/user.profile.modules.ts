@@ -12,6 +12,9 @@ import { UserProfileController } from "@presentation/http/controllers/user.profi
 import { ContainerModule } from "inversify";
 import { Model } from "mongoose";
 
+import { GetDeveloperDashboardStatsUseCase } from "@application/usecases/userprofile/imeplementation/get.developer.dashboard.stats.usecase";
+import { IGetDeveloperDashboardStatsUseCase } from "@application/usecases/userprofile/interface/get.developer.dashboard.stats.interface";
+
 export const UserProfileModule = new ContainerModule(({bind})=>{
     bind<Model<IUserProfile>>(USER_PROFILE_TYPE.UserProfileModel).toConstantValue(UserProfileModel)
     bind<IUserProfileRepository>(USER_PROFILE_TYPE.IUserProfileRepository).to(UserProfileReposiotry)
@@ -19,5 +22,5 @@ export const UserProfileModule = new ContainerModule(({bind})=>{
     bind<IUpdateProfileUseCase>(USER_PROFILE_TYPE.IUpdateProfileUseCase).to(UpdateProfileUseCase)
     bind<UserProfileController>(USER_PROFILE_TYPE.UserProfileController).to(UserProfileController)
     bind<IGetProfileUseCase>(USER_PROFILE_TYPE.IGetProfileUseCase).to(GetProfileUseCase)
-
+    bind<IGetDeveloperDashboardStatsUseCase>(USER_PROFILE_TYPE.IGetDeveloperDashboardStatsUseCase).to(GetDeveloperDashboardStatsUseCase)
 })

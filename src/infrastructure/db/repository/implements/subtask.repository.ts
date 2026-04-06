@@ -1,8 +1,9 @@
 import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import type { SubTaskPersisitanceMapper } from "@infrastructure/mappers/subtask.mapper";
+import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
 import { inject, injectable } from "inversify";
-import type { Model } from "mongoose";
+import mongoose, { type Model } from "mongoose";
 import type { ISubTaskRepository } from "../interface/subtask.interface";
 import { BaseRepository } from "./base.repository";
 
@@ -71,6 +72,52 @@ export class SubtaskRepository
 				},
 			}
 		);
+	}
+
+	async getTopMembers(companyId: string, limit: number): Promise<any[]> {
+		return await this.model.aggregate([
+			{
+				$match: {
+					companyId: new mongoose.Types.ObjectId(companyId),
+					status: SubTaskStatus.COMPLETED,
+					assignedTo: { $exists: true, $ne: null }
+				}
+			},
+			{
+				$group: {
+					_id: "$assignedTo",
+					completedCount: { $sum: 1 }
+				}
+			},
+			{ $sort: { completedCount: -1 } },
+			{ $limit: limit },
+			{
+				$lookup: {
+					from: "users",
+					localField: "_id",
+					foreignField: "_id",
+					as: "user"
+				}
+			},
+			{ $unwind: "$user" },
+			{
+				$project: {
+					_id: 1,
+					id: "$_id",
+					name: "$user.name",
+					email: "$user.email",
+					role: "$user.role",
+					completedCount: 1
+				}
+			}
+		]);
+	}
+
+	async getLiveActivity(companyId: string, limit: number): Promise<SubTaskEntity[]> {
+		const docs = await this.model.find({ companyId })
+			.sort({ updatedAt: -1, createdAt: -1 })
+			.limit(limit);
+		return docs.map(doc => this._subtaskMapper.fromMongo(doc));
 	}
 	
 

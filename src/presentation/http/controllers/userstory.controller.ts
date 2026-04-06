@@ -36,7 +36,7 @@ export class UserstoryController {
 
 	async createUserstory(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { companyId, role } = req.user;
+			const { id: userId, companyId, role } = req.user;
 			const { projectId } = req.params;
 
 			const result = await this._createUserstoryUseCase.execute(
@@ -44,6 +44,7 @@ export class UserstoryController {
 				companyId,
 				projectId,
 				role,
+				userId
 			);
 
 			return res.status(SuccessStatus.OK).json({

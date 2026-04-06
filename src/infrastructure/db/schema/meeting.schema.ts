@@ -59,6 +59,21 @@ export const meetingSchema = new Schema(
 			enum: Object.values(MeetingStatus),
 			default: MeetingStatus.SCHEDULED,
 		},
+
+		endTime: {
+			type: Date,
+			required: false,
+		},
+
+		duration: {
+			type: Number,
+			required: false,
+		},
+
+		cancelledAt: {
+			type: Date,
+			required: false,
+		},
 	},
 	{ timestamps: true },
 );

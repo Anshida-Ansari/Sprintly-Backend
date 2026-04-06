@@ -24,6 +24,11 @@ router.get(
 	authGurd.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => meetingController.getProjectMeetings(req, res, next),
 );
+router.get(
+	MEETING_ROUTES.HISTORY,
+	authGurd.authorize(["admin", "developers", "lead"]),
+	(req, res, next) => meetingController.getHistory(req, res, next),
+);
 router.patch(
 	MEETING_ROUTES.UPDATE_STATUS,
 	authGurd.authorize(["admin", "developers", "lead"]),

@@ -3,4 +3,5 @@ export const SUPERADMIN_TYPES = {
 	SuperAdminController: Symbol.for("SuperAdminController"),
 	IUpdateStatusInterface: Symbol.for("IUpdateStatusInterface"),
 	IGetDetailPageUseCase: Symbol.for("IGetDetailPageUseCase"),
+	IGetDashboardStatsUseCase: Symbol.for("ISuperAdminGetDashboardStatsUseCase"),
 };

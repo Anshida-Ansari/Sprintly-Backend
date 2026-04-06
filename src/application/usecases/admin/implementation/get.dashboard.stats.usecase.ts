@@ -1,11 +1,19 @@
 import { inject, injectable } from "inversify";
 import { ProjectStatus } from "../../../../domain/enum/project/project.status";
+import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status";
+import { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status";
 import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
 import type { ISprintReposiotry } from "../../../../infrastructure/db/repository/interface/sprints.interface";
 import type { IUserStroyRepository } from "../../../../infrastructure/db/repository/interface/user.story.interface";
+import type { ISubTaskRepository } from "../../../../infrastructure/db/repository/interface/subtask.interface";
+import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface";
 import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
 import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/spirnts/sprints.types";
 import { USERSTORY_TYPE } from "../../../../infrastructure/di/types/userstory/userstory";
+import { SUBTASK_TYPE } from "../../../../infrastructure/di/types/subtask/subtask";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import { MEETING_TYPES } from "../../../../infrastructure/di/types/meeting/meeting.types";
 import type {
 	IDashboardStats,
 	IGetDashboardStatsUseCase,
@@ -20,28 +28,66 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 		private _sprintRepository: ISprintReposiotry,
 		@inject(USERSTORY_TYPE.IUserStroyRepository)
 		private _userStoryRepository: IUserStroyRepository,
+		@inject(SUBTASK_TYPE.ISubTaskRepository)
+		private _subtaskRepository: ISubTaskRepository,
+		@inject(USER_TYPES.IUserRepository)
+		private _userRepository: IUserRepository,
+		@inject(MEETING_TYPES.IMeetingRepository)
+		private _meetingRepository: IMeetingRepository,
 	) {}
 
 	async execute(companyId: string): Promise<IDashboardStats> {
-		const activeProjects = await this._projectRepository.count({
-			companyId: companyId,
-			status: ProjectStatus.ACTIVE,
-		});
-
-		const runningSprints = await this._sprintRepository.count({
-			companyId: companyId,
-			status: "ACTIVE",
-		});
-
-		const pendingReviews = await this._userStoryRepository.count({
-			companyId: companyId,
-			status: "IN_REVIEW",
-		});
-
-		return {
+		const [
+			totalProjects,
+			totalUsers,
+			totalSprints,
+			totalSubTasks,
+			subTasksPending,
+			subTasksInProgress,
+			subTasksCompleted,
 			activeProjects,
 			runningSprints,
+			completedSprints,
 			pendingReviews,
+			topMembers,
+			liveActivity,
+		] = await Promise.all([
+			this._projectRepository.count({ companyId }),
+			this._userRepository.count({ companyId }),
+			this._sprintRepository.count({ companyId }),
+			this._subtaskRepository.count({ companyId }),
+			this._subtaskRepository.count({ companyId, status: SubTaskStatus.PENDING }),
+			this._subtaskRepository.count({ companyId, status: SubTaskStatus.IN_PROGRESS }),
+			this._subtaskRepository.count({ companyId, status: SubTaskStatus.COMPLETED }),
+			this._projectRepository.count({ companyId, status: ProjectStatus.ACTIVE }),
+			this._sprintRepository.count({ companyId, status: "ACTIVE" }),
+			this._sprintRepository.count({ companyId, status: "COMPLETED" }),
+			this._userStoryRepository.count({ companyId, status: UserStoryStatus.IN_REVIEW }),
+			this._subtaskRepository.getTopMembers(companyId, 5),
+			this._subtaskRepository.getLiveActivity(companyId, 10),
+		]);
+
+		const baseProjects = await this._projectRepository.find({ companyId }, { skip: 0, limit: 1000 });
+		const projectIds = baseProjects.map(p => p.id);
+		const totalMeetings = await this._meetingRepository.count({ projectId: { $in: projectIds } });
+
+		return {
+			totalProjects,
+			totalUsers,
+			totalSprints,
+			totalSubTasks,
+			subTasksByStatus: {
+				pending: subTasksPending,
+				inProgress: subTasksInProgress,
+				completed: subTasksCompleted,
+			},
+			activeProjects,
+			runningSprints,
+			completedSprints,
+			pendingReviews,
+			totalMeetings,
+			topMembers,
+			liveActivity,
 		};
 	}
 }

@@ -28,5 +28,10 @@ router.get(
 	authGuard.authorize(["superadmin"]),
 	(req, res, next) => superadminController.getDetailPage(req, res, next),
 );
+router.get(
+	SUPERADMIN_ROUTES.DASHBOARD_STATS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getDashboardStats(req, res, next),
+);
 
 export { router as superadminRouter };

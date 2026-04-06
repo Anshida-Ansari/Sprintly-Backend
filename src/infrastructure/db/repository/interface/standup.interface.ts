@@ -5,8 +5,12 @@ export interface IStandupRepository extends IBaseRepository<StandupEntity> {
 	findById(id: string): Promise<StandupEntity | null>;
 	findUserStandupForDate(
 		userId: string,
-		sprintId: string,
-		date: Date,
+		projectId: string,
+		date: string,
 	): Promise<StandupEntity | null>;
-	findBySprintAndDate(sprintId: string, date?: Date): Promise<StandupEntity[]>;
+	findBySprintAndDate(sprintId: string, date?: string): Promise<StandupEntity[]>;
+	findByProjectAndDate(
+		projectId: string,
+		date?: string,
+	): Promise<StandupEntity[]>;
 }

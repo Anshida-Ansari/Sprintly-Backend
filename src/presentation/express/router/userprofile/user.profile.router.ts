@@ -28,4 +28,10 @@ router.get(
     (req,res,next) => userprofileController.getProfile(req,res,next)
 )
 
+router.get(
+    USER_PROFILE.GET_DASHBOARD_STATS,
+    authGurd.authorize(['admin','lead','developers']),
+    (req,res,next) => userprofileController.getDashboardStats(req,res,next)
+)
+
 export {router as userprofileRotuer}

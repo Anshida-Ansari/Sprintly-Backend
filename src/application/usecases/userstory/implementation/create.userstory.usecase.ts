@@ -32,6 +32,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		companyId: string,
 		projectId: string,
 		role: string,
+		adminId: string
 	): Promise<{
 		id: string;
 		title: string;
@@ -70,6 +71,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 			assignedTo: dto.assignedTo,
 			estimationPoints: dto.estimationPoints,
 			acceptanceCriteria: dto.acceptanceCriteria,
+			adminId: adminId,
 		});
 
 		const created = await this._userstoryReposiotry.create(userstory);

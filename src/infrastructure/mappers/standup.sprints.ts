@@ -10,6 +10,7 @@ export class StandupPersistanceMapper {
 			yesterday: standup.yesterday,
 			today: standup.today,
 			blockers: standup.blockers,
+			date: standup.date,
 			comments: standup.comments,
 			createdAt: standup.createdAt,
 		};
@@ -28,6 +29,7 @@ export class StandupPersistanceMapper {
 			yesterday: doc.yesterday,
 			today: doc.today,
 			blockers: doc.blockers,
+			date: doc.date,
 			comments: doc.comments,
 			createdAt: doc.createdAt,
 			userData: user.name

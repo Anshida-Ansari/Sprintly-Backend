@@ -32,6 +32,10 @@ export const standupSchema = new mongoose.Schema(
 		blockers: {
 			type: String,
 		},
+		date: {
+			type: String, 
+			required: true,
+		},
 		comments: [
 			{
 				userId: String,
@@ -43,3 +47,5 @@ export const standupSchema = new mongoose.Schema(
 	},
 	{ timestamps: true },
 );
+
+standupSchema.index({ userId: 1, projectId: 1, date: 1 }, { unique: true });

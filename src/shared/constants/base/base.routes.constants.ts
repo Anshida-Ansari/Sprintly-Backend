@@ -11,4 +11,7 @@ export const BASE_API = {
 	GITHUB: "/api/github",
 	USER_PROFILE: "/api/companies",
 	NOTIFICATION: "/api/notifications",
+	AI: "/api/ai",
+	WORKLOG: "/api/worklogs",
+	ANALYTICS: "/api/analytics",
 };

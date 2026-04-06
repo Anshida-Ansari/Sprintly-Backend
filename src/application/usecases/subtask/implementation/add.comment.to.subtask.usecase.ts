@@ -8,6 +8,8 @@ import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { NotificationType } from "@domain/enum/notification/notification.types";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+import { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 
 @injectable()
 export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
@@ -15,7 +17,9 @@ export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
         @inject(SUBTASK_TYPE.ISubTaskRepository)
         private _subtaskReposiotory: ISubTaskRepository,
         @inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
-        private _createNotificationUseCase: ICreateNotificationUseCase
+        private _createNotificationUseCase: ICreateNotificationUseCase,
+        @inject(USERSTORY_TYPE.IUserStroyRepository)
+        private _userStoryRepository: IUserStroyRepository
     ) { }
 
     async execute(dto: AddCommentSubTaskDTO): Promise<void> {
@@ -34,10 +38,21 @@ export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
             createdAt: new Date()
         })
 
-        // Notify assigned user if someone else commented
         if (subtask.assignedTo && subtask.assignedTo.toString() !== dto.userId.toString()) {
             await this._createNotificationUseCase.execute(
                 subtask.assignedTo.toString(),
+                NotificationType.COMMENT_ADDED,
+                `${dto.userName} commented on subtask: ${subtask.title}`,
+                dto.subtaskId,
+                "SUBTASK",
+                dto.userId
+            );
+        }
+
+        const userStory = await this._userStoryRepository.findById(subtask.userStoryId);
+        if (userStory && userStory.adminId && userStory.adminId.toString() !== dto.userId.toString()) {
+            await this._createNotificationUseCase.execute(
+                userStory.adminId.toString(),
                 NotificationType.COMMENT_ADDED,
                 `${dto.userName} commented on subtask: ${subtask.title}`,
                 dto.subtaskId,

@@ -68,10 +68,14 @@ export class StandupController {
 
 	async listStandups(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { sprintId } = req.params;
-			const date = req.query.date ? new Date(req.query.date as string) : undefined;
+			const { projectId, sprintId } = req.params;
+			const date = req.query.date as string; 
 
-			const result = await this._listStandupUseCase.execute(sprintId, date);
+			const result = await this._listStandupUseCase.execute(
+				projectId,
+				sprintId,
+				date,
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
@@ -84,11 +88,11 @@ export class StandupController {
 	async getMyTodayStandup(req: Request, res: Response, next: NextFunction) {
 		try {
 			const { id: userId } = req.user;
-			const { sprintId } = req.params;
+			const { projectId } = req.params;
 
 			const result = await this._getTodayStandupUseCase.execute(
 				userId,
-				sprintId,
+				projectId,
 			);
 
 			return res.status(SuccessStatus.OK).json({

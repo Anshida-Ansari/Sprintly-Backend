@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import type { ListCompanyUseCase } from "../../../application/usecases/superadmin/implementation/list.companies.usecase";
+import type { IGetDashboardStatsUseCase } from "../../../application/usecases/superadmin/interface/get.dashboard.stats.interface";
 import type { IGetDetailPageUseCase } from "../../../application/usecases/superadmin/interface/get.detailpage.interface";
 import type { IUpdateStatusInterface } from "../../../application/usecases/superadmin/interface/update.status.interface";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
@@ -15,6 +16,8 @@ export class SuperAdminController {
 		private _updateStatusUseCase: IUpdateStatusInterface,
 		@inject(SUPERADMIN_TYPES.IGetDetailPageUseCase)
 		private _getDetailPageUseCase: IGetDetailPageUseCase,
+		@inject(SUPERADMIN_TYPES.IGetDashboardStatsUseCase)
+		private _getDashboardStatsUseCase: IGetDashboardStatsUseCase,
 	) {}
 
 	async listCompanies(req: Request, res: Response, next: NextFunction) {
@@ -60,6 +63,18 @@ export class SuperAdminController {
 			return res.status(SuccessStatus.OK).json({
 				success: true,
 				data: company,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getDashboardStats(req: Request, res: Response, next: NextFunction) {
+		try {
+			const stats = await this._getDashboardStatsUseCase.execute();
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				data: stats,
 			});
 		} catch (error) {
 			next(error);

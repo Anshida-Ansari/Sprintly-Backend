@@ -7,6 +7,9 @@ import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { Role } from "@domain/enum/role.enum";
 import { UserStatus } from "@domain/enum/status.enum";
 import { Status } from "@domain/enum/user/user.status.enum";
+import { NotificationType } from "@domain/enum/notification/notification.types";
+import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
+import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
@@ -37,6 +40,9 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 
 		@inject(COMPANY_TYPES.CompanyPersistenceMapper)
 		private readonly _companyPersistance: CompanyPersistenceMapper,
+
+		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
+		private readonly _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
 
 	async execute(dto: VerifyOtpDTO): Promise<{
@@ -92,6 +98,28 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 		});
 
 		await redisClient.del(key);
+
+	
+		try {
+			const superAdmins = await this._userRepository.find(
+				{ role: Role.SUPER_ADMIN },
+				{ skip: 0, limit: 100 }
+			);
+
+			for (const admin of superAdmins) {
+				if (admin.id) {
+					await this._createNotificationUseCase.execute(
+						admin.id.toString(),
+						NotificationType.COMPANY_REGISTERED,
+						`A new company, ${newCompany.companyName}, has registered. Please review the registration.`,
+						newCompany.id?.toString() || "",
+						"Company"
+					);
+				}
+			}
+		} catch (error) {
+			console.error("Failed to notify superadmins of new registration:", error);
+		}
 
 		return {
 			message: "Admin registered successfully",

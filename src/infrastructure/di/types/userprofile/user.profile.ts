@@ -5,6 +5,7 @@ export const USER_PROFILE_TYPE = {
     UserProfilePersistenceMapper: Symbol.for('UserProfilePersistenceMapper'),
     IUpdateProfileUseCase: Symbol.for('IUpdateProfileUseCase'),
     UserProfileController: Symbol.for('UserProfileController'),
-    IGetProfileUseCase: Symbol.for('IGetProfileUseCase')
+    IGetProfileUseCase: Symbol.for('IGetProfileUseCase'),
+    IGetDeveloperDashboardStatsUseCase: Symbol.for('IGetDeveloperDashboardStatsUseCase')
 
 }

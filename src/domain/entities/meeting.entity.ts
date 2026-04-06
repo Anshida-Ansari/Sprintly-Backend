@@ -11,6 +11,9 @@ export class MeetingEntity {
 	private _createdBy: string;
 	private _status: MeetingStatus;
 	private _participants: Array<{ userId: string; joinedAt?: Date }>;
+	private _endTime?: Date;
+	private _duration?: number;
+	private _cancelledAt?: Date;
 	private readonly _createdAt?: Date;
 	private _updatedAt?: Date;
 
@@ -25,6 +28,9 @@ export class MeetingEntity {
 		createdBy: string;
 		status: MeetingStatus;
 		participants?: Array<{ userId: string; joinedAt?: Date }>;
+		endTime?: Date;
+		duration?: number;
+		cancelledAt?: Date;
 		createdAt?: Date;
 		updatedAt?: Date;
 	}) {
@@ -38,6 +44,9 @@ export class MeetingEntity {
 		this._createdBy = data.createdBy;
 		this._status = data.status;
 		this._participants = data.participants || [];
+		this._endTime = data.endTime;
+		this._duration = data.duration;
+		this._cancelledAt = data.cancelledAt;
 		this._createdAt = data.createdAt || new Date();
 		this._updatedAt = data.updatedAt || new Date();
 	}
@@ -53,6 +62,9 @@ export class MeetingEntity {
 		createdBy: string;
 		status: MeetingStatus;
 		participants?: Array<{ userId: string; joinedAt?: Date }>;
+		endTime?: Date;
+		duration?: number;
+		cancelledAt?: Date;
 		createdAt?: Date;
 		updatedAt?: Date;
 	}): MeetingEntity {
@@ -109,6 +121,18 @@ export class MeetingEntity {
 		return this._participants;
 	}
 
+	get endTime(): Date | undefined {
+		return this._endTime;
+	}
+
+	get duration(): number | undefined {
+		return this._duration;
+	}
+
+	get cancelledAt(): Date | undefined {
+		return this._cancelledAt;
+	}
+
 	get createdAt(): Date | undefined {
 		return this._createdAt;
 	}
@@ -147,6 +171,9 @@ export class MeetingEntity {
 			createdBy: this._createdBy,
 			status: this._status,
 			participants: this._participants,
+			endTime: this._endTime,
+			duration: this._duration,
+			cancelledAt: this._cancelledAt,
 			createdAt: this._createdAt,
 			updatedAt: this._updatedAt,
 		};

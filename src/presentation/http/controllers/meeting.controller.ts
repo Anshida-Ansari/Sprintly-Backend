@@ -1,6 +1,7 @@
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
+import type { IGetMeetingHistoryUseCase } from "../../../application/usecases/meeting/interface/get.meeting.history.interface";
 import type { IGetProjectMeetingsUseCase } from "../../../application/usecases/meeting/interface/get.project.meetings.interface";
 import type { IScheduleMeetingUseCase } from "../../../application/usecases/meeting/interface/schedule.meeting.interface";
 import type { IUpdateMeetingStatusUseCase } from "../../../application/usecases/meeting/interface/update.meeting.status.interface";
@@ -16,6 +17,8 @@ export class MeetingController {
 		private getProjectMeetingsUseCase: IGetProjectMeetingsUseCase,
 		@inject(MEETING_TYPES.UpdateMeetingStatusUseCase)
 		private updateMeetingStatusUseCase: IUpdateMeetingStatusUseCase,
+		@inject(MEETING_TYPES.GetMeetingHistoryUseCase)
+		private getMeetingHistoryUseCase: IGetMeetingHistoryUseCase,
 	) {}
 
 	async schedule(req: Request, res: Response, next: NextFunction) {
@@ -58,6 +61,20 @@ export class MeetingController {
 			return res.status(SuccessStatus.OK).json({
 				success: true,
 				message: "Meeting status updated",
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getHistory(req: Request, res: Response, next: NextFunction) {
+		try {
+			const { projectId } = req.params;
+			const meetings = await this.getMeetingHistoryUseCase.execute(projectId);
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Meeting history fetch Successfully",
+				data: meetings,
 			});
 		} catch (error) {
 			next(error);

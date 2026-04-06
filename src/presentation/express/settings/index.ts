@@ -8,6 +8,7 @@ import { createServer } from "http";
 import { SocketServer } from "../../socket/socket.server.js";
 import app from "./app.js";
 import { PinoLoggerService } from "@infrastructure/providers/logger/logger.service.js";
+import { MeetingScheduler } from "../../../infrastructure/scheduler/meeting.scheduler.js";
 
 const logger = new PinoLoggerService()
 
@@ -18,6 +19,9 @@ connectDB();
 
 const httpServer = createServer(app);
 new SocketServer(httpServer);
+
+const meetingScheduler = new MeetingScheduler();
+meetingScheduler.start();
 
 httpServer.listen(PORT, () => {
 	logger.info({

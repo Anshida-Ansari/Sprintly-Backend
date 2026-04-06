@@ -38,8 +38,28 @@ export class MeetingRepository
 		return docs.map((doc) => this._meetingMapper.fromMongo(doc));
 	}
 
-	async updateStatus(id: string, status: MeetingStatus): Promise<void> {
-		await this.model.findByIdAndUpdate(id, { status }).exec();
+	async updateStatus(idOrRoomId: string, status: MeetingStatus): Promise<void> {
+		const update: any = { status };
+
+		let meeting: any = await this.model.findOne({ roomId: idOrRoomId }).exec();
+		if (!meeting) {
+			meeting = await this.model.findById(idOrRoomId).exec();
+		}
+
+		if (!meeting) return;
+
+		if (status === "COMPLETED") {
+			const endTime = new Date();
+			update.endTime = endTime;
+			const startTime = new Date(meeting.date);
+			update.duration = Math.floor(
+				(endTime.getTime() - startTime.getTime()) / 1000 / 60,
+			);
+		} else if (status === "CANCELLED") {
+			update.cancelledAt = new Date();
+		}
+
+		await this.model.findByIdAndUpdate(meeting._id, update).exec();
 	}
 
 	async findByRoomId(roomId: string): Promise<MeetingEntity | null> {

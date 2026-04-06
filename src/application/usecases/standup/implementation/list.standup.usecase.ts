@@ -11,7 +11,17 @@ export class ListStandupsUseCase implements IListStandupsUseCase {
 		private _standupRepository: IStandupRepository,
 	) {}
 
-	async execute(sprintId: string, date?: Date): Promise<StandupEntity[]> {
-		return await this._standupRepository.findBySprintAndDate(sprintId, date);
+	async execute(
+		projectId?: string,
+		sprintId?: string,
+		date?: string,
+	): Promise<StandupEntity[]> {
+		if (sprintId) {
+			return await this._standupRepository.findBySprintAndDate(sprintId, date);
+		}
+		if (projectId) {
+			return await this._standupRepository.findByProjectAndDate(projectId, date);
+		}
+		return [];
 	}
 }

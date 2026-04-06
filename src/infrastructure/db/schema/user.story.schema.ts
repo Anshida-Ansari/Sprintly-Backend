@@ -57,7 +57,7 @@ export const userStorySchema = new mongoose.Schema(
 		},
 		companyId: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "Companies",
+			ref: "Company",
 			required: true,
 		},
 		adminId: {

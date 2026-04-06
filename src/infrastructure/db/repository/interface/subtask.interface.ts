@@ -6,11 +6,12 @@ export interface ISubTaskRepository extends IBaseRepository<SubTaskEntity> {
 	findByCompanyId(companyId: string): Promise<SubTaskEntity[]>;
 	findByAssignedTo(userId: string): Promise<SubTaskEntity[]>;
 	findByUserStoryIds(userStoryIds: string[]): Promise<SubTaskEntity[]>;
+	getTopMembers(companyId: string, limit: number): Promise<any[]>;
+	getLiveActivity(companyId: string, limit: number): Promise<SubTaskEntity[]>;
 	addComment(userStoryId: string, comment: {
 		userId: string
 		userName: string
 		message: string
 		createdAt: Date
 	}): Promise<void>
-	// countOfUserstory(userStoryId: string):Promise<number>
 }

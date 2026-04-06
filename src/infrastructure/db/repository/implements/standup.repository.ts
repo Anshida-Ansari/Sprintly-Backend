@@ -42,18 +42,13 @@ export class StandupRepository extends BaseRepository<StandupEntity>implements I
 
 	async findUserStandupForDate(
 		userId: string,
-		sprintId: string,
-		date: Date,
+		projectId: string,
+		date: string,
 	): Promise<StandupEntity | null> {
-		const startDay = new Date(date);
-		startDay.setHours(0, 0, 0, 0);
-		const endDay = new Date(date);
-		endDay.setHours(23, 59, 59, 999);
-
 		const doc = await this.model.findOne({
 			userId,
-			sprintId,
-			createdAt: { $gte: startDay, $lte: endDay },
+			projectId,
+			date,
 		});
 
 		return doc ? this._standupMapper.fromMongo(doc) : null;
@@ -61,24 +56,36 @@ export class StandupRepository extends BaseRepository<StandupEntity>implements I
 
 	async findBySprintAndDate(
 		sprintId: string,
-		date?: Date,
+		date?: string,
 	): Promise<StandupEntity[]> {
 		const query: any = { sprintId };
 
 		if (date) {
-			const startOfDate = new Date(date);
-			startOfDate.setHours(0, 0, 0, 0);
-
-			const endOfDate = new Date(date);
-			endOfDate.setHours(23, 59, 59, 999);
-
-			query.createdAt = { $gte: startOfDate, $lte: endOfDate };
+			query.date = date;
 		}
 
 		const docs = await this.model
 			.find(query)
 			.populate("userId")
 			.sort({ createdAt: 1 });
+
+		return docs.map((doc) => this._standupMapper.fromMongo(doc));
+	}
+
+	async findByProjectAndDate(
+		projectId: string,
+		date?: string,
+	): Promise<StandupEntity[]> {
+		const query: any = { projectId };
+
+		if (date) {
+			query.date = date;
+		}
+
+		const docs = await this.model
+			.find(query)
+			.populate("userId")
+			.sort({ createdAt: -1 });
 
 		return docs.map((doc) => this._standupMapper.fromMongo(doc));
 	}

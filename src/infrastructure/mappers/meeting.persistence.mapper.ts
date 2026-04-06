@@ -17,6 +17,9 @@ export class MeetingPersistenceMapper {
 				userId: p.userId.toString(),
 				joinedAt: p.joinedAt,
 			})),
+			endTime: doc.endTime,
+			duration: doc.duration,
+			cancelledAt: doc.cancelledAt,
 			createdAt: doc.createdAt,
 			updatedAt: doc.updatedAt,
 		});
@@ -36,6 +39,9 @@ export class MeetingPersistenceMapper {
 				userId: new Types.ObjectId(p.userId),
 				joinedAt: p.joinedAt,
 			})),
+			endTime: entity.endTime,
+			duration: entity.duration,
+			cancelledAt: entity.cancelledAt,
 		};
 	}
 }

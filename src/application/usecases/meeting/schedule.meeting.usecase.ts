@@ -26,6 +26,7 @@ export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
 		type: "single" | "group";
 		createdBy: string;
 		participants?: string[];
+		duration?: number;
 	}): Promise<MeetingEntity> {
 		const meeting = MeetingEntity.create({
 			projectId: data.projectId,
@@ -35,6 +36,7 @@ export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
 			link: data.link,
 			type: data.type,
 			status: MeetingStatus.SCHEDULED,
+			duration: data.duration,
 			participants: data.participants?.map((userId) => ({ userId })),
 		});
 

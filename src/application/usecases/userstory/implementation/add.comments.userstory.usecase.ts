@@ -49,5 +49,16 @@ export class AddCommentToUserStoryUseCase implements IAddCommentToUserStoryUseCa
                 }
             }
         }
+
+        if (userStory.adminId && userStory.adminId.toString() !== dto.userId.toString()) {
+            await this._createNotificationUseCase.execute(
+                userStory.adminId.toString(),
+                NotificationType.COMMENT_ADDED,
+                `${dto.userName} commented on story: ${userStory.title}`,
+                dto.userStoryId,
+                "STORY",
+                dto.userId
+            );
+        }
     }
 }

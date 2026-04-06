@@ -7,6 +7,7 @@ export class StandupEntity {
 	private _yesterday: string;
 	private _today: string;
 	private _blockers: string;
+	private _date: string;
 	private _comments: Array<{
 		userId: string;
 		userName: string;
@@ -25,6 +26,7 @@ export class StandupEntity {
 		yesterday: string;
 		today: string;
 		blockers?: string;
+		date: string;
 		comments?: Array<{
 			userId: string;
 			userName: string;
@@ -42,6 +44,7 @@ export class StandupEntity {
 		this._yesterday = props.yesterday.trim();
 		this._today = props.today.trim();
 		this._blockers = props.blockers?.trim() || "None";
+		this._date = props.date;
 		this._comments = props.comments ?? [];
 		this._createdAt = props.createdAt ?? new Date();
 		this._userData = props.userData;
@@ -56,6 +59,7 @@ export class StandupEntity {
 		yesterday: string;
 		today: string;
 		blockers?: string;
+		date: string;
 		comments?: Array<{
 			userId: string;
 			userName: string;
@@ -67,6 +71,9 @@ export class StandupEntity {
 	}): StandupEntity {
 		if (!props.yesterday || !props.today) {
 			throw new Error("Standup updates for Yesterday and Today are required");
+		}
+		if (!props.date) {
+			throw new Error("Date is required for standup");
 		}
 		return new StandupEntity(props);
 	}
@@ -112,6 +119,9 @@ export class StandupEntity {
 	get blockers() {
 		return this._blockers;
 	}
+	get date() {
+		return this._date;
+	}
 	get comments() {
 		return [...this._comments];
 	}
@@ -132,6 +142,7 @@ export class StandupEntity {
 			yesterday: this._yesterday,
 			today: this._today,
 			blockers: this._blockers,
+			date: this._date,
 			comments: this._comments,
 			createdAt: this._createdAt,
 			user: this._userData

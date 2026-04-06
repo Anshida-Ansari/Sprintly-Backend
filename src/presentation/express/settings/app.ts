@@ -16,6 +16,9 @@ import { subTaskRouter } from "../router/subtask/subtask.router";
 import { superadminRouter } from "../router/superadmin/superadmin.router";
 import { userstoryRouter } from "../router/userstory/userstory.router";
 import { notificationRouter } from "../router/notification/notification.router";
+import { aiRouter } from "../router/ai/ai.router";
+import { workLogRouter } from "../router/worklog/worklog.router.js";
+import { analyticsRouter } from "../router/analytics/analytics.router";
 
 app.use(
 	cors({
@@ -52,5 +55,8 @@ app.use(BASE_API.MEETING, meetingRouter);
 app.use(BASE_API.GITHUB, githubRouter);
 app.use(BASE_API.USER_PROFILE, userprofileRotuer)
 app.use(BASE_API.NOTIFICATION, notificationRouter);
+app.use(BASE_API.AI, aiRouter);
+app.use(BASE_API.WORKLOG, workLogRouter);
+app.use(BASE_API.ANALYTICS, analyticsRouter);
 
 export default app;

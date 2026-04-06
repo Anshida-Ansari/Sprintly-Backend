@@ -29,11 +29,13 @@ export class SubmitStandupUseCase implements ISubmitStandupUseCase {
 			throw new Error("Standups can only be submitted for active sprints.");
 		}
 
+		const todayStr = new Date().toISOString().split("T")[0];
+
 		const existingStandup =
 			await this._standupRepository.findUserStandupForDate(
 				userId,
-				sprintId,
-				new Date(),
+				projectId,
+				todayStr,
 			);
 
 		if (existingStandup) {
@@ -55,6 +57,7 @@ export class SubmitStandupUseCase implements ISubmitStandupUseCase {
 				yesterday: dto.yesterday,
 				today: dto.today,
 				blockers: dto.blockers,
+				date: todayStr,
 			});
 			await this._standupRepository.create(newStandup);
 		}
