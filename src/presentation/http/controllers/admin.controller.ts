@@ -6,6 +6,11 @@ import type { IGetDashboardStatsUseCase } from "../../../application/usecases/ad
 import type { IInviteMemberUseCase } from "../../../application/usecases/admin/interface/invite.member.interface";
 import type { IListMembersUseCase } from "../../../application/usecases/admin/interface/list.members.interface";
 import type { IVerifyInvitationUseCase } from "../../../application/usecases/admin/interface/verify.member.interface";
+import type { IUpgradeSubscriptionUseCase } from "../../../application/usecases/subscription/interface/upgrade.subscription.interface";
+import type { ICreateStripeSessionUseCase } from "../../../application/usecases/subscription/interface/create.stripe.session.interface";
+import type { IHandleStripeWebhookUseCase } from "../../../application/usecases/subscription/interface/handle.stripe.webhook.interface";
+import type { IGetCompanySubscriptionUseCase } from "../../../application/usecases/subscription/interface/get.company.subscription.interface";
+import type { IVerifyStripeSessionUseCase } from "../../../application/usecases/subscription/interface/verify.stripe.session.interface";
 import { ErrorMessage } from "../../../domain/enum/messages/error.message.enum";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
 import { SuccessStatus } from "../../../domain/enum/status-codes/success.status.enum";
@@ -24,6 +29,16 @@ export class AdminController {
 		private _blockUserUseCase: IBlockUserUseCase,
 		@inject(ADMIN_TYPES.IGetDashboardStatsUseCase)
 		private _getDashboardStatsUseCase: IGetDashboardStatsUseCase,
+		@inject(ADMIN_TYPES.IUpgradeSubscriptionUseCase)
+		private _upgradeSubscriptionUseCase: IUpgradeSubscriptionUseCase,
+		@inject(ADMIN_TYPES.ICreateStripeSessionUseCase)
+		private _createStripeSessionUseCase: ICreateStripeSessionUseCase,
+		@inject(ADMIN_TYPES.IHandleStripeWebhookUseCase)
+		private _handleStripeWebhookUseCase: IHandleStripeWebhookUseCase,
+		@inject(ADMIN_TYPES.IGetCompanySubscriptionUseCase)
+		private _getCompanySubscriptionUseCase: IGetCompanySubscriptionUseCase,
+		@inject(ADMIN_TYPES.IVerifyStripeSessionUseCase)
+		private _verifyStripeSessionUseCase: IVerifyStripeSessionUseCase,
 	) {}
 
 	async inviteMember(req: Request, res: Response, next: NextFunction) {
@@ -137,6 +152,117 @@ export class AdminController {
 			}
 
 			const stats = await this._getDashboardStatsUseCase.execute(companyId);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				data: stats,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async upgradePlan(req: Request, res: Response, next: NextFunction) {
+		try {
+			const companyId = req.user.companyId;
+			if (!companyId) {
+				return res.status(ClientErrorStatus.NOT_FOUND).json({
+					success: false,
+					message: ErrorMessage.COMPANY_NOT_FOUND,
+				});
+			}
+
+			const result = await this._upgradeSubscriptionUseCase.execute(companyId);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				...result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async createStripeSession(req: Request, res: Response, next: NextFunction) {
+		try {
+			const companyId = req.user.companyId;
+			const { priceId } = req.body;
+			if (!companyId) {
+				return res.status(ClientErrorStatus.NOT_FOUND).json({
+					success: false,
+					message: ErrorMessage.COMPANY_NOT_FOUND,
+				});
+			}
+
+			const result = await this._createStripeSessionUseCase.execute(companyId, priceId);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				...result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async stripeWebhook(req: Request, res: Response, next: NextFunction) {
+		try {
+			const signature = req.headers["stripe-signature"] as string;
+			
+			// We need the raw body as a buffer for signature verification.
+			// This typically requires a custom body parser middleware specifically for this route.
+			const rawBody = req.body;
+
+			await this._handleStripeWebhookUseCase.execute(rawBody, signature);
+
+			return res.status(SuccessStatus.OK).json({ received: true });
+		} catch (error) {
+			// Stripe expects an error response if webhook handling fails
+			console.error("Webhook processing error:", error);
+			return res.status(ClientErrorStatus.BAD_REQUEST).send(`Webhook Error: ${error}`);
+		}
+	}
+
+	async verifyStripeSession(req: Request, res: Response, next: NextFunction) {
+		try {
+			const companyId = req.user.companyId;
+			const { sessionId } = req.body;
+
+			if (!companyId) {
+				return res.status(ClientErrorStatus.NOT_FOUND).json({
+					success: false,
+					message: ErrorMessage.COMPANY_NOT_FOUND,
+				});
+			}
+
+			if (!sessionId) {
+				return res.status(ClientErrorStatus.BAD_REQUEST).json({
+					success: false,
+					message: "Session ID is required",
+				});
+			}
+
+			const result = await this._verifyStripeSessionUseCase.execute(sessionId, companyId);
+
+			return res.status(SuccessStatus.OK).json({
+				...result,
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getSubscriptionStatus(req: Request, res: Response, next: NextFunction) {
+		try {
+			const companyId = req.user.companyId;
+			if (!companyId) {
+				return res.status(ClientErrorStatus.NOT_FOUND).json({
+					success: false,
+					message: ErrorMessage.COMPANY_NOT_FOUND,
+				});
+			}
+
+			const stats = await this._getCompanySubscriptionUseCase.execute(companyId);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,

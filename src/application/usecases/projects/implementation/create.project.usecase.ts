@@ -15,6 +15,8 @@ import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notific
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { EncryptionUtil } from "@shared/utils/encryption/encryption.util";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
+import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
 
 @injectable()
@@ -44,12 +46,25 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
 			throw new ConflictError(ProjectErrorMessage.PROJECT_ALREADY_EXIST);
 		}
 
+		// ── Subscription Limit Check ──────────────────────────────────────
+		const company = await this._companyRepository.findById(companyId);
+
+		if (!company) {
+			throw new NotFoundError("Company not found");
+		}
+
+		if (company.projectLimit !== -1) {
+			const projectCount = await this._projectRepsitory.count({ companyId });
+			if (projectCount >= company.projectLimit) {
+				throw new ForbiddenError(ProjectErrorMessage.PROJECT_LIMIT_REACHED);
+			}
+		}
+		// ─────────────────────────────────────────────────────────────────
+
 		const startDate = new Date(dto.startDate);
 		const endDate = new Date(dto.endDate);
 
 		let gitRepoUrl = dto.gitRepoUrl;
-
-		const company = await this._companyRepository.findById(companyId);
 
 		if (company?.githubAccessToken && !dto.gitRepoUrl) {
 			try {

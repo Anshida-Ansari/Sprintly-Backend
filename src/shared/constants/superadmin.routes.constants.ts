@@ -3,4 +3,13 @@ export const SUPERADMIN_ROUTES = {
 	UPDATE_STATUS: "/company/:companyId/status",
 	DETAIL_PAGE: "/company/:companyId",
 	DASHBOARD_STATS: "/dashboard/stats",
+	SUBSCRIPTION_ANALYTICS: "/subscription-analytics",
+	REVENUE_ANALYTICS: "/analytics/revenue",
+	SUBSCRIPTION_METRICS: "/analytics/subscriptions",
+	TOP_COMPANIES: "/analytics/top-companies",
+	REPORT_SUBSCRIPTIONS: "/reports/subscriptions",
+	REPORT_PAYMENTS: "/reports/payments",
+	REPORT_EXPIRING: "/reports/expiring-soon",
+	REPORT_TRIALS: "/reports/trials",
+	PLATFORM_ANALYTICS: "/analytics/platform",
 };

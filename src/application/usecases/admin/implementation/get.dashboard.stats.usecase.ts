@@ -2,12 +2,14 @@ import { inject, injectable } from "inversify";
 import { ProjectStatus } from "../../../../domain/enum/project/project.status";
 import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status";
 import { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status";
+import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
 import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface";
 import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
 import type { ISprintReposiotry } from "../../../../infrastructure/db/repository/interface/sprints.interface";
 import type { ISubTaskRepository } from "../../../../infrastructure/db/repository/interface/subtask.interface";
 import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
 import type { IUserStroyRepository } from "../../../../infrastructure/db/repository/interface/user.story.interface";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
 import { MEETING_TYPES } from "../../../../infrastructure/di/types/meeting/meeting.types";
 import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
 import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/spirnts/sprints.types";
@@ -34,6 +36,8 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 		private _userRepository: IUserRepository,
 		@inject(MEETING_TYPES.IMeetingRepository)
 		private _meetingRepository: IMeetingRepository,
+		@inject(COMPANY_TYPES.ICompanyRepository)
+		private _companyRepository: ICompanyRepository,
 	) {}
 
 	async execute(companyId: string): Promise<IDashboardStats> {
@@ -91,6 +95,9 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			projectId: { $in: projectIds },
 		});
 
+		// Fetch company subscription details
+		const company = await this._companyRepository.findByCompanyId(companyId);
+
 		return {
 			totalProjects,
 			totalUsers,
@@ -108,6 +115,11 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			totalMeetings,
 			topMembers,
 			liveActivity,
+			// Subscription Info
+			companyPlan: company?.currentPlan ?? "free",
+			projectLimit: company?.projectLimit ?? 2,
+			subscriptionEndDate: company?.subscriptionEndDate ?? null,
+			autoRenew: company?.autoRenew ?? true,
 		};
 	}
 }

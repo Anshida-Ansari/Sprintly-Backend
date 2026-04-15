@@ -12,6 +12,8 @@ export class UserEntity {
 	private _status: UserStatus;
 	private _companyId?: string;
 	private _adminId?: string;
+	private _lastActive?: Date;
+	private _createdAt?: Date;
 
 	constructor(props: {
 		id?: string;
@@ -22,6 +24,8 @@ export class UserEntity {
 		status: UserStatus;
 		companyId?: string;
 		adminId?: string;
+		lastActive?: Date;
+		createdAt?: Date;
 	}) {
 		this._id = props.id;
 		this._name = props.name;
@@ -31,6 +35,8 @@ export class UserEntity {
 		this._status = props.status;
 		this._companyId = props.companyId;
 		this._adminId = props.adminId;
+		this._lastActive = props.lastActive;
+		this._createdAt = props.createdAt;
 	}
 
 	static create(props: {
@@ -42,6 +48,8 @@ export class UserEntity {
 		status: UserStatus;
 		companyId?: string;
 		adminId?: string;
+		lastActive?: Date;
+		createdAt?: Date;
 	}): UserEntity {
 		return new UserEntity({
 			id: props.id,
@@ -52,6 +60,8 @@ export class UserEntity {
 			status: props.status,
 			companyId: props.companyId,
 			adminId: props.adminId,
+			lastActive: props.lastActive,
+			createdAt: props.createdAt,
 		});
 	}
 
@@ -78,6 +88,12 @@ export class UserEntity {
 	}
 	get adminId() {
 		return this._adminId;
+	}
+	get lastActive() {
+		return this._lastActive;
+	}
+	get createdAt() {
+		return this._createdAt;
 	}
 
 	isBlocked() {

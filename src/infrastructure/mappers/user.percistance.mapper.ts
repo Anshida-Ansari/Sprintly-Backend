@@ -11,6 +11,7 @@ export class UserPersistenceMapper {
 			status: user.status,
 			companyId: user.companyId,
 			adminId: user.adminId,
+			lastActive: user.lastActive,
 		};
 	}
 	fromMongo(doc: any): UserEntity {
@@ -23,6 +24,8 @@ export class UserPersistenceMapper {
 			status: (doc.status ?? "active") as UserStatus,
 			companyId: doc.companyId,
 			adminId: doc.adminId,
+			lastActive: doc.lastActive,
+			createdAt: doc.createdAt,
 		});
 	}
 }

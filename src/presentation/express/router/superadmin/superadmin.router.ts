@@ -33,5 +33,54 @@ router.get(
 	authGuard.authorize(["superadmin"]),
 	(req, res, next) => superadminController.getDashboardStats(req, res, next),
 );
+router.get(
+	SUPERADMIN_ROUTES.SUBSCRIPTION_ANALYTICS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getSubscriptionAnalytics(req, res, next),
+);
+
+// Analytics
+router.get(
+	SUPERADMIN_ROUTES.REVENUE_ANALYTICS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getRevenueAnalytics(req, res, next),
+);
+router.get(
+	SUPERADMIN_ROUTES.SUBSCRIPTION_METRICS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getSubscriptionMetrics(req, res, next),
+);
+router.get(
+	SUPERADMIN_ROUTES.TOP_COMPANIES,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getTopCompanies(req, res, next),
+);
+router.get(
+	SUPERADMIN_ROUTES.PLATFORM_ANALYTICS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getPlatformAnalytics(req, res, next),
+);
+
+// Reports
+router.get(
+	SUPERADMIN_ROUTES.REPORT_SUBSCRIPTIONS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getSubscriptionReport(req, res, next),
+);
+router.get(
+	SUPERADMIN_ROUTES.REPORT_PAYMENTS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getPaymentReport(req, res, next),
+);
+router.get(
+	SUPERADMIN_ROUTES.REPORT_EXPIRING,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getExpiringSoonReport(req, res, next),
+);
+router.get(
+	SUPERADMIN_ROUTES.REPORT_TRIALS,
+	authGuard.authorize(["superadmin"]),
+	(req, res, next) => superadminController.getTrialReport(req, res, next),
+);
 
 export { router as superadminRouter };

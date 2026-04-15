@@ -1,3 +1,4 @@
+import { SubscriptionPlan, PROJECT_LIMITS } from "@domain/enum/company/subscription.plan.enum";
 import type { Status } from "@domain/enum/user/user.status.enum";
 
 export interface GitHubCredentials {
@@ -20,6 +21,12 @@ export class CompanyEnitiy {
 	private _githubConnectedAt?: Date;
 	private _githubUsername?: string;
 	private _githubOrganization?: string;
+	private _currentPlan: SubscriptionPlan;
+	private _projectLimit: number;
+	private _stripeCustomerId?: string;
+	private _stripeSubscriptionId?: string;
+	private _subscriptionEndDate?: Date;
+	private _autoRenew: boolean;
 
 	constructor(props: {
 		id?: string;
@@ -33,6 +40,12 @@ export class CompanyEnitiy {
 		githubConnectedAt?: Date;
 		githubUsername?: string;
 		githubOrganization?: string;
+		currentPlan: SubscriptionPlan;
+		projectLimit: number;
+		stripeCustomerId?: string;
+		stripeSubscriptionId?: string;
+		subscriptionEndDate?: Date;
+		autoRenew?: boolean;
 	}) {
 		this._id = props.id;
 		this._companyName = props.companyName;
@@ -45,6 +58,12 @@ export class CompanyEnitiy {
 		this._githubConnectedAt = props.githubConnectedAt;
 		this._githubUsername = props.githubUsername;
 		this._githubOrganization = props.githubOrganization;
+		this._currentPlan = props.currentPlan;
+		this._projectLimit = props.projectLimit;
+		this._stripeCustomerId = props.stripeCustomerId;
+		this._stripeSubscriptionId = props.stripeSubscriptionId;
+		this._subscriptionEndDate = props.subscriptionEndDate;
+		this._autoRenew = props.autoRenew ?? true;
 	}
 
 	static create(props: {
@@ -59,7 +78,15 @@ export class CompanyEnitiy {
 		githubConnectedAt?: Date;
 		githubUsername?: string;
 		githubOrganization?: string;
+		currentPlan?: SubscriptionPlan;
+		projectLimit?: number;
+		stripeCustomerId?: string;
+		stripeSubscriptionId?: string;
+		subscriptionEndDate?: Date;
+		autoRenew?: boolean;
 	}): CompanyEnitiy {
+		const plan = props.currentPlan ?? SubscriptionPlan.FREE;
+		const limit = props.projectLimit ?? PROJECT_LIMITS[SubscriptionPlan.FREE];
 		return new CompanyEnitiy({
 			id: props.id,
 			companyName: props.companyName,
@@ -72,6 +99,12 @@ export class CompanyEnitiy {
 			githubConnectedAt: props.githubConnectedAt,
 			githubUsername: props.githubUsername,
 			githubOrganization: props.githubOrganization,
+			currentPlan: plan,
+			projectLimit: limit,
+			stripeCustomerId: props.stripeCustomerId,
+			stripeSubscriptionId: props.stripeSubscriptionId,
+			subscriptionEndDate: props.subscriptionEndDate,
+			autoRenew: props.autoRenew,
 		});
 	}
 
@@ -129,5 +162,28 @@ export class CompanyEnitiy {
 	}
 	get githubOrganization() {
 		return this._githubOrganization;
+	}
+	get currentPlan() {
+		return this._currentPlan;
+	}
+	get projectLimit() {
+		return this._projectLimit;
+	}
+	get stripeCustomerId() {
+		return this._stripeCustomerId;
+	}
+	get stripeSubscriptionId() {
+		return this._stripeSubscriptionId;
+	}
+	get subscriptionEndDate() {
+		return this._subscriptionEndDate;
+	}
+	get autoRenew() {
+		return this._autoRenew;
+	}
+
+	hasReachedProjectLimit(currentCount: number): boolean {
+		if (this._projectLimit === -1) return false; // unlimited
+		return currentCount >= this._projectLimit;
 	}
 }

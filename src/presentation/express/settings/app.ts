@@ -27,7 +27,15 @@ app.use(
 	}),
 );
 
-app.use(express.json());
+// Apply JSON body parser to ALL routes EXCEPT the stripe webhook
+// Stripe needs the raw Buffer body for signature verification
+app.use((req, res, next) => {
+	if (req.originalUrl.includes("/stripe-webhook")) {
+		next(); // Skip JSON parsing — the router uses express.raw() for this route
+	} else {
+		express.json()(req, res, next);
+	}
+});
 app.use(cookieParser());
 
 app.use((req, res, next) => {

@@ -15,6 +15,11 @@ export interface IDashboardStats {
 	totalMeetings: number;
 	topMembers: any[];
 	liveActivity: any[];
+	// Subscription Info
+	companyPlan: string;
+	projectLimit: number;
+	subscriptionEndDate: Date | null;
+	autoRenew: boolean;
 }
 
 export interface IGetDashboardStatsUseCase {

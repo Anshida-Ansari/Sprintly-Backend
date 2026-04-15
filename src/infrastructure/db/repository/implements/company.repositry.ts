@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
 import type { CompanyEnitiy } from "../../../../domain/entities/company.enities";
+import type { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
 import type { Status } from "../../../../domain/enum/user/user.status.enum";
 import { COMPANY_TYPES } from "../../../di/types/company/company.types";
 import type { CompanyPersistenceMapper } from "../../../mappers/company.persistance.mapper";
@@ -12,8 +13,6 @@ export class CompanyRepository
 	extends BaseRepository<CompanyEnitiy>
 	implements ICompanyRepository
 {
-	// private readonly _companyMapper:CompanyPersistenceMapper
-
 	constructor(
 		@inject(COMPANY_TYPES.CompanyModel)
 		model: Model<CompanyEnitiy>,
@@ -21,7 +20,6 @@ export class CompanyRepository
 		private readonly _companyMapper: CompanyPersistenceMapper,
 	) {
 		super(model);
-		// this._companyMapper = _companyMapper
 	}
 
 	async findByName(name: string): Promise<CompanyEnitiy | null> {
@@ -40,7 +38,47 @@ export class CompanyRepository
 	}
 
 	async findByCompanyId(companyId: string): Promise<CompanyEnitiy | null> {
-		const doc = await this.findOne({ _id: companyId });
+		const doc = await this.model.findById(companyId);
+		if (!doc) return null;
+		return this._companyMapper.fromMongo(doc);
+	}
+
+	async findByStripeCustomerId(customerId: string): Promise<CompanyEnitiy | null> {
+		const doc = await this.model.findOne({ stripeCustomerId: customerId });
+		if (!doc) return null;
+		return this._companyMapper.fromMongo(doc);
+	}
+
+	async updatePlan(
+		companyId: string,
+		plan: SubscriptionPlan,
+		projectLimit: number,
+		stripeCustomerId?: string,
+		stripeSubscriptionId?: string,
+		subscriptionEndDate?: Date,
+		autoRenew?: boolean,
+	): Promise<CompanyEnitiy | null> {
+		const updatePayload: Record<string, any> = {
+			currentPlan: plan,
+			projectLimit,
+		};
+		if (stripeCustomerId !== undefined) {
+			updatePayload.stripeCustomerId = stripeCustomerId;
+		}
+		if (stripeSubscriptionId !== undefined) {
+			updatePayload.stripeSubscriptionId = stripeSubscriptionId;
+		}
+		if (subscriptionEndDate !== undefined) {
+			updatePayload.subscriptionEndDate = subscriptionEndDate;
+		}
+		if (autoRenew !== undefined) {
+			updatePayload.autoRenew = autoRenew;
+		}
+		const doc = await this.model.findByIdAndUpdate(
+			companyId,
+			{ $set: updatePayload },
+			{ new: true },
+		);
 		return doc ? this._companyMapper.fromMongo(doc) : null;
 	}
 }

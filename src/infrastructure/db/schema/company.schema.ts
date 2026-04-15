@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { SubscriptionPlan } from "../../../domain/enum/company/subscription.plan.enum";
 import { Status } from "../../../domain/enum/user/user.status.enum";
 
 export const companySchema = new mongoose.Schema(
@@ -45,6 +46,31 @@ export const companySchema = new mongoose.Schema(
 		githubOrganization: {
 			type: String,
 			default: null,
+		},
+		currentPlan: {
+			type: String,
+			enum: Object.values(SubscriptionPlan),
+			default: SubscriptionPlan.FREE,
+		},
+		projectLimit: {
+			type: Number,
+			default: 2, // Free plan: 2 projects max
+		},
+		stripeCustomerId: {
+			type: String,
+			default: null,
+		},
+		stripeSubscriptionId: {
+			type: String,
+			default: null,
+		},
+		subscriptionEndDate: {
+			type: Date,
+			default: null,
+		},
+		autoRenew: {
+			type: Boolean,
+			default: true,
 		},
 	},
 	{

@@ -43,4 +43,36 @@ router.get(
 	(req, res, next) => adminController.getDashboardStats(req, res, next),
 );
 
+// Subscription endpoints
+router.post(
+	ADMIN_ROUTES.UPGRADE_PLAN,
+	authGurd.authorize(["admin"]),
+	(req, res, next) => adminController.upgradePlan(req, res, next),
+);
+
+router.post(
+	ADMIN_ROUTES.CREATE_STRIPE_SESSION,
+	authGurd.authorize(["admin"]),
+	(req, res, next) => adminController.createStripeSession(req, res, next),
+);
+router.post(
+	ADMIN_ROUTES.VERIFY_STRIPE_SESSION,
+	authGurd.authorize(["admin"]),
+	(req, res, next) => adminController.verifyStripeSession(req, res, next),
+);
+
+import express from "express";
+
+router.post(
+	ADMIN_ROUTES.STRIPE_WEBHOOK,
+	express.raw({ type: 'application/json' }), // Required to get the raw buffer for Stripe signature verification
+	(req, res, next) => adminController.stripeWebhook(req, res, next),
+);
+
+router.get(
+	ADMIN_ROUTES.GET_SUBSCRIPTION_STATUS,
+	authGurd.authorize(["admin"]),
+	(req, res, next) => adminController.getSubscriptionStatus(req, res, next),
+);
+
 export { router as adminRouter };
