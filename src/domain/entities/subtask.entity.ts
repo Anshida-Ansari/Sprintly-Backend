@@ -27,6 +27,7 @@ export class SubTaskEntity {
 
 	private readonly _createdAt: Date;
 	private _updatedAt?: Date;
+	private _completedAt?: Date;
 
 	private constructor(props: {
 		id?: string;
@@ -51,6 +52,7 @@ export class SubTaskEntity {
 		}>;
 		createdAt?: Date;
 		updatedAt?: Date;
+		completedAt?: Date;
 	}) {
 		this._id = props.id;
 		this._userStoryId = props.userStoryId;
@@ -64,6 +66,7 @@ export class SubTaskEntity {
 		this._attachments = props.attachments || [];
 		this._createdAt = props.createdAt || new Date();
 		this._updatedAt = props.updatedAt;
+		this._completedAt = props.completedAt;
 	}
 
 	static create(props: {
@@ -109,6 +112,7 @@ export class SubTaskEntity {
 			actualHours: props.actualHours,
 			comments: props.comments || [],
 			attachments: props.attachments || [],
+			completedAt: props.status === SubTaskStatus.COMPLETED ? new Date() : undefined,
 		});
 	}
 
@@ -122,7 +126,14 @@ export class SubTaskEntity {
 		}>,
 	) {
 		if (props.title !== undefined) this._title = props.title.trim();
-		if (props.status !== undefined) this._status = props.status;
+		if (props.status !== undefined) {
+			if (props.status === SubTaskStatus.COMPLETED && this._status !== SubTaskStatus.COMPLETED) {
+				this._completedAt = new Date();
+			} else if (props.status !== SubTaskStatus.COMPLETED) {
+				this._completedAt = undefined;
+			}
+			this._status = props.status;
+		}
 		if (props.assignedTo !== undefined) this._assignedTo = props.assignedTo;
 
 		if (props.estimatedHours !== undefined) {
@@ -219,6 +230,9 @@ export class SubTaskEntity {
 	get updatedAt() {
 		return this._updatedAt;
 	}
+	get completedAt() {
+		return this._completedAt;
+	}
 
 	get completed() {
 		return this._status === SubTaskStatus.COMPLETED;
@@ -238,6 +252,7 @@ export class SubTaskEntity {
 			attachments: this._attachments,
 			createdAt: this._createdAt,
 			updatedAt: this._updatedAt,
+			completedAt: this._completedAt,
 		};
 	}
 }

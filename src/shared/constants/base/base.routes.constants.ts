@@ -13,5 +13,6 @@ export const BASE_API = {
 	NOTIFICATION: "/api/notifications",
 	AI: "/api/ai",
 	WORKLOG: "/api/worklogs",
-	ANALYTICS: "/api/analytics",
+	ANALYTICS: "/api/projects",
+	REPORTS: "/api/projects",
 };

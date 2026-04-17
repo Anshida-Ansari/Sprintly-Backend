@@ -22,6 +22,7 @@ export class UserStoryEntity {
 	private _adminId?: string;
 	private readonly _createdAt: Date;
 	private _updatedAt?: Date;
+	private _completedAt?: Date;
 
 	private constructor(props: {
 		id?: string;
@@ -44,6 +45,7 @@ export class UserStoryEntity {
 		adminId?: string;
 		createdAt?: Date;
 		updatedAt?: Date;
+		completedAt?: Date;
 	}) {
 		this._id = props.id;
 		this._projectId = props.projectId;
@@ -60,6 +62,7 @@ export class UserStoryEntity {
 		this._adminId = props.adminId;
 		this._createdAt = props.createdAt || new Date();
 		this._updatedAt = props.updatedAt;
+		this._completedAt = props.completedAt;
 	}
 
 	static create(props: {
@@ -106,6 +109,7 @@ export class UserStoryEntity {
 			comments: props.comments || [],
 			estimationPoints: props.estimationPoints,
 			acceptanceCriteria: props.acceptanceCriteria || [],
+			completedAt: props.status === UserStoryStatus.DONE ? new Date() : undefined,
 		});
 	}
 
@@ -124,7 +128,14 @@ export class UserStoryEntity {
 		if (props.title !== undefined) this._title = props.title.trim();
 		if (props.description !== undefined)
 			this._description = props.description?.trim();
-		if (props.status !== undefined) this._status = props.status;
+		if (props.status !== undefined) {
+			if (props.status === UserStoryStatus.DONE && this._status !== UserStoryStatus.DONE) {
+				this._completedAt = new Date();
+			} else if (props.status !== UserStoryStatus.DONE) {
+				this._completedAt = undefined;
+			}
+			this._status = props.status;
+		}
 		if (props.priority !== undefined) this._priority = props.priority;
 		if (props.sprintId !== undefined) this._sprintId = props.sprintId;
 		if (props.assignedTo !== undefined) this._assignedTo = props.assignedTo;
@@ -209,6 +220,9 @@ export class UserStoryEntity {
 	get updatedAt() {
 		return this._updatedAt;
 	}
+	get completedAt() {
+		return this._completedAt;
+	}
 
 	toJSON() {
 		return {
@@ -227,6 +241,7 @@ export class UserStoryEntity {
 			adminId: this._adminId,
 			createdAt: this._createdAt,
 			updatedAt: this._updatedAt,
+			completedAt: this._completedAt,
 		};
 	}
 }

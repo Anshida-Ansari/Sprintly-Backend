@@ -35,6 +35,9 @@ export const subTaskSchema = new mongoose.Schema(
 			type: Number,
 			min: 0,
 		},
+		completedAt: {
+			type: Date,
+		},
 		comments: [
 			{
 				userId: {

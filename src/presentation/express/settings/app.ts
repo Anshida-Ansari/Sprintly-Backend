@@ -19,6 +19,7 @@ import { subTaskRouter } from "../router/subtask/subtask.router";
 import { superadminRouter } from "../router/superadmin/superadmin.router";
 import { userstoryRouter } from "../router/userstory/userstory.router";
 import { workLogRouter } from "../router/worklog/worklog.router.js";
+import { reportsRouter } from "../router/reports/reports.router";
 
 app.use(
 	cors({
@@ -66,5 +67,6 @@ app.use(BASE_API.NOTIFICATION, notificationRouter);
 app.use(BASE_API.AI, aiRouter);
 app.use(BASE_API.WORKLOG, workLogRouter);
 app.use(BASE_API.ANALYTICS, analyticsRouter);
+app.use(BASE_API.REPORTS, reportsRouter);
 
 export default app;

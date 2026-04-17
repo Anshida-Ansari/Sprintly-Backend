@@ -10,4 +10,8 @@ export interface IProjectReposiotory extends IBaseRepository<ProjectEntity> {
 		id: string,
 		project: ProjectEntity,
 	): Promise<ProjectEntity | null>;
+	findWithAnalytics(
+		filter: any,
+		options: { skip: number; limit: number },
+	): Promise<any[]>;
 }

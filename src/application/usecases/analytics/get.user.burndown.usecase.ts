@@ -9,13 +9,13 @@ export class GetUserBurndownUseCase {
 		private readonly analyticsRepository: IAnalyticsRepository,
 	) {}
 
-	async execute(sprintId: string, userId: string) {
+	async execute(sprintId: string, userId: string, type: "hours" | "points" = "hours") {
 		if (!sprintId) {
 			throw new Error("sprintId is required");
 		}
 		if (!userId) {
 			throw new Error("userId is required");
 		}
-		return await this.analyticsRepository.getUserBurndown(sprintId, userId);
+		return await this.analyticsRepository.getUserBurndown(sprintId, userId, type);
 	}
 }

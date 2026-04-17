@@ -18,6 +18,7 @@ export class UserStoryPersisitanceMapper {
 			adminId: userStory.adminId,
 			createdAt: userStory.createdAt,
 			updatedAt: userStory.updatedAt,
+			completedAt: userStory.completedAt,
 		};
 	}
 
@@ -53,6 +54,7 @@ export class UserStoryPersisitanceMapper {
 			estimationPoints: parsedEstimationPoints,
 			acceptanceCriteria: doc.acceptanceCriteria,
 			adminId: doc.adminId?.toString(),
-		});
+			completedAt: doc.completedAt,
+		} as any);
 	}
 }

@@ -26,4 +26,15 @@ router.get(
 	(req, res, next) => analyticsController.getUserBurndown(req, res, next),
 );
 
+router.get(
+	ANALYTICS_ROUTES.DASHBOARD,
+	authGurd.authorize(["admin", "lead", "developers"]),
+	(req, res, next) => analyticsController.getDashboardAnalytics(req, res, next),
+);
+router.get(
+	ANALYTICS_ROUTES.PROJECT_ANALYTICS,
+	authGurd.authorize(["admin", "lead", "developers"]),
+	(req, res, next) => analyticsController.getDashboardAnalytics(req, res, next),
+);
+
 export { router as analyticsRouter };

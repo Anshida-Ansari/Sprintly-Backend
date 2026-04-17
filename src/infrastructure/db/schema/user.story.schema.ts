@@ -72,6 +72,9 @@ export const userStorySchema = new mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
+		completedAt: {
+			type: Date,
+		},
 		acceptanceCriteria: [
 			{
 				type: String,

@@ -45,10 +45,14 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			totalProjects,
 			totalUsers,
 			totalSprints,
+			totalUserStories,
 			totalSubTasks,
 			subTasksPending,
 			subTasksInProgress,
 			subTasksCompleted,
+			userStoriesPending,
+			userStoriesInProgress,
+			userStoriesDone,
 			activeProjects,
 			runningSprints,
 			completedSprints,
@@ -59,6 +63,7 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			this._projectRepository.count({ companyId }),
 			this._userRepository.count({ companyId }),
 			this._sprintRepository.count({ companyId }),
+			this._userStoryRepository.count({ companyId }),
 			this._subtaskRepository.count({ companyId }),
 			this._subtaskRepository.count({
 				companyId,
@@ -71,6 +76,18 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			this._subtaskRepository.count({
 				companyId,
 				status: SubTaskStatus.COMPLETED,
+			}),
+			this._userStoryRepository.count({
+				companyId,
+				status: UserStoryStatus.IN_PENDING,
+			}),
+			this._userStoryRepository.count({
+				companyId,
+				status: UserStoryStatus.IN_PROGRESS,
+			}),
+			this._userStoryRepository.count({
+				companyId,
+				status: UserStoryStatus.DONE,
 			}),
 			this._projectRepository.count({
 				companyId,
@@ -98,15 +115,50 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 		// Fetch company subscription details
 		const company = await this._companyRepository.findByCompanyId(companyId);
 
+		// Fetch one active sprint for the snapshot
+		const activeSprints = await this._sprintRepository.find(
+			{ companyId, status: "ACTIVE" },
+			{ skip: 0, limit: 1 }
+		);
+		let activeSprintData: any = null;
+
+		if (activeSprints && activeSprints.length > 0) {
+			const sprint = activeSprints[0];
+			// For the snapshot, we want total tasks and completed tasks in THIS sprint
+			// We need to fetch all user stories in this sprint
+			const sprintStories = await this._userStoryRepository.find(
+				{ sprintId: (sprint as any).id || (sprint as any)._id },
+				{ skip: 0, limit: 1000 }
+			);
+			const storyIds = sprintStories.map(s => s.id);
+			
+			const sprintTasks = await this._subtaskRepository.findByUserStoryIds(storyIds);
+			const completedSprintTasks = sprintTasks.filter(t => t.status === SubTaskStatus.COMPLETED);
+
+			activeSprintData = {
+				id: sprint.id,
+				name: sprint.name,
+				totalTasks: sprintTasks.length,
+				completedTasks: completedSprintTasks.length,
+				endDate: sprint.endDate,
+			};
+		}
+
 		return {
 			totalProjects,
 			totalUsers,
 			totalSprints,
+			totalUserStories,
 			totalSubTasks,
 			subTasksByStatus: {
 				pending: subTasksPending,
 				inProgress: subTasksInProgress,
 				completed: subTasksCompleted,
+			},
+			userStoriesByStatus: {
+				pending: userStoriesPending,
+				inProgress: userStoriesInProgress,
+				done: userStoriesDone,
 			},
 			activeProjects,
 			runningSprints,
@@ -115,6 +167,7 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			totalMeetings,
 			topMembers,
 			liveActivity,
+			activeSprint: activeSprintData,
 			// Subscription Info
 			companyPlan: company?.currentPlan ?? "free",
 			projectLimit: company?.projectLimit ?? 2,

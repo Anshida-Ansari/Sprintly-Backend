@@ -15,6 +15,7 @@ export class SubTaskPersisitanceMapper {
 			attachments: subTask.attachments,
 			createdAt: subTask.createdAt,
 			updatedAt: subTask.updatedAt,
+			completedAt: subTask.completedAt,
 		};
 	}
 
@@ -30,6 +31,7 @@ export class SubTaskPersisitanceMapper {
 			actualHours: doc.actualHours,
 			comments: doc.comments || [],
 			attachments: doc.attachments,
-		});
+			completedAt: doc.completedAt,
+		} as any);
 	}
 }

@@ -68,4 +68,74 @@ export class ProjectRepository
 
 		return docs.map((doc) => this._projectMapper.fromMongo(doc));
 	}
+
+	async findWithAnalytics(
+		filter: any,
+		options: { skip: number; limit: number },
+	): Promise<any[]> {
+		const doneStatuses = ["Done", "done", "completed", "COMPLETED", "Completed"];
+		
+		const results = await this.model.aggregate([
+			{ $match: filter },
+			{
+				$lookup: {
+					from: "userstories",
+					let: { projectId: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: {
+									$eq: ["$projectId", "$$projectId"]
+								}
+							}
+						}
+					],
+					as: "stories"
+				}
+			},
+			{
+				$addFields: {
+					analytics: {
+						totalStories: { $size: "$stories" },
+						completedStories: {
+							$size: {
+								$filter: {
+									input: "$stories",
+									as: "story",
+									cond: { $in: ["$$story.status", doneStatuses] }
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				$addFields: {
+					"analytics.progressPercentage": {
+						$cond: [
+							{ $gt: ["$analytics.totalStories", 0] },
+							{ $multiply: [{ $divide: ["$analytics.completedStories", "$analytics.totalStories"] }, 100] },
+							0
+						]
+					}
+				}
+			},
+			{
+				$project: {
+					stories: 0
+				}
+			},
+			{ $sort: { createdAt: -1 } },
+			{ $skip: options.skip },
+			{ $limit: options.limit }
+		]);
+
+		return results.map(doc => {
+            const project = this._projectMapper.fromMongo(doc);
+            return {
+                ...project,
+                analytics: doc.analytics
+            };
+        });
+	}
 }

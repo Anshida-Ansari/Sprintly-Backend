@@ -3,16 +3,16 @@ import { ANALYTICS_TYPES } from "@infrastructure/di/types/analytics/analytics.ty
 import { inject, injectable } from "inversify";
 
 @injectable()
-export class GetSprintBurndownUseCase {
+export class GetDashboardAnalyticsUseCase {
 	constructor(
 		@inject(ANALYTICS_TYPES.IAnalyticsRepository)
 		private readonly analyticsRepository: IAnalyticsRepository,
 	) {}
 
-	async execute(sprintId: string, type: "hours" | "points" = "hours") {
-		if (!sprintId) {
-			throw new Error("sprintId is required");
+	async execute(companyId: string, filters: any) {
+		if (!companyId) {
+			throw new Error("companyId is required");
 		}
-		return await this.analyticsRepository.getSprintBurndown(sprintId, type);
+		return await this.analyticsRepository.getDashboardAnalytics(companyId, filters);
 	}
 }
