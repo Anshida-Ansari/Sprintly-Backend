@@ -23,9 +23,21 @@ router.post(
 	validateDTO(SubmitStandupDTO),
 	(req, res, next) => standupController.submitStandup(req, res, next),
 );
+router.post(
+	STANDUP.SUBMIT_PROJECT_STANDUP,
+	authGurd.authorize(["admin", "developers"]),
+	validateDTO(SubmitStandupDTO),
+	(req, res, next) => standupController.submitStandup(req, res, next),
+);
 
 router.post(
 	STANDUP.ADD_STANDUP,
+	authGurd.authorize(["admin", "developers"]),
+	validateDTO(AddStandupCommentDTO),
+	(req, res, next) => standupController.addStandup(req, res, next),
+);
+router.post(
+	STANDUP.ADD_PROJECT_STANDUP,
 	authGurd.authorize(["admin", "developers"]),
 	validateDTO(AddStandupCommentDTO),
 	(req, res, next) => standupController.addStandup(req, res, next),
@@ -36,9 +48,19 @@ router.get(
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => standupController.listStandups(req, res, next),
 );
+router.get(
+	STANDUP.LIST_PROJECT_STANDUP,
+	authGurd.authorize(["admin", "developers"]),
+	(req, res, next) => standupController.listStandups(req, res, next),
+);
 
 router.post(
 	STANDUP.TODAY_STANDUP,
+	authGurd.authorize(["admin", "developers"]),
+	(req, res, next) => standupController.getMyTodayStandup(req, res, next),
+);
+router.post(
+	STANDUP.TODAY_PROJECT_STANDUP,
 	authGurd.authorize(["admin", "developers"]),
 	(req, res, next) => standupController.getMyTodayStandup(req, res, next),
 );

@@ -13,7 +13,10 @@ export class AiController {
 
 	async chat(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { message } = req.body as { message: string };
+			const { message, projectId } = req.body as { message: string; projectId?: string };
+			const user = (req as any).user;
+
+			console.log("[AiController] Received chat request:", { message, projectId, userId: user?.id });
 
 			if (
 				!message ||
@@ -26,7 +29,11 @@ export class AiController {
 				});
 			}
 
-			const reply = await this._aiChatUseCase.execute(message.trim());
+			const reply = await this._aiChatUseCase.execute(message.trim(), {
+				companyId: user?.companyId,
+				userId: user?.id,
+				projectId: projectId,
+			});
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
