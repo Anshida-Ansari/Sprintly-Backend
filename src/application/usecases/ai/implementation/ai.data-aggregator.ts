@@ -50,6 +50,7 @@ export class AiDataAggregator implements IAiDataAggregator {
 		today.setHours(0, 0, 0, 0);
 
 		const completedTasksYesterday = allSubtasks.filter(st => {
+			if (!st.updatedAt) return false;
 			const updatedAt = new Date(st.updatedAt);
 			return st.status === SubTaskStatus.COMPLETED && 
 				   updatedAt >= yesterday && 

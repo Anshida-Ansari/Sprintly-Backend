@@ -130,7 +130,7 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 				{ sprintId: (sprint as any).id || (sprint as any)._id },
 				{ skip: 0, limit: 1000 }
 			);
-			const storyIds = sprintStories.map(s => s.id);
+			const storyIds = sprintStories.map(s => s.id).filter((id): id is string => !!id);
 			
 			const sprintTasks = await this._subtaskRepository.findByUserStoryIds(storyIds);
 			const completedSprintTasks = sprintTasks.filter(t => t.status === SubTaskStatus.COMPLETED);
