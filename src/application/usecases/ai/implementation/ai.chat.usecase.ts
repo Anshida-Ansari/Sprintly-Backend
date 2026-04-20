@@ -1,7 +1,7 @@
+import { AI_TYPES } from "@infrastructure/di/types/ai/ai.types";
 import Groq from "groq-sdk";
 import { inject, injectable } from "inversify";
 import type { IAiChatUseCase } from "../interface/ai.chat.interface";
-import { AI_TYPES } from "@infrastructure/di/types/ai/ai.types";
 import type { IAiDataAggregator } from "../interface/ai.data-aggregator.interface";
 
 const SYSTEM_PROMPT = `You are an AI assistant integrated into a Project Management Tool.
@@ -33,19 +33,29 @@ export class AiChatUseCase implements IAiChatUseCase {
 		});
 	}
 
-	async execute(userMessage: string, context?: { companyId?: string; projectId?: string; userId?: string }): Promise<string> {
+	async execute(
+		userMessage: string,
+		context?: { companyId?: string; projectId?: string; userId?: string },
+	): Promise<string> {
 		console.log("[AiChatUseCase] Executing with context:", context);
 		let projectContext = null;
 		if (context?.companyId) {
-			projectContext = await this._aiDataAggregator.getProjectContext(context.companyId, context.projectId, context.userId);
-			console.log("[AiChatUseCase] Fetched projectContext projectInfo:", !!projectContext?.projectInfo);
+			projectContext = await this._aiDataAggregator.getProjectContext(
+				context.companyId,
+				context.projectId,
+				context.userId,
+			);
+			console.log(
+				"[AiChatUseCase] Fetched projectContext projectInfo:",
+				!!projectContext?.projectInfo,
+			);
 		}
 
 		let prompt = userMessage;
 		const query = userMessage.toLowerCase();
 
 		// Add project background if available
-		const projectBackground = projectContext?.projectInfo 
+		const projectBackground = projectContext?.projectInfo
 			? `CURRENT PROJECT CONTEXT:
 Project Name: ${projectContext.projectInfo.name}
 Description: ${projectContext.projectInfo.description}
@@ -57,13 +67,13 @@ Status: ${projectContext.projectInfo.status}
 			prompt = `Generate a daily standup update using the following data:
 
 Completed Tasks (Yesterday):
-${projectContext?.completedTasksYesterday.map(t => `- ${t.title}`).join("\n") || "No data available"}
+${projectContext?.completedTasksYesterday.map((t) => `- ${t.title}`).join("\n") || "No data available"}
 
 In Progress Tasks (Today):
-${projectContext?.inProgressTasksToday.map(t => `- ${t.title}`).join("\n") || "No data available"}
+${projectContext?.inProgressTasksToday.map((t) => `- ${t.title}`).join("\n") || "No data available"}
 
 Blocked Tasks:
-${projectContext?.blockedTasks.map(t => `- ${t.title}`).join("\n") || "No data available"}
+${projectContext?.blockedTasks.map((t) => `- ${t.title}`).join("\n") || "No data available"}
 
 Format:
 * Yesterday:
@@ -73,8 +83,19 @@ Format:
 Keep it short, clear, and professional.
 User Query: "${userMessage}"`;
 		} else if (query.includes("summary") || query.includes("progress")) {
-			const completionRate = projectContext ? Math.round((projectContext.completedTasksCount / (projectContext.totalTasksCount || 1)) * 100) : 0;
-			const status = completionRate > 70 ? "Good" : completionRate > 40 ? "Moderate" : "At Risk";
+			const completionRate = projectContext
+				? Math.round(
+						(projectContext.completedTasksCount /
+							(projectContext.totalTasksCount || 1)) *
+							100,
+					)
+				: 0;
+			const status =
+				completionRate > 70
+					? "Good"
+					: completionRate > 40
+						? "Moderate"
+						: "At Risk";
 
 			prompt = `Generate a sprint summary using the following data:
 
@@ -90,11 +111,23 @@ Provide:
 
 Keep it concise and professional.
 User Query: "${userMessage}"`;
-		} else if (query.includes("task") || query.includes("fetch") || query.includes("find")) {
+		} else if (
+			query.includes("task") ||
+			query.includes("fetch") ||
+			query.includes("find")
+		) {
 			prompt = `User Query: "${userMessage}"
 
 Here is the task data:
-${projectContext?.inProgressTasksToday.concat(projectContext?.blockedTasks).map(t => `- ${t.title} [Status: ${t.status}, Priority: ${t.priority || "Normal"}, Due: ${t.dueDate || "N/A"}]`).join("\n") || "No tasks found"}
+${
+	projectContext?.inProgressTasksToday
+		.concat(projectContext?.blockedTasks)
+		.map(
+			(t) =>
+				`- ${t.title} [Status: ${t.status}, Priority: ${t.priority || "Normal"}, Due: ${t.dueDate || "N/A"}]`,
+		)
+		.join("\n") || "No tasks found"
+}
 
 Based on the query, filter and return only relevant tasks.
 

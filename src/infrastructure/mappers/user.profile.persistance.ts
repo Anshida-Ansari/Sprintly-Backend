@@ -17,20 +17,21 @@ export class UserProfilePersistenceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): UserProfileEntity {
 		return UserProfileEntity.create({
-			id: doc._id?.toString(),
-			userId: doc.userId?.toString(),
-			companyId: doc.companyId.toString(),
-			phoneNumber: doc.phoneNumber,
-			address: doc.address,
-			bio: doc.bio,
-			skills: doc.skills ?? [],
-			avatarUrl: doc.avatarUrl,
-			linkedin: doc.linkedin,
-			github: doc.github,
-			createdAt: doc.createdAt,
-			updatedAt: doc.updatedAt,
+			id: (doc._id as { toString(): string } | undefined)?.toString(),
+			userId: (doc.userId as { toString(): string } | undefined)?.toString() ?? "",
+			companyId: (doc.companyId as { toString(): string }).toString(),
+			phoneNumber: doc.phoneNumber as string,
+			address: doc.address as string,
+			bio: doc.bio as string,
+			skills: (doc.skills as string[]) ?? [],
+			avatarUrl: doc.avatarUrl as string,
+			linkedin: doc.linkedin as string,
+			github: doc.github as string,
+			createdAt: doc.createdAt as Date,
+			updatedAt: doc.updatedAt as Date,
 		});
 	}
 }

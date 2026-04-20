@@ -5,7 +5,7 @@ import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
-import type { IGetDetailPageUseCase } from "../interface/get.detailpage.interface";
+import type { ICompanyDetail, IGetDetailPageUseCase } from "../interface/get.detailpage.interface";
 
 @injectable()
 export class GetDetailPageUseCase implements IGetDetailPageUseCase {
@@ -16,11 +16,11 @@ export class GetDetailPageUseCase implements IGetDetailPageUseCase {
 		private _userRepository: IUserRepository,
 	) {}
 
-	async execute(companyId: string): Promise<any> {
+	async execute(companyId: string): Promise<ICompanyDetail> {
 		const company = await this._companyrepository.findByCompanyId(companyId);
 
 		if (!company) {
-			return new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND);
+			throw new NotFoundError(ErrorMessage.COMPANY_NOT_FOUND);
 		}
 
 		let email = "";

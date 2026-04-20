@@ -1,5 +1,12 @@
 export interface IAnalyticsRepository {
-	getSprintBurndown(sprintId: string, type: "hours" | "points"): Promise<any>;
-	getUserBurndown(sprintId: string, userId: string, type: "hours" | "points"): Promise<any>;
-	getDashboardAnalytics(companyId: string, filters: any): Promise<any>;
+	getSprintBurndown(sprintId: string, type: "hours" | "points"): Promise<Record<string, unknown>>;
+	getUserBurndown(
+		sprintId: string,
+		userId: string,
+		type: "hours" | "points",
+	): Promise<Record<string, unknown>>;
+	getDashboardAnalytics(
+		companyId: string,
+		filters: Record<string, unknown>,
+	): Promise<unknown>;
 }

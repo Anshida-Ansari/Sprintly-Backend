@@ -118,22 +118,27 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 		// Fetch one active sprint for the snapshot
 		const activeSprints = await this._sprintRepository.find(
 			{ companyId, status: "ACTIVE" },
-			{ skip: 0, limit: 1 }
+			{ skip: 0, limit: 1 },
 		);
-		let activeSprintData: any = null;
+		let activeSprintData = null;
 
 		if (activeSprints && activeSprints.length > 0) {
 			const sprint = activeSprints[0];
 			// For the snapshot, we want total tasks and completed tasks in THIS sprint
 			// We need to fetch all user stories in this sprint
 			const sprintStories = await this._userStoryRepository.find(
-				{ sprintId: (sprint as any).id || (sprint as any)._id },
-				{ skip: 0, limit: 1000 }
+				{ sprintId: (sprint as { id: string }).id },
+				{ skip: 0, limit: 1000 },
 			);
-			const storyIds = sprintStories.map(s => s.id).filter((id): id is string => !!id);
-			
-			const sprintTasks = await this._subtaskRepository.findByUserStoryIds(storyIds);
-			const completedSprintTasks = sprintTasks.filter(t => t.status === SubTaskStatus.COMPLETED);
+			const storyIds = sprintStories
+				.map((s) => s.id)
+				.filter((id): id is string => !!id);
+
+			const sprintTasks =
+				await this._subtaskRepository.findByUserStoryIds(storyIds);
+			const completedSprintTasks = sprintTasks.filter(
+				(t) => t.status === SubTaskStatus.COMPLETED,
+			);
 
 			activeSprintData = {
 				id: sprint.id,

@@ -62,7 +62,13 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 		);
 		const activeSprint = sprints.find((s) => s.status === "ACTIVE");
 
-		let detailedMembers: any[] = [];
+		let detailedMembers: {
+			id: string;
+			name: string;
+			email: string;
+			role: string;
+		}[] = [];
+
 		if (project.members && project.members.length > 0) {
 			try {
 				const memberPromises = project.members.map((memberId) =>
@@ -70,20 +76,24 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 				);
 				const members = await Promise.all(memberPromises);
 				detailedMembers = members
-					.filter((m) => m !== null)
+					.filter((m): m is Exclude<typeof m, null> => m !== null)
 					.map((m) => ({
-						id: m!.id!,
-						name: m!.name,
-						email: m!.email,
-						role: m!.role,
+						id: m.id ?? "",
+						name: m.name,
+						email: m.email,
+						role: m.role,
 					}));
 			} catch (error) {
 				console.error("Error fetching project members", error);
 			}
 		}
 
+		if (!project.id) {
+			throw new Error("Project ID is missing");
+		}
+
 		return {
-			id: project.id!,
+			id: project.id,
 			name: project.name,
 			description: project.description,
 			status: project.status,
@@ -92,7 +102,7 @@ export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 			gitRepoUrl: project.gitRepoUrl,
 			members: detailedMembers,
 			createdAt: project.createdAt,
-			updatedAt: project.updatedAt!,
+			updatedAt: project.updatedAt ?? new Date(),
 			activeSprintId: activeSprint ? activeSprint.id : undefined,
 		};
 	}

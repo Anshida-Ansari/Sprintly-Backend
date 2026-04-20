@@ -5,5 +5,7 @@ export const REPORTS_TYPE = {
 	GetSprintReportsUseCase: Symbol.for("GetSprintReportsUseCase"),
 	GetUserStoryReportsUseCase: Symbol.for("GetUserStoryReportsUseCase"),
 	GetSubtaskReportsUseCase: Symbol.for("GetSubtaskReportsUseCase"),
-	GetUserPerformanceReportsUseCase: Symbol.for("GetUserPerformanceReportsUseCase"),
+	GetUserPerformanceReportsUseCase: Symbol.for(
+		"GetUserPerformanceReportsUseCase",
+	),
 };

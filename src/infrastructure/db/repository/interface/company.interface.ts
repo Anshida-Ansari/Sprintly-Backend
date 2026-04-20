@@ -19,4 +19,3 @@ export interface ICompanyRepository extends IBaseRepository<CompanyEnitiy> {
 		autoRenew?: boolean,
 	): Promise<CompanyEnitiy | null>;
 }
-

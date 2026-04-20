@@ -15,6 +15,7 @@ import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error";
 import { inject, injectable } from "inversify";
 
 @injectable()
@@ -38,7 +39,12 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 		priority: PriorityStatus;
 		status: UserStoryStatus;
 		assignedTo?: string[];
-		comments?: any[];
+		comments?: Array<{
+			createdAt: Date;
+			message: string;
+			userName?: string;
+			userId: string;
+		}>;
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 		sprintId?: string;
@@ -91,11 +97,15 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 		);
 
 		if (!updatedUserstory) {
-			throw new NotFoundError(ErrorMessage.NOT_FOUND);
+			throw new ServiceUnavailableError(ErrorMessage.CANNOT_EDIT);
+		}
+
+		if (!updatedUserstory.id) {
+			throw new Error("Updated User Story ID is missing");
 		}
 
 		return {
-			id: updatedUserstory.id!,
+			id: updatedUserstory.id,
 			title: updatedUserstory.title,
 			description: updatedUserstory.description,
 			priority: updatedUserstory.priority,

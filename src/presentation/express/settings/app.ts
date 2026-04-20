@@ -13,13 +13,13 @@ import githubRouter from "../router/github/github.router";
 import meetingRouter from "../router/meeting/meeting.router";
 import { notificationRouter } from "../router/notification/notification.router";
 import { projectRouter } from "../router/projects/project.router";
+import { reportsRouter } from "../router/reports/reports.router";
 import { sprintRouter } from "../router/sprints/sprints.router";
 import { standupRouter } from "../router/standup/standup.router";
 import { subTaskRouter } from "../router/subtask/subtask.router";
 import { superadminRouter } from "../router/superadmin/superadmin.router";
 import { userstoryRouter } from "../router/userstory/userstory.router";
 import { workLogRouter } from "../router/worklog/worklog.router.js";
-import { reportsRouter } from "../router/reports/reports.router";
 
 app.use(
 	cors({
@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 });
 app.use(cookieParser());
 
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
 	logger.info({
 		method: req.method,
 		url: req.originalUrl,

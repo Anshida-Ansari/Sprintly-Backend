@@ -62,14 +62,14 @@ export const userSchema = new mongoose.Schema(
 		companyId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Companies",
-			required: function (this: any) {
+			required: function (this: { role: Role }) {
 				return this.role !== Role.SUPER_ADMIN;
 			},
 		},
 		adminId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Users",
-			required: function (this: any) {
+			required: function (this: { role: Role }) {
 				return this.role === Role.DEVELOPERS;
 			},
 			index: true,

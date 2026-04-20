@@ -1,7 +1,6 @@
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
-import path from "path";
-import { ProjectModel } from "./src/infrastructure/db/models/project.schema";
+import path from "node:path";
 import { UserStoryModel } from "./src/infrastructure/db/models/user.story.schema";
 
 dotenv.config({ path: path.join(__dirname, ".env") });

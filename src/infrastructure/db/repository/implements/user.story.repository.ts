@@ -19,7 +19,6 @@ export class UserStoryRepository
 		private readonly _userstoryMapper: UserStoryPersisitanceMapper,
 	) {
 		super(model);
-		// this._userstoryMapper = _userstoryMapper
 	}
 
 	async create(item: UserStoryEntity): Promise<UserStoryEntity> {
@@ -67,7 +66,7 @@ export class UserStoryRepository
 		const { page, limit, search, sprintId, status, projectId, companyId } =
 			params;
 
-		const filter: any = {
+		const filter: Record<string, unknown> = {
 			projectId,
 			companyId,
 		};

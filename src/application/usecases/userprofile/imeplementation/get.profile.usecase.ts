@@ -26,8 +26,12 @@ export class GetProfileUseCase implements IGetProfileUseCase {
 			throw new NotFoundError(ErrorMessage.NOT_FOUND);
 		}
 
+		if (!profile.id) {
+			throw new Error("Profile ID is missing");
+		}
+
 		return {
-			id: profile.id!,
+			id: profile.id,
 			userId: profile.userId,
 			companyId: profile.companyId,
 			phoneNumber: profile.phoneNumber,

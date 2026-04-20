@@ -8,6 +8,7 @@ import { MeetingEntity } from "../../../domain/entities/meeting.entity";
 import type { IMeetingRepository } from "../../../infrastructure/db/repository/interface/meeting.interface";
 import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
 
+import type { ScheduleMeetingDTO } from "../dtos/meeting/schedule.meeting.dto";
 import type { IScheduleMeetingUseCase } from "./interface/schedule.meeting.interface";
 
 @injectable()
@@ -19,16 +20,7 @@ export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
 		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
 
-	async execute(data: {
-		projectId: string;
-		title: string;
-		link?: string;
-		date: Date;
-		type: "single" | "group";
-		createdBy: string;
-		participants?: string[];
-		duration?: number;
-	}): Promise<MeetingEntity> {
+	async execute(data: ScheduleMeetingDTO): Promise<MeetingEntity> {
 		if (new Date(data.date) < new Date()) {
 			throw new BadRequestError("Meeting date must be in the future");
 		}
@@ -37,7 +29,7 @@ export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
 			projectId: data.projectId,
 			title: data.title,
 			date: new Date(data.date),
-			createdBy: data.createdBy!,
+			createdBy: data.createdBy,
 			link: data.link,
 			type: data.type,
 			status: MeetingStatus.SCHEDULED,
@@ -49,11 +41,16 @@ export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
 
 		if (data.participants && data.participants.length > 0) {
 			for (const userId of data.participants) {
+				if (!savedMeeting.id) {
+					console.error("Meeting ID missing after save");
+					continue;
+				}
+
 				await this._createNotificationUseCase.execute(
 					userId,
 					NotificationType.MEETING_SCHEDULED,
 					`New meeting scheduled: ${savedMeeting.title}`,
-					savedMeeting.id!,
+					savedMeeting.id,
 					"MEETING",
 					data.createdBy,
 				);

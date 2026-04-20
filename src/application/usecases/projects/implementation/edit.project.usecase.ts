@@ -49,8 +49,12 @@ export class EditProjectUseCase implements IEditProjectUsecase {
 			throw new Error("Failed to update project");
 		}
 
+		if (!updatedProject.id) {
+			throw new Error("Project ID is missing after update");
+		}
+
 		return {
-			id: updatedProject.id!,
+			id: updatedProject.id,
 			name: updatedProject.name,
 			description: updatedProject.description,
 			startDate: updatedProject.startDate

@@ -2,7 +2,10 @@ import type { ICompanyRepository } from "@infrastructure/db/repository/interface
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
-import { PROJECT_LIMITS, SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
+import {
+	PROJECT_LIMITS,
+	SubscriptionPlan,
+} from "../../../../domain/enum/company/subscription.plan.enum";
 import type { IUpgradeSubscriptionUseCase } from "../interface/upgrade.subscription.interface";
 
 @injectable()
@@ -12,7 +15,9 @@ export class UpgradeSubscriptionUseCase implements IUpgradeSubscriptionUseCase {
 		private _companyRepository: ICompanyRepository,
 	) {}
 
-	async execute(companyId: string): Promise<{ message: string; currentPlan: string }> {
+	async execute(
+		companyId: string,
+	): Promise<{ message: string; currentPlan: string }> {
 		const company = await this._companyRepository.findByCompanyId(companyId);
 
 		if (!company) {

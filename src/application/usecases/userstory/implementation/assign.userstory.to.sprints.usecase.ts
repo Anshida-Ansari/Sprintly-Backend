@@ -6,7 +6,7 @@ import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
+import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error";
 import { inject, injectable } from "inversify";
 import type { IAssignUserStoriesToSprintUseCase } from "../interface/assign.userstory.to.sprints.interface";
 
@@ -50,8 +50,12 @@ export class AssignUserStoryToSprintUseCase
 
 		userstory.update({ sprintId: sprint.id });
 
+		if (!userstory.id) {
+			throw new Error("User Story ID is missing");
+		}
+
 		const updatedresult = await this._userstoryreposiotory.update(
-			userstory.id!,
+			userstory.id,
 			userstory,
 		);
 

@@ -63,7 +63,7 @@ export class GitHubController {
 
 			const companyId = dto.state.split("-")[0];
 
-			const result = await this._connectGitHubUseCase.execute(dto, companyId);
+			await this._connectGitHubUseCase.execute(dto, companyId);
 
 			const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 			res.redirect(`${frontendUrl}/admin/settings?github=connected`);
@@ -98,7 +98,7 @@ export class GitHubController {
 		next: NextFunction,
 	): Promise<void> {
 		try {
-			const companyId = (req as any).user?.companyId;
+			const companyId = req.user?.companyId;
 			if (!companyId) {
 				res.status(401).json({ message: "Unauthorized" });
 				return;

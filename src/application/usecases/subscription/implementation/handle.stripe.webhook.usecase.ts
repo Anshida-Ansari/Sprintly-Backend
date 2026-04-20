@@ -1,15 +1,18 @@
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import type { ITransactionRepository } from "@infrastructure/db/repository/interface/transaction.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { TRANSACTION_TYPES } from "@infrastructure/di/types/transaction/transaction.types";
-import type { ITransactionRepository } from "@infrastructure/db/repository/interface/transaction.interface";
 import { inject, injectable } from "inversify";
 import Stripe from "stripe";
-import { PROJECT_LIMITS, SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
+import {
+	PROJECT_LIMITS,
+	SubscriptionPlan,
+} from "../../../../domain/enum/company/subscription.plan.enum";
 import type { IHandleStripeWebhookUseCase } from "../interface/handle.stripe.webhook.interface";
 
 @injectable()
 export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
-	private _stripe: any;
+	private _stripe: Stripe;
 
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
@@ -21,9 +24,9 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 		if (!secretKey) {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
-		this._stripe = new Stripe(secretKey, { 
-			apiVersion: "2026-03-25.dahlia" as any, 
-			typescript: true 
+		this._stripe = new Stripe(secretKey, {
+			apiVersion: "2024-06-20",
+			typescript: true,
 		});
 	}
 
@@ -33,12 +36,17 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 			throw new Error("STRIPE_WEBHOOK_SECRET is not configured");
 		}
 
-		let event: any;
+		let event: Stripe.Event;
 
 		try {
-			event = this._stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
-		} catch (err: any) {
-			throw new Error(`Webhook Error: ${err.message}`);
+			event = this._stripe.webhooks.constructEvent(
+				rawBody,
+				signature,
+				webhookSecret,
+			);
+		} catch (err: unknown) {
+			const error = err as Error;
+			throw new Error(`Webhook Error: ${error.message}`);
 		}
 
 		console.log(`[Stripe Webhook] Received event: ${event.type}`);
@@ -46,10 +54,12 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 		switch (event.type) {
 			// ─── Initial Checkout Completed ───────────────────────────────────
 			case "checkout.session.completed": {
-				const session = event.data.object as any;
+				const session = event.data.object as Stripe.Checkout.Session;
 				const companyId = session.metadata?.companyId;
 				if (!companyId) {
-					console.error("[Stripe Webhook] Missing companyId in session metadata");
+					console.error(
+						"[Stripe Webhook] Missing companyId in session metadata",
+					);
 					return;
 				}
 
@@ -88,17 +98,18 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 
 			// ─── Monthly Renewal Paid Successfully ────────────────────────────
 			case "invoice.payment_succeeded": {
-				const invoice = event.data.object as any;
+				const invoice = event.data.object as Stripe.Invoice;
 				const customerId = invoice.customer as string;
 				const subscriptionId = invoice.subscription as string;
 
 				// Find company by stripeCustomerId
-				const company = await this._companyRepository.findByStripeCustomerId(customerId);
+				const company =
+					await this._companyRepository.findByStripeCustomerId(customerId);
 
-				if (company && company.id) {
+				if (company?.id) {
 					// Log transaction for every successful payment
 					await this._transactionRepository.create({
-						stripePaymentId: invoice.id,
+						stripePaymentId: invoice.id as string,
 						stripeCustomerId: customerId,
 						companyId: company.id,
 						amount: invoice.amount_paid / 100,
@@ -108,8 +119,12 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 					});
 
 					// If it's a subscription renewal, update the end date
-					if (subscriptionId && invoice.billing_reason !== "subscription_create") {
-						const subscription = await this._stripe.subscriptions.retrieve(subscriptionId);
+					if (
+						subscriptionId &&
+						invoice.billing_reason !== "subscription_create"
+					) {
+						const subscription =
+							await this._stripe.subscriptions.retrieve(subscriptionId);
 						const periodEnd = new Date(subscription.current_period_end * 1000);
 						const proLimit = PROJECT_LIMITS[SubscriptionPlan.PRO];
 
@@ -121,7 +136,9 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 							subscriptionId,
 							periodEnd,
 						);
-						console.log(`[Stripe Webhook] Company ${company.id} renewed PRO until ${periodEnd.toISOString()}`);
+						console.log(
+							`[Stripe Webhook] Company ${company.id} renewed PRO until ${periodEnd.toISOString()}`,
+						);
 					}
 				}
 				break;
@@ -129,31 +146,35 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 
 			// ─── Payment Failed (card declined / expired) ─────────────────────
 			case "invoice.payment_failed": {
-				const invoice = event.data.object as any;
+				const invoice = event.data.object as Stripe.Invoice;
 				const customerId = invoice.customer as string;
 
-				const company = await this._companyRepository.findByStripeCustomerId(customerId);
+				const company =
+					await this._companyRepository.findByStripeCustomerId(customerId);
 
-				if (company && company.id) {
+				if (company?.id) {
 					const freeLimit = PROJECT_LIMITS[SubscriptionPlan.FREE];
 					await this._companyRepository.updatePlan(
 						company.id,
 						SubscriptionPlan.FREE,
 						freeLimit,
 					);
-					console.log(`[Stripe Webhook] Company ${company.id} downgraded to FREE (payment failed)`);
+					console.log(
+						`[Stripe Webhook] Company ${company.id} downgraded to FREE (payment failed)`,
+					);
 				}
 				break;
 			}
 
 			// ─── Subscription Cancelled / Deleted ────────────────────────────
 			case "customer.subscription.deleted": {
-				const subscription = event.data.object as any;
+				const subscription = event.data.object as Stripe.Subscription;
 				const customerId = subscription.customer as string;
 
-				const company = await this._companyRepository.findByStripeCustomerId(customerId);
+				const company =
+					await this._companyRepository.findByStripeCustomerId(customerId);
 
-				if (company && company.id) {
+				if (company?.id) {
 					const freeLimit = PROJECT_LIMITS[SubscriptionPlan.FREE];
 					await this._companyRepository.updatePlan(
 						company.id,
@@ -164,19 +185,22 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 						undefined,
 						false, // autoRenew OFF
 					);
-					console.log(`[Stripe Webhook] Company ${company.id} downgraded to FREE (subscription cancelled)`);
+					console.log(
+						`[Stripe Webhook] Company ${company.id} downgraded to FREE (subscription cancelled)`,
+					);
 				}
 				break;
 			}
 
 			// ─── Subscription Updated (e.g., auto-renew toggled) ──────────────
 			case "customer.subscription.updated": {
-				const subscription = event.data.object as any;
+				const subscription = event.data.object as Stripe.Subscription;
 				const customerId = subscription.customer as string;
 				const autoRenew = !subscription.cancel_at_period_end;
 
-				const company = await this._companyRepository.findByStripeCustomerId(customerId);
-				if (company && company.id) {
+				const company =
+					await this._companyRepository.findByStripeCustomerId(customerId);
+				if (company?.id) {
 					await this._companyRepository.updatePlan(
 						company.id,
 						company.currentPlan,
@@ -186,7 +210,9 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 						company.subscriptionEndDate,
 						autoRenew,
 					);
-					console.log(`[Stripe Webhook] Company ${company.id} autoRenew set to ${autoRenew}`);
+					console.log(
+						`[Stripe Webhook] Company ${company.id} autoRenew set to ${autoRenew}`,
+					);
 				}
 				break;
 			}

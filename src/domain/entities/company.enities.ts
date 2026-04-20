@@ -1,4 +1,7 @@
-import { SubscriptionPlan, PROJECT_LIMITS } from "@domain/enum/company/subscription.plan.enum";
+import {
+	PROJECT_LIMITS,
+	SubscriptionPlan,
+} from "@domain/enum/company/subscription.plan.enum";
 import type { Status } from "@domain/enum/user/user.status.enum";
 
 export interface GitHubCredentials {

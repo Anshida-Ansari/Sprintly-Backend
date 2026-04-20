@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 
 @injectable()
 export class WorkLogMapper {
-	toMongo(entity: WorkLogEntity): any {
+	toMongo(entity: WorkLogEntity): Record<string, unknown> {
 		return {
 			userId: entity.userId,
 			projectId: entity.projectId,
@@ -16,19 +16,20 @@ export class WorkLogMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): WorkLogEntity {
 		return WorkLogEntity.create({
-			id: doc._id.toString(),
-			userId: doc.userId.toString(),
-			projectId: doc.projectId.toString(),
-			sprintId: doc.sprintId.toString(),
-			taskId: doc.taskId.toString(),
-			subTaskId: doc.subTaskId.toString(),
-			hours: doc.hours,
-			description: doc.description,
-			date: doc.date,
-			createdAt: doc.createdAt,
-			updatedAt: doc.updatedAt,
+			id: (doc._id as { toString(): string }).toString(),
+			userId: (doc.userId as { toString(): string }).toString(),
+			projectId: (doc.projectId as { toString(): string }).toString(),
+			sprintId: (doc.sprintId as { toString(): string }).toString(),
+			taskId: (doc.taskId as { toString(): string }).toString(),
+			subTaskId: (doc.subTaskId as { toString(): string }).toString(),
+			hours: doc.hours as number,
+			description: doc.description as string,
+			date: doc.date as Date,
+			createdAt: doc.createdAt as Date,
+			updatedAt: doc.updatedAt as Date,
 		});
 	}
 }

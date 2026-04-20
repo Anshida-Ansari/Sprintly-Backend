@@ -7,7 +7,7 @@ import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notific
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
+import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error";
 import { inject, injectable } from "inversify";
 import type { IAssignUserStoryUseCase } from "../interface/assign.userstory.to.member.interface";
 
@@ -46,11 +46,15 @@ export class AssignUserStoryUseCase implements IAssignUserStoryUseCase {
 			throw new ServiceUnavailableError(ErrorMessage.CANNOT_EDIT);
 		}
 
+		if (!update.id) {
+			throw new Error("Update ID is missing");
+		}
+
 		await this._createNotificationUseCase.execute(
 			developerId,
 			NotificationType.STORY_ASSIGNED,
 			`You have been assigned to story: ${update.title}`,
-			update.id!,
+			update.id,
 			"STORY",
 		);
 

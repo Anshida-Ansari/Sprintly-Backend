@@ -12,7 +12,8 @@ export interface TransactionEntity {
 	createdAt?: Date;
 }
 
-export interface ITransactionRepository extends IBaseRepository<TransactionEntity> {
+export interface ITransactionRepository
+	extends IBaseRepository<TransactionEntity> {
 	findByStripePaymentId(paymentId: string): Promise<TransactionEntity | null>;
 	findByCompanyId(companyId: string): Promise<TransactionEntity[]>;
 	getRevenueStats(): Promise<{ totalRevenue: number; monthlyRevenue: number }>;

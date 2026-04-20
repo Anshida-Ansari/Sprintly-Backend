@@ -1,5 +1,5 @@
 import env from "@infrastructure/providers/env/env.validation";
-import type { Server as HttpServer } from "http";
+import type { Server as HttpServer } from "node:http";
 import { Server } from "socket.io";
 import { SignalingGateway } from "./signaling.gateway";
 

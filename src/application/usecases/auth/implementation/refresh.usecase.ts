@@ -25,7 +25,7 @@ export class RefreshUseCase implements IRefreshUseCase {
 	async execute(refreshToken: string): Promise<RefreshResult> {
 		if (!refreshToken) throw new validationError("Refresh token missing");
 
-		const decoded: any = verifyToken(refreshToken, "refresh");
+		const decoded = verifyToken(refreshToken, "refresh") as { email: string };
 		if (!decoded) throw new Unauthorized("Invalid or expired refresh token");
 
 		const storedToken = await redisClient.get(`refresh:${decoded.email}`);

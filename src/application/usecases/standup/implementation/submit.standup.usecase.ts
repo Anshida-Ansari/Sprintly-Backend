@@ -44,8 +44,11 @@ export class SubmitStandupUseCase implements ISubmitStandupUseCase {
 				today: dto.today,
 				blockers: dto.blockers,
 			});
+			if (!existingStandup.id) {
+				throw new Error("Standup ID is missing");
+			}
 			await this._standupRepository.update(
-				existingStandup.id!,
+				existingStandup.id,
 				existingStandup,
 			);
 		} else {

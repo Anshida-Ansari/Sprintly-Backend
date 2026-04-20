@@ -10,7 +10,10 @@ export class GetAdminWorkLogsUseCase implements IGetAdminWorkLogsUseCase {
 		private readonly _workLogRepository: IWorkLogRepository,
 	) {}
 
-	async execute(companyId: string, filters: any = {}): Promise<any> {
+	async execute(
+		companyId: string,
+		filters: Record<string, unknown> = {},
+	): Promise<unknown> {
 		// This uses the repository's aggregation for advanced reporting
 		return await this._workLogRepository.getWorkLogAnalytics(
 			companyId,

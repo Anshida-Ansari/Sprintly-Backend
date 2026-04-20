@@ -1,17 +1,21 @@
 import { inject, injectable } from "inversify";
-import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
-import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import { ProjectStatus } from "../../../../domain/enum/project/project.status";
+import { UserStatus } from "../../../../domain/enum/status.enum"; // This has BLOCK/ACTIVE
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
 import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
 import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
-import { ProjectStatus } from "../../../../domain/enum/project/project.status";
-import { UserStatus } from "../../../../domain/enum/status.enum"; // This has BLOCK/ACTIVE
-import { Status } from "../../../../domain/enum/user/user.status.enum"; // This has PENDING/APPROVED/REJECTED
-import type { IGetPlatformAnalyticsUseCase, PlatformStats } from "../interface/get.analytics.interface";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
+import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
+import type {
+	IGetPlatformAnalyticsUseCase,
+	PlatformStats,
+} from "../interface/get.analytics.interface";
 
 @injectable()
-export class GetPlatformAnalyticsUseCase implements IGetPlatformAnalyticsUseCase {
+export class GetPlatformAnalyticsUseCase
+	implements IGetPlatformAnalyticsUseCase
+{
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
@@ -35,7 +39,9 @@ export class GetPlatformAnalyticsUseCase implements IGetPlatformAnalyticsUseCase
 		twoMonthsAgo.setMonth(now.getMonth() - 2);
 
 		// Company Stats
-		const activeCompanies = companies.filter((c) => c.status === "approved").length;
+		const activeCompanies = companies.filter(
+			(c) => c.status === "approved",
+		).length;
 		const newCompaniesThisMonth = companies.filter((c) => {
 			const createdAt = c.createdAt ? new Date(c.createdAt) : null;
 			return createdAt && createdAt >= oneMonthAgo;
@@ -45,22 +51,37 @@ export class GetPlatformAnalyticsUseCase implements IGetPlatformAnalyticsUseCase
 			return createdAt && createdAt >= twoMonthsAgo && createdAt < oneMonthAgo;
 		}).length;
 
-		const growthRate = newCompaniesLastMonth === 0 
-			? (newCompaniesThisMonth > 0 ? 100 : 0) 
-			: ((newCompaniesThisMonth - newCompaniesLastMonth) / newCompaniesLastMonth) * 100;
+		const growthRate =
+			newCompaniesLastMonth === 0
+				? newCompaniesThisMonth > 0
+					? 100
+					: 0
+				: ((newCompaniesThisMonth - newCompaniesLastMonth) /
+						newCompaniesLastMonth) *
+					100;
 
 		// Project Stats
-		const activeProjects = projects.filter((p) => p.status === ProjectStatus.ACTIVE).length;
-		const completedProjects = projects.filter((p) => p.status === ProjectStatus.COMPLETED).length;
-		const avgProjectsPerCompany = companies.length === 0 ? 0 : projects.length / companies.length;
+		const activeProjects = projects.filter(
+			(p) => p.status === ProjectStatus.ACTIVE,
+		).length;
+		const completedProjects = projects.filter(
+			(p) => p.status === ProjectStatus.COMPLETED,
+		).length;
+		const avgProjectsPerCompany =
+			companies.length === 0 ? 0 : projects.length / companies.length;
 
 		// User Stats
 		const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 		const activeUsersCount = users.filter((u) => {
 			const lastActive = u.lastActive ? new Date(u.lastActive) : null;
-			return u.status === UserStatus.ACTIVE && lastActive && lastActive >= twentyFourHoursAgo;
+			return (
+				u.status === UserStatus.ACTIVE &&
+				lastActive &&
+				lastActive >= twentyFourHoursAgo
+			);
 		}).length;
-		const avgUsersPerCompany = companies.length === 0 ? 0 : users.length / companies.length;
+		const avgUsersPerCompany =
+			companies.length === 0 ? 0 : users.length / companies.length;
 
 		return {
 			companyStats: {

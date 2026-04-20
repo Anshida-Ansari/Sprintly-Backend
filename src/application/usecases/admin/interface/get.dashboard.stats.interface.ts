@@ -1,3 +1,6 @@
+import type { SubTaskEntity } from "@domain/entities/subtask.entity";
+import type { ITopMember } from "../../../../infrastructure/db/repository/interface/subtask.interface";
+
 export interface IDashboardStats {
 	totalProjects: number;
 	totalUsers: number;
@@ -19,8 +22,8 @@ export interface IDashboardStats {
 	completedSprints: number;
 	pendingReviews: number;
 	totalMeetings: number;
-	topMembers: any[];
-	liveActivity: any[];
+	topMembers: ITopMember[];
+	liveActivity: SubTaskEntity[];
 	activeSprint: {
 		id: string;
 		name: string;

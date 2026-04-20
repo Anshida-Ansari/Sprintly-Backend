@@ -39,9 +39,9 @@ export class MeetingRepository
 	}
 
 	async updateStatus(idOrRoomId: string, status: MeetingStatus): Promise<void> {
-		const update: any = { status };
+		const update: Record<string, unknown> = { status };
 
-		let meeting: any = await this.model.findOne({ roomId: idOrRoomId }).exec();
+		let meeting = await this.model.findOne({ roomId: idOrRoomId }).exec();
 		if (!meeting) {
 			meeting = await this.model.findById(idOrRoomId).exec();
 		}
@@ -51,7 +51,7 @@ export class MeetingRepository
 		if (status === "COMPLETED") {
 			const endTime = new Date();
 			update.endTime = endTime;
-			const startTime = new Date(meeting.date);
+			const startTime = new Date(meeting.date as unknown as string);
 			update.duration = Math.floor(
 				(endTime.getTime() - startTime.getTime()) / 1000 / 60,
 			);

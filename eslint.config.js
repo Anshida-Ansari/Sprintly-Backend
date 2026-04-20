@@ -9,7 +9,7 @@ export default tseslint.config(
 	js.configs.recommended,
 	...tseslint.configs.recommended,
 	{
-		files: ["**/*.ts"],
+		files: ["**/*.{ts,js,cjs}"],
 		languageOptions: {
 			ecmaVersion: 2020,
 			sourceType: "module",
@@ -21,9 +21,18 @@ export default tseslint.config(
 			"@typescript-eslint/no-explicit-any": "warn",
 			"@typescript-eslint/no-unused-vars": [
 				"warn",
-				{ argsIgnorePattern: "^_" },
+				{ 
+					argsIgnorePattern: "^_",
+					varsIgnorePattern: "^_"
+				},
 			],
-			"no-console": "off", // Allow console in backend, maybe switch to warn later
+			"no-console": "off",
+		},
+	},
+	{
+		files: ["**/*.cjs"],
+		languageOptions: {
+			sourceType: "commonjs",
 		},
 	},
 );

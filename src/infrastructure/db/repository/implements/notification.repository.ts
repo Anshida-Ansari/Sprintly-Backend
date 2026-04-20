@@ -22,15 +22,15 @@ export class NotificationRepository
 
 	async create(item: NotificationEntity): Promise<NotificationEntity> {
 		const rawData = this._mapper.toPersistence(item);
-		const createdNotification = await this.model.create(rawData as any);
-		return this._mapper.toEntity(createdNotification as any);
+		const createdNotification = await this.model.create(rawData as Record<string, unknown>);
+		return this._mapper.toEntity(createdNotification as unknown as Record<string, unknown>);
 	}
 
 	async findByRecipient(userId: string): Promise<NotificationEntity[]> {
 		const notifications = await this.model
 			.find({ recipientId: userId })
 			.sort({ createdAt: -1 });
-		return notifications.map((n) => this._mapper.toEntity(n as any));
+		return notifications.map((n) => this._mapper.toEntity(n as unknown as Record<string, unknown>));
 	}
 
 	async markAsRead(notificationId: string): Promise<void> {
@@ -38,14 +38,14 @@ export class NotificationRepository
 	}
 
 	async markAllAsRead(userId: string): Promise<void> {
-		await this.model.updateMany({ recipientId: userId } as any, {
+		await this.model.updateMany({ recipientId: userId } as Record<string, unknown>, {
 			isRead: true,
 		});
 	}
 
 	async findById(id: string): Promise<NotificationEntity | null> {
 		const notification = await this.model.findById(id);
-		return notification ? this._mapper.toEntity(notification as any) : null;
+		return notification ? this._mapper.toEntity(notification as unknown as Record<string, unknown>) : null;
 	}
 
 	async update(
@@ -53,9 +53,9 @@ export class NotificationRepository
 		item: NotificationEntity,
 	): Promise<NotificationEntity | null> {
 		const rawData = this._mapper.toPersistence(item);
-		const updated = await this.model.findByIdAndUpdate(id, rawData as any, {
+		const updated = await this.model.findByIdAndUpdate(id, rawData as Record<string, unknown>, {
 			new: true,
 		});
-		return updated ? this._mapper.toEntity(updated as any) : null;
+		return updated ? this._mapper.toEntity(updated as unknown as Record<string, unknown>) : null;
 	}
 }

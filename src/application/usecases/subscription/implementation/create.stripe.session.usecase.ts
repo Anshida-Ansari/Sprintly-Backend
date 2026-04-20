@@ -1,13 +1,13 @@
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { inject, injectable } from "inversify";
+import Stripe from "stripe";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
 import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
-import Stripe from "stripe";
 import type { ICreateStripeSessionUseCase } from "../interface/create.stripe.session.interface";
 
 @injectable()
 export class CreateStripeSessionUseCase implements ICreateStripeSessionUseCase {
-	private _stripe: any;
+	private _stripe: Stripe;
 
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
@@ -17,9 +17,9 @@ export class CreateStripeSessionUseCase implements ICreateStripeSessionUseCase {
 		if (!secretKey) {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
-		this._stripe = new Stripe(secretKey, { 
-			apiVersion: "2026-03-25.dahlia" as any,
-			typescript: true 
+		this._stripe = new Stripe(secretKey, {
+			apiVersion: "2024-06-20", // Using a stable version if the specific one is unknown to current SDK types
+			typescript: true,
 		});
 	}
 
@@ -59,7 +59,8 @@ export class CreateStripeSessionUseCase implements ICreateStripeSessionUseCase {
 		}
 
 		const frontendUrl = process.env.FRONTENT_URL || "http://localhost:5173";
-		const finalSuccessUrl = successUrl || `${frontendUrl}/admin/projects?upgraded=true`;
+		const finalSuccessUrl =
+			successUrl || `${frontendUrl}/admin/projects?upgraded=true`;
 		const finalCancelUrl = cancelUrl || `${frontendUrl}/admin/projects`;
 
 		const session = await this._stripe.checkout.sessions.create({

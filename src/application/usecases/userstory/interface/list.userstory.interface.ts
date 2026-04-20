@@ -1,3 +1,5 @@
+import type { UserStoryEntity } from "@domain/entities/user.story.entities";
+
 export interface IListUserstoryUseCase {
 	execute(
 		query: {
@@ -10,7 +12,7 @@ export interface IListUserstoryUseCase {
 		companyId: string,
 		projectId: string,
 	): Promise<{
-		data: any[];
+		data: UserStoryEntity[];
 		total: number;
 		page: number;
 		limit: number;

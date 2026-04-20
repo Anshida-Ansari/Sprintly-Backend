@@ -13,7 +13,7 @@ export class GetUserWorkLogsUseCase implements IGetUserWorkLogsUseCase {
 
 	async execute(
 		userId: string,
-		filters: any = {},
+		filters: Record<string, unknown> = {},
 	): Promise<{ logs: WorkLogEntity[]; totalHours: number }> {
 		const logs = await this._workLogRepository.findByUserId(userId, filters);
 

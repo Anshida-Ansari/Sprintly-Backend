@@ -1,29 +1,49 @@
+import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
+import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
-import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
-import { WORKLOG_TYPE } from "@infrastructure/di/types/worklog/worklog";
-import { inject, injectable } from "inversify";
-import mongoose, { type Model } from "mongoose";
-import type { IAnalyticsRepository } from "../interface/analytics.interface";
-import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
-import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+import { inject, injectable } from "inversify";
+import mongoose, { type Model, type Document } from "mongoose";
+import type { IAnalyticsRepository } from "../interface/analytics.interface";
+
+interface ISprint extends Document {
+	startDate: Date;
+	endDate: Date;
+}
+
+interface IUserStory extends Document {
+	estimationPoints: number;
+	status: UserStoryStatus;
+	completedAt?: Date;
+	updatedAt: Date;
+	assignedTo?: mongoose.Types.ObjectId[];
+}
+
+interface ISubTask extends Document {
+	estimatedHours: number;
+	status: SubTaskStatus;
+	completedAt?: Date;
+	updatedAt: Date;
+}
 
 @injectable()
 export class AnalyticsRepository implements IAnalyticsRepository {
 	constructor(
-		@inject(WORKLOG_TYPE.WorkLogModel)
-		private readonly workLogModel: Model<any>,
-		@inject(SPRINTS_TYPE.SprintModel) private readonly sprintModel: Model<any>,
+		@inject(SPRINTS_TYPE.SprintModel) private readonly sprintModel: Model<ISprint>,
 		@inject(SUBTASK_TYPE.SubTaskModel)
-		private readonly subTaskModel: Model<any>,
+		private readonly subTaskModel: Model<ISubTask>,
 		@inject(USERSTORY_TYPE.UserStoryModel)
-		private readonly userStoryModel: Model<any>,
+		private readonly userStoryModel: Model<IUserStory>,
 		@inject(USER_TYPES.userModel)
-		private readonly userModel: Model<any>,
+		private readonly userModel: Model<unknown>,
 	) {}
 
-	async getSprintBurndown(sprintId: string, type: "hours" | "points" = "hours"): Promise<any> {
+	async getSprintBurndown(
+		sprintId: string,
+		type: "hours" | "points" = "hours",
+	): Promise<Record<string, unknown>> {
 		const sprint = await this.sprintModel.findById(sprintId);
 		if (!sprint) throw new Error("Sprint not found");
 
@@ -33,38 +53,58 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 		const userStoryIds = userStories.map((us) => us._id);
 
 		let totalWork = 0;
-		let completedData: any[] = [];
+		let completedData: Array<{ burned: number; date: string }> = [];
 
 		if (type === "hours") {
-			const subTasks = await this.subTaskModel.find({
+			const subTasks = (await this.subTaskModel.find({
 				userStoryId: { $in: userStoryIds },
-			});
-			totalWork = subTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
+			})) as Array<Record<string, unknown>>;
+			totalWork = subTasks.reduce(
+				(sum, task) => sum + ((task.estimatedHours as number) || 0),
+				0,
+			);
 			completedData = subTasks
-				.filter((task) => task.status === SubTaskStatus.COMPLETED && (task.completedAt || task.updatedAt))
+				.filter(
+					(task) =>
+						task.status === SubTaskStatus.COMPLETED &&
+						(task.completedAt || task.updatedAt),
+				)
 				.map((task) => ({
-					burned: task.estimatedHours || 0,
-					date: (task.completedAt || task.updatedAt).toISOString().split("T")[0],
+					burned: (task.estimatedHours as number) || 0,
+					date: ((task.completedAt as Date) || (task.updatedAt as Date))
+						.toISOString()
+						.split("T")[0],
 				}));
 		} else {
-			totalWork = userStories.reduce((sum, us) => sum + (us.estimationPoints || 0), 0);
+			totalWork = userStories.reduce(
+				(sum, us) => sum + ((us as Record<string, unknown>).estimationPoints as number || 0),
+				0,
+			);
 			completedData = userStories
-				.filter((us) => us.status === UserStoryStatus.DONE && (us.completedAt || us.updatedAt))
+				.filter(
+					(us) =>
+						(us as Record<string, unknown>).status === UserStoryStatus.DONE &&
+						((us as Record<string, unknown>).completedAt || (us as Record<string, unknown>).updatedAt),
+				)
 				.map((us) => ({
-					burned: us.estimationPoints || 0,
-					date: (us.completedAt || us.updatedAt).toISOString().split("T")[0],
+					burned: (us as Record<string, unknown>).estimationPoints as number || 0,
+					date: (((us as Record<string, unknown>).completedAt as Date) || ((us as Record<string, unknown>).updatedAt as Date)).toISOString().split("T")[0],
 				}));
 		}
 
 		return this.calculateBurndown(
-			sprint.startDate,
-			sprint.endDate,
+			(sprint as Record<string, unknown>).startDate as Date,
+			(sprint as Record<string, unknown>).endDate as Date,
 			totalWork,
 			completedData,
 		);
 	}
 
-	async getUserBurndown(sprintId: string, userId: string, type: "hours" | "points" = "hours"): Promise<any> {
+	async getUserBurndown(
+		sprintId: string,
+		userId: string,
+		type: "hours" | "points" = "hours",
+	): Promise<Record<string, unknown>> {
 		const sprint = await this.sprintModel.findById(sprintId);
 		if (!sprint) throw new Error("Sprint not found");
 
@@ -74,92 +114,127 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 		const userStoryIds = userStories.map((us) => us._id);
 
 		let totalWork = 0;
-		let completedData: any[] = [];
+		let completedData: Array<{ burned: number; date: string }> = [];
 
 		if (type === "hours") {
-			const subTasks = await this.subTaskModel.find({
+			const subTasks = (await this.subTaskModel.find({
 				userStoryId: { $in: userStoryIds },
 				assignedTo: new mongoose.Types.ObjectId(userId),
-			});
-			totalWork = subTasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
+			})) as Array<Record<string, unknown>>;
+			totalWork = subTasks.reduce(
+				(sum, task) => sum + ((task.estimatedHours as number) || 0),
+				0,
+			);
 			completedData = subTasks
-				.filter((task) => task.status === SubTaskStatus.COMPLETED && (task.completedAt || task.updatedAt))
+				.filter(
+					(task) =>
+						task.status === SubTaskStatus.COMPLETED &&
+						(task.completedAt || task.updatedAt),
+				)
 				.map((task) => ({
-					burned: task.estimatedHours || 0,
-					date: (task.completedAt || task.updatedAt).toISOString().split("T")[0],
+					burned: (task.estimatedHours as number) || 0,
+					date: ((task.completedAt as Date) || (task.updatedAt as Date))
+						.toISOString()
+						.split("T")[0],
 				}));
 		} else {
-			const userStoriesAssigned = userStories.filter(us => us.assignedTo?.some((id: any) => id.toString() === userId));
-			totalWork = userStoriesAssigned.reduce((sum, us) => sum + (us.estimationPoints || 0), 0);
+			const userStoriesAssigned = userStories.filter((us) =>
+				(us as Record<string, unknown>).assignedTo?.some((id: unknown) => (id as { toString(): string }).toString() === userId),
+			);
+			totalWork = userStoriesAssigned.reduce(
+				(sum, us) => sum + ((us as Record<string, unknown>).estimationPoints as number || 0),
+				0,
+			);
 			completedData = userStoriesAssigned
-				.filter((us) => us.status === UserStoryStatus.DONE && (us.completedAt || us.updatedAt))
+				.filter(
+					(us) =>
+						(us as Record<string, unknown>).status === UserStoryStatus.DONE &&
+						((us as Record<string, unknown>).completedAt || (us as Record<string, unknown>).updatedAt),
+				)
 				.map((us) => ({
-					burned: us.estimationPoints || 0,
-					date: (us.completedAt || us.updatedAt).toISOString().split("T")[0],
+					burned: (us as Record<string, unknown>).estimationPoints as number || 0,
+					date: (((us as Record<string, unknown>).completedAt as Date) || ((us as Record<string, unknown>).updatedAt as Date)).toISOString().split("T")[0],
 				}));
 		}
 
 		return this.calculateBurndown(
-			sprint.startDate,
-			sprint.endDate,
+			(sprint as Record<string, unknown>).startDate as Date,
+			(sprint as Record<string, unknown>).endDate as Date,
 			totalWork,
 			completedData,
 		);
 	}
 
-	async getDashboardAnalytics(companyId: string, filters: any): Promise<any> {
+	async getDashboardAnalytics(
+		companyId: string,
+		filters: Record<string, unknown>,
+	): Promise<Record<string, unknown>> {
 		const companyObjectId = new mongoose.Types.ObjectId(companyId.toString());
-		const userStoryMatchQuery: any = { companyId: companyObjectId };
-		let subtaskMatchQuery: any = { companyId: companyObjectId };
-		
-		if (filters.projectId && filters.projectId !== "undefined" && filters.projectId !== "") {
-			const projectObjectId = new mongoose.Types.ObjectId(filters.projectId.toString());
+		const userStoryMatchQuery: Record<string, unknown> = { companyId: companyObjectId };
+		const subtaskMatchQuery: Record<string, unknown> = { companyId: companyObjectId };
+
+		if (
+			filters.projectId &&
+			filters.projectId !== "undefined" &&
+			filters.projectId !== ""
+		) {
+			const projectObjectId = new mongoose.Types.ObjectId(
+				filters.projectId.toString(),
+			);
 			userStoryMatchQuery.projectId = projectObjectId;
 
 			// For subtasks, we need to match via userStoryId since they don't have projectId
-			const stories = await this.userStoryModel.find({ 
-				projectId: projectObjectId,
-				companyId: companyObjectId 
-			}).select("_id");
-			const usIds = stories.map(s => s._id);
+			const stories = await this.userStoryModel
+				.find({
+					projectId: projectObjectId,
+					companyId: companyObjectId,
+				})
+				.select("_id");
+			const usIds = stories.map((s) => s._id);
 			subtaskMatchQuery.userStoryId = { $in: usIds };
 		}
 
-		const doneStatuses = ["Done", "done", "completed", "COMPLETED", "Completed"];
+		const doneStatuses = [
+			"Done",
+			"done",
+			"completed",
+			"COMPLETED",
+			"Completed",
+		];
 
 		// 1. Task Distribution (Status Pie)
 		const taskDistribution = await this.subTaskModel.aggregate([
-			{ 
+			{
 				$match: {
 					...subtaskMatchQuery,
-					companyId: companyObjectId
-				} 
+					companyId: companyObjectId,
+				},
 			},
 			{ $group: { _id: "$status", count: { $sum: 1 } } },
 		]);
 
 		// 2. User Productivity (Bar Charts)
 		const userProductivity = await this.userModel.aggregate([
-			{ 
-				$match: { 
+			{
+				$match: {
 					companyId: companyObjectId,
-					role: { $ne: "superadmin" }
-				} 
+					role: { $ne: "superadmin" },
+				},
 			},
 			{
 				$lookup: {
 					from: "worklogs",
 					localField: "_id",
 					foreignField: "userId",
-					as: "logs"
-				}
+					as: "logs",
+				},
 			},
 			{
 				$project: {
 					name: 1,
 					totalHours: { $sum: "$logs.hours" },
-					taskIds: "$logs.subTaskId"
-				}
+					taskIds: "$logs.subTaskId",
+				},
 			},
 			{
 				$lookup: {
@@ -172,14 +247,23 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 									$and: [
 										{ $in: ["$_id", { $ifNull: ["$$subtaskIds", []] }] },
 										{ $in: ["$status", doneStatuses] },
-										...(subtaskMatchQuery.userStoryId ? [{ $in: ["$userStoryId", subtaskMatchQuery.userStoryId.$in] }] : [])
-									]
-								}
-							}
-						}
+										...(subtaskMatchQuery.userStoryId
+											? [
+													{
+														$in: [
+															"$userStoryId",
+															subtaskMatchQuery.userStoryId.$in,
+														],
+													},
+												]
+											: []),
+									],
+								},
+							},
+						},
 					],
-					as: "completedSubtasks"
-				}
+					as: "completedSubtasks",
+				},
 			},
 			{
 				$project: {
@@ -190,12 +274,12 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 						$cond: [
 							{ $gt: ["$totalHours", 0] },
 							{ $divide: [{ $size: "$completedSubtasks" }, "$totalHours"] },
-							0
-						]
-					}
-				}
+							0,
+						],
+					},
+				},
 			},
-			{ $sort: { completedTasks: -1 } }
+			{ $sort: { completedTasks: -1 } },
 		]);
 
 		// 3. Project Health & Overall Trends
@@ -207,30 +291,30 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 					totalStories: { $sum: 1 },
 					completedStories: {
 						$sum: {
-							$cond: [{ $in: ["$status", doneStatuses] }, 1, 0]
-						}
+							$cond: [{ $in: ["$status", doneStatuses] }, 1, 0],
+						},
 					},
-					totalEstimation: { $sum: "$estimationPoints" }
-				}
-			}
+					totalEstimation: { $sum: "$estimationPoints" },
+				},
+			},
 		]);
 
 		// 4. Overdue Tasks
 		const today = new Date();
 		const overdueAggregation = await this.subTaskModel.aggregate([
-			{ 
-				$match: { 
-					...subtaskMatchQuery, 
-					status: { $nin: doneStatuses } 
-				} 
+			{
+				$match: {
+					...subtaskMatchQuery,
+					status: { $nin: doneStatuses },
+				},
 			},
 			{
 				$lookup: {
 					from: "userstories",
 					localField: "userStoryId",
 					foreignField: "_id",
-					as: "story"
-				}
+					as: "story",
+				},
 			},
 			{ $unwind: { path: "$story", preserveNullAndEmptyArrays: false } },
 			{
@@ -238,16 +322,16 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 					from: "sprints",
 					localField: "story.sprintId",
 					foreignField: "_id",
-					as: "sprint"
-				}
+					as: "sprint",
+				},
 			},
 			{ $unwind: { path: "$sprint", preserveNullAndEmptyArrays: false } },
 			{
 				$match: {
-					"sprint.endDate": { $lt: today }
-				}
+					"sprint.endDate": { $lt: today },
+				},
 			},
-			{ $count: "count" }
+			{ $count: "count" },
 		]);
 
 		// 4. Tasks Over Time (Last 30 days trend)
@@ -255,33 +339,35 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 		thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
 		const tasksOverTime = await this.subTaskModel.aggregate([
-			{ 
+			{
 				$match: {
 					...subtaskMatchQuery,
 					status: { $in: doneStatuses },
-					updatedAt: { $gte: thirtyDaysAgo }
-				} 
+					updatedAt: { $gte: thirtyDaysAgo },
+				},
 			},
 			{
 				$group: {
 					_id: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } },
-					completedTasks: { $sum: 1 }
-				}
+					completedTasks: { $sum: 1 },
+				},
 			},
-			{ $sort: { "_id": 1 } },
+			{ $sort: { _id: 1 } },
 			{
 				$project: {
 					date: "$_id",
 					completedTasks: 1,
-					_id: 0
-				}
-			}
+					_id: 0,
+				},
+			},
 		]);
 
 		// 5. Sprint Analytics (Completion per sprint)
 		let sprintAnalytics = [];
 		if (filters.projectId) {
-			const projectObjectId = new mongoose.Types.ObjectId(filters.projectId.toString());
+			const projectObjectId = new mongoose.Types.ObjectId(
+				filters.projectId.toString(),
+			);
 			sprintAnalytics = await this.sprintModel.aggregate([
 				{ $match: { projectId: projectObjectId, companyId: companyObjectId } },
 				{
@@ -289,8 +375,8 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 						from: "userstories",
 						localField: "_id",
 						foreignField: "sprintId",
-						as: "stories"
-					}
+						as: "stories",
+					},
 				},
 				{
 					$project: {
@@ -307,48 +393,48 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 														$filter: {
 															input: "$stories",
 															as: "s",
-															cond: { $in: ["$$s.status", doneStatuses] }
-														}
-													}
+															cond: { $in: ["$$s.status", doneStatuses] },
+														},
+													},
 												},
-												{ $size: "$stories" }
-											]
+												{ $size: "$stories" },
+											],
 										},
-										100
-									]
+										100,
+									],
 								},
-								0
-							]
-						}
-					}
+								0,
+							],
+						},
+					},
 				},
-				{ $limit: 10 }
+				{ $limit: 10 },
 			]);
 		}
 
 		// 6. Story Completion Trend
 		const storyCompletionTrend = await this.userStoryModel.aggregate([
-			{ 
+			{
 				$match: {
 					...userStoryMatchQuery,
 					status: { $in: doneStatuses },
-					updatedAt: { $gte: thirtyDaysAgo }
-				} 
+					updatedAt: { $gte: thirtyDaysAgo },
+				},
 			},
 			{
 				$group: {
 					_id: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } },
-					completedStories: { $sum: 1 }
-				}
+					completedStories: { $sum: 1 },
+				},
 			},
-			{ $sort: { "_id": 1 } },
+			{ $sort: { _id: 1 } },
 			{
 				$project: {
 					date: "$_id",
 					completedStories: 1,
-					_id: 0
-				}
-			}
+					_id: 0,
+				},
+			},
 		]);
 
 		return {
@@ -357,8 +443,12 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 			userProductivity,
 			sprintAnalytics,
 			storyCompletionTrend,
-			overallHealth: projectHealth[0] || { totalStories: 0, completedStories: 0, totalEstimation: 0 },
-			overdueCount: overdueAggregation[0]?.count || 0
+			overallHealth: projectHealth[0] || {
+				totalStories: 0,
+				completedStories: 0,
+				totalEstimation: 0,
+			},
+			overdueCount: overdueAggregation[0]?.count || 0,
 		};
 	}
 
@@ -367,7 +457,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 		endDate: Date | string,
 		totalWork: number,
 		completedData: { burned: number; date: string }[],
-	): any {
+	): Record<string, unknown> {
 		const labels = [];
 		const ideal = [];
 		const actual = [];
@@ -379,8 +469,8 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 		// Normalize dates to start of day UTC for consistent comparison
 		const start = new Date(startDate);
 		const end = new Date(endDate);
-		
-		if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+
+		if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
 			return { labels: [], ideal: [], actual: [] };
 		}
 
@@ -392,10 +482,13 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 
 		const diffTime = end.getTime() - start.getTime();
 		const totalDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
-		
+
 		const completedMap = new Map<string, number>();
 		for (const item of completedData) {
-			completedMap.set(item.date, (completedMap.get(item.date) || 0) + item.burned);
+			completedMap.set(
+				item.date,
+				(completedMap.get(item.date) || 0) + item.burned,
+			);
 		}
 
 		let currentActualRemaining = totalWork;
@@ -403,7 +496,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 		let dayIndex = 0;
 
 		// Limit loop to prevent infinite runs if dates are somehow broken
-		const maxDays = 100; 
+		const maxDays = 100;
 
 		while (currentDate <= end && dayIndex < maxDays) {
 			const dateStr = currentDate.toISOString().split("T")[0];

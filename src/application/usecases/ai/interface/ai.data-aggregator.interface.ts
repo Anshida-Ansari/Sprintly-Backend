@@ -1,14 +1,15 @@
-import type { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
+import type { StandupEntity } from "@domain/entities/standup.entity";
+import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 
 export interface ProjectContext {
-	completedTasksYesterday: any[];
-	inProgressTasksToday: any[];
-	blockedTasks: any[];
+	completedTasksYesterday: SubTaskEntity[];
+	inProgressTasksToday: SubTaskEntity[];
+	blockedTasks: SubTaskEntity[];
 	totalTasksCount: number;
 	completedTasksCount: number;
 	pendingTasksCount: number;
 	blockedTasksCount: number;
-	recentActivity: any[];
+	recentActivity: StandupEntity[];
 	projectInfo?: {
 		name: string;
 		description: string;
@@ -17,5 +18,9 @@ export interface ProjectContext {
 }
 
 export interface IAiDataAggregator {
-	getProjectContext(companyId: string, projectId?: string, userId?: string): Promise<ProjectContext>;
+	getProjectContext(
+		companyId: string,
+		projectId?: string,
+		userId?: string,
+	): Promise<ProjectContext>;
 }

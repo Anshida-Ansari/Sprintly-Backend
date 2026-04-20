@@ -41,7 +41,12 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		status: UserStoryStatus;
 		sprintId?: string;
 		assignedTo?: string[];
-		comments?: any[];
+		comments?: Array<{
+			createdAt: Date;
+			message: string;
+			userName?: string;
+			userId: string;
+		}>;
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 		createdAt: Date;
@@ -75,8 +80,12 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 
 		const created = await this._userstoryReposiotry.create(userstory);
 
+		if (!created.id) {
+			throw new Error("Created User Story ID is missing");
+		}
+
 		return {
-			id: created.id!,
+			id: created.id,
 			title: created.title,
 			description: created.description,
 			priority: created.priority,

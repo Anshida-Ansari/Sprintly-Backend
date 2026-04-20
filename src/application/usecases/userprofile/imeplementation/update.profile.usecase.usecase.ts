@@ -47,7 +47,10 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
 			github: dto.github,
 		});
 
-		await this._userprofilereposiotory.update(profile.id!, profile);
+		if (!profile.id) {
+			throw new Error("Profile ID is missing");
+		}
+		await this._userprofilereposiotory.update(profile.id, profile);
 
 		return profile;
 	}

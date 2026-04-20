@@ -21,38 +21,39 @@ export class GitHubRepositoryService implements IGitHubRepositoryService {
 
 			const sanitizedName = this.sanitizeRepoName(repoName);
 
-			let response: any;
+			let response: { data: Record<string, unknown> };
 
 			if (organization) {
-				response = await octokit.rest.repos.createInOrg({
+				response = (await octokit.rest.repos.createInOrg({
 					org: organization,
 					name: sanitizedName,
 					description: description,
 					private: isPrivate,
 					auto_init: true,
-				});
+				})) as unknown as { data: Record<string, unknown> };
 			} else {
-				response = await octokit.rest.repos.createForAuthenticatedUser({
+				response = (await octokit.rest.repos.createForAuthenticatedUser({
 					name: sanitizedName,
 					description: description,
 					private: isPrivate,
 					auto_init: true,
-				});
+				})) as unknown as { data: Record<string, unknown> };
 			}
 
 			const repo = response.data;
 
 			return {
-				name: repo.name,
-				fullName: repo.full_name,
-				htmlUrl: repo.html_url,
-				cloneUrl: repo.clone_url,
-				sshUrl: repo.ssh_url,
-				isPrivate: repo.private,
-				description: repo.description || "",
+				name: repo.name as string,
+				fullName: repo.full_name as string,
+				htmlUrl: repo.html_url as string,
+				cloneUrl: repo.clone_url as string,
+				sshUrl: repo.ssh_url as string,
+				isPrivate: repo.private as boolean,
+				description: (repo.description as string) || "",
 			};
-		} catch (error: any) {
-			throw new Error(`Failed to create repository: ${error.message}`);
+		} catch (error: unknown) {
+			const err = error as { message: string };
+			throw new Error(`Failed to create repository: ${err.message}`);
 		}
 	}
 
@@ -80,8 +81,9 @@ export class GitHubRepositoryService implements IGitHubRepositoryService {
 				isPrivate: data.private,
 				description: data.description || "",
 			};
-		} catch (error: any) {
-			throw new Error(`Failed to get repository: ${error.message}`);
+		} catch (error: unknown) {
+			const err = error as { message: string };
+			throw new Error(`Failed to get repository: ${err.message}`);
 		}
 	}
 
@@ -99,8 +101,9 @@ export class GitHubRepositoryService implements IGitHubRepositoryService {
 				owner,
 				repo,
 			});
-		} catch (error: any) {
-			throw new Error(`Failed to delete repository: ${error.message}`);
+		} catch (error: unknown) {
+			const err = error as { message: string };
+			throw new Error(`Failed to delete repository: ${err.message}`);
 		}
 	}
 

@@ -1,26 +1,25 @@
 import * as crypto from "node:crypto";
 
-export class EncryptionUtil {
-	private static readonly ALGORITHM = "aes-256-gcm";
-	private static readonly IV_LENGTH = 16;
-	private static readonly SALT_LENGTH = 64;
-	private static readonly TAG_LENGTH = 16;
-	private static readonly KEY_LENGTH = 32;
+const ALGORITHM = "aes-256-gcm";
+const IV_LENGTH = 16;
+const SALT_LENGTH = 64;
+const KEY_LENGTH = 32;
 
-	static encrypt(text: string, secret: string): string {
-		const salt = crypto.randomBytes(EncryptionUtil.SALT_LENGTH);
+export const EncryptionUtil = {
+	encrypt(text: string, secret: string): string {
+		const salt = crypto.randomBytes(SALT_LENGTH);
 
 		const key = crypto.pbkdf2Sync(
 			secret,
 			salt,
 			100000,
-			EncryptionUtil.KEY_LENGTH,
+			KEY_LENGTH,
 			"sha512",
 		);
 
-		const iv = crypto.randomBytes(EncryptionUtil.IV_LENGTH);
+		const iv = crypto.randomBytes(IV_LENGTH);
 
-		const cipher = crypto.createCipheriv(EncryptionUtil.ALGORITHM, key, iv);
+		const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
 
 		let encrypted = cipher.update(text, "utf8", "hex");
 		encrypted += cipher.final("hex");
@@ -28,9 +27,9 @@ export class EncryptionUtil {
 		const tag = cipher.getAuthTag();
 
 		return `${salt.toString("hex")}:${iv.toString("hex")}:${encrypted}:${tag.toString("hex")}`;
-	}
+	},
 
-	static decrypt(encryptedData: string, secret: string): string {
+	decrypt(encryptedData: string, secret: string): string {
 		const parts = encryptedData.split(":");
 		if (parts.length !== 4) {
 			throw new Error("Invalid encrypted data format");
@@ -45,16 +44,16 @@ export class EncryptionUtil {
 			secret,
 			salt,
 			100000,
-			EncryptionUtil.KEY_LENGTH,
+			KEY_LENGTH,
 			"sha512",
 		);
 
-		const decipher = crypto.createDecipheriv(EncryptionUtil.ALGORITHM, key, iv);
+		const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
 		decipher.setAuthTag(tag);
 
 		let decrypted = decipher.update(encrypted, "hex", "utf8");
 		decrypted += decipher.final("utf8");
 
 		return decrypted;
-	}
-}
+	},
+};

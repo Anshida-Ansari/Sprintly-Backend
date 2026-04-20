@@ -1,4 +1,3 @@
-import { GitHubController } from "@presentation/http/controllers/github.controller";
 
 export const GITHUB_TYPE = {
 	IGitHubOAuthService: Symbol.for("IGitHubOAuthService"),

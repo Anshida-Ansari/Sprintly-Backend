@@ -16,7 +16,6 @@ const userstoryController = container.get<UserstoryController>(
 );
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
-import { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.usertory.dto";
 import { USER_STORIES } from "@shared/constants/userstory.routes.constants";
 
 router.post(

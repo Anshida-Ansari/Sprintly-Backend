@@ -6,10 +6,10 @@ import type { IGetDashboardStatsUseCase } from "../../../application/usecases/ad
 import type { IInviteMemberUseCase } from "../../../application/usecases/admin/interface/invite.member.interface";
 import type { IListMembersUseCase } from "../../../application/usecases/admin/interface/list.members.interface";
 import type { IVerifyInvitationUseCase } from "../../../application/usecases/admin/interface/verify.member.interface";
-import type { IUpgradeSubscriptionUseCase } from "../../../application/usecases/subscription/interface/upgrade.subscription.interface";
 import type { ICreateStripeSessionUseCase } from "../../../application/usecases/subscription/interface/create.stripe.session.interface";
-import type { IHandleStripeWebhookUseCase } from "../../../application/usecases/subscription/interface/handle.stripe.webhook.interface";
 import type { IGetCompanySubscriptionUseCase } from "../../../application/usecases/subscription/interface/get.company.subscription.interface";
+import type { IHandleStripeWebhookUseCase } from "../../../application/usecases/subscription/interface/handle.stripe.webhook.interface";
+import type { IUpgradeSubscriptionUseCase } from "../../../application/usecases/subscription/interface/upgrade.subscription.interface";
 import type { IVerifyStripeSessionUseCase } from "../../../application/usecases/subscription/interface/verify.stripe.session.interface";
 import { ErrorMessage } from "../../../domain/enum/messages/error.message.enum";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
@@ -120,7 +120,7 @@ export class AdminController {
 				success: true,
 				...response,
 			});
-		} catch (error: any) {
+		} catch (error: unknown) {
 			next(error);
 		}
 	}
@@ -194,7 +194,10 @@ export class AdminController {
 				});
 			}
 
-			const result = await this._createStripeSessionUseCase.execute(companyId, priceId);
+			const result = await this._createStripeSessionUseCase.execute(
+				companyId,
+				priceId,
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
@@ -205,10 +208,10 @@ export class AdminController {
 		}
 	}
 
-	async stripeWebhook(req: Request, res: Response, next: NextFunction) {
+	async stripeWebhook(req: Request, res: Response, _next: NextFunction) {
 		try {
 			const signature = req.headers["stripe-signature"] as string;
-			
+
 			// We need the raw body as a buffer for signature verification.
 			// This typically requires a custom body parser middleware specifically for this route.
 			const rawBody = req.body;
@@ -219,7 +222,9 @@ export class AdminController {
 		} catch (error) {
 			// Stripe expects an error response if webhook handling fails
 			console.error("Webhook processing error:", error);
-			return res.status(ClientErrorStatus.BAD_REQUEST).send(`Webhook Error: ${error}`);
+			return res
+				.status(ClientErrorStatus.BAD_REQUEST)
+				.send(`Webhook Error: ${error}`);
 		}
 	}
 
@@ -242,7 +247,10 @@ export class AdminController {
 				});
 			}
 
-			const result = await this._verifyStripeSessionUseCase.execute(sessionId, companyId);
+			const result = await this._verifyStripeSessionUseCase.execute(
+				sessionId,
+				companyId,
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				...result,
@@ -262,7 +270,8 @@ export class AdminController {
 				});
 			}
 
-			const stats = await this._getCompanySubscriptionUseCase.execute(companyId);
+			const stats =
+				await this._getCompanySubscriptionUseCase.execute(companyId);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,

@@ -4,10 +4,12 @@ import type { NextFunction, Request, Response } from "express";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
 import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
 
-export const validateDTO = (dtoClass: any) => {
+export const validateDTO = <T extends object>(
+	dtoClass: new (...args: unknown[]) => T,
+) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const dtoInstance = plainToInstance(dtoClass, req.body, {
+			const dtoInstance: T = plainToInstance(dtoClass, req.body, {
 				excludeExtraneousValues: true,
 				enableImplicitConversion: true,
 			});

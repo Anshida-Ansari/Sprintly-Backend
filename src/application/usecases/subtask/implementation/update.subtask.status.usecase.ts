@@ -9,7 +9,7 @@ import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
+import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error";
 import { inject, injectable } from "inversify";
 import type { IUpdateSubtaskStatusUseCase } from "../interface/update.subtask.status.interface";
 
@@ -82,8 +82,11 @@ export class UpdateSubtaskStatusUseCase implements IUpdateSubtaskStatusUseCase {
 
 			if (storyNewStatus !== parentUserstory.status) {
 				parentUserstory.update({ status: storyNewStatus });
+				if (!parentUserstory.id) {
+					throw new Error("Parent User Story ID is missing");
+				}
 				await this._userstoryrepository.update(
-					parentUserstory.id!,
+					parentUserstory.id,
 					parentUserstory,
 				);
 			}

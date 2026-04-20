@@ -6,7 +6,7 @@ import { DeleteSubtaskUseCase } from "@application/usecases/subtask/implementati
 import { GenerateDownloadUrlUseCase } from "@application/usecases/subtask/implementation/generate.download.url.usecase";
 import { GenrateUploadUrlUseCase } from "@application/usecases/subtask/implementation/generate.upload.url.usecase";
 import { ListSubtasksByStoryUseCase } from "@application/usecases/subtask/implementation/list.subtask.usecase";
-import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecasets";
+import { UpdateSubtaskStatusUseCase } from "@application/usecases/subtask/implementation/update.subtask.status.usecase";
 import { UpdateSubtaskTimeUseCase } from "@application/usecases/subtask/implementation/update.subtask.time.usecase";
 import type { IAddAttachementsUseCase } from "@application/usecases/subtask/interface/add.attachements.interface";
 import type { IAddCommentToSubtaskUseCase } from "@application/usecases/subtask/interface/add.comment.to.subtask.interface";

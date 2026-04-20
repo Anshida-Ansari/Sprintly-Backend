@@ -1,5 +1,6 @@
 import { UserEntity } from "../../domain/entities/user.entities";
 import type { UserStatus } from "../../domain/enum/status.enum";
+import type { Role } from "../../domain/enum/role.enum";
 
 export class UserPersistenceMapper {
 	toMongo(user: UserEntity) {
@@ -14,18 +15,19 @@ export class UserPersistenceMapper {
 			lastActive: user.lastActive,
 		};
 	}
+	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): UserEntity {
 		return UserEntity.create({
-			id: doc._id?.toString(),
-			name: doc.name,
-			email: doc.email,
-			password: doc.password,
-			role: doc.role,
+			id: (doc._id as { toString(): string } | undefined)?.toString(),
+			name: doc.name as string,
+			email: doc.email as string,
+			password: doc.password as string,
+			role: doc.role as Role, // Role enum casting
 			status: (doc.status ?? "active") as UserStatus,
-			companyId: doc.companyId,
-			adminId: doc.adminId,
-			lastActive: doc.lastActive,
-			createdAt: doc.createdAt,
+			companyId: (doc.companyId as { toString(): string } | undefined)?.toString(),
+			adminId: (doc.adminId as { toString(): string } | undefined)?.toString(),
+			lastActive: doc.lastActive as Date,
+			createdAt: doc.createdAt as Date,
 		});
 	}
 }

@@ -8,7 +8,7 @@ export class SignalingGateway {
 		SignalingGateway.io = io;
 	}
 
-	public static sendNotification(userId: string, event: string, data: any) {
+	public static sendNotification(userId: string, event: string, data: unknown) {
 		const socketId = SignalingGateway.userSockets.get(userId);
 		if (socketId && SignalingGateway.io) {
 			SignalingGateway.io.to(socketId).emit(event, data);

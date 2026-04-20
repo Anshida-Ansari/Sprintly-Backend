@@ -1,14 +1,17 @@
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { inject, injectable } from "inversify";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import { PROJECT_LIMITS, SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 import Stripe from "stripe";
+import {
+	PROJECT_LIMITS,
+	SubscriptionPlan,
+} from "../../../../domain/enum/company/subscription.plan.enum";
+import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
+import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
 import type { IVerifyStripeSessionUseCase } from "../interface/verify.stripe.session.interface";
 
 @injectable()
 export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
-	private _stripe: any;
+	private _stripe: Stripe;
 
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
@@ -18,9 +21,9 @@ export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
 		if (!secretKey) {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
-		this._stripe = new Stripe(secretKey, { 
-			apiVersion: "2026-03-25.dahlia" as any,
-			typescript: true 
+		this._stripe = new Stripe(secretKey, {
+			apiVersion: "2024-06-20",
+			typescript: true,
 		});
 	}
 
@@ -44,7 +47,10 @@ export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
 			// Retrieve the session from Stripe
 			const session = await this._stripe.checkout.sessions.retrieve(sessionId);
 
-			if (session.payment_status === "paid" && session.metadata?.companyId === companyId) {
+			if (
+				session.payment_status === "paid" &&
+				session.metadata?.companyId === companyId
+			) {
 				const stripeCustomerId = session.customer as string;
 				const stripeSubscriptionId = session.subscription as string;
 				const proLimit = PROJECT_LIMITS[SubscriptionPlan.PRO];
@@ -69,9 +75,10 @@ export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
 				message: "Session not paid or invalid",
 				currentPlan: company.currentPlan,
 			};
-		} catch (error: any) {
-			console.error("Stripe session verification error:", error);
-			throw new Error(`Failed to verify Stripe session: ${error.message}`);
+		} catch (error: unknown) {
+			const err = error as Error;
+			console.error("Stripe session verification error:", err);
+			throw new Error(`Failed to verify Stripe session: ${err.message}`);
 		}
 	}
 }

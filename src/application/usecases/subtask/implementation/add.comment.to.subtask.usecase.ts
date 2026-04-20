@@ -56,8 +56,7 @@ export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
 			subtask.userStoryId,
 		);
 		if (
-			userStory &&
-			userStory.adminId &&
+			userStory?.adminId &&
 			userStory.adminId.toString() !== dto.userId.toString()
 		) {
 			await this._createNotificationUseCase.execute(

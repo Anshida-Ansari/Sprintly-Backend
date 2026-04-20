@@ -13,10 +13,17 @@ export class AiController {
 
 	async chat(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { message, projectId } = req.body as { message: string; projectId?: string };
-			const user = (req as any).user;
+			const { message, projectId } = req.body as {
+				message: string;
+				projectId?: string;
+			};
+			const user = req.user;
 
-			console.log("[AiController] Received chat request:", { message, projectId, userId: user?.id });
+			console.log("[AiController] Received chat request:", {
+				message,
+				projectId,
+				userId: user?.id,
+			});
 
 			if (
 				!message ||

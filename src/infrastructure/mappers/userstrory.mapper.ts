@@ -1,3 +1,5 @@
+import type { PriorityStatus } from "@domain/enum/userstory/user.story.priority";
+import type { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 import { UserStoryEntity } from "../../domain/entities/user.story.entities";
 
 export class UserStoryPersisitanceMapper {
@@ -22,12 +24,14 @@ export class UserStoryPersisitanceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): UserStoryEntity {
 		const allowedPoints = [1, 2, 3, 5, 8, 13];
-		let parsedEstimationPoints = doc.estimationPoints;
+		let parsedEstimationPoints = doc.estimationPoints as number;
 
 		if (
 			parsedEstimationPoints !== undefined &&
+			parsedEstimationPoints !== null &&
 			!allowedPoints.includes(parsedEstimationPoints)
 		) {
 			parsedEstimationPoints = allowedPoints.reduce((prev, curr) =>
@@ -39,22 +43,29 @@ export class UserStoryPersisitanceMapper {
 		}
 
 		return UserStoryEntity.create({
-			id: doc._id.toString(),
-			projectId: doc.projectId.toString(),
-			companyId: doc.companyId.toString(),
-			title: doc.title,
-			description: doc.description,
-			priority: doc.priority,
-			sprintId: doc.sprintId?.toString(),
+			id: (doc._id as { toString(): string }).toString(),
+			projectId: (doc.projectId as { toString(): string }).toString(),
+			companyId: (doc.companyId as { toString(): string }).toString(),
+			title: doc.title as string,
+			description: doc.description as string,
+			priority: doc.priority as PriorityStatus,
+			sprintId: (doc.sprintId as { toString(): string | undefined })?.toString(),
 			assignedTo: doc.assignedTo
-				? doc.assignedTo.map((id: any) => id.toString())
+				? (doc.assignedTo as unknown[]).map((id) =>
+						(id as { toString(): string }).toString(),
+					)
 				: [],
-			comments: doc.comments || [],
-			status: doc.status,
+			comments: (doc.comments as Array<{
+				createdAt: Date;
+				message: string;
+				userName?: string;
+				userId: string;
+			}>) || [],
+			status: doc.status as UserStoryStatus,
 			estimationPoints: parsedEstimationPoints,
-			acceptanceCriteria: doc.acceptanceCriteria,
-			adminId: doc.adminId?.toString(),
-			completedAt: doc.completedAt,
-		} as any);
+			acceptanceCriteria: (doc.acceptanceCriteria as string[]) || [],
+			adminId: (doc.adminId as { toString(): string | undefined })?.toString(),
+			completedAt: doc.completedAt as Date,
+		});
 	}
 }

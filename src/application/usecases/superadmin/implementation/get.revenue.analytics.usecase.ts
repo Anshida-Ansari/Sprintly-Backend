@@ -1,7 +1,10 @@
 import { inject, injectable } from "inversify";
-import { TRANSACTION_TYPES } from "../../../../infrastructure/di/types/transaction/transaction.types";
 import type { ITransactionRepository } from "../../../../infrastructure/db/repository/interface/transaction.interface";
-import type { IGetRevenueAnalyticsUseCase, RevenueStats } from "../interface/get.analytics.interface";
+import { TRANSACTION_TYPES } from "../../../../infrastructure/di/types/transaction/transaction.types";
+import type {
+	IGetRevenueAnalyticsUseCase,
+	RevenueStats,
+} from "../interface/get.analytics.interface";
 
 @injectable()
 export class GetRevenueAnalyticsUseCase implements IGetRevenueAnalyticsUseCase {
@@ -20,20 +23,30 @@ export class GetRevenueAnalyticsUseCase implements IGetRevenueAnalyticsUseCase {
 		const transactions = await this._transactionRepository.findAll();
 		const successfulTx = transactions.filter((t) => t.status === "succeeded");
 
-		const totalLifetimeRevenue = successfulTx.reduce((acc, t) => acc + t.amount, 0);
+		const totalLifetimeRevenue = successfulTx.reduce(
+			(acc, t) => acc + t.amount,
+			0,
+		);
 
 		const currentMonthRevenue = successfulTx
 			.filter((t) => t.createdAt && t.createdAt >= currentMonthStart)
 			.reduce((acc, t) => acc + t.amount, 0);
 
 		const previousMonthRevenue = successfulTx
-			.filter((t) => t.createdAt && t.createdAt >= prevMonthStart && t.createdAt <= prevMonthEnd)
+			.filter(
+				(t) =>
+					t.createdAt &&
+					t.createdAt >= prevMonthStart &&
+					t.createdAt <= prevMonthEnd,
+			)
 			.reduce((acc, t) => acc + t.amount, 0);
 
 		// Calculate MoM Growth
 		let revenueGrowthPercentage = 0;
 		if (previousMonthRevenue > 0) {
-			revenueGrowthPercentage = ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) * 100;
+			revenueGrowthPercentage =
+				((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) *
+				100;
 		} else if (currentMonthRevenue > 0) {
 			revenueGrowthPercentage = 100;
 		}
@@ -47,7 +60,10 @@ export class GetRevenueAnalyticsUseCase implements IGetRevenueAnalyticsUseCase {
 			const monthEnd = new Date(d.getFullYear(), d.getMonth() + 1, 0);
 
 			const monthAmount = successfulTx
-				.filter((t) => t.createdAt && t.createdAt >= monthStart && t.createdAt <= monthEnd)
+				.filter(
+					(t) =>
+						t.createdAt && t.createdAt >= monthStart && t.createdAt <= monthEnd,
+				)
 				.reduce((acc, t) => acc + t.amount, 0);
 
 			revenueHistory.push({

@@ -16,26 +16,35 @@ export class StandupPersistanceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): StandupEntity {
-		const user = doc.userId;
-		const userId = user._id ? user._id.toString() : user.toString();
+		const user = doc.userId as Record<string, unknown>;
+		const userId =
+			user && typeof user === "object" && "_id" in user
+				? (user._id as { toString(): string }).toString()
+				: (user as unknown as { toString(): string }).toString();
 
 		return StandupEntity.create({
-			id: doc._id.toString(),
+			id: (doc._id as { toString(): string }).toString(),
 			userId: userId,
-			projectId: doc.projectId.toString(),
-			sprintId: doc.sprintId.toString(),
-			companyId: doc.companyId.toString(),
-			yesterday: doc.yesterday,
-			today: doc.today,
-			blockers: doc.blockers,
-			date: doc.date,
-			comments: doc.comments,
-			createdAt: doc.createdAt,
-			userData: user.name
+			projectId: (doc.projectId as { toString(): string }).toString(),
+			sprintId: (doc.sprintId as { toString(): string }).toString(),
+			companyId: (doc.companyId as { toString(): string }).toString(),
+			yesterday: doc.yesterday as string,
+			today: doc.today as string,
+			blockers: doc.blockers as string,
+			date: (doc.date as Date).toISOString(),
+			comments: (doc.comments as Array<{
+				userId: string;
+				userName: string;
+				text: string;
+				createdAt: Date;
+			}>) || [],
+			createdAt: doc.createdAt as Date,
+			userData: user && typeof user === "object" && "name" in user
 				? {
-						name: user.name,
-						email: user.email,
+						name: user.name as string,
+						email: user.email as string,
 					}
 				: undefined,
 		});

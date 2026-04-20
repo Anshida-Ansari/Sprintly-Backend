@@ -7,7 +7,7 @@ import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notific
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
+import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error";
 import { inject, injectable } from "inversify";
 import type { IAssignSubtaskUseCase } from "../interface/assign.subtask.interface";
 

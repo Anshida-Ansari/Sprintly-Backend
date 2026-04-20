@@ -7,7 +7,9 @@ import { NotFoundError } from "../../../../shared/utils/error-handling/errors/no
 import type { IGetCompanySubscriptionUseCase } from "../interface/get.company.subscription.interface";
 
 @injectable()
-export class GetCompanySubscriptionUseCase implements IGetCompanySubscriptionUseCase {
+export class GetCompanySubscriptionUseCase
+	implements IGetCompanySubscriptionUseCase
+{
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
@@ -29,7 +31,9 @@ export class GetCompanySubscriptionUseCase implements IGetCompanySubscriptionUse
 			projectLimit: company.projectLimit,
 			projectCount,
 			isLimitReached: company.hasReachedProjectLimit(projectCount),
-			subscriptionEndDate: company.subscriptionEndDate ? company.subscriptionEndDate.toISOString() : null,
+			subscriptionEndDate: company.subscriptionEndDate
+				? company.subscriptionEndDate.toISOString()
+				: null,
 			stripeSubscriptionId: company.stripeSubscriptionId ?? null,
 		};
 	}

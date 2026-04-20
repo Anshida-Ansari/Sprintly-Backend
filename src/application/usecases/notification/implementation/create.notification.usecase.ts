@@ -22,7 +22,7 @@ export class CreateNotificationUseCase implements ICreateNotificationUseCase {
 		entityId: string,
 		entityType: string,
 		senderId?: string,
-		metadata?: Record<string, any>,
+		metadata?: Record<string, unknown>,
 	): Promise<NotificationEntity> {
 		const notificationEntity = NotificationEntity.create({
 			receiverId,

@@ -65,7 +65,7 @@ import express from "express";
 
 router.post(
 	ADMIN_ROUTES.STRIPE_WEBHOOK,
-	express.raw({ type: 'application/json' }), // Required to get the raw buffer for Stripe signature verification
+	express.raw({ type: "application/json" }), // Required to get the raw buffer for Stripe signature verification
 	(req, res, next) => adminController.stripeWebhook(req, res, next),
 );
 

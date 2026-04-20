@@ -73,7 +73,7 @@ export class AuthGurd {
 				};
 
 				next();
-			} catch (_error) {
+			} catch {
 				return res.status(ClientErrorStatus.NOT_FOUND).json({
 					success: false,
 					message: ErrorMessage.USER_NOT_FOUND,

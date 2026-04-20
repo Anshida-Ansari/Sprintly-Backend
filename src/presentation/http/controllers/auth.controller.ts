@@ -172,7 +172,7 @@ export class AuthController {
 				success: true,
 				message: result.message,
 			});
-		} catch (error: any) {
+		} catch (error: unknown) {
 			next(error);
 		}
 	}
@@ -191,7 +191,7 @@ export class AuthController {
 
 	async getMe(req: Request, res: Response, next: NextFunction) {
 		try {
-			const { id, userId, email, role, companyId } = req.user as any;
+			const { id, userId, email, role, companyId } = req.user;
 			const resolvedId = id || userId;
 
 			let companyName = "";

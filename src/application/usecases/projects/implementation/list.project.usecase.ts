@@ -1,6 +1,5 @@
 import type { IListProjectUseCase } from "@application/usecases/projects/interface/list.project.interface";
-
-import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
+import type { IProjectReposiotory, IProjectWithAnalytics } from "@infrastructure/db/repository/interface/project.interface";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { inject, injectable } from "inversify";
 import { Types } from "mongoose";
@@ -18,14 +17,16 @@ export class ListProjectUseCase implements IListProjectUseCase {
 		userId: string,
 		userRole: string,
 	): Promise<{
-		data: any[];
+		data: IProjectWithAnalytics[];
 		total: number;
 		page: number;
 		limit: number;
 		totalPages: number;
 	}> {
 		const { page, limit, search } = query;
-		const filter: any = { companyId: new Types.ObjectId(companyId) };
+		const filter: Record<string, unknown> = {
+			companyId: new Types.ObjectId(companyId),
+		};
 
 		if (userRole === "developers" || userRole === "developer") {
 			filter.members = new Types.ObjectId(userId);

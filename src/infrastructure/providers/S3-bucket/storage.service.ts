@@ -9,7 +9,6 @@ import type {
 	IStorageService,
 	SignedUrlResponse,
 } from "@domain/interface/storage.service.interface";
-import { error } from "console";
 import { injectable } from "inversify";
 import { logger } from "../logger/pino.logger";
 

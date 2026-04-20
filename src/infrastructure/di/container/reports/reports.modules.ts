@@ -1,11 +1,11 @@
-import { ContainerModule } from "inversify";
-import { ReportsRepository } from "@infrastructure/db/repository/implements/reports.repository";
 import { GetProjectReportsUseCase } from "@application/usecases/reports/implementation/get.project.reports.usecase";
 import { GetSprintReportsUseCase } from "@application/usecases/reports/implementation/get.sprint.reports.usecase";
-import { GetUserStoryReportsUseCase } from "@application/usecases/reports/implementation/get.userstory.reports.usecase";
 import { GetSubtaskReportsUseCase } from "@application/usecases/reports/implementation/get.subtask.reports.usecase";
 import { GetUserPerformanceReportsUseCase } from "@application/usecases/reports/implementation/get.userperformance.reports.usecase";
+import { GetUserStoryReportsUseCase } from "@application/usecases/reports/implementation/get.userstory.reports.usecase";
+import { ReportsRepository } from "@infrastructure/db/repository/implements/reports.repository";
 import { ReportsController } from "@presentation/http/controllers/reports.controller";
+import { ContainerModule } from "inversify";
 import { REPORTS_TYPE } from "../../types/reports/reports.types";
 
 export const ReportsModule = new ContainerModule(({ bind }) => {
@@ -17,7 +17,9 @@ export const ReportsModule = new ContainerModule(({ bind }) => {
 	bind(REPORTS_TYPE.GetSprintReportsUseCase).to(GetSprintReportsUseCase);
 	bind(REPORTS_TYPE.GetUserStoryReportsUseCase).to(GetUserStoryReportsUseCase);
 	bind(REPORTS_TYPE.GetSubtaskReportsUseCase).to(GetSubtaskReportsUseCase);
-	bind(REPORTS_TYPE.GetUserPerformanceReportsUseCase).to(GetUserPerformanceReportsUseCase);
+	bind(REPORTS_TYPE.GetUserPerformanceReportsUseCase).to(
+		GetUserPerformanceReportsUseCase,
+	);
 
 	// Controllers
 	bind(REPORTS_TYPE.ReportsController).to(ReportsController);

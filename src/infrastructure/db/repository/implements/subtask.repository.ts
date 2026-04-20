@@ -4,7 +4,7 @@ import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import type { SubTaskPersisitanceMapper } from "@infrastructure/mappers/subtask.mapper";
 import { inject, injectable } from "inversify";
 import mongoose, { type Model } from "mongoose";
-import type { ISubTaskRepository } from "../interface/subtask.interface";
+import type { ISubTaskRepository, ITopMember } from "../interface/subtask.interface";
 import { BaseRepository } from "./base.repository";
 
 @injectable()
@@ -79,7 +79,10 @@ export class SubtaskRepository
 		});
 	}
 
-	async getTopMembers(companyId: string, limit: number): Promise<any[]> {
+	async getTopMembers(
+		companyId: string,
+		limit: number,
+	): Promise<ITopMember[]> {
 		return await this.model.aggregate([
 			{
 				$match: {

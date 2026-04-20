@@ -4,7 +4,7 @@ import { injectable } from "inversify";
 
 @injectable()
 export class NotificationSocketService implements INotificationSocketService {
-	sendNotification(userId: string, event: string, payload: any): void {
+	sendNotification(userId: string, event: string, payload: unknown): void {
 		SignalingGateway.sendNotification(userId, event, payload);
 	}
 }

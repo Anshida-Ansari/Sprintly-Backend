@@ -1,5 +1,6 @@
-import { SubscriptionPlan } from "../../domain/enum/company/subscription.plan.enum";
 import { CompanyEnitiy } from "../../domain/entities/company.enities";
+import { SubscriptionPlan } from "../../domain/enum/company/subscription.plan.enum";
+import type { Status } from "../../domain/enum/user/user.status.enum";
 
 export class CompanyPersistenceMapper {
 	toMongo(company: CompanyEnitiy) {
@@ -22,25 +23,27 @@ export class CompanyPersistenceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): CompanyEnitiy {
 		return CompanyEnitiy.create({
-			id: doc._id?.toString(),
-			companyName: doc.companyName,
-			status: doc.status,
-			adminId: doc.adminId?.toString(),
-			createdAt: doc.createdAt,
-			githubAccessToken: doc.githubAccessToken,
-			githubRefreshToken: doc.githubRefreshToken,
-			githubInstallationId: doc.githubInstallationId,
-			githubConnectedAt: doc.githubConnectedAt,
-			githubUsername: doc.githubUsername,
-			githubOrganization: doc.githubOrganization,
-			currentPlan: doc.currentPlan as SubscriptionPlan ?? SubscriptionPlan.FREE,
-			projectLimit: doc.projectLimit ?? 2,
-			stripeCustomerId: doc.stripeCustomerId ?? undefined,
-			stripeSubscriptionId: doc.stripeSubscriptionId ?? undefined,
-			subscriptionEndDate: doc.subscriptionEndDate ?? undefined,
-			autoRenew: doc.autoRenew ?? true,
+			id: (doc._id as { toString(): string } | undefined)?.toString(),
+			companyName: doc.companyName as string,
+			status: doc.status as Status,
+			adminId: (doc.adminId as { toString(): string } | undefined)?.toString() ?? "",
+			createdAt: doc.createdAt as unknown as Date,
+			githubAccessToken: doc.githubAccessToken as string,
+			githubRefreshToken: doc.githubRefreshToken as string,
+			githubInstallationId: doc.githubInstallationId as string,
+			githubConnectedAt: doc.githubConnectedAt as Date,
+			githubUsername: doc.githubUsername as string,
+			githubOrganization: doc.githubOrganization as string,
+			currentPlan:
+				(doc.currentPlan as SubscriptionPlan) ?? SubscriptionPlan.FREE,
+			projectLimit: (doc.projectLimit as number) ?? 2,
+			stripeCustomerId: (doc.stripeCustomerId as string) ?? undefined,
+			stripeSubscriptionId: (doc.stripeSubscriptionId as string) ?? undefined,
+			subscriptionEndDate: (doc.subscriptionEndDate as Date) ?? undefined,
+			autoRenew: (doc.autoRenew as boolean) ?? true,
 		});
 	}
 }

@@ -1,8 +1,8 @@
 import type { IListCompanyUseCase } from "@application/usecases/superadmin/interface/list.companies.interface";
-
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { inject, injectable } from "inversify";
+import type { CompanyEnitiy } from "@domain/entities/company.enities";
 
 @injectable()
 export class ListCompanyUseCase implements IListCompanyUseCase {
@@ -15,14 +15,14 @@ export class ListCompanyUseCase implements IListCompanyUseCase {
 		limit: number;
 		search?: string;
 	}): Promise<{
-		data: any[];
+		data: CompanyEnitiy[];
 		total: number;
 		page: number;
 		limit: number;
 		totalPages: number;
 	}> {
 		const { page, limit, search } = query;
-		const filter: any = {};
+		const filter: Record<string, unknown> = {};
 		if (search) {
 			filter.companyName = { $regex: search, $options: "i" };
 		}

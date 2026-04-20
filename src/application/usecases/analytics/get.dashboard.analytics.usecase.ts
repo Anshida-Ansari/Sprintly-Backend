@@ -9,10 +9,13 @@ export class GetDashboardAnalyticsUseCase {
 		private readonly analyticsRepository: IAnalyticsRepository,
 	) {}
 
-	async execute(companyId: string, filters: any) {
+	async execute(companyId: string, filters: Record<string, unknown>) {
 		if (!companyId) {
 			throw new Error("companyId is required");
 		}
-		return await this.analyticsRepository.getDashboardAnalytics(companyId, filters);
+		return await this.analyticsRepository.getDashboardAnalytics(
+			companyId,
+			filters,
+		);
 	}
 }

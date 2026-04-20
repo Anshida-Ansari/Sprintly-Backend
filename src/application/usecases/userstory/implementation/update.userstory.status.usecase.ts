@@ -9,7 +9,7 @@ import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notific
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
-import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error,r";
+import { ServiceUnavailableError } from "@shared/utils/error-handling/errors/service.unavailable.error";
 import { inject, injectable } from "inversify";
 import type { IUpdateStatusOfUserStoryInterface } from "../interface/update.userstory.status.interface";
 
@@ -60,11 +60,14 @@ export class UpdateUserStoryUseCase
 			updated.assignedTo.length > 0
 		) {
 			for (const assigneeId of updated.assignedTo) {
+				if (!updated.id) {
+					throw new Error("Updated Story ID is missing");
+				}
 				await this._createNotificationUseCase.execute(
 					assigneeId.toString(),
 					NotificationType.STORY_COMPLETED,
 					`Story marked as completed: ${updated.title}`,
-					updated.id!,
+					updated.id,
 					"STORY",
 				);
 			}

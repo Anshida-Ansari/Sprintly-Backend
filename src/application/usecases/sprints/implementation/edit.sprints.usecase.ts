@@ -74,10 +74,14 @@ export class EditSprintUseCase implements IEditSprintUseCase {
 
 		await this._sprintRepository.update(sprintId, sprint);
 
+		if (!sprint.id) {
+			throw new Error("Sprint ID is missing after update");
+		}
+
 		return {
-			id: sprint.id!,
+			id: sprint.id,
 			name: sprint.name,
-			goal: sprint.goal!,
+			goal: sprint.goal ?? "",
 			status: sprint.status,
 			createdAt: sprint.createdAt,
 		};

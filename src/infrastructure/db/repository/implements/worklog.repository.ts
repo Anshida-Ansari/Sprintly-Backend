@@ -45,20 +45,22 @@ export class WorkLogRepository
 
 	async findByUserId(
 		userId: string,
-		filters: any = {},
+		filters: Record<string, unknown> = {},
 	): Promise<WorkLogEntity[]> {
-		const query: any = { userId: new mongoose.Types.ObjectId(userId) };
+		const query: Record<string, unknown> = {
+			userId: new mongoose.Types.ObjectId(userId),
+		};
 
 		if (filters.startDate && filters.endDate) {
 			query.date = {
-				$gte: new Date(filters.startDate),
-				$lte: new Date(filters.endDate),
+				$gte: new Date(filters.startDate as string),
+				$lte: new Date(filters.endDate as string),
 			};
 		}
 		if (filters.projectId)
-			query.projectId = new mongoose.Types.ObjectId(filters.projectId);
+			query.projectId = new mongoose.Types.ObjectId(filters.projectId as string);
 		if (filters.sprintId)
-			query.sprintId = new mongoose.Types.ObjectId(filters.sprintId);
+			query.sprintId = new mongoose.Types.ObjectId(filters.sprintId as string);
 
 		const docs = await this.model.find(query).sort({ date: -1 });
 		return docs.map((doc) => this._workLogMapper.fromMongo(doc));
@@ -79,22 +81,27 @@ export class WorkLogRepository
 	}
 
 	async getWorkLogAnalytics(
-		companyId: string,
-		filters: any = {},
-	): Promise<any> {
-		const matchQuery: any = {};
+		_companyId: string,
+		filters: Record<string, unknown> = {},
+	): Promise<unknown> {
+		const matchQuery: mongoose.FilterQuery<WorkLogEntity> = {};
 
 		if (filters.userId)
-			matchQuery.userId = new mongoose.Types.ObjectId(filters.userId);
+			matchQuery.userId = new mongoose.Types.ObjectId(filters.userId as string);
 		if (filters.projectId)
-			matchQuery.projectId = new mongoose.Types.ObjectId(filters.projectId);
+			matchQuery.projectId = new mongoose.Types.ObjectId(
+				filters.projectId as string,
+			);
 		if (filters.sprintId)
-			matchQuery.sprintId = new mongoose.Types.ObjectId(filters.sprintId);
-		if (filters.startDate && filters.endDate) {
-			matchQuery.date = {
-				$gte: new Date(filters.startDate),
-				$lte: new Date(filters.endDate),
-			};
+			matchQuery.sprintId = new mongoose.Types.ObjectId(
+				filters.sprintId as string,
+			);
+		if (filters.startDate || filters.endDate) {
+			matchQuery.date = {};
+			if (filters.startDate)
+				matchQuery.date.$gte = new Date(filters.startDate as string);
+			if (filters.endDate)
+				matchQuery.date.$lte = new Date(filters.endDate as string);
 		}
 
 		const logs = await this.model
@@ -151,13 +158,13 @@ export class WorkLogRepository
 		return {
 			logs,
 			totalHours: parseFloat(totalHours.toFixed(2)),
-			hoursPerUser: hoursPerUser.map((u: any) => ({
+			hoursPerUser: hoursPerUser.map((u: Record<string, unknown>) => ({
 				...u,
-				totalHours: parseFloat(u.totalHours.toFixed(2)),
+				totalHours: parseFloat((u.totalHours as number).toFixed(2)),
 			})),
-			hoursPerSprint: hoursPerSprint.map((s: any) => ({
+			hoursPerSprint: hoursPerSprint.map((s: Record<string, unknown>) => ({
 				...s,
-				totalHours: parseFloat(s.totalHours.toFixed(2)),
+				totalHours: parseFloat((s.totalHours as number).toFixed(2)),
 			})),
 		};
 	}

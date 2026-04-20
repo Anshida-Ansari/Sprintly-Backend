@@ -13,6 +13,8 @@ import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.er
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
 
+import type { UserStoryEntity } from "@domain/entities/user.story.entities";
+
 @injectable()
 export class ListUserstoryUseCase implements IListUserstoryUseCase {
 	constructor(
@@ -33,7 +35,7 @@ export class ListUserstoryUseCase implements IListUserstoryUseCase {
 		companyId: string,
 		projectId: string,
 	): Promise<{
-		data: any[];
+		data: UserStoryEntity[];
 		total: number;
 		page: number;
 		limit: number;

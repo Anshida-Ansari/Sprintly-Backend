@@ -3,15 +3,45 @@ export interface IDeveloperDashboardStats {
 		id: string;
 		title: string;
 		status: string;
-		description: string;
+		projectName: string;
+		sprintName: string;
 		estimatedHours: number;
 		actualHours: number;
+		dueDate: Date | null;
 	} | null;
-	upNext: {
+	todayTasks: {
 		id: string;
 		title: string;
+		projectName: string;
+		status: string;
 		priority: string;
-		dueDate: string;
+		dueDate: Date | null;
+		isOverdue: boolean;
+	}[];
+	myTasks: {
+		pending: any[];
+		inProgress: any[];
+		completed: any[];
+	};
+	activeSprint: {
+		id: string;
+		name: string;
+		daysLeft: number;
+		totalTasks: number;
+		completedTasks: number;
+		completionPercentage: number;
+	} | null;
+	performance: {
+		tasksCompletedThisWeek: number;
+		hoursWorkedThisWeek: number;
+		completionRate: number;
+	};
+	recentActivity: {
+		id: string;
+		type: "TASK_UPDATE" | "COMMENT_ADDED";
+		title: string;
+		message: string;
+		timestamp: Date;
 	}[];
 	schedule: {
 		id: string;
@@ -20,12 +50,6 @@ export interface IDeveloperDashboardStats {
 		roomId: string;
 		status: string;
 	}[];
-	dailyTargets: {
-		completedTasks: number;
-		totalTasks: number;
-		loggedHours: number;
-		totalHours: number;
-	};
 }
 
 export interface IGetDeveloperDashboardStatsUseCase {

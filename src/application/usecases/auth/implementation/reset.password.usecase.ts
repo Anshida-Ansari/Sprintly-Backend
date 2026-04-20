@@ -44,7 +44,10 @@ export class ResetPasswordUsecase implements IResetPasswordUseCase {
 		const hashedPassword = await userEntity.getHashedPassword();
 		userEntity.setPassword(hashedPassword);
 
-		await this._userRepository.updatePassword(user.id!, userEntity.password);
+		if (!user.id) {
+			throw new Error("User ID is missing");
+		}
+		await this._userRepository.updatePassword(user.id, userEntity.password);
 		return {
 			message: SuccessMessage.PASSWORD_RESET,
 		};

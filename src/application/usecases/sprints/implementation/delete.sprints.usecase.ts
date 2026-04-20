@@ -32,7 +32,10 @@ export class DeleteSprintUseCase implements IDeleteSprintUseCase {
 
 		const updatePromises = stories.map((story) => {
 			story.update({ sprintId: undefined });
-			return this._userstoryRepostioty.update(story.id!, story);
+			if (!story.id) {
+				throw new Error("Story ID is missing");
+			}
+			return this._userstoryRepostioty.update(story.id, story);
 		});
 		await Promise.all(updatePromises);
 

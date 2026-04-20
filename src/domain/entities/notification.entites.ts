@@ -9,7 +9,7 @@ export class NotificationEntity {
 	private _entityId: string;
 	private _entityType: string;
 	private _isRead: boolean;
-	private _meta?: Record<string, any>;
+	private _meta?: Record<string, unknown>;
 
 	private readonly _createdAt: Date;
 	private _updatedAt?: Date;
@@ -23,7 +23,7 @@ export class NotificationEntity {
 		entityId: string;
 		entityType: string;
 		isRead?: boolean;
-		meta?: Record<string, any>;
+		meta?: Record<string, unknown>;
 		createdAt?: Date;
 		updatedAt?: Date;
 	}) {
@@ -49,7 +49,7 @@ export class NotificationEntity {
 		message: string;
 		entityId: string;
 		entityType: string;
-		meta?: Record<string, any>;
+		meta?: Record<string, unknown>;
 	}): NotificationEntity {
 		if (!props.receiverId) throw new Error("Receiver ID is required");
 		if (!props.type) throw new Error("Notification type is required");
@@ -72,7 +72,7 @@ export class NotificationEntity {
 		entityId: string;
 		entityType: string;
 		isRead: boolean;
-		meta?: Record<string, any>;
+		meta?: Record<string, unknown>;
 		createdAt: Date;
 		updatedAt?: Date;
 	}): NotificationEntity {

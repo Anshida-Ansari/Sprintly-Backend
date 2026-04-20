@@ -1,3 +1,5 @@
+import type { IProjectWithAnalytics } from "@infrastructure/db/repository/interface/project.interface";
+
 export interface IListProjectUseCase {
 	execute(
 		query: { page: number; limit: number; search?: string },
@@ -5,7 +7,7 @@ export interface IListProjectUseCase {
 		userId: string,
 		userRole: string,
 	): Promise<{
-		data: any[];
+		data: IProjectWithAnalytics[];
 		total: number;
 		page: number;
 		limit: number;

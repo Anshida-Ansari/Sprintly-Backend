@@ -84,6 +84,7 @@ export class UserStoryEntity {
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 		adminId?: string;
+		completedAt?: Date;
 	}): UserStoryEntity {
 		if (!props.title?.trim()) throw new Error("User story title is required");
 		const allowedPoints = [1, 2, 3, 5, 8, 13];
@@ -109,7 +110,9 @@ export class UserStoryEntity {
 			comments: props.comments || [],
 			estimationPoints: props.estimationPoints,
 			acceptanceCriteria: props.acceptanceCriteria || [],
-			completedAt: props.status === UserStoryStatus.DONE ? new Date() : undefined,
+			completedAt:
+				props.completedAt ||
+				(props.status === UserStoryStatus.DONE ? new Date() : undefined),
 		});
 	}
 
@@ -129,7 +132,10 @@ export class UserStoryEntity {
 		if (props.description !== undefined)
 			this._description = props.description?.trim();
 		if (props.status !== undefined) {
-			if (props.status === UserStoryStatus.DONE && this._status !== UserStoryStatus.DONE) {
+			if (
+				props.status === UserStoryStatus.DONE &&
+				this._status !== UserStoryStatus.DONE
+			) {
 				this._completedAt = new Date();
 			} else if (props.status !== UserStoryStatus.DONE) {
 				this._completedAt = undefined;

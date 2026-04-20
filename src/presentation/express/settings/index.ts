@@ -5,7 +5,7 @@ config();
 import connectDB from "@infrastructure/db/mongoose/connect.db.js";
 import env from "@infrastructure/providers/env/env.validation.js";
 import { PinoLoggerService } from "@infrastructure/providers/logger/logger.service.js";
-import { createServer } from "http";
+import { createServer } from "node:http";
 import { MeetingScheduler } from "../../../infrastructure/scheduler/meeting.scheduler.js";
 import { SocketServer } from "../../socket/socket.server.js";
 import app from "./app.js";

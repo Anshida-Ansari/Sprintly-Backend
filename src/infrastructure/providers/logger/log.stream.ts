@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { createStream } from "rotating-file-stream";
 
 const logDirectory = path.join(process.cwd(), "logs");

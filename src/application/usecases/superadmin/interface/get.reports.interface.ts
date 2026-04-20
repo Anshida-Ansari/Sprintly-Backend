@@ -31,8 +31,20 @@ export interface TrialReportItem {
 }
 
 export interface IGetSubscriptionReportsUseCase {
-	getSubscriptions(page: number, limit: number): Promise<PaginatedResult<SubscriptionReportItem>>;
-	getPayments(page: number, limit: number): Promise<PaginatedResult<PaymentReportItem>>;
-	getExpiringSoon(page: number, limit: number): Promise<PaginatedResult<SubscriptionReportItem>>;
-	getTrials(page: number, limit: number): Promise<PaginatedResult<TrialReportItem>>;
+	getSubscriptions(
+		page: number,
+		limit: number,
+	): Promise<PaginatedResult<SubscriptionReportItem>>;
+	getPayments(
+		page: number,
+		limit: number,
+	): Promise<PaginatedResult<PaymentReportItem>>;
+	getExpiringSoon(
+		page: number,
+		limit: number,
+	): Promise<PaginatedResult<SubscriptionReportItem>>;
+	getTrials(
+		page: number,
+		limit: number,
+	): Promise<PaginatedResult<TrialReportItem>>;
 }

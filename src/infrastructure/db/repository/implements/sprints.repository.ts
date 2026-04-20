@@ -5,7 +5,7 @@ import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
 import type { SprintPersistenceMapper } from "@infrastructure/mappers/sprints.mapper";
 import { inject, injectable } from "inversify";
-import type { Model } from "mongoose";
+import type { Model, FilterQuery } from "mongoose";
 
 @injectable()
 export class SprintsRepository
@@ -65,7 +65,7 @@ export class SprintsRepository
 		endDate: Date,
 		excludeSprintId?: string,
 	): Promise<boolean> {
-		const filter: any = {
+		const filter: FilterQuery<SprintEntity> = {
 			projectId,
 			startDate: { $lt: endDate },
 			endDate: { $gt: startDate },
@@ -100,7 +100,7 @@ export class SprintsRepository
 	}): Promise<{ data: SprintEntity[]; total: number }> {
 		const { projectId, companyId, page, limit, search, status } = params;
 
-		const filter: any = {
+		const filter: FilterQuery<SprintEntity> = {
 			projectId,
 			companyId,
 		};

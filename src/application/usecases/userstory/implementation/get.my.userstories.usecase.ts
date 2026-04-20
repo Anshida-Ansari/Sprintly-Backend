@@ -3,7 +3,7 @@ import type { IUserStroyRepository } from "@infrastructure/db/repository/interfa
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { inject, injectable } from "inversify";
-import type { IGetMyUserStoriesUseCase } from "../interface/get.my.userstories.interface";
+import type { IGetMyUserStoriesUseCase, IMyUserStoryResponse } from "../interface/get.my.userstories.interface";
 
 @injectable()
 export class GetMyUserStoriesUseCase implements IGetMyUserStoriesUseCase {
@@ -14,12 +14,17 @@ export class GetMyUserStoriesUseCase implements IGetMyUserStoriesUseCase {
 		private _userStoryRepository: IUserStroyRepository,
 	) {}
 
-	async execute(userId: string): Promise<any[]> {
+	async execute(userId: string): Promise<IMyUserStoryResponse[]> {
 		const mySubtasks = await this._subTaskRepository.findByAssignedTo(userId);
 		const myStories = await this._userStoryRepository.findByAssignedTo(userId);
 
 		const storyIdsFromSubtasks = mySubtasks.map((s) => s.userStoryId);
-		const storyIdsFromAssignment = myStories.map((s) => s.id!);
+		const storyIdsFromAssignment = myStories.map((s) => {
+			if (!s.id) {
+				throw new Error(`User story ID for ${s.title} is missing`);
+			}
+			return s.id;
+		});
 
 		const userStoryIds = [
 			...new Set([...storyIdsFromSubtasks, ...storyIdsFromAssignment]),

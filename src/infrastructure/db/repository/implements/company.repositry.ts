@@ -43,7 +43,9 @@ export class CompanyRepository
 		return this._companyMapper.fromMongo(doc);
 	}
 
-	async findByStripeCustomerId(customerId: string): Promise<CompanyEnitiy | null> {
+	async findByStripeCustomerId(
+		customerId: string,
+	): Promise<CompanyEnitiy | null> {
 		const doc = await this.model.findOne({ stripeCustomerId: customerId });
 		if (!doc) return null;
 		return this._companyMapper.fromMongo(doc);
@@ -58,7 +60,7 @@ export class CompanyRepository
 		subscriptionEndDate?: Date,
 		autoRenew?: boolean,
 	): Promise<CompanyEnitiy | null> {
-		const updatePayload: Record<string, any> = {
+		const updatePayload: Record<string, unknown> = {
 			currentPlan: plan,
 			projectLimit,
 		};

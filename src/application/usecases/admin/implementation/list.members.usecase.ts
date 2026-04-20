@@ -1,4 +1,5 @@
 import type { IListMembersUseCase } from "@application/usecases/admin/interface/list.members.interface";
+import type { UserEntity } from "@domain/entities/user.entities";
 import { UserStatus } from "@domain/enum/status.enum";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
@@ -28,7 +29,7 @@ export class ListUserUseCase implements IListMembersUseCase {
 		totalPages: number;
 	}> {
 		const { page, limit, search } = query;
-		const filter: any = { companyId };
+		const filter: Record<string, unknown> = { companyId };
 		if (search) {
 			filter.name = { $regex: search, $options: "i" };
 		}
@@ -41,13 +42,13 @@ export class ListUserUseCase implements IListMembersUseCase {
 		]);
 
 		return {
-			data: users.map((user: any) => ({
-				_id: user._id,
+			data: users.map((user: UserEntity) => ({
+				_id: user.id ?? "",
 				name: user.name || "No Name",
 				email: user.email,
 				role: user.role,
 				status: user.status || UserStatus.ACTIVE,
-				createdAt: user.createdAt,
+				createdAt: user.createdAt ?? new Date(),
 			})),
 			total: count,
 			page,

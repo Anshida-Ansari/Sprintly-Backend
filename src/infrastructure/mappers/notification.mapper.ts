@@ -2,38 +2,33 @@ import { NotificationEntity } from "@domain/entities/notification.entites";
 import type { NotificationType } from "@domain/enum/notification/notification.types";
 import type { INotification } from "../db/interface/notification.interface";
 
-export class NotificationMapper {
-	static toEntity(doc: INotification): NotificationEntity {
+export const NotificationMapper = {
+	toEntity(doc: INotification): NotificationEntity {
 		return NotificationEntity.restore({
 			id: doc._id as string,
-			receiverId: doc.recipientId.toString(),
-			senderId: doc.senderId?.toString(),
+			receiverId: (doc.recipientId as { toString(): string }).toString(),
+			senderId: (doc.senderId as { toString(): string })?.toString(),
 			type: doc.type as NotificationType,
-			message: doc.message,
-			entityId: doc.entityId?.toString() as string,
+			message: doc.message as string,
+			entityId: (doc.entityId as { toString(): string })?.toString() as string,
 			entityType: doc.entityType as string,
-			isRead: doc.isRead,
-			meta: doc.metadata,
-			createdAt: doc.createdAt,
-			updatedAt: doc.updatedAt,
+			isRead: doc.isRead as boolean,
+			meta: doc.metadata as Record<string, unknown>,
+			createdAt: doc.createdAt as Date,
+			updatedAt: doc.updatedAt as Date,
 		});
-	}
+	},
 
-	static toPersistence(entity: NotificationEntity): Partial<INotification> {
+	toPersistence(entity: NotificationEntity): Record<string, unknown> {
 		return {
 			recipientId: entity.receiverId,
 			senderId: entity.senderId,
 			type: entity.type,
 			message: entity.message,
 			entityId: entity.entityId,
-			entityType: entity.entityType as
-				| "PROJECT"
-				| "SPRINT"
-				| "STORY"
-				| "SUBTASK"
-				| "MEETING",
+			entityType: entity.entityType,
 			isRead: entity.isRead,
 			metadata: entity.meta,
 		};
-	}
-}
+	},
+};

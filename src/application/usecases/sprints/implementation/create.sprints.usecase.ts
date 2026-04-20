@@ -88,6 +88,10 @@ export class CreateSprintUseCase implements ICreateSprintUseCase {
 
 		const createdSprint = await this._sprintRepository.create(sprint);
 
+		if (!createdSprint.id) {
+			throw new Error("Sprint ID is missing after creation");
+		}
+
 		// Trigger Notifications for all project members
 		for (const memberId of project.members) {
 			this._createNotificationUseCase
@@ -95,16 +99,16 @@ export class CreateSprintUseCase implements ICreateSprintUseCase {
 					memberId,
 					NotificationType.SPRINT_CREATED,
 					`A new sprint "${createdSprint.name}" has been created in your project.`,
-					createdSprint.id!,
+					createdSprint.id,
 					"SPRINT",
 				)
 				.catch((err) => console.error("Failed to send notification:", err));
 		}
 
 		return {
-			id: createdSprint.id!,
+			id: createdSprint.id,
 			name: createdSprint.name,
-			goal: createdSprint.goal!,
+			goal: createdSprint.goal ?? "",
 			status: createdSprint.status,
 			createdAt: createdSprint.createdAt,
 		};

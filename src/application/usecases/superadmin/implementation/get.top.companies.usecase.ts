@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
-import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
-import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
 import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
 import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
+import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
 
 export interface TopCompany {
 	companyName: string;
@@ -29,8 +29,12 @@ export class GetTopCompaniesUseCase {
 		const users = await this._userRepository.findAll();
 
 		const topCompanies = companies.map((c) => {
-			const projectCount = projects.filter((p) => p.companyId?.toString() === c.id?.toString()).length;
-			const userCount = users.filter((u) => u.companyId?.toString() === c.id?.toString()).length;
+			const projectCount = projects.filter(
+				(p) => p.companyId?.toString() === c.id?.toString(),
+			).length;
+			const userCount = users.filter(
+				(u) => u.companyId?.toString() === c.id?.toString(),
+			).length;
 
 			return {
 				companyName: c.companyName,
@@ -41,7 +45,9 @@ export class GetTopCompaniesUseCase {
 
 		// Sort by project count and then user count
 		return topCompanies
-			.sort((a, b) => b.projectCount - a.projectCount || b.userCount - a.userCount)
+			.sort(
+				(a, b) => b.projectCount - a.projectCount || b.userCount - a.userCount,
+			)
 			.slice(0, 5);
 	}
 }

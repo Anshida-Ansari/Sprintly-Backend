@@ -90,6 +90,9 @@ export class SubTaskEntity {
 			uploadedBy: string;
 			createdAt: Date;
 		}[];
+		completedAt?: Date;
+		createdAt?: Date;
+		updatedAt?: Date;
 	}): SubTaskEntity {
 		if (!props.title?.trim()) throw new Error("Sub-task title is required");
 		if (!props.userStoryId) throw new Error("User Story ID is required");
@@ -112,7 +115,11 @@ export class SubTaskEntity {
 			actualHours: props.actualHours,
 			comments: props.comments || [],
 			attachments: props.attachments || [],
-			completedAt: props.status === SubTaskStatus.COMPLETED ? new Date() : undefined,
+			completedAt:
+				props.completedAt ||
+				(props.status === SubTaskStatus.COMPLETED ? new Date() : undefined),
+			createdAt: props.createdAt,
+			updatedAt: props.updatedAt,
 		});
 	}
 
@@ -127,7 +134,10 @@ export class SubTaskEntity {
 	) {
 		if (props.title !== undefined) this._title = props.title.trim();
 		if (props.status !== undefined) {
-			if (props.status === SubTaskStatus.COMPLETED && this._status !== SubTaskStatus.COMPLETED) {
+			if (
+				props.status === SubTaskStatus.COMPLETED &&
+				this._status !== SubTaskStatus.COMPLETED
+			) {
 				this._completedAt = new Date();
 			} else if (props.status !== SubTaskStatus.COMPLETED) {
 				this._completedAt = undefined;

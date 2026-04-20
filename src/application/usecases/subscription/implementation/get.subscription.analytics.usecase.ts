@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
+import { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
 import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
-import { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
 
 export interface IGetSubscriptionAnalyticsUseCase {
 	execute(): Promise<{
@@ -23,7 +23,9 @@ export interface IGetSubscriptionAnalyticsUseCase {
 const PRO_PRICE_INR = 469;
 
 @injectable()
-export class GetSubscriptionAnalyticsUseCase implements IGetSubscriptionAnalyticsUseCase {
+export class GetSubscriptionAnalyticsUseCase
+	implements IGetSubscriptionAnalyticsUseCase
+{
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,

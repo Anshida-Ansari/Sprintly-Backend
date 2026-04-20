@@ -10,7 +10,7 @@ import { injectable } from "inversify";
 
 @injectable()
 export class ResendAdminOtpUseCase implements IResendAdminOtpUseCase {
-	async execute(dto: ResendAdminOtpDTO): Promise<any> {
+	async execute(dto: ResendAdminOtpDTO): Promise<{ message: string }> {
 		const { token, email } = dto;
 
 		let key = "";

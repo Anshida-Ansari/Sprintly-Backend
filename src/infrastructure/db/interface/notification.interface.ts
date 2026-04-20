@@ -8,7 +8,7 @@ export interface INotification extends Document {
 	entityId?: string;
 	entityType?: "PROJECT" | "SPRINT" | "STORY" | "SUBTASK" | "MEETING";
 	isRead: boolean;
-	metadata?: any;
+	metadata?: Record<string, unknown>;
 	createdAt: Date;
 	updatedAt: Date;
 }

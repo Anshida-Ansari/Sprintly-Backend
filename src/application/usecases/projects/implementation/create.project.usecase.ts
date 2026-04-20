@@ -107,19 +107,23 @@ export class CreateProjectUseCase implements ICreateProjectUseCase {
 
 		const savedProject = await this._projectRepsitory.create(Project);
 
+		if (!savedProject.id) {
+			throw new Error("Project ID is missing after save");
+		}
+
 		// Trigger Notification for the Lead
 		if (savedProject.leadId) {
 			await this._createNotificationUseCase.execute(
 				savedProject.leadId,
 				NotificationType.PROJECT_ASSIGNED,
 				`You have been assigned as the lead for project: ${savedProject.name}`,
-				savedProject.id!,
+				savedProject.id,
 				"PROJECT",
 			);
 		}
 
 		return {
-			id: savedProject.id!,
+			id: savedProject.id,
 			name: savedProject.name,
 			description: savedProject.description,
 			startDate: savedProject.startDate,

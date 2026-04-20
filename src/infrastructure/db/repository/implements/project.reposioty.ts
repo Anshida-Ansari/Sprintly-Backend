@@ -46,7 +46,7 @@ export class ProjectRepository
 		return doc ? this._projectMapper.fromMongo(doc) : null;
 	}
 
-	async findOne(filter: any): Promise<ProjectEntity | null> {
+	async findOne(filter: Record<string, unknown>): Promise<ProjectEntity | null> {
 		const doc = await this.model.findOne(filter);
 		return doc ? this._projectMapper.fromMongo(doc) : null;
 	}
@@ -70,11 +70,17 @@ export class ProjectRepository
 	}
 
 	async findWithAnalytics(
-		filter: any,
+		filter: Record<string, unknown>,
 		options: { skip: number; limit: number },
-	): Promise<any[]> {
-		const doneStatuses = ["Done", "done", "completed", "COMPLETED", "Completed"];
-		
+	): Promise<IProjectWithAnalytics[]> {
+		const doneStatuses = [
+			"Done",
+			"done",
+			"completed",
+			"COMPLETED",
+			"Completed",
+		];
+
 		const results = await this.model.aggregate([
 			{ $match: filter },
 			{
@@ -85,13 +91,13 @@ export class ProjectRepository
 						{
 							$match: {
 								$expr: {
-									$eq: ["$projectId", "$$projectId"]
-								}
-							}
-						}
+									$eq: ["$projectId", "$$projectId"],
+								},
+							},
+						},
 					],
-					as: "stories"
-				}
+					as: "stories",
+				},
 			},
 			{
 				$addFields: {
@@ -102,40 +108,50 @@ export class ProjectRepository
 								$filter: {
 									input: "$stories",
 									as: "story",
-									cond: { $in: ["$$story.status", doneStatuses] }
-								}
-							}
-						}
-					}
-				}
+									cond: { $in: ["$$story.status", doneStatuses] },
+								},
+							},
+						},
+					},
+				},
 			},
 			{
 				$addFields: {
 					"analytics.progressPercentage": {
 						$cond: [
 							{ $gt: ["$analytics.totalStories", 0] },
-							{ $multiply: [{ $divide: ["$analytics.completedStories", "$analytics.totalStories"] }, 100] },
-							0
-						]
-					}
-				}
+							{
+								$multiply: [
+									{
+										$divide: [
+											"$analytics.completedStories",
+											"$analytics.totalStories",
+										],
+									},
+									100,
+								],
+							},
+							0,
+						],
+					},
+				},
 			},
 			{
 				$project: {
-					stories: 0
-				}
+					stories: 0,
+				},
 			},
 			{ $sort: { createdAt: -1 } },
 			{ $skip: options.skip },
-			{ $limit: options.limit }
+			{ $limit: options.limit },
 		]);
 
-		return results.map(doc => {
-            const project = this._projectMapper.fromMongo(doc);
-            return {
-                ...project,
-                analytics: doc.analytics
-            };
-        });
+		return results.map((doc) => {
+			const project = this._projectMapper.fromMongo(doc);
+			return {
+				...project,
+				analytics: doc.analytics,
+			};
+		});
 	}
 }

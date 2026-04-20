@@ -8,6 +8,6 @@ export interface ICreateNotificationUseCase {
 		entityId: string,
 		entityType: string,
 		senderId?: string,
-		metadata?: Record<string, any>,
+		metadata?: Record<string, unknown>,
 	): Promise<NotificationEntity>;
 }

@@ -17,15 +17,16 @@ export class SprintPersistenceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): SprintEntity {
 		return SprintEntity.create({
-			id: doc._id.toString(),
-			projectId: doc.projectId.toString(),
-			companyId: doc.companyId.toString(),
-			name: doc.name,
-			goal: doc.goal,
-			startDate: new Date(doc.startDate),
-			endDate: new Date(doc.endDate),
+			id: (doc._id as { toString(): string }).toString(),
+			projectId: (doc.projectId as { toString(): string }).toString(),
+			companyId: (doc.companyId as { toString(): string }).toString(),
+			name: doc.name as string,
+			goal: doc.goal as string,
+			startDate: new Date(doc.startDate as string),
+			endDate: new Date(doc.endDate as string),
 			status: doc.status as SprintStatus,
 		});
 	}

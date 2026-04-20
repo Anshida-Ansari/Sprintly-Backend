@@ -1,16 +1,21 @@
-import { inject, injectable } from "inversify";
+import type { IReportFilter, IReportResult, IReportsRepository } from "@infrastructure/db/repository/interface/reports.interface";
 import { REPORTS_TYPE } from "@infrastructure/di/types/reports/reports.types";
-import type { IReportsRepository } from "@infrastructure/db/repository/interface/reports.interface";
+import { inject, injectable } from "inversify";
 import type { IGetUserPerformanceReportsUseCase } from "../interface/reports.usecase.interface";
 
 @injectable()
-export class GetUserPerformanceReportsUseCase implements IGetUserPerformanceReportsUseCase {
+export class GetUserPerformanceReportsUseCase
+	implements IGetUserPerformanceReportsUseCase
+{
 	constructor(
 		@inject(REPORTS_TYPE.IReportsRepository)
 		private readonly reportsRepository: IReportsRepository,
 	) {}
 
-	async execute(companyId: string, filters: any): Promise<{ data: any[]; total: number }> {
+	async execute(
+		companyId: string,
+		filters: IReportFilter,
+	): Promise<IReportResult> {
 		return this.reportsRepository.getUserPerformanceReports(companyId, filters);
 	}
 }

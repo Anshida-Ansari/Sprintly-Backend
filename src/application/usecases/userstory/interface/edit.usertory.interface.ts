@@ -16,7 +16,12 @@ export interface IEditUserstoryUseCase {
 		status: UserStoryStatus;
 		sprintId?: string;
 		assignedTo?: string[];
-		comments?: any[];
+		comments?: Array<{
+			createdAt: Date;
+			message: string;
+			userName?: string;
+			userId: string;
+		}>;
 		estimationPoints?: number;
 		acceptanceCriteria?: string[];
 		updatedAt?: Date;

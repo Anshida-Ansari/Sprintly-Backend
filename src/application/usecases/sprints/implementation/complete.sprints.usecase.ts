@@ -17,7 +17,7 @@ export class CompleteSprintUseCase implements ICompleteSprintUseCase {
 		private _userstoryRepository: IUserStroyRepository,
 	) {}
 
-	async execute(sprintId: string, companyId: string): Promise<void> {
+	async execute(sprintId: string, _companyId: string): Promise<void> {
 		const sprint = await this._sprintRepsitory.findById(sprintId);
 		if (!sprint) throw new NotFoundError(ErrorMessage.NOT_FOUND);
 
@@ -29,7 +29,9 @@ export class CompleteSprintUseCase implements ICompleteSprintUseCase {
 		for (const story of stories) {
 			if (story.status !== UserStoryStatus.DONE) {
 				story.update({ sprintId: undefined });
-				await this._userstoryRepository.update(story.id!, story);
+				if (story.id) {
+					await this._userstoryRepository.update(story.id, story);
+				}
 			}
 		}
 	}

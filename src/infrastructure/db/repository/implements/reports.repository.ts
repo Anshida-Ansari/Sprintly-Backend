@@ -1,34 +1,47 @@
-import { inject, injectable } from "inversify";
-import mongoose, { type Model } from "mongoose";
+import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
+import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
-import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
-import { WORKLOG_TYPE } from "@infrastructure/di/types/worklog/worklog";
-import type { IReportsRepository } from "../interface/reports.interface";
-import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
-import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+import { inject, injectable } from "inversify";
+import mongoose, { type FilterQuery, type Model } from "mongoose";
+import type {
+	IReportFilter,
+	IReportResult,
+	IReportsRepository,
+} from "../interface/reports.interface";
 
 @injectable()
 export class ReportsRepository implements IReportsRepository {
 	constructor(
-		@inject(PROJECT_TYPE.ProjectModel) private readonly projectModel: Model<any>,
-		@inject(SPRINTS_TYPE.SprintModel) private readonly sprintModel: Model<any>,
-		@inject(USERSTORY_TYPE.UserStoryModel) private readonly userStoryModel: Model<any>,
-		@inject(SUBTASK_TYPE.SubTaskModel) private readonly subTaskModel: Model<any>,
-		@inject(USER_TYPES.userModel) private readonly userModel: Model<any>,
-		@inject(WORKLOG_TYPE.WorkLogModel) private readonly workLogModel: Model<any>,
+		@inject(PROJECT_TYPE.ProjectModel)
+		private readonly projectModel: Model<unknown>,
+		@inject(SPRINTS_TYPE.SprintModel) private readonly sprintModel: Model<unknown>,
+		@inject(USERSTORY_TYPE.UserStoryModel)
+		private readonly userStoryModel: Model<unknown>,
+		@inject(SUBTASK_TYPE.SubTaskModel)
+		private readonly subTaskModel: Model<unknown>,
+		@inject(USER_TYPES.userModel) private readonly userModel: Model<unknown>,
 	) {}
 
-	async getProjectReports(companyId: string, filters: any): Promise<{ data: any[]; total: number }> {
-		const matchQuery: any = { companyId: new mongoose.Types.ObjectId(companyId) };
+	async getProjectReports(
+		companyId: string,
+		filters: IReportFilter,
+	): Promise<IReportResult> {
+		const matchQuery: FilterQuery<unknown> = {
+			companyId: new mongoose.Types.ObjectId(companyId),
+		};
 		if (filters.status) matchQuery.status = filters.status;
-		if (filters.search) matchQuery.name = { $regex: filters.search, $options: "i" };
+		if (filters.search)
+			matchQuery.name = { $regex: filters.search, $options: "i" };
 		if (filters.startDate || filters.endDate) {
 			matchQuery.startDate = {};
-			if (filters.startDate) matchQuery.startDate.$gte = new Date(filters.startDate);
-			if (filters.endDate) matchQuery.startDate.$lte = new Date(filters.endDate);
+			if (filters.startDate)
+				matchQuery.startDate.$gte = new Date(filters.startDate);
+			if (filters.endDate)
+				matchQuery.startDate.$lte = new Date(filters.endDate);
 		}
 
 		const skip = (filters.page - 1) * filters.limit;
@@ -45,11 +58,11 @@ export class ReportsRepository implements IReportsRepository {
 								$expr: {
 									$and: [
 										{ $ne: ["$$leadId", null] },
-										{ $eq: ["$_id", { $toObjectId: "$$leadId" }] }
-									]
-								}
-							}
-						}
+										{ $eq: ["$_id", { $toObjectId: "$$leadId" }] },
+									],
+								},
+							},
+						},
 					],
 					as: "leadInfo",
 				},
@@ -74,9 +87,15 @@ export class ReportsRepository implements IReportsRepository {
 		return { data, total };
 	}
 
-	async getSprintReports(companyId: string, filters: any): Promise<{ data: any[]; total: number }> {
-		const matchQuery: any = { companyId: new mongoose.Types.ObjectId(companyId) };
-		if (filters.projectId) matchQuery.projectId = new mongoose.Types.ObjectId(filters.projectId);
+	async getSprintReports(
+		companyId: string,
+		filters: IReportFilter,
+	): Promise<IReportResult> {
+		const matchQuery: FilterQuery<unknown> = {
+			companyId: new mongoose.Types.ObjectId(companyId),
+		};
+		if (filters.projectId)
+			matchQuery.projectId = new mongoose.Types.ObjectId(filters.projectId);
 		if (filters.status) matchQuery.status = filters.status;
 
 		const skip = (filters.page - 1) * filters.limit;
@@ -93,11 +112,11 @@ export class ReportsRepository implements IReportsRepository {
 								$expr: {
 									$and: [
 										{ $ne: ["$sprintId", null] },
-										{ $eq: [{ $toObjectId: "$sprintId" }, "$$sprintId"] }
-									]
-								}
-							}
-						}
+										{ $eq: [{ $toObjectId: "$sprintId" }, "$$sprintId"] },
+									],
+								},
+							},
+						},
 					],
 					as: "stories",
 				},
@@ -121,11 +140,13 @@ export class ReportsRepository implements IReportsRepository {
 													$filter: {
 														input: "$stories",
 														as: "story",
-														cond: { 
+														cond: {
 															$or: [
-																{ $eq: ["$$story.status", UserStoryStatus.DONE] },
-																{ $eq: ["$$story.status", "Done"] }
-															]
+																{
+																	$eq: ["$$story.status", UserStoryStatus.DONE],
+																},
+																{ $eq: ["$$story.status", "Done"] },
+															],
 														},
 													},
 												},
@@ -150,12 +171,20 @@ export class ReportsRepository implements IReportsRepository {
 		return { data, total };
 	}
 
-	async getUserStoryReports(companyId: string, filters: any): Promise<{ data: any[]; total: number }> {
-		const matchQuery: any = { companyId: new mongoose.Types.ObjectId(companyId) };
-		if (filters.projectId) matchQuery.projectId = new mongoose.Types.ObjectId(filters.projectId);
-		if (filters.sprintId) matchQuery.sprintId = new mongoose.Types.ObjectId(filters.sprintId);
+	async getUserStoryReports(
+		companyId: string,
+		filters: IReportFilter,
+	): Promise<IReportResult> {
+		const matchQuery: FilterQuery<unknown> = {
+			companyId: new mongoose.Types.ObjectId(companyId),
+		};
+		if (filters.projectId)
+			matchQuery.projectId = new mongoose.Types.ObjectId(filters.projectId);
+		if (filters.sprintId)
+			matchQuery.sprintId = new mongoose.Types.ObjectId(filters.sprintId);
 		if (filters.status) matchQuery.status = filters.status;
-		if (filters.assignedTo) matchQuery.assignedTo = new mongoose.Types.ObjectId(filters.assignedTo);
+		if (filters.assignedTo)
+			matchQuery.assignedTo = new mongoose.Types.ObjectId(filters.assignedTo);
 
 		const skip = (filters.page - 1) * filters.limit;
 
@@ -175,13 +204,13 @@ export class ReportsRepository implements IReportsRepository {
 											$map: {
 												input: { $ifNull: ["$$assignedToIds", []] },
 												as: "id",
-												in: { $toObjectId: "$$id" }
-											}
-										}
-									]
-								}
-							}
-						}
+												in: { $toObjectId: "$$id" },
+											},
+										},
+									],
+								},
+							},
+						},
 					],
 					as: "usersInfo",
 				},
@@ -203,9 +232,15 @@ export class ReportsRepository implements IReportsRepository {
 		return { data, total };
 	}
 
-	async getSubtaskReports(companyId: string, filters: any): Promise<{ data: any[]; total: number }> {
-		const matchQuery: any = { companyId: new mongoose.Types.ObjectId(companyId) };
-		if (filters.assignedTo) matchQuery.assignedTo = new mongoose.Types.ObjectId(filters.assignedTo);
+	async getSubtaskReports(
+		companyId: string,
+		filters: IReportFilter,
+	): Promise<IReportResult> {
+		const matchQuery: Record<string, unknown> = {
+			companyId: new mongoose.Types.ObjectId(companyId),
+		};
+		if (filters.assignedTo)
+			matchQuery.assignedTo = new mongoose.Types.ObjectId(filters.assignedTo);
 		if (filters.status) matchQuery.status = filters.status;
 
 		const skip = (filters.page - 1) * filters.limit;
@@ -222,11 +257,11 @@ export class ReportsRepository implements IReportsRepository {
 								$expr: {
 									$and: [
 										{ $ne: ["$$assignedTo", null] },
-										{ $eq: ["$_id", { $toObjectId: "$$assignedTo" }] }
-									]
-								}
-							}
-						}
+										{ $eq: ["$_id", { $toObjectId: "$$assignedTo" }] },
+									],
+								},
+							},
+						},
 					],
 					as: "userInfo",
 				},
@@ -252,12 +287,16 @@ export class ReportsRepository implements IReportsRepository {
 		return { data, total };
 	}
 
-	async getUserPerformanceReports(companyId: string, filters: any): Promise<{ data: any[]; total: number }> {
-		const matchQuery: any = { 
-            companyId: new mongoose.Types.ObjectId(companyId),
-            role: { $ne: "superadmin" } 
-        };
-		if (filters.userId) matchQuery._id = new mongoose.Types.ObjectId(filters.userId);
+	async getUserPerformanceReports(
+		companyId: string,
+		filters: IReportFilter,
+	): Promise<IReportResult> {
+		const matchQuery: Record<string, unknown> = {
+			companyId: new mongoose.Types.ObjectId(companyId),
+			role: { $ne: "superadmin" },
+		};
+		if (filters.userId)
+			matchQuery._id = new mongoose.Types.ObjectId(filters.userId);
 
 		const skip = (filters.page - 1) * filters.limit;
 
@@ -277,13 +316,13 @@ export class ReportsRepository implements IReportsRepository {
 											$map: {
 												input: { $ifNull: ["$$subtaskIds", []] },
 												as: "id",
-												in: { $toObjectId: "$$id" }
-											}
-										}
-									]
-								}
-							}
-						}
+												in: { $toObjectId: "$$id" },
+											},
+										},
+									],
+								},
+							},
+						},
 					],
 					as: "matchedSubtasks",
 				},
@@ -298,11 +337,11 @@ export class ReportsRepository implements IReportsRepository {
 								$expr: {
 									$and: [
 										{ $ne: ["$userId", null] },
-										{ $eq: [{ $toObjectId: "$userId" }, "$$userId"] }
-									]
-								}
-							}
-						}
+										{ $eq: [{ $toObjectId: "$userId" }, "$$userId"] },
+									],
+								},
+							},
+						},
 					],
 					as: "worklogs",
 				},
@@ -317,13 +356,13 @@ export class ReportsRepository implements IReportsRepository {
 							$filter: {
 								input: { $ifNull: ["$matchedSubtasks", []] },
 								as: "task",
-								cond: { 
+								cond: {
 									$or: [
 										{ $eq: ["$$task.status", SubTaskStatus.COMPLETED] },
 										{ $eq: ["$$task.status", "Done"] },
 										{ $eq: ["$$task.status", "completed"] },
-										{ $eq: ["$$task.status", "COMPLETED"] }
-									]
+										{ $eq: ["$$task.status", "COMPLETED"] },
+									],
 								},
 							},
 						},
@@ -341,13 +380,18 @@ export class ReportsRepository implements IReportsRepository {
 													$filter: {
 														input: { $ifNull: ["$matchedSubtasks", []] },
 														as: "task",
-														cond: { 
+														cond: {
 															$or: [
-																{ $eq: ["$$task.status", SubTaskStatus.COMPLETED] },
+																{
+																	$eq: [
+																		"$$task.status",
+																		SubTaskStatus.COMPLETED,
+																	],
+																},
 																{ $eq: ["$$task.status", "Done"] },
 																{ $eq: ["$$task.status", "completed"] },
-																{ $eq: ["$$task.status", "COMPLETED"] }
-															]
+																{ $eq: ["$$task.status", "COMPLETED"] },
+															],
 														},
 													},
 												},

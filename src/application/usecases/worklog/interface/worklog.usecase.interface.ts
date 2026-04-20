@@ -15,10 +15,13 @@ export interface ICreateWorkLogUseCase {
 export interface IGetUserWorkLogsUseCase {
 	execute(
 		userId: string,
-		filters?: any,
+		filters?: Record<string, unknown>,
 	): Promise<{ logs: WorkLogEntity[]; totalHours: number }>;
 }
 
 export interface IGetAdminWorkLogsUseCase {
-	execute(companyId: string, filters?: any): Promise<any>;
+	execute(
+		companyId: string,
+		filters?: Record<string, unknown>,
+	): Promise<unknown>;
 }

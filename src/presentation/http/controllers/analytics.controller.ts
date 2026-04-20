@@ -1,6 +1,6 @@
+import type { GetDashboardAnalyticsUseCase } from "@application/usecases/analytics/get.dashboard.analytics.usecase";
 import type { GetSprintBurndownUseCase } from "@application/usecases/analytics/get.sprint.burndown.usecase";
 import type { GetUserBurndownUseCase } from "@application/usecases/analytics/get.user.burndown.usecase";
-import type { GetDashboardAnalyticsUseCase } from "@application/usecases/analytics/get.dashboard.analytics.usecase";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
 import { ANALYTICS_TYPES } from "@infrastructure/di/types/analytics/analytics.types";
 import type { NextFunction, Request, Response } from "express";
@@ -21,7 +21,10 @@ export class AnalyticsController {
 		try {
 			const { sprintId } = req.params;
 			const { type } = req.query;
-			const data = await this.getSprintBurndownUseCase.execute(sprintId, type as "hours" | "points");
+			const data = await this.getSprintBurndownUseCase.execute(
+				sprintId,
+				type as "hours" | "points",
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
@@ -38,7 +41,11 @@ export class AnalyticsController {
 			const { type } = req.query;
 			const userId = req.user.id;
 
-			const data = await this.getUserBurndownUseCase.execute(sprintId, userId, type as "hours" | "points");
+			const data = await this.getUserBurndownUseCase.execute(
+				sprintId,
+				userId,
+				type as "hours" | "points",
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,
@@ -51,9 +58,12 @@ export class AnalyticsController {
 
 	async getDashboardAnalytics(req: Request, res: Response, next: NextFunction) {
 		try {
-			const companyId = (req.user as any).companyId;
+			const companyId = req.user.companyId;
 			const filters = { ...req.query, ...req.params };
-			const data = await this.getDashboardAnalyticsUseCase.execute(companyId, filters);
+			const data = await this.getDashboardAnalyticsUseCase.execute(
+				companyId,
+				filters,
+			);
 
 			return res.status(SuccessStatus.OK).json({
 				success: true,

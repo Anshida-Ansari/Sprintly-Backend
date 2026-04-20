@@ -147,10 +147,14 @@ export class SprintController {
 			const { companyId } = req.user;
 			const { sprintId } = req.params;
 
-			const result = await this._deleteSprintUseCase.execute(
-				sprintId,
-				companyId,
-			);
-		} catch (error) {}
+			await this._deleteSprintUseCase.execute(sprintId, companyId);
+
+			return res.status(SuccessStatus.OK).json({
+				success: true,
+				message: "Sprint deleted successfully",
+			});
+		} catch (error) {
+			next(error);
+		}
 	}
 }
