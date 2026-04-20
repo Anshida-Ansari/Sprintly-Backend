@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon --exec tsx src/presentation/express/settings/index.ts",
-		"build": "tsc",
+		"build": "tsc && tsc-alias",
 		"start": "node dist/presentation/express/settings/index.js",
 		"lint": "biome lint .",
 		"format": "biome format .",
@@ -80,6 +80,7 @@
 		"nodemon": "^3.1.10",
 		"ts-node": "^10.9.2",
 		"ts-node-dev": "^2.0.0",
+		"tsc-alias": "^1.8.16",
 		"tsx": "^4.20.6",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.58.0"
