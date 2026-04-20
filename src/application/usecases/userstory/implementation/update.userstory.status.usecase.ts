@@ -1,10 +1,10 @@
 import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
-import type { UserStoryEntity } from "@domain/entities/user.story.entities";
+import type { UserStoryEntity } from "@domain/entities/user.story.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
 import type { Role } from "@domain/enum/role.enum";
 import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
@@ -18,8 +18,8 @@ export class UpdateUserStoryUseCase
 	implements IUpdateStatusOfUserStoryInterface
 {
 	constructor(
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryrepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryrepository: IUserStoryRepository,
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}

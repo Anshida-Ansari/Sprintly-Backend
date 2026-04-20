@@ -21,7 +21,8 @@ export class UserProfilePersistenceMapper {
 	fromMongo(doc: any): UserProfileEntity {
 		return UserProfileEntity.create({
 			id: (doc._id as { toString(): string } | undefined)?.toString(),
-			userId: (doc.userId as { toString(): string } | undefined)?.toString() ?? "",
+			userId:
+				(doc.userId as { toString(): string } | undefined)?.toString() ?? "",
 			companyId: (doc.companyId as { toString(): string }).toString(),
 			phoneNumber: doc.phoneNumber as string,
 			address: doc.address as string,

@@ -1,17 +1,17 @@
 import type { CreateSprintDTO } from "@application/dtos/sprints/create.sprints.dto";
 import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import type { ICreateSprintUseCase } from "@application/usecases/sprints/interface/create.sprint.interface";
-import { SprintEntity } from "@domain/entities/sptint.entities";
+import { SprintEntity } from "@domain/entities/sprint.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
 import { SprintErrorMessage } from "@domain/enum/sprints/sprints.error.message";
 import { SprintStatus } from "@domain/enum/sprints/sprints.status";
-import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -20,10 +20,10 @@ import { inject, injectable } from "inversify";
 @injectable()
 export class CreateSprintUseCase implements ICreateSprintUseCase {
 	constructor(
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintRepository: ISprintReposiotry,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintRepository: ISprintRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectReposiotry: IProjectReposiotory,
+		private _projectReposiotry: IProjectRepository,
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}

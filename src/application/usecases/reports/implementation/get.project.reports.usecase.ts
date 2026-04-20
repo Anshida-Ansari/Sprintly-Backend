@@ -1,4 +1,8 @@
-import type { IReportFilter, IReportResult, IReportsRepository } from "@infrastructure/db/repository/interface/reports.interface";
+import type {
+	IReportFilter,
+	IReportResult,
+	IReportsRepository,
+} from "@infrastructure/db/repository/interface/reports.interface";
 import { REPORTS_TYPE } from "@infrastructure/di/types/reports/reports.types";
 import { inject, injectable } from "inversify";
 import type { IGetProjectReportsUseCase } from "../interface/reports.usecase.interface";

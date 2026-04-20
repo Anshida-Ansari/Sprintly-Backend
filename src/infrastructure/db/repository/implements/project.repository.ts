@@ -1,16 +1,19 @@
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
-import type { ProjectEntity } from "../../../../domain/entities/project.entities";
-import type { ProjectStatus } from "../../../../domain/enum/project/project.status";
-import { PROJECT_TYPE } from "../../../di/types/Project/project.types";
-import type { ProjectPersistanceMapper } from "../../../mappers/project.mapper";
-import type { IProjectReposiotory } from "../interface/project.interface";
-import { BaseRepository } from "./base.repository";
+import type { ProjectEntity } from "../../../../domain/entities/project.entity.js";
+import type { ProjectStatus } from "../../../../domain/enum/project/project.status.js";
+import { PROJECT_TYPE } from "../../../di/types/Project/project.types.js";
+import type { ProjectPersistanceMapper } from "../../../mappers/project.mapper.js";
+import type {
+	IProjectRepository,
+	IProjectWithAnalytics,
+} from "../interface/project.interface.js";
+import { BaseRepository } from "./base.repository.js";
 
 @injectable()
 export class ProjectRepository
 	extends BaseRepository<ProjectEntity>
-	implements IProjectReposiotory
+	implements IProjectRepository
 {
 	constructor(
 		@inject(PROJECT_TYPE.ProjectModel)
@@ -46,7 +49,9 @@ export class ProjectRepository
 		return doc ? this._projectMapper.fromMongo(doc) : null;
 	}
 
-	async findOne(filter: Record<string, unknown>): Promise<ProjectEntity | null> {
+	async findOne(
+		filter: Record<string, unknown>,
+	): Promise<ProjectEntity | null> {
 		const doc = await this.model.findOne(filter);
 		return doc ? this._projectMapper.fromMongo(doc) : null;
 	}
@@ -151,7 +156,7 @@ export class ProjectRepository
 			return {
 				...project,
 				analytics: doc.analytics,
-			};
+			} as any;
 		});
 	}
 }

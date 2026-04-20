@@ -2,7 +2,7 @@ import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
 import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
@@ -15,8 +15,8 @@ export class DeleteSubtaskUseCase implements IDeleteSubtaskUseCase {
 	constructor(
 		@inject(SUBTASK_TYPE.ISubTaskRepository)
 		private _subtaskrespository: ISubTaskRepository,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userStoryrepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userStoryrepository: IUserStoryRepository,
 	) {}
 
 	async execute(subtaskId: string, companyId: string): Promise<void> {

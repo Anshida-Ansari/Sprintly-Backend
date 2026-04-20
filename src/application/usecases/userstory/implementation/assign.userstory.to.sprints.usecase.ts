@@ -1,8 +1,8 @@
 import type { AssignUserStoryToSprintDTO } from "@application/dtos/userstory/assign.userstory.to.sprints.dto";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -15,10 +15,10 @@ export class AssignUserStoryToSprintUseCase
 	implements IAssignUserStoriesToSprintUseCase
 {
 	constructor(
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryreposiotory: IUserStroyRepository,
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintrepository: ISprintReposiotry,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryreposiotory: IUserStoryRepository,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintrepository: ISprintRepository,
 	) {}
 
 	async execute(

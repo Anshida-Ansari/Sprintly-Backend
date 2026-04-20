@@ -2,7 +2,7 @@ import { CreateSprintDTO } from "@application/dtos/sprints/create.sprints.dto";
 import { EditSprintDTO } from "@application/dtos/sprints/edit.sprints.dto";
 import { container } from "@infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "@infrastructure/di/types/admin/admin.types";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import type { AuthGurd } from "@presentation/express/middleware/auth.gurd";
 import { validateDTO } from "@presentation/express/middleware/validate.dto.middlware";
 import type { SprintController } from "@presentation/http/controllers/sprint.controller";

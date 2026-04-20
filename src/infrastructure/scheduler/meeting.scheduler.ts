@@ -1,14 +1,14 @@
+import type { Model } from "mongoose";
 import cron from "node-cron";
 import type { ICreateNotificationUseCase } from "../../application/usecases/notification/interface/create.notification.interface";
 import { MeetingStatus } from "../../domain/enum/meeting/meeting.status.enum";
 import { NotificationType } from "../../domain/enum/notification/notification.types";
+import type { IMeeting } from "../../infrastructure/db/interface/meeting.interface";
 import type { IMeetingRepository } from "../../infrastructure/db/repository/interface/meeting.interface";
 import { container } from "../di/inversify.di";
 import { MEETING_TYPES } from "../di/types/meeting/meeting.types";
 import { NOTIFICATION_TYPE } from "../di/types/notification/notification";
 import { logger } from "../providers/logger/pino.logger";
-import type { Model } from "mongoose";
-import type { IMeeting } from "../../infrastructure/db/interface/meeting.interface";
 
 interface IMeetingRepositoryWithModel extends IMeetingRepository {
 	model: Model<IMeeting>;

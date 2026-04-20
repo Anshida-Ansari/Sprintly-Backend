@@ -1,27 +1,22 @@
 import type { IListUserstoryUseCase } from "@application/usecases/userstory/interface/list.userstory.interface";
-
+import type { UserStoryEntity } from "@domain/entities/user.story.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
-
-import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
-
+import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
-
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
 
-import type { UserStoryEntity } from "@domain/entities/user.story.entities";
-
 @injectable()
 export class ListUserstoryUseCase implements IListUserstoryUseCase {
 	constructor(
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryrepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryrepository: IUserStoryRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectreposioty: IProjectReposiotory,
+		private _projectreposioty: IProjectRepository,
 	) {}
 
 	async execute(

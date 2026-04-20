@@ -1,8 +1,8 @@
 import type { SubmitStandupDTO } from "@application/dtos/standup/submit.standup.dto";
 import { StandupEntity } from "@domain/entities/standup.entity";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
 import type { IStandupRepository } from "@infrastructure/db/repository/interface/standup.interface";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
 import { inject, injectable } from "inversify";
 import type { ISubmitStandupUseCase } from "../interface/submit.standup.interface";
@@ -12,8 +12,8 @@ export class SubmitStandupUseCase implements ISubmitStandupUseCase {
 	constructor(
 		@inject(STANDUP_TYPES.IStandupRepository)
 		private _standupRepository: IStandupRepository,
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintRepository: ISprintReposiotry,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintRepository: ISprintRepository,
 	) {}
 
 	async execute(
@@ -47,10 +47,7 @@ export class SubmitStandupUseCase implements ISubmitStandupUseCase {
 			if (!existingStandup.id) {
 				throw new Error("Standup ID is missing");
 			}
-			await this._standupRepository.update(
-				existingStandup.id,
-				existingStandup,
-			);
+			await this._standupRepository.update(existingStandup.id, existingStandup);
 		} else {
 			const newStandup = StandupEntity.create({
 				userId,

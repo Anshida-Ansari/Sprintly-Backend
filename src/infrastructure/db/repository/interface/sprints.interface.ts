@@ -1,7 +1,7 @@
-import type { SprintEntity } from "../../../../domain/entities/sptint.entities";
+import type { SprintEntity } from "../../../../domain/entities/sprint.entity";
 import type { IBaseRepository } from "./base.repository";
 
-export interface ISprintReposiotry extends IBaseRepository<SprintEntity> {
+export interface ISprintRepository extends IBaseRepository<SprintEntity> {
 	findActiveByProject(projectId: string): Promise<SprintEntity[]>;
 	hasActiveSprint(projectId: string): Promise<boolean>;
 	hasOverlappingSprint(

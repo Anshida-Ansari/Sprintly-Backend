@@ -1,6 +1,6 @@
 import { WorkLogEntity } from "@domain/entities/worklog.entity";
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import type { IWorkLogRepository } from "@infrastructure/db/repository/interface/worklog.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
@@ -17,8 +17,8 @@ export class CreateWorkLogUseCase implements ICreateWorkLogUseCase {
 		private readonly _workLogRepository: IWorkLogRepository,
 		@inject(SUBTASK_TYPE.ISubTaskRepository)
 		private readonly _subTaskRepository: ISubTaskRepository,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private readonly _userStoryRepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private readonly _userStoryRepository: IUserStoryRepository,
 	) {}
 
 	async execute(

@@ -5,7 +5,10 @@ import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
-import type { ICompanyDetail, IGetDetailPageUseCase } from "../interface/get.detailpage.interface";
+import type {
+	ICompanyDetail,
+	IGetDetailPageUseCase,
+} from "../interface/get.detailpage.interface";
 
 @injectable()
 export class GetDetailPageUseCase implements IGetDetailPageUseCase {

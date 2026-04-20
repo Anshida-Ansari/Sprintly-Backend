@@ -1,5 +1,5 @@
 import type { IListMembersUseCase } from "@application/usecases/admin/interface/list.members.interface";
-import type { UserEntity } from "@domain/entities/user.entities";
+import type { UserEntity } from "@domain/entities/user.entity";
 import { UserStatus } from "@domain/enum/status.enum";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";

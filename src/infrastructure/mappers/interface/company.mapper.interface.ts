@@ -1,7 +1,7 @@
-// import { CompanyEnitiy } from "src/domain/entities/company.enities";
+// import { CompanyEntity } from "src/domain/entities/company.entity";
 // import { ICompany } from "src/infrastructure/db/interface/company.interface";
 
 // export interface ICompanyMapper{
-//     toMongo(company: CompanyEnitiy),
-//     fromMongo(doc:ICompany):CompanyEnitiy
+//     toMongo(company: CompanyEntity),
+//     fromMongo(doc:ICompany):CompanyEntity
 // }

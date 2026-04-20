@@ -1,4 +1,4 @@
-import type { UserEntity } from "../../../../domain/entities/user.entities";
+import type { UserEntity } from "../../../../domain/entities/user.entity";
 import type { IBaseRepository } from "./base.repository";
 
 export interface IUserRepository extends IBaseRepository<UserEntity> {

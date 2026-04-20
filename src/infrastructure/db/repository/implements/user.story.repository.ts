@@ -1,15 +1,15 @@
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
-import type { UserStoryEntity } from "../../../../domain/entities/user.story.entities";
+import type { UserStoryEntity } from "../../../../domain/entities/user.story.entity";
 import { USERSTORY_TYPE } from "../../../di/types/userstory/userstory";
 import type { UserStoryPersisitanceMapper } from "../../../mappers/userstrory.mapper";
-import type { IUserStroyRepository } from "../interface/user.story.interface";
+import type { IUserStoryRepository } from "../interface/user.story.interface";
 import { BaseRepository } from "./base.repository";
 
 @injectable()
 export class UserStoryRepository
 	extends BaseRepository<UserStoryEntity>
-	implements IUserStroyRepository
+	implements IUserStoryRepository
 {
 	constructor(
 		@inject(USERSTORY_TYPE.UserStoryModel)

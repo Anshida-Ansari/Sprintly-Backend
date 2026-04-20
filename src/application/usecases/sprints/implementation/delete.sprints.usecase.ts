@@ -1,7 +1,7 @@
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -11,10 +11,10 @@ import type { IDeleteSprintUseCase } from "../interface/delete.sprints.interface
 @injectable()
 export class DeleteSprintUseCase implements IDeleteSprintUseCase {
 	constructor(
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _spritRepositoryUsecase: ISprintReposiotry,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryRepostioty: IUserStroyRepository,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _spritRepositoryUsecase: ISprintRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryRepostioty: IUserStoryRepository,
 	) {}
 
 	async execute(sprintId: string, companyId: string): Promise<void> {

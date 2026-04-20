@@ -1,14 +1,14 @@
-import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
-import type { ITransactionRepository } from "@infrastructure/db/repository/interface/transaction.interface";
-import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
-import { TRANSACTION_TYPES } from "@infrastructure/di/types/transaction/transaction.types";
 import { inject, injectable } from "inversify";
 import Stripe from "stripe";
 import {
 	PROJECT_LIMITS,
 	SubscriptionPlan,
-} from "../../../../domain/enum/company/subscription.plan.enum";
-import type { IHandleStripeWebhookUseCase } from "../interface/handle.stripe.webhook.interface";
+} from "../../../../domain/enum/company/subscription.plan.enum.js";
+import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
+import type { ITransactionRepository } from "../../../../infrastructure/db/repository/interface/transaction.interface.js";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types.js";
+import { TRANSACTION_TYPES } from "../../../../infrastructure/di/types/transaction/transaction.types.js";
+import type { IHandleStripeWebhookUseCase } from "../interface/handle.stripe.webhook.interface.js";
 
 @injectable()
 export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
@@ -25,7 +25,7 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
 		this._stripe = new Stripe(secretKey, {
-			apiVersion: "2024-06-20",
+			apiVersion: "2024-06-20" as any,
 			typescript: true,
 		});
 	}
@@ -100,7 +100,6 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 			case "invoice.payment_succeeded": {
 				const invoice = event.data.object as Stripe.Invoice;
 				const customerId = invoice.customer as string;
-				const subscriptionId = invoice.subscription as string;
 
 				// Find company by stripeCustomerId
 				const company =
@@ -115,17 +114,20 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 						amount: invoice.amount_paid / 100,
 						currency: invoice.currency,
 						status: "succeeded",
-						billingReason: invoice.billing_reason,
+						billingReason: (invoice.billing_reason as any) || undefined,
 					});
 
 					// If it's a subscription renewal, update the end date
 					if (
-						subscriptionId &&
+						(invoice as any).subscription &&
 						invoice.billing_reason !== "subscription_create"
 					) {
+						const subscriptionId = (invoice as any).subscription as string;
 						const subscription =
 							await this._stripe.subscriptions.retrieve(subscriptionId);
-						const periodEnd = new Date(subscription.current_period_end * 1000);
+						const periodEnd = new Date(
+							(subscription as any).current_period_end * 1000,
+						);
 						const proLimit = PROJECT_LIMITS[SubscriptionPlan.PRO];
 
 						await this._companyRepository.updatePlan(

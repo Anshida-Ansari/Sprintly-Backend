@@ -58,7 +58,9 @@ export class WorkLogRepository
 			};
 		}
 		if (filters.projectId)
-			query.projectId = new mongoose.Types.ObjectId(filters.projectId as string);
+			query.projectId = new mongoose.Types.ObjectId(
+				filters.projectId as string,
+			);
 		if (filters.sprintId)
 			query.sprintId = new mongoose.Types.ObjectId(filters.sprintId as string);
 
@@ -84,7 +86,7 @@ export class WorkLogRepository
 		_companyId: string,
 		filters: Record<string, unknown> = {},
 	): Promise<unknown> {
-		const matchQuery: mongoose.FilterQuery<WorkLogEntity> = {};
+		const matchQuery: any = {};
 
 		if (filters.userId)
 			matchQuery.userId = new mongoose.Types.ObjectId(filters.userId as string);

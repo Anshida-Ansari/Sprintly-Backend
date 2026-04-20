@@ -123,7 +123,7 @@ ${
 	projectContext?.inProgressTasksToday
 		.concat(projectContext?.blockedTasks)
 		.map(
-			(t) =>
+			(t: any) =>
 				`- ${t.title} [Status: ${t.status}, Priority: ${t.priority || "Normal"}, Due: ${t.dueDate || "N/A"}]`,
 		)
 		.join("\n") || "No tasks found"

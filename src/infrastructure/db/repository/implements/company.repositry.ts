@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
-import type { CompanyEnitiy } from "../../../../domain/entities/company.enities";
+import type { CompanyEntity } from "../../../../domain/entities/company.entity";
 import type { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
 import type { Status } from "../../../../domain/enum/user/user.status.enum";
 import { COMPANY_TYPES } from "../../../di/types/company/company.types";
@@ -10,34 +10,34 @@ import { BaseRepository } from "./base.repository";
 
 @injectable()
 export class CompanyRepository
-	extends BaseRepository<CompanyEnitiy>
+	extends BaseRepository<CompanyEntity>
 	implements ICompanyRepository
 {
 	constructor(
 		@inject(COMPANY_TYPES.CompanyModel)
-		model: Model<CompanyEnitiy>,
+		model: Model<CompanyEntity>,
 		@inject(COMPANY_TYPES.CompanyPersistenceMapper)
 		private readonly _companyMapper: CompanyPersistenceMapper,
 	) {
 		super(model);
 	}
 
-	async findByName(name: string): Promise<CompanyEnitiy | null> {
+	async findByName(name: string): Promise<CompanyEntity | null> {
 		const doc = await this.findOne({ companyName: name });
 		return doc ? this._companyMapper.fromMongo(doc) : null;
 	}
 
-	async findByStatus(status: Status): Promise<CompanyEnitiy[]> {
+	async findByStatus(status: Status): Promise<CompanyEntity[]> {
 		const docs = await this.find({ status }, { limit: 10, skip: 12 });
 		return docs.map((doc) => this._companyMapper.fromMongo(doc));
 	}
 
-	async findByAdminId(adminId: string): Promise<CompanyEnitiy | null> {
+	async findByAdminId(adminId: string): Promise<CompanyEntity | null> {
 		const doc = await this.findOne({ adminId });
 		return doc ? this._companyMapper.fromMongo(doc) : null;
 	}
 
-	async findByCompanyId(companyId: string): Promise<CompanyEnitiy | null> {
+	async findByCompanyId(companyId: string): Promise<CompanyEntity | null> {
 		const doc = await this.model.findById(companyId);
 		if (!doc) return null;
 		return this._companyMapper.fromMongo(doc);
@@ -45,7 +45,7 @@ export class CompanyRepository
 
 	async findByStripeCustomerId(
 		customerId: string,
-	): Promise<CompanyEnitiy | null> {
+	): Promise<CompanyEntity | null> {
 		const doc = await this.model.findOne({ stripeCustomerId: customerId });
 		if (!doc) return null;
 		return this._companyMapper.fromMongo(doc);
@@ -59,7 +59,7 @@ export class CompanyRepository
 		stripeSubscriptionId?: string,
 		subscriptionEndDate?: Date,
 		autoRenew?: boolean,
-	): Promise<CompanyEnitiy | null> {
+	): Promise<CompanyEntity | null> {
 		const updatePayload: Record<string, unknown> = {
 			currentPlan: plan,
 			projectLimit,

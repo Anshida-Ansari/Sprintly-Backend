@@ -1,5 +1,5 @@
-import type { ScheduleMeetingDTO } from "../../dtos/meeting/schedule.meeting.dto";
-import type { MeetingEntity } from "../../../../domain/entities/meeting.entity";
+import type { ScheduleMeetingDTO } from "@application/dtos/meeting/schedule.meeting.dto.js";
+import type { MeetingEntity } from "../../../../domain/entities/meeting.entity.js";
 
 export interface IScheduleMeetingUseCase {
 	execute(data: ScheduleMeetingDTO): Promise<MeetingEntity>;

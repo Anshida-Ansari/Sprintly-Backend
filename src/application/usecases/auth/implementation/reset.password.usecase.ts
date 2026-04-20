@@ -1,6 +1,6 @@
 import type { ResetPasswordDTO } from "@application/dtos/auth/reset.password.dto";
 import type { IResetPasswordUseCase } from "@application/usecases/auth/interface/reset.password.interface";
-import { UserEntity } from "@domain/entities/user.entities";
+import { UserEntity } from "@domain/entities/user.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { SuccessMessage } from "@domain/enum/messages/success.message.enum";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";

@@ -3,10 +3,10 @@ import type { IEditSprintUseCase } from "@application/usecases/sprints/interface
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
 import { SprintStatus } from "@domain/enum/sprints/sprints.status";
-import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { InternalServerError } from "@shared/utils/error-handling/errors/internal.server.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -15,10 +15,10 @@ import { inject, injectable } from "inversify";
 @injectable()
 export class EditSprintUseCase implements IEditSprintUseCase {
 	constructor(
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintRepository: ISprintReposiotry,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintRepository: ISprintRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectRepository: IProjectReposiotory,
+		private _projectRepository: IProjectRepository,
 	) {}
 
 	async execute(

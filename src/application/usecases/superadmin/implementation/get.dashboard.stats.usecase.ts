@@ -1,13 +1,13 @@
-import type { CompanyEnitiy } from "@domain/entities/company.enities";
-import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
-import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
-import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
-import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { inject, injectable } from "inversify";
+import type { CompanyEntity } from "../../../../domain/entities/company.entity.js";
+import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
+import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface.js";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types.js";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types.js";
 import type {
 	IDashboardStats,
 	IGetDashboardStatsUseCase,
-} from "../interface/get.dashboard.stats.interface";
+} from "../interface/get.dashboard.stats.interface.js";
 
 @injectable()
 export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
@@ -26,13 +26,13 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 
 		const totalCompanies = allCompanies.length;
 		const approvedCompanies = allCompanies.filter(
-			(c: CompanyEnitiy) => c.status === "approved",
+			(c: CompanyEntity) => c.status === "approved",
 		).length;
 		const pendingCompanies = allCompanies.filter(
-			(c: CompanyEnitiy) => c.status === "pending",
+			(c: CompanyEntity) => c.status === "pending",
 		).length;
 		const rejectedCompanies = allCompanies.filter(
-			(c: CompanyEnitiy) => c.status === "rejected",
+			(c: CompanyEntity) => c.status === "rejected",
 		).length;
 
 		const recentCompanies = await this._companyRepository.find(
@@ -40,12 +40,14 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			{ skip: 0, limit: 5 },
 		);
 
-		const enriched = recentCompanies.map((c: CompanyEnitiy) => ({
-			_id: c.id,
+		const enriched = recentCompanies.map((c: CompanyEntity) => ({
+			_id: c.id || "",
 			companyName: c.companyName,
 			email: "", // User entity might have the email, or we need to fetch it. Keeping empty for now to match interface.
 			status: c.status,
-			createdAt: c.createdAt,
+			createdAt: c.createdAt
+				? c.createdAt.toISOString()
+				: new Date().toISOString(),
 		}));
 
 		return {

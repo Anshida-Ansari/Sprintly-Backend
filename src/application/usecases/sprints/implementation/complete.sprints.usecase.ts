@@ -1,8 +1,8 @@
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
@@ -11,10 +11,10 @@ import type { ICompleteSprintUseCase } from "../interface/complete.sprints.inter
 @injectable()
 export class CompleteSprintUseCase implements ICompleteSprintUseCase {
 	constructor(
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintRepsitory: ISprintReposiotry,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryRepository: IUserStroyRepository,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintRepsitory: ISprintRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryRepository: IUserStoryRepository,
 	) {}
 
 	async execute(sprintId: string, _companyId: string): Promise<void> {

@@ -1,17 +1,20 @@
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { inject, injectable } from "inversify";
-import type { IGetMyUserStoriesUseCase, IMyUserStoryResponse } from "../interface/get.my.userstories.interface";
+import type {
+	IGetMyUserStoriesUseCase,
+	IMyUserStoryResponse,
+} from "../interface/get.my.userstories.interface";
 
 @injectable()
 export class GetMyUserStoriesUseCase implements IGetMyUserStoriesUseCase {
 	constructor(
 		@inject(SUBTASK_TYPE.ISubTaskRepository)
 		private _subTaskRepository: ISubTaskRepository,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userStoryRepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userStoryRepository: IUserStoryRepository,
 	) {}
 
 	async execute(userId: string): Promise<IMyUserStoryResponse[]> {
@@ -59,7 +62,7 @@ export class GetMyUserStoriesUseCase implements IGetMyUserStoriesUseCase {
 				acceptanceCriteria: story.acceptanceCriteria,
 				createdAt: story.createdAt,
 				updatedAt: story.updatedAt,
-				subtasks: storySubtasks,
+				subtasks: storySubtasks as any,
 			};
 		});
 

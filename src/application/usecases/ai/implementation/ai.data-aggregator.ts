@@ -1,5 +1,5 @@
 import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
-import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
+import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
 import type { IReportsRepository } from "@infrastructure/db/repository/interface/reports.interface";
 import type { IStandupRepository } from "@infrastructure/db/repository/interface/standup.interface";
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
@@ -23,7 +23,7 @@ export class AiDataAggregator implements IAiDataAggregator {
 		@inject(REPORTS_TYPE.IReportsRepository)
 		readonly _reportsRepository: IReportsRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private readonly _projectRepository: IProjectReposiotory,
+		private readonly _projectRepository: IProjectRepository,
 	) {}
 
 	async getProjectContext(

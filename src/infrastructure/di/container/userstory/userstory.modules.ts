@@ -20,7 +20,7 @@ import { UserstoryController } from "../../../../presentation/http/controllers/u
 import type { IUsersStory } from "../../../db/interface/userstory.interface";
 import { UserStoryModel } from "../../../db/models/userstory.model";
 import { UserStoryRepository } from "../../../db/repository/implements/user.story.repository";
-import type { IUserStroyRepository } from "../../../db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "../../../db/repository/interface/user.story.interface";
 import { UserStoryPersisitanceMapper } from "../../../mappers/userstrory.mapper";
 import { USERSTORY_TYPE } from "../../types/userstory/userstory";
 
@@ -37,7 +37,7 @@ export const UserStoryModule = new ContainerModule(({ bind }) => {
 	bind<UserstoryController>(USERSTORY_TYPE.UserstoryController).to(
 		UserstoryController,
 	);
-	bind<IUserStroyRepository>(USERSTORY_TYPE.IUserStroyRepository).to(
+	bind<IUserStoryRepository>(USERSTORY_TYPE.IUserStoryRepository).to(
 		UserStoryRepository,
 	);
 	bind<IEditUserstoryUseCase>(USERSTORY_TYPE.IEditUserstoryUseCase).to(

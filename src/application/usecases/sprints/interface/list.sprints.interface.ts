@@ -1,4 +1,4 @@
-import type { SprintEntity } from "@domain/entities/sptint.entities";
+import type { SprintEntity } from "@domain/entities/sprint.entity";
 
 export interface IListSprintsUseCase {
 	execute(

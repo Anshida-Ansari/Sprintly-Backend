@@ -1,8 +1,8 @@
 import type { VerifyOtpDTO } from "@application/dtos/auth/verify.admin.dto";
 import type { IVerifyOtpUseCase } from "@application/usecases/auth/interface/verifyadmin.otp.interface";
 import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
-import { CompanyEnitiy } from "@domain/entities/company.enities";
-import { UserEntity } from "@domain/entities/user.entities";
+import { CompanyEntity } from "@domain/entities/company.entity";
+import { UserEntity } from "@domain/entities/user.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
 import { Role } from "@domain/enum/role.enum";
@@ -78,7 +78,7 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 
 		if (!newAdmin.id) throw new InternalServerError("Failed to create admin");
 
-		const companyEntity = CompanyEnitiy.create({
+		const companyEntity = CompanyEntity.create({
 			companyName: parsed.companyName,
 			adminId: newAdmin.id.toString(),
 			status: Status.PENDING,

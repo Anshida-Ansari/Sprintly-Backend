@@ -1,35 +1,35 @@
 import { inject, injectable } from "inversify";
-import { ProjectStatus } from "../../../../domain/enum/project/project.status";
-import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status";
-import { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
-import type { ISprintReposiotry } from "../../../../infrastructure/db/repository/interface/sprints.interface";
-import type { ISubTaskRepository } from "../../../../infrastructure/db/repository/interface/subtask.interface";
-import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
-import type { IUserStroyRepository } from "../../../../infrastructure/db/repository/interface/user.story.interface";
-import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
-import { MEETING_TYPES } from "../../../../infrastructure/di/types/meeting/meeting.types";
-import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/spirnts/sprints.types";
-import { SUBTASK_TYPE } from "../../../../infrastructure/di/types/subtask/subtask";
-import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types";
-import { USERSTORY_TYPE } from "../../../../infrastructure/di/types/userstory/userstory";
+import { ProjectStatus } from "../../../../domain/enum/project/project.status.js";
+import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status.js";
+import { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status.js";
+import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
+import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface.js";
+import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface.js";
+import type { ISprintRepository } from "../../../../infrastructure/db/repository/interface/sprints.interface.js";
+import type { ISubTaskRepository } from "../../../../infrastructure/db/repository/interface/subtask.interface.js";
+import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface.js";
+import type { IUserStoryRepository } from "../../../../infrastructure/db/repository/interface/user.story.interface.js";
+import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types.js";
+import { MEETING_TYPES } from "../../../../infrastructure/di/types/meeting/meeting.types.js";
+import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types.js";
+import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/sprints/sprints.types.js";
+import { SUBTASK_TYPE } from "../../../../infrastructure/di/types/subtask/subtask.js";
+import { USER_TYPES } from "../../../../infrastructure/di/types/user/user.types.js";
+import { USERSTORY_TYPE } from "../../../../infrastructure/di/types/userstory/userstory.js";
 import type {
 	IDashboardStats,
 	IGetDashboardStatsUseCase,
-} from "../interface/get.dashboard.stats.interface";
+} from "../interface/get.dashboard.stats.interface.js";
 
 @injectable()
 export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 	constructor(
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectRepository: IProjectReposiotory,
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintRepository: ISprintReposiotry,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userStoryRepository: IUserStroyRepository,
+		private _projectRepository: IProjectRepository,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintRepository: ISprintRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userStoryRepository: IUserStoryRepository,
 		@inject(SUBTASK_TYPE.ISubTaskRepository)
 		private _subtaskRepository: ISubTaskRepository,
 		@inject(USER_TYPES.IUserRepository)
@@ -137,11 +137,11 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			const sprintTasks =
 				await this._subtaskRepository.findByUserStoryIds(storyIds);
 			const completedSprintTasks = sprintTasks.filter(
-				(t) => t.status === SubTaskStatus.COMPLETED,
+				(t: any) => t.status === SubTaskStatus.COMPLETED,
 			);
 
 			activeSprintData = {
-				id: sprint.id,
+				id: sprint.id || "",
 				name: sprint.name,
 				totalTasks: sprintTasks.length,
 				completedTasks: completedSprintTasks.length,
@@ -172,7 +172,7 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			totalMeetings,
 			topMembers,
 			liveActivity,
-			activeSprint: activeSprintData,
+			activeSprint: activeSprintData as any,
 			// Subscription Info
 			companyPlan: company?.currentPlan ?? "free",
 			projectLimit: company?.projectLimit ?? 2,

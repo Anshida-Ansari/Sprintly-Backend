@@ -4,11 +4,11 @@ import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
 import type { ProjectStatus } from "@domain/enum/project/project.status";
 
-import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
+import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -18,9 +18,9 @@ import { inject, injectable } from "inversify";
 export class GetDetailProjectUseCase implements IGetDetailProjectUseCase {
 	constructor(
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectrepsository: IProjectReposiotory,
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintRepository: ISprintReposiotry,
+		private _projectrepsository: IProjectRepository,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintRepository: ISprintRepository,
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
 	) {}

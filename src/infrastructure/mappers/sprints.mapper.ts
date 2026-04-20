@@ -1,4 +1,4 @@
-import { SprintEntity } from "../../domain/entities/sptint.entities";
+import { SprintEntity } from "../../domain/entities/sprint.entity";
 import type { SprintStatus } from "../../domain/enum/sprints/sprints.status";
 
 export class SprintPersistenceMapper {

@@ -3,7 +3,7 @@ import type { ICreateNotificationUseCase } from "@application/usecases/notificat
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
@@ -18,8 +18,8 @@ export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
 		private _subtaskReposiotory: ISubTaskRepository,
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private _createNotificationUseCase: ICreateNotificationUseCase,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userStoryRepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userStoryRepository: IUserStoryRepository,
 	) {}
 
 	async execute(dto: AddCommentSubTaskDTO): Promise<void> {

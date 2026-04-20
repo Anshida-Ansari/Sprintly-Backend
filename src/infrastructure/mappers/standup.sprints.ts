@@ -34,19 +34,21 @@ export class StandupPersistanceMapper {
 			today: doc.today as string,
 			blockers: doc.blockers as string,
 			date: (doc.date as Date).toISOString(),
-			comments: (doc.comments as Array<{
-				userId: string;
-				userName: string;
-				text: string;
-				createdAt: Date;
-			}>) || [],
+			comments:
+				(doc.comments as Array<{
+					userId: string;
+					userName: string;
+					text: string;
+					createdAt: Date;
+				}>) || [],
 			createdAt: doc.createdAt as Date,
-			userData: user && typeof user === "object" && "name" in user
-				? {
-						name: user.name as string,
-						email: user.email as string,
-					}
-				: undefined,
+			userData:
+				user && typeof user === "object" && "name" in user
+					? {
+							name: user.name as string,
+							email: user.email as string,
+						}
+					: undefined,
 		});
 	}
 }

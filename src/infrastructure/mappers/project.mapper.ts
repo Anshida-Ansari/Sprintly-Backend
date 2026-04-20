@@ -1,5 +1,5 @@
 import type { ProjectStatus } from "@domain/enum/project/project.status";
-import { ProjectEntity } from "../../domain/entities/project.entities";
+import { ProjectEntity } from "../../domain/entities/project.entity";
 
 export class ProjectPersistanceMapper {
 	toMongo(project: ProjectEntity) {

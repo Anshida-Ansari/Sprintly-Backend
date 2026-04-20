@@ -1,12 +1,12 @@
-import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
-import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
-import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
-import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
-import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
+import { SubTaskStatus } from "@domain/enum/subtask/subtask.status.js";
+import { UserStoryStatus } from "@domain/enum/userstory/user.story.status.js";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types.js";
+import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask.js";
+import { USER_TYPES } from "@infrastructure/di/types/user/user.types.js";
+import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory.js";
 import { inject, injectable } from "inversify";
-import mongoose, { type Model, type Document } from "mongoose";
-import type { IAnalyticsRepository } from "../interface/analytics.interface";
+import mongoose, { type Document, type Model } from "mongoose";
+import type { IAnalyticsRepository } from "../interface/analytics.interface.js";
 
 interface ISprint extends Document {
 	startDate: Date;
@@ -31,7 +31,8 @@ interface ISubTask extends Document {
 @injectable()
 export class AnalyticsRepository implements IAnalyticsRepository {
 	constructor(
-		@inject(SPRINTS_TYPE.SprintModel) private readonly sprintModel: Model<ISprint>,
+		@inject(SPRINTS_TYPE.SprintModel)
+		private readonly sprintModel: Model<ISprint>,
 		@inject(SUBTASK_TYPE.SubTaskModel)
 		private readonly subTaskModel: Model<ISubTask>,
 		@inject(USERSTORY_TYPE.UserStoryModel)
@@ -77,24 +78,28 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 				}));
 		} else {
 			totalWork = userStories.reduce(
-				(sum, us) => sum + ((us as Record<string, unknown>).estimationPoints as number || 0),
+				(sum, us) => sum + (((us as any).estimationPoints as number) || 0),
 				0,
 			);
 			completedData = userStories
 				.filter(
 					(us) =>
-						(us as Record<string, unknown>).status === UserStoryStatus.DONE &&
-						((us as Record<string, unknown>).completedAt || (us as Record<string, unknown>).updatedAt),
+						(us as any).status === UserStoryStatus.DONE &&
+						((us as any).completedAt || (us as any).updatedAt),
 				)
 				.map((us) => ({
-					burned: (us as Record<string, unknown>).estimationPoints as number || 0,
-					date: (((us as Record<string, unknown>).completedAt as Date) || ((us as Record<string, unknown>).updatedAt as Date)).toISOString().split("T")[0],
+					burned: ((us as any).estimationPoints as number) || 0,
+					date: (
+						((us as any).completedAt as Date) || ((us as any).updatedAt as Date)
+					)
+						.toISOString()
+						.split("T")[0],
 				}));
 		}
 
 		return this.calculateBurndown(
-			(sprint as Record<string, unknown>).startDate as Date,
-			(sprint as Record<string, unknown>).endDate as Date,
+			(sprint as any).startDate as Date,
+			(sprint as any).endDate as Date,
 			totalWork,
 			completedData,
 		);
@@ -139,27 +144,31 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 				}));
 		} else {
 			const userStoriesAssigned = userStories.filter((us) =>
-				(us as Record<string, unknown>).assignedTo?.some((id: unknown) => (id as { toString(): string }).toString() === userId),
+				(us as any).assignedTo?.some((id: any) => id.toString() === userId),
 			);
 			totalWork = userStoriesAssigned.reduce(
-				(sum, us) => sum + ((us as Record<string, unknown>).estimationPoints as number || 0),
+				(sum, us) => sum + (((us as any).estimationPoints as number) || 0),
 				0,
 			);
 			completedData = userStoriesAssigned
 				.filter(
 					(us) =>
-						(us as Record<string, unknown>).status === UserStoryStatus.DONE &&
-						((us as Record<string, unknown>).completedAt || (us as Record<string, unknown>).updatedAt),
+						(us as any).status === UserStoryStatus.DONE &&
+						((us as any).completedAt || (us as any).updatedAt),
 				)
 				.map((us) => ({
-					burned: (us as Record<string, unknown>).estimationPoints as number || 0,
-					date: (((us as Record<string, unknown>).completedAt as Date) || ((us as Record<string, unknown>).updatedAt as Date)).toISOString().split("T")[0],
+					burned: ((us as any).estimationPoints as number) || 0,
+					date: (
+						((us as any).completedAt as Date) || ((us as any).updatedAt as Date)
+					)
+						.toISOString()
+						.split("T")[0],
 				}));
 		}
 
 		return this.calculateBurndown(
-			(sprint as Record<string, unknown>).startDate as Date,
-			(sprint as Record<string, unknown>).endDate as Date,
+			(sprint as any).startDate as Date,
+			(sprint as any).endDate as Date,
 			totalWork,
 			completedData,
 		);
@@ -170,8 +179,12 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 		filters: Record<string, unknown>,
 	): Promise<Record<string, unknown>> {
 		const companyObjectId = new mongoose.Types.ObjectId(companyId.toString());
-		const userStoryMatchQuery: Record<string, unknown> = { companyId: companyObjectId };
-		const subtaskMatchQuery: Record<string, unknown> = { companyId: companyObjectId };
+		const userStoryMatchQuery: Record<string, unknown> = {
+			companyId: companyObjectId,
+		};
+		const subtaskMatchQuery: Record<string, unknown> = {
+			companyId: companyObjectId,
+		};
 
 		if (
 			filters.projectId &&
@@ -252,7 +265,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 													{
 														$in: [
 															"$userStoryId",
-															subtaskMatchQuery.userStoryId.$in,
+															(subtaskMatchQuery.userStoryId as any).$in,
 														],
 													},
 												]

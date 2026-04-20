@@ -6,7 +6,7 @@ import type { IListSprintsUseCase } from "@application/usecases/sprints/interfac
 import type { IStartSprintUseCase } from "@application/usecases/sprints/interface/start.sprint.interface";
 import type { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { SuccessStatus } from "@domain/enum/status-codes/success.status.enum";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import type { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "inversify";
 

@@ -1,6 +1,6 @@
-import { UserEntity } from "../../domain/entities/user.entities";
-import type { UserStatus } from "../../domain/enum/status.enum";
+import { UserEntity } from "../../domain/entities/user.entity";
 import type { Role } from "../../domain/enum/role.enum";
+import type { UserStatus } from "../../domain/enum/status.enum";
 
 export class UserPersistenceMapper {
 	toMongo(user: UserEntity) {
@@ -24,7 +24,9 @@ export class UserPersistenceMapper {
 			password: doc.password as string,
 			role: doc.role as Role, // Role enum casting
 			status: (doc.status ?? "active") as UserStatus,
-			companyId: (doc.companyId as { toString(): string } | undefined)?.toString(),
+			companyId: (
+				doc.companyId as { toString(): string } | undefined
+			)?.toString(),
 			adminId: (doc.adminId as { toString(): string } | undefined)?.toString(),
 			lastActive: doc.lastActive as Date,
 			createdAt: doc.createdAt as Date,

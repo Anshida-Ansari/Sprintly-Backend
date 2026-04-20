@@ -1,14 +1,14 @@
 import { inject, injectable } from "inversify";
 import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status";
 import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
-import type { ISprintReposiotry } from "../../../../infrastructure/db/repository/interface/sprints.interface";
+import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface";
+import type { ISprintRepository } from "../../../../infrastructure/db/repository/interface/sprints.interface";
 import type { ISubTaskRepository } from "../../../../infrastructure/db/repository/interface/subtask.interface";
+import type { IUserStoryRepository } from "../../../../infrastructure/db/repository/interface/user.story.interface";
 import type { IWorkLogRepository } from "../../../../infrastructure/db/repository/interface/worklog.interface";
-import type { IUserStroyRepository } from "../../../../infrastructure/db/repository/interface/user.story.interface";
 import { MEETING_TYPES } from "../../../../infrastructure/di/types/meeting/meeting.types";
 import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/sprints/sprints.types";
 import { SUBTASK_TYPE } from "../../../../infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "../../../../infrastructure/di/types/userstory/userstory";
 import { WORKLOG_TYPE } from "../../../../infrastructure/di/types/worklog/worklog";
@@ -27,11 +27,11 @@ export class GetDeveloperDashboardStatsUseCase
 		@inject(MEETING_TYPES.IMeetingRepository)
 		private _meetingRepository: IMeetingRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectRepository: IProjectReposiotory,
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintRepository: ISprintReposiotry,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userStoryRepository: IUserStroyRepository,
+		private _projectRepository: IProjectRepository,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintRepository: ISprintRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userStoryRepository: IUserStoryRepository,
 		@inject(WORKLOG_TYPE.IWorkLogRepository)
 		private _worklogRepository: IWorkLogRepository,
 	) {}
@@ -56,7 +56,9 @@ export class GetDeveloperDashboardStatsUseCase
 			{ skip: 0, limit: 1000 },
 		);
 
-		const projectIds = [...new Set(userStories.map((s) => s.projectId.toString()))];
+		const projectIds = [
+			...new Set(userStories.map((s) => s.projectId.toString())),
+		];
 		const sprintIds = [
 			...new Set(
 				userStories
@@ -84,7 +86,9 @@ export class GetDeveloperDashboardStatsUseCase
 		const enrichTask = (task: any) => {
 			const story = storyMap.get(task.userStoryId.toString());
 			const project = story ? projectMap.get(story.projectId.toString()) : null;
-			const sprint = story?.sprintId ? sprintMap.get(story.sprintId.toString()) : null;
+			const sprint = story?.sprintId
+				? sprintMap.get(story.sprintId.toString())
+				: null;
 			return {
 				...task,
 				projectName: project?.name || "Unknown Project",
@@ -104,7 +108,11 @@ export class GetDeveloperDashboardStatsUseCase
 			.filter((t) => t.status === SubTaskStatus.COMPLETED)
 			.map(enrichTask);
 
-		const enrichedUserSubTasks = [...pendingTasks, ...inProgressTasks, ...completedTasks];
+		const enrichedUserSubTasks = [
+			...pendingTasks,
+			...inProgressTasks,
+			...completedTasks,
+		];
 
 		// 4. Determine Current Focus
 		let currentFocus = null;
@@ -138,7 +146,9 @@ export class GetDeveloperDashboardStatsUseCase
 				status: t.status,
 				priority: "Normal", // Subtasks don't have priority directly, using default
 				dueDate: t.dueDate,
-				isOverdue: t.dueDate ? new Date(t.dueDate) < now && t.status !== SubTaskStatus.COMPLETED : false,
+				isOverdue: t.dueDate
+					? new Date(t.dueDate) < now && t.status !== SubTaskStatus.COMPLETED
+					: false,
 			}))
 			.sort((a, b) => (a.isOverdue === b.isOverdue ? 0 : a.isOverdue ? -1 : 1));
 
@@ -151,16 +161,21 @@ export class GetDeveloperDashboardStatsUseCase
 		if (activeSprints.length > 0) {
 			const sprint = activeSprints[0];
 			const sprintId = sprint.id;
-			
+
 			// Tasks assigned to user in THIS sprint
-			const sprintTasks = enrichedUserSubTasks.filter(t => {
+			const sprintTasks = enrichedUserSubTasks.filter((t) => {
 				const story = storyMap.get(t.userStoryId.toString());
 				return story?.sprintId?.toString() === sprintId?.toString();
 			});
-			
-			const sprintCompleted = sprintTasks.filter(t => t.status === SubTaskStatus.COMPLETED).length;
+
+			const sprintCompleted = sprintTasks.filter(
+				(t) => t.status === SubTaskStatus.COMPLETED,
+			).length;
 			const totalInSprint = sprintTasks.length;
-			const daysLeft = Math.ceil((new Date(sprint.endDate).getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+			const daysLeft = Math.ceil(
+				(new Date(sprint.endDate).getTime() - now.getTime()) /
+					(1000 * 60 * 60 * 24),
+			);
 
 			activeSprintInfo = {
 				id: sprintId || "",
@@ -168,7 +183,10 @@ export class GetDeveloperDashboardStatsUseCase
 				daysLeft: Math.max(0, daysLeft),
 				totalTasks: totalInSprint,
 				completedTasks: sprintCompleted,
-				completionPercentage: totalInSprint > 0 ? Math.round((sprintCompleted / totalInSprint) * 100) : 0,
+				completionPercentage:
+					totalInSprint > 0
+						? Math.round((sprintCompleted / totalInSprint) * 100)
+						: 0,
 			};
 		}
 
@@ -177,34 +195,40 @@ export class GetDeveloperDashboardStatsUseCase
 		startOfWeek.setDate(now.getDate() - now.getDay());
 		startOfWeek.setHours(0, 0, 0, 0);
 
-		const completedThisWeek = completedTasks.filter(t => t.completedAt && new Date(t.completedAt) >= startOfWeek).length;
-		
+		const completedThisWeek = completedTasks.filter(
+			(t) => t.completedAt && new Date(t.completedAt) >= startOfWeek,
+		).length;
+
 		const worklogs = await this._worklogRepository.findByUserId(userId, {
-			createdAt: { $gte: startOfWeek }
+			createdAt: { $gte: startOfWeek },
 		});
-		const hoursWorkedThisWeek = worklogs.reduce((acc, curr) => acc + (curr.hours || 0), 0);
+		const hoursWorkedThisWeek = worklogs.reduce(
+			(acc, curr) => acc + (curr.hours || 0),
+			0,
+		);
 
 		// 8. Recent Activity
 		// Simulate activity by gathering recent status updates and comments
-		const recentComments = userSubTasks.flatMap(t => 
-			(t.comments || []).filter(c => c.userId?.toString() === userId.toString())
-				.map(c => ({
+		const recentComments = userSubTasks.flatMap((t) =>
+			(t.comments || [])
+				.filter((c) => c.userId?.toString() === userId.toString())
+				.map((c) => ({
 					id: `${t.id}-comment-${c.createdAt.getTime()}`,
 					type: "COMMENT_ADDED" as const,
 					title: `Commented on ${t.title}`,
 					message: c.message,
-					timestamp: c.createdAt
-				}))
+					timestamp: c.createdAt,
+				})),
 		);
 
 		const recentUpdates = userSubTasks
-			.filter(t => t.updatedAt && new Date(t.updatedAt) >= startOfWeek)
-			.map(t => ({
+			.filter((t) => t.updatedAt && new Date(t.updatedAt) >= startOfWeek)
+			.map((t) => ({
 				id: `${t.id}-update-${t.updatedAt?.getTime()}`,
 				type: "TASK_UPDATE" as const,
 				title: `Updated ${t.title}`,
 				message: `Status: ${t.status}`,
-				timestamp: t.updatedAt as Date
+				timestamp: t.updatedAt as Date,
 			}));
 
 		const recentActivity = [...recentComments, ...recentUpdates]
@@ -252,9 +276,12 @@ export class GetDeveloperDashboardStatsUseCase
 			performance: {
 				tasksCompletedThisWeek: completedThisWeek,
 				hoursWorkedThisWeek,
-				completionRate: enrichedUserSubTasks.length > 0 
-					? Math.round((completedTasks.length / enrichedUserSubTasks.length) * 100) 
-					: 0,
+				completionRate:
+					enrichedUserSubTasks.length > 0
+						? Math.round(
+								(completedTasks.length / enrichedUserSubTasks.length) * 100,
+							)
+						: 0,
 			},
 			recentActivity,
 			schedule,

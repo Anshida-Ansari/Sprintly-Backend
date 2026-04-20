@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { ProjectStatus } from "../../../../domain/enum/project/project.status";
 import { UserStatus } from "../../../../domain/enum/status.enum"; // This has BLOCK/ACTIVE
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
+import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface";
 import type { IUserRepository } from "../../../../infrastructure/db/repository/interface/user.interface";
 import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
 import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
@@ -20,7 +20,7 @@ export class GetPlatformAnalyticsUseCase
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectRepository: IProjectReposiotory,
+		private _projectRepository: IProjectRepository,
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,
 	) {}

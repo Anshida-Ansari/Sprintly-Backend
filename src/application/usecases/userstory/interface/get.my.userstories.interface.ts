@@ -1,4 +1,3 @@
-
 export interface IUserStoryComment {
 	createdAt: Date;
 	message: string;

@@ -1,5 +1,8 @@
 import type { IListProjectUseCase } from "@application/usecases/projects/interface/list.project.interface";
-import type { IProjectReposiotory, IProjectWithAnalytics } from "@infrastructure/db/repository/interface/project.interface";
+import type {
+	IProjectRepository,
+	IProjectWithAnalytics,
+} from "@infrastructure/db/repository/interface/project.interface";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { inject, injectable } from "inversify";
 import { Types } from "mongoose";
@@ -8,7 +11,7 @@ import { Types } from "mongoose";
 export class ListProjectUseCase implements IListProjectUseCase {
 	constructor(
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectrepository: IProjectReposiotory,
+		private _projectrepository: IProjectRepository,
 	) {}
 
 	async execute(
@@ -45,7 +48,7 @@ export class ListProjectUseCase implements IListProjectUseCase {
 		]);
 
 		return {
-			data: projects,
+			data: projects as any[],
 			total: count,
 			page,
 			limit,

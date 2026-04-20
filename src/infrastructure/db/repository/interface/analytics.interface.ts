@@ -1,5 +1,8 @@
 export interface IAnalyticsRepository {
-	getSprintBurndown(sprintId: string, type: "hours" | "points"): Promise<Record<string, unknown>>;
+	getSprintBurndown(
+		sprintId: string,
+		type: "hours" | "points",
+	): Promise<Record<string, unknown>>;
 	getUserBurndown(
 		sprintId: string,
 		userId: string,

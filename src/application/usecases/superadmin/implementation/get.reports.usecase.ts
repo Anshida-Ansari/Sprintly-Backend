@@ -1,7 +1,8 @@
 import { inject, injectable } from "inversify";
+import type { CompanyEntity } from "../../../../domain/entities/company.entity.js";
 import { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
+import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
+import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface";
 import type { ITransactionRepository } from "../../../../infrastructure/db/repository/interface/transaction.interface";
 import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
 import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
@@ -24,7 +25,7 @@ export class GetSubscriptionReportsUseCase
 		@inject(TRANSACTION_TYPES.ITransactionRepository)
 		private _transactionRepository: ITransactionRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectRepository: IProjectReposiotory,
+		private _projectRepository: IProjectRepository,
 	) {}
 
 	async getSubscriptions(
@@ -140,7 +141,7 @@ export class GetSubscriptionReportsUseCase
 	}
 
 	private _getStatus(
-		c: CompanyEnitiy,
+		c: CompanyEntity,
 		now: Date,
 	): "Active" | "Expired" | "Expiring Soon" {
 		if (c.currentPlan === SubscriptionPlan.FREE) return "Active";

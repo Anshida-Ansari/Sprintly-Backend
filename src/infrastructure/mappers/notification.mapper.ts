@@ -1,4 +1,4 @@
-import { NotificationEntity } from "@domain/entities/notification.entites";
+import { NotificationEntity } from "@domain/entities/notification.entity";
 import type { NotificationType } from "@domain/enum/notification/notification.types";
 import type { INotification } from "../db/interface/notification.interface";
 

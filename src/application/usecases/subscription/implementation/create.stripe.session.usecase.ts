@@ -18,7 +18,7 @@ export class CreateStripeSessionUseCase implements ICreateStripeSessionUseCase {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
 		this._stripe = new Stripe(secretKey, {
-			apiVersion: "2024-06-20", // Using a stable version if the specific one is unknown to current SDK types
+			apiVersion: "2024-06-20" as any, // Using a stable version if the specific one is unknown to current SDK types
 			typescript: true,
 		});
 	}

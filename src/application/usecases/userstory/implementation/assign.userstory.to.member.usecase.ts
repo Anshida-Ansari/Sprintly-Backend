@@ -1,8 +1,8 @@
 import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
-import type { UserStoryEntity } from "@domain/entities/user.story.entities";
+import type { UserStoryEntity } from "@domain/entities/user.story.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
@@ -14,8 +14,8 @@ import type { IAssignUserStoryUseCase } from "../interface/assign.userstory.to.m
 @injectable()
 export class AssignUserStoryUseCase implements IAssignUserStoryUseCase {
 	constructor(
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryRepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryRepository: IUserStoryRepository,
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}

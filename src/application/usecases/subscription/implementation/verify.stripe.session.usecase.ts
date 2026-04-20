@@ -22,7 +22,7 @@ export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
 		this._stripe = new Stripe(secretKey, {
-			apiVersion: "2024-06-20",
+			apiVersion: "2024-06-20" as any,
 			typescript: true,
 		});
 	}

@@ -1,15 +1,15 @@
 import type { CreateUserStoryDTO } from "@application/dtos/userstory/create.userstory.dto";
 import type { ICreateUserstoryUsecase } from "@application/usecases/userstory/interface/create.userstory.interface";
 
-import { UserStoryEntity } from "@domain/entities/user.story.entities";
+import { UserStoryEntity } from "@domain/entities/user.story.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { ProjectErrorMessage } from "@domain/enum/project/project.error.message";
 
 import type { PriorityStatus } from "@domain/enum/userstory/user.story.priority";
 import type { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 
-import type { IProjectReposiotory } from "@infrastructure/db/repository/interface/project.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
@@ -21,10 +21,10 @@ import { inject, injectable } from "inversify";
 @injectable()
 export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 	constructor(
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryReposiotry: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryReposiotry: IUserStoryRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectReposiotory: IProjectReposiotory,
+		private _projectReposiotory: IProjectRepository,
 	) {}
 
 	async execute(

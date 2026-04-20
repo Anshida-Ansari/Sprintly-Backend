@@ -13,8 +13,8 @@ import type { IStartSprintUseCase } from "@application/usecases/sprints/interfac
 import type { ISprints } from "@infrastructure/db/interface/sprints.interface";
 import { SprintModel } from "@infrastructure/db/models/sprints.model";
 import { SprintsRepository } from "@infrastructure/db/repository/implements/sprints.repository";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { SprintPersistenceMapper } from "@infrastructure/mappers/sprints.mapper";
 import { SprintController } from "@presentation/http/controllers/sprint.controller";
 import { ContainerModule } from "inversify";
@@ -25,7 +25,7 @@ export const SprintModule = new ContainerModule(({ bind }) => {
 	bind<SprintPersistenceMapper>(SPRINTS_TYPE.SprintPersistenceMapper).to(
 		SprintPersistenceMapper,
 	);
-	bind<ISprintReposiotry>(SPRINTS_TYPE.ISprintReposiotry).to(SprintsRepository);
+	bind<ISprintRepository>(SPRINTS_TYPE.ISprintRepository).to(SprintsRepository);
 	bind<ICreateSprintUseCase>(SPRINTS_TYPE.ICreateSprintUseCase).to(
 		CreateSprintUseCase,
 	);

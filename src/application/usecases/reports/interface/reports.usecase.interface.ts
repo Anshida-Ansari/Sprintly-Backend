@@ -1,4 +1,7 @@
-import type { IReportFilter, IReportResult } from "@infrastructure/db/repository/interface/reports.interface";
+import type {
+	IReportFilter,
+	IReportResult,
+} from "@infrastructure/db/repository/interface/reports.interface";
 
 export interface IGetProjectReportsUseCase {
 	execute(companyId: string, filters: IReportFilter): Promise<IReportResult>;

@@ -1,4 +1,4 @@
-import type { UserStoryEntity } from "@domain/entities/user.story.entities";
+import type { UserStoryEntity } from "@domain/entities/user.story.entity";
 
 export interface IListUserstoryUseCase {
 	execute(

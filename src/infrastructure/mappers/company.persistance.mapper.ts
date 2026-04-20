@@ -1,9 +1,9 @@
-import { CompanyEnitiy } from "../../domain/entities/company.enities";
+import { CompanyEntity } from "../../domain/entities/company.entity";
 import { SubscriptionPlan } from "../../domain/enum/company/subscription.plan.enum";
 import type { Status } from "../../domain/enum/user/user.status.enum";
 
 export class CompanyPersistenceMapper {
-	toMongo(company: CompanyEnitiy) {
+	toMongo(company: CompanyEntity) {
 		return {
 			companyName: company.companyName,
 			status: company.status,
@@ -24,12 +24,13 @@ export class CompanyPersistenceMapper {
 	}
 
 	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
-	fromMongo(doc: any): CompanyEnitiy {
-		return CompanyEnitiy.create({
+	fromMongo(doc: any): CompanyEntity {
+		return CompanyEntity.create({
 			id: (doc._id as { toString(): string } | undefined)?.toString(),
 			companyName: doc.companyName as string,
 			status: doc.status as Status,
-			adminId: (doc.adminId as { toString(): string } | undefined)?.toString() ?? "",
+			adminId:
+				(doc.adminId as { toString(): string } | undefined)?.toString() ?? "",
 			createdAt: doc.createdAt as unknown as Date,
 			githubAccessToken: doc.githubAccessToken as string,
 			githubRefreshToken: doc.githubRefreshToken as string,

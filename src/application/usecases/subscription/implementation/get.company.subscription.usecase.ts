@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import type { IProjectReposiotory } from "../../../../infrastructure/db/repository/interface/project.interface";
+import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface";
 import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
 import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
 import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
@@ -14,7 +14,7 @@ export class GetCompanySubscriptionUseCase
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectRepository: IProjectReposiotory,
+		private _projectRepository: IProjectRepository,
 	) {}
 
 	async execute(companyId: string) {

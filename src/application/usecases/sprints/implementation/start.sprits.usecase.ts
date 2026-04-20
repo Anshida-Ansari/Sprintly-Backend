@@ -1,6 +1,6 @@
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { ConflictError } from "@shared/utils/error-handling/errors/conflict.error";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -10,8 +10,8 @@ import type { IStartSprintUseCase } from "../interface/start.sprint.interface";
 @injectable()
 export class StartSprtintsUseCase implements IStartSprintUseCase {
 	constructor(
-		@inject(SPRINTS_TYPE.ISprintReposiotry)
-		private _sprintrepository: ISprintReposiotry,
+		@inject(SPRINTS_TYPE.ISprintRepository)
+		private _sprintrepository: ISprintRepository,
 	) {}
 
 	async execute(companyId: string, sprintId: string): Promise<void> {

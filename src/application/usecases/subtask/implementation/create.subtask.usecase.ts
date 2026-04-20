@@ -2,7 +2,7 @@ import type { CreateSubTaskDTO } from "@application/dtos/subtask/create.subtask.
 import { SubTaskEntity } from "@domain/entities/subtask.entity";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import type { ISubTaskRepository } from "@infrastructure/db/repository/interface/subtask.interface";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { ForbiddenError } from "@shared/utils/error-handling/errors/forbidden.error";
@@ -15,8 +15,8 @@ export class CreateSubTaskUseCase implements ICreateSubTaskUseCase {
 	constructor(
 		@inject(SUBTASK_TYPE.ISubTaskRepository)
 		private _subtaskrepository: ISubTaskRepository,
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userstoryrepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userstoryrepository: IUserStoryRepository,
 	) {}
 
 	async execute(

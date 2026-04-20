@@ -1,4 +1,4 @@
-import type { NotificationEntity } from "@domain/entities/notification.entites";
+import type { NotificationEntity } from "@domain/entities/notification.entity";
 import type { INotificationReposiotory } from "@infrastructure/db/repository/interface/notification.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { inject, injectable } from "inversify";

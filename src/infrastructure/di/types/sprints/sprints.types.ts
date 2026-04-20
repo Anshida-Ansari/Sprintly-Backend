@@ -1,6 +1,6 @@
 export const SPRINTS_TYPE = {
 	SprintModel: Symbol.for("SprintModel"),
-	ISprintReposiotry: Symbol.for("ISprintReposiotry"),
+	ISprintRepository: Symbol.for("ISprintRepository"),
 	SprintPersistenceMapper: Symbol.for("SprintPersistenceMapper"),
 	ICreateSprintUseCase: Symbol.for("ICreateSprintUseCase"),
 	SprintController: Symbol.for("SprintController"),

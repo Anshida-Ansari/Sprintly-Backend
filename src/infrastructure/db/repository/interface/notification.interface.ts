@@ -1,4 +1,4 @@
-import type { NotificationEntity } from "@domain/entities/notification.entites";
+import type { NotificationEntity } from "@domain/entities/notification.entity";
 import type { IBaseRepository } from "./base.repository";
 
 export interface INotificationReposiotory

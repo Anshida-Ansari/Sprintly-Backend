@@ -15,10 +15,12 @@ export class MeetingPersistenceMapper {
 			type: doc.type as "single" | "group",
 			createdBy: (doc.createdBy as { toString(): string }).toString(),
 			status: doc.status as MeetingStatus,
-			participants: (doc.participants as Array<Record<string, unknown>>)?.map((p) => ({
-				userId: (p.userId as { toString(): string }).toString(),
-				joinedAt: p.joinedAt as Date,
-			})),
+			participants: (doc.participants as Array<Record<string, unknown>>)?.map(
+				(p) => ({
+					userId: (p.userId as { toString(): string }).toString(),
+					joinedAt: p.joinedAt as Date,
+				}),
+			),
 			endTime: doc.endTime as Date,
 			duration: doc.duration as number,
 			cancelledAt: doc.cancelledAt as Date,

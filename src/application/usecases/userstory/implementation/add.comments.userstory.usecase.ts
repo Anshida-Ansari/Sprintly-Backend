@@ -2,7 +2,7 @@ import type { AddCommentDTO } from "@application/dtos/userstory/add.comment.to.u
 import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { ErrorMessage } from "@domain/enum/messages/error.message.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
-import type { IUserStroyRepository } from "@infrastructure/db/repository/interface/user.story.interface";
+import type { IUserStoryRepository } from "@infrastructure/db/repository/interface/user.story.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
@@ -14,8 +14,8 @@ export class AddCommentToUserStoryUseCase
 	implements IAddCommentToUserStoryUseCase
 {
 	constructor(
-		@inject(USERSTORY_TYPE.IUserStroyRepository)
-		private _userStoryRepository: IUserStroyRepository,
+		@inject(USERSTORY_TYPE.IUserStoryRepository)
+		private _userStoryRepository: IUserStoryRepository,
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}

@@ -1,7 +1,7 @@
 import { SubTaskStatus } from "@domain/enum/subtask/subtask.status";
 import { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
 import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import { SUBTASK_TYPE } from "@infrastructure/di/types/subtask/subtask";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 import { USERSTORY_TYPE } from "@infrastructure/di/types/userstory/userstory";
@@ -18,7 +18,8 @@ export class ReportsRepository implements IReportsRepository {
 	constructor(
 		@inject(PROJECT_TYPE.ProjectModel)
 		private readonly projectModel: Model<unknown>,
-		@inject(SPRINTS_TYPE.SprintModel) private readonly sprintModel: Model<unknown>,
+		@inject(SPRINTS_TYPE.SprintModel)
+		private readonly sprintModel: Model<unknown>,
 		@inject(USERSTORY_TYPE.UserStoryModel)
 		private readonly userStoryModel: Model<unknown>,
 		@inject(SUBTASK_TYPE.SubTaskModel)

@@ -1,4 +1,3 @@
-
 export const GITHUB_TYPE = {
 	IGitHubOAuthService: Symbol.for("IGitHubOAuthService"),
 	IGitHubRepositoryService: Symbol.for("IGitHubRepositoryService"),

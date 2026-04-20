@@ -1,3 +1,4 @@
+import type { ScheduleMeetingDTO } from "@application/dtos/meeting/schedule.meeting.dto.js";
 import type { ICreateNotificationUseCase } from "@application/usecases/notification/interface/create.notification.interface";
 import { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { NotificationType } from "@domain/enum/notification/notification.types";
@@ -7,8 +8,6 @@ import { inject, injectable } from "inversify";
 import { MeetingEntity } from "../../../domain/entities/meeting.entity";
 import type { IMeetingRepository } from "../../../infrastructure/db/repository/interface/meeting.interface";
 import { MEETING_TYPES } from "../../../infrastructure/di/types/meeting/meeting.types";
-
-import type { ScheduleMeetingDTO } from "../dtos/meeting/schedule.meeting.dto";
 import type { IScheduleMeetingUseCase } from "./interface/schedule.meeting.interface";
 
 @injectable()
@@ -34,7 +33,7 @@ export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
 			type: data.type,
 			status: MeetingStatus.SCHEDULED,
 			duration: data.duration,
-			participants: data.participants?.map((userId) => ({ userId })),
+			participants: data.participants?.map((userId: any) => ({ userId })),
 		});
 
 		const savedMeeting = await this.meetingRepository.create(meeting);

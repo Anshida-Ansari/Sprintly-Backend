@@ -1,6 +1,6 @@
 import type { PriorityStatus } from "@domain/enum/userstory/user.story.priority";
 import type { UserStoryStatus } from "@domain/enum/userstory/user.story.status";
-import { UserStoryEntity } from "../../domain/entities/user.story.entities";
+import { UserStoryEntity } from "../../domain/entities/user.story.entity";
 
 export class UserStoryPersisitanceMapper {
 	toMongo(userStory: UserStoryEntity) {
@@ -49,18 +49,21 @@ export class UserStoryPersisitanceMapper {
 			title: doc.title as string,
 			description: doc.description as string,
 			priority: doc.priority as PriorityStatus,
-			sprintId: (doc.sprintId as { toString(): string | undefined })?.toString(),
+			sprintId: (
+				doc.sprintId as { toString(): string | undefined }
+			)?.toString(),
 			assignedTo: doc.assignedTo
 				? (doc.assignedTo as unknown[]).map((id) =>
 						(id as { toString(): string }).toString(),
 					)
 				: [],
-			comments: (doc.comments as Array<{
-				createdAt: Date;
-				message: string;
-				userName?: string;
-				userId: string;
-			}>) || [],
+			comments:
+				(doc.comments as Array<{
+					createdAt: Date;
+					message: string;
+					userName?: string;
+					userId: string;
+				}>) || [],
 			status: doc.status as UserStoryStatus,
 			estimationPoints: parsedEstimationPoints,
 			acceptanceCriteria: (doc.acceptanceCriteria as string[]) || [],

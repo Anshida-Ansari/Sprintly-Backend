@@ -1,11 +1,11 @@
 import type { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { inject, injectable } from "inversify";
 import { type Model, Types } from "mongoose";
-import type { MeetingEntity } from "../../../../domain/entities/meeting.entity";
-import { MEETING_TYPES } from "../../../di/types/meeting/meeting.types";
-import type { MeetingPersistenceMapper } from "../../../mappers/meeting.persistence.mapper";
-import type { IMeetingRepository } from "../interface/meeting.interface";
-import { BaseRepository } from "./base.repository";
+import type { MeetingEntity } from "../../../../domain/entities/meeting.entity.js";
+import { MEETING_TYPES } from "../../../di/types/meeting/meeting.types.js";
+import type { MeetingPersistenceMapper } from "../../../mappers/meeting.persistence.mapper.js";
+import type { IMeetingRepository } from "../interface/meeting.interface.js";
+import { BaseRepository } from "./base.repository.js";
 
 @injectable()
 export class MeetingRepository
@@ -51,7 +51,7 @@ export class MeetingRepository
 		if (status === "COMPLETED") {
 			const endTime = new Date();
 			update.endTime = endTime;
-			const startTime = new Date(meeting.date as unknown as string);
+			const startTime = new Date((meeting as any).date as unknown as string);
 			update.duration = Math.floor(
 				(endTime.getTime() - startTime.getTime()) / 1000 / 60,
 			);
@@ -59,7 +59,7 @@ export class MeetingRepository
 			update.cancelledAt = new Date();
 		}
 
-		await this.model.findByIdAndUpdate(meeting._id, update).exec();
+		await this.model.findByIdAndUpdate((meeting as any)._id, update).exec();
 	}
 
 	async findByRoomId(roomId: string): Promise<MeetingEntity | null> {

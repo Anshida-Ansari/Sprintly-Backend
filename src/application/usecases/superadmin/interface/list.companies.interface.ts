@@ -1,8 +1,8 @@
-import type { CompanyEnitiy } from "@domain/entities/company.enities";
+import type { CompanyEntity } from "@domain/entities/company.entity";
 
 export interface IListCompanyUseCase {
 	execute(query: { page: number; limit: number; search?: string }): Promise<{
-		data: CompanyEnitiy[];
+		data: CompanyEntity[];
 		total: number;
 		page: number;
 		limit: number;

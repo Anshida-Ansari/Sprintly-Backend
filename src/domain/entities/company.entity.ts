@@ -12,7 +12,7 @@ export interface GitHubCredentials {
 	organization?: string;
 }
 
-export class CompanyEnitiy {
+export class CompanyEntity {
 	private readonly _id?: string;
 	private _companyName: string;
 	private _status: Status;
@@ -87,10 +87,10 @@ export class CompanyEnitiy {
 		stripeSubscriptionId?: string;
 		subscriptionEndDate?: Date;
 		autoRenew?: boolean;
-	}): CompanyEnitiy {
+	}): CompanyEntity {
 		const plan = props.currentPlan ?? SubscriptionPlan.FREE;
 		const limit = props.projectLimit ?? PROJECT_LIMITS[SubscriptionPlan.FREE];
-		return new CompanyEnitiy({
+		return new CompanyEntity({
 			id: props.id,
 			companyName: props.companyName,
 			status: props.status,

@@ -1,16 +1,16 @@
-import type { SprintEntity } from "@domain/entities/sptint.entities";
+import type { SprintEntity } from "@domain/entities/sprint.entity";
 import { SprintStatus } from "@domain/enum/sprints/sprints.status";
 import { BaseRepository } from "@infrastructure/db/repository/implements/base.repository";
-import type { ISprintReposiotry } from "@infrastructure/db/repository/interface/sprints.interface";
-import { SPRINTS_TYPE } from "@infrastructure/di/types/spirnts/sprints.types";
+import type { ISprintRepository } from "@infrastructure/db/repository/interface/sprints.interface";
+import { SPRINTS_TYPE } from "@infrastructure/di/types/sprints/sprints.types";
 import type { SprintPersistenceMapper } from "@infrastructure/mappers/sprints.mapper";
 import { inject, injectable } from "inversify";
-import type { Model, FilterQuery } from "mongoose";
+import type { FilterQuery, Model } from "mongoose";
 
 @injectable()
 export class SprintsRepository
 	extends BaseRepository<SprintEntity>
-	implements ISprintReposiotry
+	implements ISprintRepository
 {
 	constructor(
 		@inject(SPRINTS_TYPE.SprintModel)
@@ -72,7 +72,7 @@ export class SprintsRepository
 		};
 
 		if (excludeSprintId) {
-			filter._id = { $ne: excludeSprintId };
+			(filter as any)._id = { $ne: excludeSprintId };
 		}
 
 		const count = await this.model.countDocuments(filter);
@@ -106,11 +106,11 @@ export class SprintsRepository
 		};
 
 		if (search) {
-			filter.name = { $regex: search, $options: "i" };
+			(filter as any).name = { $regex: search, $options: "i" };
 		}
 
 		if (status) {
-			filter.status = status;
+			(filter as any).status = status;
 		}
 
 		const skip = (page - 1) * limit;

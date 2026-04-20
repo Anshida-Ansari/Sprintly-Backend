@@ -1,4 +1,4 @@
-import type { UserEntity } from "../../../domain/entities/user.entities";
+import type { UserEntity } from "../../../domain/entities/user.entity";
 
 export interface IUserMapper {
 	toMongo(user: UserEntity): Record<string, unknown>;

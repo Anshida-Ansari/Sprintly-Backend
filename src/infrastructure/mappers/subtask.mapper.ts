@@ -31,18 +31,20 @@ export class SubTaskPersisitanceMapper {
 			assignedTo: (doc.assignedTo as string)?.toString() || "",
 			estimatedHours: doc.estimatedHours as number,
 			actualHours: doc.actualHours as number,
-			comments: (doc.comments as Array<{
-				userId: string;
-				userName?: string;
-				message: string;
-				createdAt: Date;
-			}>) || [],
-			attachments: (doc.attachments as Array<{
-				fileUrl: string;
-				fileName: string;
-				uploadedBy: string;
-				createdAt: Date;
-			}>) || [],
+			comments:
+				(doc.comments as Array<{
+					userId: string;
+					userName?: string;
+					message: string;
+					createdAt: Date;
+				}>) || [],
+			attachments:
+				(doc.attachments as Array<{
+					fileUrl: string;
+					fileName: string;
+					uploadedBy: string;
+					createdAt: Date;
+				}>) || [],
 			completedAt: doc.completedAt as Date,
 			createdAt: doc.createdAt as Date,
 			updatedAt: doc.updatedAt as Date,

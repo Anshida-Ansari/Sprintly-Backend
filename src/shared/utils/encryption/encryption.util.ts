@@ -9,13 +9,7 @@ export const EncryptionUtil = {
 	encrypt(text: string, secret: string): string {
 		const salt = crypto.randomBytes(SALT_LENGTH);
 
-		const key = crypto.pbkdf2Sync(
-			secret,
-			salt,
-			100000,
-			KEY_LENGTH,
-			"sha512",
-		);
+		const key = crypto.pbkdf2Sync(secret, salt, 100000, KEY_LENGTH, "sha512");
 
 		const iv = crypto.randomBytes(IV_LENGTH);
 
@@ -40,13 +34,7 @@ export const EncryptionUtil = {
 		const encrypted = parts[2];
 		const tag = Buffer.from(parts[3], "hex");
 
-		const key = crypto.pbkdf2Sync(
-			secret,
-			salt,
-			100000,
-			KEY_LENGTH,
-			"sha512",
-		);
+		const key = crypto.pbkdf2Sync(secret, salt, 100000, KEY_LENGTH, "sha512");
 
 		const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
 		decipher.setAuthTag(tag);
