@@ -1,9 +1,29 @@
-node_modules
-logs
-.log
+# Dependencies – reinstalled inside the image
+node_modules/
+
+# Build output – rebuilt inside the image
+dist/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment secrets – injected at runtime via env vars
 .env
+.env.*
+
+# Git metadata
+.git/
+.github/
 .gitignore
-dist
+
+# Development-only config files
 biome.json
 eslint.config.js
- 
+
+# Editor/OS files
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp

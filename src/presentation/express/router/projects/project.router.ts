@@ -28,7 +28,7 @@ router.get(
 );
 router.patch(
 	PROJECT_ROUTES.EDIT_PROJECT,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	(req, res, next) => projectController.editProject(req, res, next),
 );
 router.get(

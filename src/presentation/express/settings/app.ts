@@ -69,4 +69,10 @@ app.use(BASE_API.WORKLOG, workLogRouter);
 app.use(BASE_API.ANALYTICS, analyticsRouter);
 app.use(BASE_API.REPORTS, reportsRouter);
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+	res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+
 export default app;

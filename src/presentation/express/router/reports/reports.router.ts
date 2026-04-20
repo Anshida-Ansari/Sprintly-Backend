@@ -15,7 +15,7 @@ const reportsController = container.get<ReportsController>(
 
 const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
 
-// Allow Admin and Lead roles for reports
+
 const authorizeReports = authGurd.authorize([Role.ADMIN, Role.LEAD]);
 
 router.get(REPORTS_ROUTES.PROJECTS, authorizeReports, (req, res, next) =>

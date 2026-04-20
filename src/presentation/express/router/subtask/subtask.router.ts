@@ -36,13 +36,13 @@ router.get(
 
 router.patch(
 	SUBTASK.ASSIGN_MEMBER,
-	authGurd.authorize(["admin"]),
+	authGurd.authorize(["admin","lead"]),
 	(req, res, next) => subtaskController.assignMembers(req, res, next),
 );
 
 router.delete(
 	SUBTASK.DELETE_SUBTASK,
-	authGurd.authorize(["admin", "developers"]),
+	authGurd.authorize(["admin", "developers","lead"]),
 	(req, res, next) => subtaskController.deleteSubtask(req, res, next),
 );
 router.post(

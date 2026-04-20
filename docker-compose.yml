@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  # ─── Sprintly Backend API ────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: sprintly-api
+    restart: unless-stopped
+    ports:
+      - "2000:2000"
+    env_file:
+      - .env
+    environment:
+      # Override Redis host to use the container name when running locally
+      REDIS_HOST: ${REDIS_HOST}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:2000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - sprintly-network
+
+networks:
+  sprintly-network:
+    driver: bridge
