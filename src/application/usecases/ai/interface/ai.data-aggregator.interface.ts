@@ -15,6 +15,12 @@ export interface ProjectContext {
 		description: string;
 		status: string;
 	};
+	companyProjects: {
+		id: string;
+		name: string;
+		status: string;
+	}[];
+	totalProjectsCount: number;
 }
 
 export interface IAiDataAggregator {

@@ -92,6 +92,12 @@ export class AiDataAggregator implements IAiDataAggregator {
 		const recentStandups = projectId
 			? await this._standupRepository.findByProjectAndDate(projectId)
 			: [];
+			
+		// Fetch all projects for the company to provide global context
+		const allProjects = await this._projectRepository.find(
+			{ companyId: companyId },
+			{ skip: 0, limit: 100 }
+		);
 
 		return {
 			completedTasksYesterday,
@@ -103,6 +109,12 @@ export class AiDataAggregator implements IAiDataAggregator {
 			blockedTasksCount: blockedTasks.length,
 			recentActivity: recentStandups.slice(0, 5), // last 5 manual standup updates
 			projectInfo,
+			companyProjects: allProjects.map((p) => ({
+				id: p.id || "",
+				name: p.name,
+				status: p.status,
+			})),
+			totalProjectsCount: allProjects.length,
 		};
 	}
 }

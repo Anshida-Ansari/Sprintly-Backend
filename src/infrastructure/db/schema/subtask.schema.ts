@@ -23,10 +23,10 @@ export const subTaskSchema = new mongoose.Schema(
 			enum: Object.values(SubTaskStatus),
 			default: SubTaskStatus.PENDING,
 		},
-		assignedTo: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Users",
-		},
+		// assignedTo: {
+		// 	type: mongoose.Schema.Types.ObjectId,
+		// 	ref: "Users",
+		// },
 		estimatedHours: {
 			type: Number,
 			min: 0,

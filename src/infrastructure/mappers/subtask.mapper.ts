@@ -9,7 +9,7 @@ export class SubTaskPersisitanceMapper {
 			companyId: subTask.companyId,
 			title: subTask.title,
 			status: subTask.status,
-			assignedTo: subTask.assignedTo,
+			// assignedTo: subTask.assignedTo,
 			estimatedHours: subTask.estimatedHours,
 			actualHours: subTask.actualHours,
 			comments: subTask.comments,
@@ -28,7 +28,7 @@ export class SubTaskPersisitanceMapper {
 			companyId: (doc.companyId as string)?.toString() || "",
 			title: doc.title as string,
 			status: doc.status as SubTaskStatus,
-			assignedTo: (doc.assignedTo as string)?.toString() || "",
+			// assignedTo: (doc.assignedTo as string)?.toString() || "",
 			estimatedHours: doc.estimatedHours as number,
 			actualHours: doc.actualHours as number,
 			comments:

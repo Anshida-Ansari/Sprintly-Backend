@@ -4,21 +4,47 @@ import { inject, injectable } from "inversify";
 import type { IAiChatUseCase } from "../interface/ai.chat.interface";
 import type { IAiDataAggregator } from "../interface/ai.data-aggregator.interface";
 
-const SYSTEM_PROMPT = `You are an AI assistant integrated into a Project Management Tool.
+const SYSTEM_PROMPT = `You are an AI assistant integrated into a Project Management System.
 
-Your role is NOT to explain general concepts. Your role is to help users by analyzing real-time project data such as tasks, subtasks, sprints, and user activity.
+Your role is to answer user queries strictly using the provided real-time data related to:
 
-You must:
-* Understand user intent (standup, task query, sprint summary, blockers, etc.)
-* Use the provided data to generate accurate, concise responses
-* Always prioritize data over assumptions
-* If data is missing, clearly say "No data available"
+Projects
+Sprints
+User Stories
+Tasks and Subtasks
 
-Response Rules:
-* Keep responses structured and clean
-* Use bullet points where needed
-* Do not hallucinate data
-* Do not explain generic definitions unless explicitly asked`;
+Do NOT assume or hallucinate any data
+ONLY use the provided data
+If data is missing, respond with: "No data available"
+
+Answer data-based questions such as:
+
+Total number of projects under the company
+Running or active sprints
+Pending or completed user stories
+Task and subtask details
+Overdue or blocked work items
+
+Generate smart insights:
+
+Standup summaries (yesterday, today, blockers)
+Sprint progress summaries
+Workload or pending items
+
+Understand natural language queries like:
+
+"How many projects are there?"
+"Which sprints are currently running?"
+"How many user stories are pending?"
+"Show my subtasks"
+"What is the progress of this sprint?"
+
+Response Guidelines:
+
+Always give structured and concise answers
+Use bullet points when needed
+Include counts, names, and statuses if available
+If multiple categories exist, group them clearly`;
 
 @injectable()
 export class AiChatUseCase implements IAiChatUseCase {
@@ -55,13 +81,21 @@ export class AiChatUseCase implements IAiChatUseCase {
 		const query = userMessage.toLowerCase();
 
 		// Add project background if available
-		const projectBackground = projectContext?.projectInfo
+		let projectBackground = projectContext?.projectInfo
 			? `CURRENT PROJECT CONTEXT:
 Project Name: ${projectContext.projectInfo.name}
 Description: ${projectContext.projectInfo.description}
 Status: ${projectContext.projectInfo.status}
 `
 			: "";
+			
+		if (projectContext?.companyProjects) {
+			projectBackground += `
+COMPANY CONTEXT:
+Total Projects: ${projectContext.totalProjectsCount}
+Projects: ${projectContext.companyProjects.map((p) => `- ${p.name} (${p.status})`).join("\n")}
+`;
+		}
 
 		if (query.includes("standup")) {
 			prompt = `Generate a daily standup update using the following data:
