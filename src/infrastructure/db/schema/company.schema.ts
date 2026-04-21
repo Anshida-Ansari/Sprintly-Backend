@@ -49,8 +49,7 @@ export const companySchema = new mongoose.Schema(
 		},
 		currentPlan: {
 			type: String,
-			enum: Object.values(SubscriptionPlan),
-			default: SubscriptionPlan.FREE,
+			default: "free",
 		},
 		projectLimit: {
 			type: Number,
