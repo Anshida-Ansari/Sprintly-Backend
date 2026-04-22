@@ -6,7 +6,7 @@ export class SubTaskEntity {
 	private _companyId: string;
 	private _title: string;
 	private _status: SubTaskStatus;
-	// private _assignedTo?: string;
+	private _assignedTo?: string;
 
 	private _estimatedHours?: number;
 	private _actualHours?: number;
@@ -59,7 +59,7 @@ export class SubTaskEntity {
 		this._companyId = props.companyId;
 		this._title = props.title;
 		this._status = props.status;
-		// this._assignedTo = props.assignedTo;
+		this._assignedTo = props.assignedTo;
 		this._estimatedHours = props.estimatedHours;
 		this._actualHours = props.actualHours;
 		this._comments = props.comments || [];
@@ -144,7 +144,7 @@ export class SubTaskEntity {
 			}
 			this._status = props.status;
 		}
-		// if (props.assignedTo !== undefined) this._assignedTo = props.assignedTo;
+		if (props.assignedTo !== undefined) this._assignedTo = props.assignedTo;
 
 		if (props.estimatedHours !== undefined) {
 			if (props.estimatedHours < 0) {
@@ -213,9 +213,9 @@ export class SubTaskEntity {
 		return this._status;
 	}
 
-	// get assignedTo() {
-	// 	return this._assignedTo;
-	// }
+	get assignedTo() {
+		return this._assignedTo;
+	}
 
 	get estimatedHours() {
 		return this._estimatedHours;
@@ -255,7 +255,7 @@ export class SubTaskEntity {
 			companyId: this._companyId,
 			title: this._title,
 			status: this._status,
-			// assignedTo: this._assignedTo,
+			assignedTo: this._assignedTo,
 			estimatedHours: this._estimatedHours,
 			actualHours: this._actualHours,
 			comments: this._comments,

@@ -16,7 +16,7 @@ export class SubscriptionPlanEntity {
 		price: number;
 		stripePriceId?: string;
 		projectLimit: number;
-		features: Array<{ text: string; included: boolean }>;
+		features?: Array<{ text: string; included: boolean }>;
 		isActive?: boolean;
 		isPopular?: boolean;
 		createdAt?: Date;
@@ -27,7 +27,7 @@ export class SubscriptionPlanEntity {
 		this._price = props.price;
 		this._stripePriceId = props.stripePriceId;
 		this._projectLimit = props.projectLimit;
-		this._features = props.features;
+		this._features = props.features ?? [];
 		this._isActive = props.isActive ?? true;
 		this._isPopular = props.isPopular ?? false;
 		this._createdAt = props.createdAt;

@@ -1,4 +1,4 @@
-import type { INotificationReposiotory } from "@infrastructure/db/repository/interface/notification.interface";
+import type { INotificationRepository } from "@infrastructure/db/repository/interface/notification.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { inject, injectable } from "inversify";
 import type { IMarkNotificationReadUseCase } from "../interface/mark.notification.read.interface";
@@ -8,8 +8,8 @@ export class MarkNotificationReadUseCase
 	implements IMarkNotificationReadUseCase
 {
 	constructor(
-		@inject(NOTIFICATION_TYPE.INotificationReposiotory)
-		private readonly _notificationRepository: INotificationReposiotory,
+		@inject(NOTIFICATION_TYPE.INotificationRepository)
+		private readonly _notificationRepository: INotificationRepository,
 	) {}
 
 	async execute(notificationId?: string, userId?: string): Promise<void> {

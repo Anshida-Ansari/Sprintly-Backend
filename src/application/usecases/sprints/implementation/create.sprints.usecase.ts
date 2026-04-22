@@ -23,7 +23,7 @@ export class CreateSprintUseCase implements ICreateSprintUseCase {
 		@inject(SPRINTS_TYPE.ISprintRepository)
 		private _sprintRepository: ISprintRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectReposiotry: IProjectRepository,
+		private _projectRepository: IProjectRepository,
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private _createNotificationUseCase: ICreateNotificationUseCase,
 	) {}
@@ -39,7 +39,7 @@ export class CreateSprintUseCase implements ICreateSprintUseCase {
 		status: SprintStatus;
 		createdAt: Date;
 	}> {
-		const project = await this._projectReposiotry.findById(projectId);
+		const project = await this._projectRepository.findById(projectId);
 		if (!project) {
 			throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND);
 		}

@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import { ProjectStatus } from "../../../../domain/enum/project/project.status.js";
 import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status.js";
 import { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status.js";
+import type { SubTaskEntity } from "../../../../domain/entities/subtask.entity.js";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
 import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface.js";
 import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface.js";
@@ -120,7 +121,7 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			{ companyId, status: "ACTIVE" },
 			{ skip: 0, limit: 1 },
 		);
-		let activeSprintData = null;
+		let activeSprintData: IDashboardStats["activeSprint"] = null;
 
 		if (activeSprints && activeSprints.length > 0) {
 			const sprint = activeSprints[0];
@@ -137,7 +138,7 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			const sprintTasks =
 				await this._subtaskRepository.findByUserStoryIds(storyIds);
 			const completedSprintTasks = sprintTasks.filter(
-				(t: any) => t.status === SubTaskStatus.COMPLETED,
+				(t: SubTaskEntity) => t.status === SubTaskStatus.COMPLETED,
 			);
 
 			activeSprintData = {
@@ -172,7 +173,7 @@ export class GetDashboardStatsUseCase implements IGetDashboardStatsUseCase {
 			totalMeetings,
 			topMembers,
 			liveActivity,
-			activeSprint: activeSprintData as any,
+			activeSprint: activeSprintData,
 			// Subscription Info
 			companyPlan: company?.currentPlan ?? "free",
 			projectLimit: company?.projectLimit ?? 2,

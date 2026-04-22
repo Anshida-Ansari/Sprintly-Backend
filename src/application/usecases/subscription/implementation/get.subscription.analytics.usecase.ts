@@ -1,7 +1,9 @@
 import { inject, injectable } from "inversify";
-import { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import type { CompanyEntity } from "@domain/entities/company.entity";
 
 export interface IGetSubscriptionAnalyticsUseCase {
 	execute(): Promise<{
@@ -20,7 +22,6 @@ export interface IGetSubscriptionAnalyticsUseCase {
 	}>;
 }
 
-const PRO_PRICE_INR = 469;
 
 @injectable()
 export class GetSubscriptionAnalyticsUseCase
@@ -29,21 +30,31 @@ export class GetSubscriptionAnalyticsUseCase
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
+		@inject(SUBSCRIPTION_PLAN_TYPES.ISubscriptionPlanRepository)
+		private _subscriptionPlanRepository: ISubscriptionPlanRepository,
 	) {}
 
 	async execute() {
 		const allCompanies = await this._companyRepository.findAll();
+		const allPlans = await this._subscriptionPlanRepository.findAll();
+		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlanName = freePlan ? freePlan.name : "Free";
 
 		const proCompanies = allCompanies.filter(
-			(c) => c.currentPlan === SubscriptionPlan.PRO,
+			(c: CompanyEntity) => c.currentPlan !== freePlanName,
 		);
 		const freeCompanies = allCompanies.filter(
-			(c) => c.currentPlan === SubscriptionPlan.FREE,
+			(c: CompanyEntity) => c.currentPlan === freePlanName,
 		);
 
-		const mrr = proCompanies.length * PRO_PRICE_INR;
+		// Calculate MRR dynamically based on current plan prices
+		let mrr = 0;
+		proCompanies.forEach((c: CompanyEntity) => {
+			const plan = allPlans.find(p => p.name === c.currentPlan);
+			if (plan) mrr += plan.price;
+		});
 
-		const companies = allCompanies.map((c) => ({
+		const companies = allCompanies.map((c: CompanyEntity) => ({
 			id: c.id || "",
 			companyName: c.companyName,
 			currentPlan: c.currentPlan,

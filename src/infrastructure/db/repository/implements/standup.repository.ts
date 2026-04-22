@@ -2,7 +2,7 @@ import type { StandupEntity } from "@domain/entities/standup.entity";
 import { STANDUP_TYPES } from "@infrastructure/di/types/standup/standup.types";
 import type { StandupPersistanceMapper } from "@infrastructure/mappers/standup.sprints";
 import { inject, injectable } from "inversify";
-import type { FilterQuery, Model } from "mongoose";
+import type { Model } from "mongoose";
 import type { IStandupRepository } from "../interface/standup.interface";
 import { BaseRepository } from "./base.repository";
 
@@ -60,7 +60,7 @@ export class StandupRepository
 		sprintId: string,
 		date?: string,
 	): Promise<StandupEntity[]> {
-		const query: any = { sprintId };
+		const query: Record<string, unknown> = { sprintId };
 
 		if (date) {
 			query.date = date;
@@ -78,7 +78,7 @@ export class StandupRepository
 		projectId: string,
 		date?: string,
 	): Promise<StandupEntity[]> {
-		const query: any = { projectId };
+		const query: Record<string, unknown> = { projectId };
 
 		if (date) {
 			query.date = date;

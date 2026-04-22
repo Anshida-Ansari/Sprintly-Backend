@@ -2,7 +2,7 @@ import { Role } from "@domain/enum/role.enum";
 import { container } from "@infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "@infrastructure/di/types/admin/admin.types";
 import { REPORTS_TYPE } from "@infrastructure/di/types/reports/reports.types";
-import type { AuthGurd } from "@presentation/express/middleware/auth.gurd";
+import type { AuthGuard } from "@presentation/express/middleware/auth.guard";
 import type { ReportsController } from "@presentation/http/controllers/reports.controller";
 import { REPORTS_ROUTES } from "@shared/constants/reports.routes.constants";
 import { Router } from "express";
@@ -13,10 +13,10 @@ const reportsController = container.get<ReportsController>(
 	REPORTS_TYPE.ReportsController,
 );
 
-const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
+const authGuard = container.get<AuthGuard>(ADMIN_TYPES.AuthGuard);
 
 
-const authorizeReports = authGurd.authorize([Role.ADMIN, Role.LEAD]);
+const authorizeReports = authGuard.authorize([Role.ADMIN, Role.LEAD]);
 
 router.get(REPORTS_ROUTES.PROJECTS, authorizeReports, (req, res, next) =>
 	reportsController.getProjectReports(req, res, next),

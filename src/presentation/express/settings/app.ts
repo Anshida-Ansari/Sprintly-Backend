@@ -50,7 +50,7 @@ app.use((req, _res, next) => {
 
 import { logger } from "@infrastructure/providers/logger/pino.logger";
 import { BASE_API } from "@shared/constants/base/base.routes.constants";
-import { userprofileRotuer } from "../router/userprofile/user.profile.router";
+import { userprofileRouter } from "../router/userprofile/user.profile.router";
 
 app.use(BASE_API.AUTH, authRouter);
 app.use(BASE_API.ADMIN, adminRouter);
@@ -62,7 +62,7 @@ app.use(BASE_API.SUBTASK, subTaskRouter);
 app.use(BASE_API.STANDUP, standupRouter);
 app.use(BASE_API.MEETING, meetingRouter);
 app.use(BASE_API.GITHUB, githubRouter);
-app.use(BASE_API.USER_PROFILE, userprofileRotuer);
+app.use(BASE_API.USER_PROFILE, userprofileRouter);
 app.use(BASE_API.NOTIFICATION, notificationRouter);
 app.use(BASE_API.AI, aiRouter);
 app.use(BASE_API.WORKLOG, workLogRouter);
@@ -70,7 +70,7 @@ app.use(BASE_API.ANALYTICS, analyticsRouter);
 app.use(BASE_API.REPORTS, reportsRouter);
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
 	res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 

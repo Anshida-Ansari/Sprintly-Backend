@@ -7,7 +7,7 @@ import type { IUserRepository } from "../../../infrastructure/db/repository/inte
 import { USER_TYPES } from "../../../infrastructure/di/types/user/user.types";
 import { verifyToken } from "../../../shared/utils/jwt.util";
 
-export class AuthGurd {
+export class AuthGuard {
 	constructor(
 		@inject(USER_TYPES.IUserRepository)
 		private _userRepository: IUserRepository,

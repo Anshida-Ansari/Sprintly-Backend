@@ -1,12 +1,15 @@
 import { inject, injectable } from "inversify";
-import type { CompanyEntity } from "../../../../domain/entities/company.entity.js";
-import { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
-import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface";
-import type { ITransactionRepository } from "../../../../infrastructure/db/repository/interface/transaction.interface";
-import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types";
-import { PROJECT_TYPE } from "../../../../infrastructure/di/types/Project/project.types";
-import { TRANSACTION_TYPES } from "../../../../infrastructure/di/types/transaction/transaction.types";
+import type { CompanyEntity } from "@domain/entities/company.entity";
+import type { TransactionEntity } from "@infrastructure/db/repository/interface/transaction.interface";
+import type { ProjectEntity } from "@domain/entities/project.entity";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
+import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
+import { TRANSACTION_TYPES } from "@infrastructure/di/types/transaction/transaction.types";
+import type { ITransactionRepository } from "@infrastructure/db/repository/interface/transaction.interface";
 import type {
 	IGetSubscriptionReportsUseCase,
 	PaginatedResult,
@@ -26,6 +29,8 @@ export class GetSubscriptionReportsUseCase
 		private _transactionRepository: ITransactionRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectRepository: IProjectRepository,
+		@inject(SUBSCRIPTION_PLAN_TYPES.ISubscriptionPlanRepository)
+		private _subscriptionPlanRepository: ISubscriptionPlanRepository,
 	) {}
 
 	async getSubscriptions(
@@ -33,16 +38,20 @@ export class GetSubscriptionReportsUseCase
 		limit: number,
 	): Promise<PaginatedResult<SubscriptionReportItem>> {
 		const skip = (page - 1) * limit;
-		const companies = await this._companyRepository.findAll(); // Simplified for now, in real apps we use skip/limit in repo
+		const allPlans = await this._subscriptionPlanRepository.findAll();
+		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlanName = freePlan ? freePlan.name : "Free";
+
+		const companies = await this._companyRepository.findAll(); 
 		const total = companies.length;
 		const now = new Date();
 
-		const data = companies.slice(skip, skip + limit).map((c) => ({
+		const data = companies.slice(skip, skip + limit).map((c: CompanyEntity) => ({
 			companyName: c.companyName,
 			plan: c.currentPlan,
 			startDate: c.createdAt || "N/A",
 			endDate: c.subscriptionEndDate || "N/A",
-			status: this._getStatus(c, now),
+			status: this._getStatus(c, now, freePlanName),
 			autoRenew: c.autoRenew,
 		}));
 
@@ -60,12 +69,12 @@ export class GetSubscriptionReportsUseCase
 
 		const data = transactions
 			.sort(
-				(a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0),
+				(a: TransactionEntity, b: TransactionEntity) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0),
 			)
 			.slice(skip, skip + limit)
-			.map((t) => {
+			.map((t: TransactionEntity) => {
 				const company = companies.find(
-					(c) => c.id?.toString() === t.companyId?.toString(),
+					(c: CompanyEntity) => c.id?.toString() === t.companyId?.toString(),
 				);
 				return {
 					paymentId: t.stripePaymentId,
@@ -88,10 +97,14 @@ export class GetSubscriptionReportsUseCase
 		const in7Days = new Date();
 		in7Days.setDate(now.getDate() + 7);
 
+		const allPlans = await this._subscriptionPlanRepository.findAll();
+		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlanName = freePlan ? freePlan.name : "Free";
+
 		const companies = await this._companyRepository.findAll();
 		const expiring = companies.filter(
-			(c) =>
-				c.currentPlan === SubscriptionPlan.PRO &&
+			(c: CompanyEntity) =>
+				c.currentPlan !== freePlanName &&
 				c.subscriptionEndDate &&
 				c.subscriptionEndDate > now &&
 				c.subscriptionEndDate <= in7Days,
@@ -100,7 +113,7 @@ export class GetSubscriptionReportsUseCase
 		const total = expiring.length;
 		const skip = (page - 1) * limit;
 
-		const data = expiring.slice(skip, skip + limit).map((c) => ({
+		const data = expiring.slice(skip, skip + limit).map((c: CompanyEntity) => ({
 			companyName: c.companyName,
 			plan: c.currentPlan,
 			startDate: c.createdAt || "N/A",
@@ -119,15 +132,19 @@ export class GetSubscriptionReportsUseCase
 		const companies = await this._companyRepository.findAll();
 		const projects = await this._projectRepository.findAll();
 
+		const allPlans = await this._subscriptionPlanRepository.findAll();
+		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlanName = freePlan ? freePlan.name : "Free";
+
 		const trials = companies.filter(
-			(c) => c.currentPlan === SubscriptionPlan.FREE,
+			(c: CompanyEntity) => c.currentPlan === freePlanName,
 		);
 		const total = trials.length;
 		const skip = (page - 1) * limit;
 
-		const data = trials.slice(skip, skip + limit).map((c) => {
+		const data = trials.slice(skip, skip + limit).map((c: CompanyEntity) => {
 			const projectCount = projects.filter(
-				(p) => p.companyId?.toString() === c.id?.toString(),
+				(p: ProjectEntity) => p.companyId?.toString() === c.id?.toString(),
 			).length;
 			return {
 				companyName: c.companyName,
@@ -143,8 +160,9 @@ export class GetSubscriptionReportsUseCase
 	private _getStatus(
 		c: CompanyEntity,
 		now: Date,
+		freePlanName: string,
 	): "Active" | "Expired" | "Expiring Soon" {
-		if (c.currentPlan === SubscriptionPlan.FREE) return "Active";
+		if (c.currentPlan === freePlanName) return "Active";
 		if (!c.subscriptionEndDate) return "Active";
 		if (c.subscriptionEndDate < now) return "Expired";
 

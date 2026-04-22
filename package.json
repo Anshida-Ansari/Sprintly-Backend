@@ -12,7 +12,8 @@
 		"format": "biome format .",
 		"check": "biome check .",
 		"lint:fix": "biome lint --write .",
-		"lint:eslint": "eslint ."
+		"lint:eslint": "eslint .",
+		"tools:force-upgrade": "tsx force-upgrade.ts"
 	},
 	"keywords": [],
 	"author": "",

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { SubscriptionPlan } from "../../../domain/enum/company/subscription.plan.enum";
 import { Status } from "../../../domain/enum/user/user.status.enum";
 
 export const companySchema = new mongoose.Schema(

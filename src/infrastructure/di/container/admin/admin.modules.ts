@@ -19,7 +19,7 @@ import type { IGetCompanySubscriptionUseCase } from "../../../../application/use
 import type { IHandleStripeWebhookUseCase } from "../../../../application/usecases/subscription/interface/handle.stripe.webhook.interface";
 import type { IUpgradeSubscriptionUseCase } from "../../../../application/usecases/subscription/interface/upgrade.subscription.interface";
 import type { IVerifyStripeSessionUseCase } from "../../../../application/usecases/subscription/interface/verify.stripe.session.interface";
-import { AuthGurd } from "../../../../presentation/express/middleware/auth.gurd";
+import { AuthGuard } from "../../../../presentation/express/middleware/auth.guard";
 import { AdminController } from "../../../../presentation/http/controllers/admin.controller";
 import { ADMIN_TYPES } from "../../types/admin/admin.types";
 
@@ -28,7 +28,7 @@ export const InviteModule = new ContainerModule(({ bind }) => {
 		InviteMemberUseCase,
 	);
 	bind<AdminController>(ADMIN_TYPES.AdminController).to(AdminController);
-	bind<AuthGurd>(ADMIN_TYPES.AuthGurd).to(AuthGurd);
+	bind<AuthGuard>(ADMIN_TYPES.AuthGuard).to(AuthGuard);
 	bind<IVerifyInvitationUseCase>(ADMIN_TYPES.IVerifyInvitationUseCase).to(
 		VerifyInvitationUseCase,
 	);

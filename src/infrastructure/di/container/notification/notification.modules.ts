@@ -19,7 +19,7 @@ export const NotificationModule = new ContainerModule(({ bind }) => {
 	);
 
 	// Repository
-	bind(NOTIFICATION_TYPE.INotificationReposiotory).to(NotificationRepository);
+	bind(NOTIFICATION_TYPE.INotificationRepository).to(NotificationRepository);
 
 	// Socket
 	bind(NOTIFICATION_TYPE.INotificationSocketService).to(

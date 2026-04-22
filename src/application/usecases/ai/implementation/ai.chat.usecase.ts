@@ -3,6 +3,7 @@ import Groq from "groq-sdk";
 import { inject, injectable } from "inversify";
 import type { IAiChatUseCase } from "../interface/ai.chat.interface";
 import type { IAiDataAggregator } from "../interface/ai.data-aggregator.interface";
+import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 
 const SYSTEM_PROMPT = `You are an AI assistant integrated into a Project Management System.
 
@@ -157,8 +158,8 @@ ${
 	projectContext?.inProgressTasksToday
 		.concat(projectContext?.blockedTasks)
 		.map(
-			(t: any) =>
-				`- ${t.title} [Status: ${t.status}, Priority: ${t.priority || "Normal"}, Due: ${t.dueDate || "N/A"}]`,
+			(t: SubTaskEntity) =>
+				`- ${t.title} [Status: ${t.status}, Priority: ${(t as unknown as { priority?: string }).priority || "Normal"}, Due: ${(t as unknown as { dueDate?: Date }).dueDate || "N/A"}]`,
 		)
 		.join("\n") || "No tasks found"
 }

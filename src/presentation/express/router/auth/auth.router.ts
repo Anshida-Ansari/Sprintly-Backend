@@ -12,13 +12,13 @@ import { container } from "../../../../infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
 import { AUTH_TYPES } from "../../../../infrastructure/di/types/auth/auth.types";
 import type { AuthController } from "../../../http/controllers/auth.controller";
-import type { AuthGurd } from "../../middleware/auth.gurd";
-import { validateDTO } from "../../middleware/validate.dto.middlware";
+import type { AuthGuard } from "../../middleware/auth.guard";
+import { validateDTO } from "../../middleware/validate.dto.middleware";
 
 const router = Router();
 
 const authController = container.get<AuthController>(AUTH_TYPES.AuthController);
-const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
+const authGuard = container.get<AuthGuard>(ADMIN_TYPES.AuthGuard);
 
 router.post(
 	AUTH_ROUTES.REGISTER,
@@ -65,7 +65,7 @@ router.post(AUTH_ROUTES.LOGOUT, validateDTO(LogoutDTO), (req, res, next) =>
 
 router.get(
 	AUTH_ROUTES.GET_ME,
-	authGurd.authorize(["admin", "lead", "developers", "superadmin"]),
+	authGuard.authorize(["admin", "lead", "developers", "superadmin"]),
 	(req, res, next) => authController.getMe(req, res, next),
 );
 

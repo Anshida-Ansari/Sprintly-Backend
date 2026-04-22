@@ -22,9 +22,9 @@ import { inject, injectable } from "inversify";
 export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 	constructor(
 		@inject(USERSTORY_TYPE.IUserStoryRepository)
-		private _userstoryReposiotry: IUserStoryRepository,
+		private _userstoryRepository: IUserStoryRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
-		private _projectReposiotory: IProjectRepository,
+		private _projectRepository: IProjectRepository,
 	) {}
 
 	async execute(
@@ -51,7 +51,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 		acceptanceCriteria?: string[];
 		createdAt: Date;
 	}> {
-		const project = await this._projectReposiotory.findById(projectId);
+		const project = await this._projectRepository.findById(projectId);
 
 		if (!project) {
 			throw new NotFoundError(ProjectErrorMessage.PROJECT_NOT_FOUND);
@@ -78,7 +78,7 @@ export class CreateUserstoryUseCase implements ICreateUserstoryUsecase {
 			adminId: adminId,
 		});
 
-		const created = await this._userstoryReposiotry.create(userstory);
+		const created = await this._userstoryRepository.create(userstory);
 
 		if (!created.id) {
 			throw new Error("Created User Story ID is missing");

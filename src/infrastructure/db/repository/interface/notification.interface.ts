@@ -1,7 +1,7 @@
 import type { NotificationEntity } from "@domain/entities/notification.entity";
 import type { IBaseRepository } from "./base.repository";
 
-export interface INotificationReposiotory
+export interface INotificationRepository
 	extends IBaseRepository<NotificationEntity> {
 	create(notification: NotificationEntity): Promise<NotificationEntity>;
 	findByRecipient(userId: string): Promise<NotificationEntity[]>;

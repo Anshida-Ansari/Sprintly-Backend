@@ -15,7 +15,7 @@ import type { IAddCommentToSubtaskUseCase } from "../interface/add.comment.to.su
 export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
 	constructor(
 		@inject(SUBTASK_TYPE.ISubTaskRepository)
-		private _subtaskReposiotory: ISubTaskRepository,
+		private _subtaskRepository: ISubTaskRepository,
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private _createNotificationUseCase: ICreateNotificationUseCase,
 		@inject(USERSTORY_TYPE.IUserStoryRepository)
@@ -23,7 +23,7 @@ export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
 	) {}
 
 	async execute(dto: AddCommentSubTaskDTO): Promise<void> {
-		const subtask = await this._subtaskReposiotory.findById(dto.subtaskId);
+		const subtask = await this._subtaskRepository.findById(dto.subtaskId);
 
 		if (!subtask) {
 			throw new NotFoundError(ErrorMessage.NOT_FOUND);
@@ -31,7 +31,7 @@ export class AddCommentToSubTaskUseCase implements IAddCommentToSubtaskUseCase {
 
 		subtask.addComment(dto.userId, dto.userName, dto.message);
 
-		await this._subtaskReposiotory.addComment(dto.subtaskId, {
+		await this._subtaskRepository.addComment(dto.subtaskId, {
 			userId: dto.userId,
 			userName: dto.userName,
 			message: dto.message,

@@ -48,7 +48,7 @@ export class ListProjectUseCase implements IListProjectUseCase {
 		]);
 
 		return {
-			data: projects as any[],
+			data: projects,
 			total: count,
 			page,
 			limit,

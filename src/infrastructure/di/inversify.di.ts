@@ -18,6 +18,7 @@ import { UserModule } from "./container/user/user.modules";
 import { UserProfileModule } from "./container/userprofile/user.profile.modules";
 import { UserStoryModule } from "./container/userstory/userstory.modules";
 import { WorkLogModule } from "./container/worklog/worklog.modules.js";
+import { SubscriptionPlanModule } from "./container/subscription-plan/subscription.plan.modules";
 
 const container = new Container({
 	defaultScope: "Singleton",
@@ -44,6 +45,7 @@ container.load(
 	AnalyticsModule,
 	TransactionModule,
 	ReportsModule,
+	SubscriptionPlanModule,
 );
 
 export { container };

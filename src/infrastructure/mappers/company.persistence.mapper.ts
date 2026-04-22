@@ -1,5 +1,4 @@
 import { CompanyEntity } from "../../domain/entities/company.entity";
-import { SubscriptionPlan } from "../../domain/enum/company/subscription.plan.enum";
 import type { Status } from "../../domain/enum/user/user.status.enum";
 
 export class CompanyPersistenceMapper {
@@ -38,8 +37,7 @@ export class CompanyPersistenceMapper {
 			githubConnectedAt: doc.githubConnectedAt as Date,
 			githubUsername: doc.githubUsername as string,
 			githubOrganization: doc.githubOrganization as string,
-			currentPlan:
-				(doc.currentPlan as SubscriptionPlan) ?? SubscriptionPlan.FREE,
+			currentPlan: (doc.currentPlan as string) || "free",
 			projectLimit: (doc.projectLimit as number) ?? 2,
 			stripeCustomerId: (doc.stripeCustomerId as string) ?? undefined,
 			stripeSubscriptionId: (doc.stripeSubscriptionId as string) ?? undefined,

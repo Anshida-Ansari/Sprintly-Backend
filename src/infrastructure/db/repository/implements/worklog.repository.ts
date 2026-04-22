@@ -86,7 +86,7 @@ export class WorkLogRepository
 		_companyId: string,
 		filters: Record<string, unknown> = {},
 	): Promise<unknown> {
-		const matchQuery: any = {};
+		const matchQuery: Record<string, unknown> = {};
 
 		if (filters.userId)
 			matchQuery.userId = new mongoose.Types.ObjectId(filters.userId as string);
@@ -99,11 +99,12 @@ export class WorkLogRepository
 				filters.sprintId as string,
 			);
 		if (filters.startDate || filters.endDate) {
-			matchQuery.date = {};
+			const dateQuery: Record<string, unknown> = {};
 			if (filters.startDate)
-				matchQuery.date.$gte = new Date(filters.startDate as string);
+				dateQuery.$gte = new Date(filters.startDate as string);
 			if (filters.endDate)
-				matchQuery.date.$lte = new Date(filters.endDate as string);
+				dateQuery.$lte = new Date(filters.endDate as string);
+			matchQuery.date = dateQuery;
 		}
 
 		const logs = await this.model

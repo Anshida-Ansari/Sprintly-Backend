@@ -1,13 +1,13 @@
 import type { UserProfileEntity } from "@domain/entities/user.profile.entities";
 import { USER_PROFILE_TYPE } from "@infrastructure/di/types/userprofile/user.profile";
-import type { UserProfilePersistenceMapper } from "@infrastructure/mappers/user.profile.persistance";
+import type { UserProfilePersistenceMapper } from "@infrastructure/mappers/user.profile.persistence";
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
 import type { IUserProfileRepository } from "../interface/user.profile.interface";
 import { BaseRepository } from "./base.repository";
 
 @injectable()
-export class UserProfileReposiotry
+export class UserProfileRepository
 	extends BaseRepository<UserProfileEntity>
 	implements IUserProfileRepository
 {

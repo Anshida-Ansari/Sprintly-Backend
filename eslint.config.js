@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
 	{
-		ignores: ["dist", "node_modules"],
+		ignores: ["dist", "node_modules", "migrate-plans.cjs", "seed-plans.cjs", "lint_errors.txt"],
 	},
 	js.configs.recommended,
 	...tseslint.configs.recommended,

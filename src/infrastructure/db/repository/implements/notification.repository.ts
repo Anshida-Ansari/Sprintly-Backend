@@ -4,13 +4,13 @@ import type { Model } from "mongoose";
 import { NOTIFICATION_TYPE } from "../../../di/types/notification/notification";
 import type { NotificationMapper } from "../../../mappers/notification.mapper";
 import type { INotification } from "../../interface/notification.interface";
-import type { INotificationReposiotory } from "../interface/notification.interface";
+import type { INotificationRepository } from "../interface/notification.interface";
 import { BaseRepository } from "./base.repository";
 
 @injectable()
 export class NotificationRepository
 	extends BaseRepository<NotificationEntity>
-	implements INotificationReposiotory
+	implements INotificationRepository
 {
 	constructor(
 		@inject(NOTIFICATION_TYPE.NotificationModel)

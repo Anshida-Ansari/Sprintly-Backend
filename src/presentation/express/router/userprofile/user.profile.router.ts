@@ -2,8 +2,8 @@ import { UpdateUserProfileDTO } from "@application/dtos/userprofie/update.profil
 import { container } from "@infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "@infrastructure/di/types/admin/admin.types";
 import { USER_PROFILE_TYPE } from "@infrastructure/di/types/userprofile/user.profile";
-import type { AuthGurd } from "@presentation/express/middleware/auth.gurd";
-import { validateDTO } from "@presentation/express/middleware/validate.dto.middlware";
+import type { AuthGuard } from "@presentation/express/middleware/auth.guard";
+import { validateDTO } from "@presentation/express/middleware/validate.dto.middleware";
 import type { UserProfileController } from "@presentation/http/controllers/user.profile.controller";
 import { USER_PROFILE } from "@shared/constants/user.profile.constants";
 import { Router } from "express";
@@ -13,25 +13,25 @@ const userprofileController = container.get<UserProfileController>(
 	USER_PROFILE_TYPE.UserProfileController,
 );
 
-const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
+const authGuard = container.get<AuthGuard>(ADMIN_TYPES.AuthGuard);
 
 router.put(
 	USER_PROFILE.UPDATE_USER_PROFILE,
-	authGurd.authorize(["admin", "lead", "developers"]),
+	authGuard.authorize(["admin", "lead", "developers"]),
 	validateDTO(UpdateUserProfileDTO),
 	(req, res, next) => userprofileController.updateProfile(req, res, next),
 );
 
 router.get(
 	USER_PROFILE.GET_USER_PROFILE,
-	authGurd.authorize(["admin", "lead", "developers"]),
+	authGuard.authorize(["admin", "lead", "developers"]),
 	(req, res, next) => userprofileController.getProfile(req, res, next),
 );
 
 router.get(
 	USER_PROFILE.GET_DASHBOARD_STATS,
-	authGurd.authorize(["admin", "lead", "developers"]),
+	authGuard.authorize(["admin", "lead", "developers"]),
 	(req, res, next) => userprofileController.getDashboardStats(req, res, next),
 );
 
-export { router as userprofileRotuer };
+export { router as userprofileRouter };

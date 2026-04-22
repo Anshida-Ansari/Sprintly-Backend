@@ -4,26 +4,31 @@ import { InviteMemberDTO } from "../../../../application/dtos/admin/invite.membe
 import { container } from "../../../../infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
 import type { AdminController } from "../../../http/controllers/admin.controller";
-import type { AuthGurd } from "../../middleware/auth.gurd";
-import { validateDTO } from "../../middleware/validate.dto.middlware";
+import type { SubscriptionPlanController } from "../../../http/controllers/subscription.plan.controller.js";
+import { SUBSCRIPTION_PLAN_TYPES } from "../../../../infrastructure/di/types/subscription-plan/subscription.plan.types.js";
+import type { AuthGuard } from "../../middleware/auth.guard";
+import { validateDTO } from "../../middleware/validate.dto.middleware";
 
 const router = Router();
 
 const adminController = container.get<AdminController>(
 	ADMIN_TYPES.AdminController,
 );
-const authGurd = container.get<AuthGurd>(ADMIN_TYPES.AuthGurd);
+const subscriptionPlanController = container.get<SubscriptionPlanController>(
+	SUBSCRIPTION_PLAN_TYPES.SubscriptionPlanController
+);
+const authGuard = container.get<AuthGuard>(ADMIN_TYPES.AuthGuard);
 
 router.post(
 	ADMIN_ROUTES.INVITE,
-	authGurd.authorize(["admin"]),
+	authGuard.authorize(["admin"]),
 	validateDTO(InviteMemberDTO),
 	(req, res, next) => adminController.inviteMember(req, res, next),
 );
 
 router.get(
 	ADMIN_ROUTES.LIST,
-	authGurd.authorize(["admin", "lead"]),
+	authGuard.authorize(["admin", "lead"]),
 	(req, res, next) => adminController.listUsers(req, res, next),
 );
 
@@ -33,31 +38,31 @@ router.post(ADMIN_ROUTES.VERIFY_INVITATION, (req, res, next) =>
 
 router.patch(
 	ADMIN_ROUTES.BLOCK_USER,
-	authGurd.authorize(["admin"]),
+	authGuard.authorize(["admin"]),
 	(req, res, next) => adminController.blockUser(req, res, next),
 );
 
 router.get(
 	ADMIN_ROUTES.DASHBOARD,
-	authGurd.authorize(["admin", "lead"]),
+	authGuard.authorize(["admin", "lead"]),
 	(req, res, next) => adminController.getDashboardStats(req, res, next),
 );
 
 // Subscription endpoints
 router.post(
 	ADMIN_ROUTES.UPGRADE_PLAN,
-	authGurd.authorize(["admin"]),
+	authGuard.authorize(["admin"]),
 	(req, res, next) => adminController.upgradePlan(req, res, next),
 );
 
 router.post(
 	ADMIN_ROUTES.CREATE_STRIPE_SESSION,
-	authGurd.authorize(["admin"]),
+	authGuard.authorize(["admin"]),
 	(req, res, next) => adminController.createStripeSession(req, res, next),
 );
 router.post(
 	ADMIN_ROUTES.VERIFY_STRIPE_SESSION,
-	authGurd.authorize(["admin"]),
+	authGuard.authorize(["admin"]),
 	(req, res, next) => adminController.verifyStripeSession(req, res, next),
 );
 
@@ -71,8 +76,17 @@ router.post(
 
 router.get(
 	ADMIN_ROUTES.GET_SUBSCRIPTION_STATUS,
-	authGurd.authorize(["admin"]),
+	authGuard.authorize(["admin"]),
 	(req, res, next) => adminController.getSubscriptionStatus(req, res, next),
+);
+
+router.get(
+	"/subscription-plans/active",
+	authGuard.authorize(["admin"]),
+	(req, res, next) => {
+		req.query.active = "true";
+		subscriptionPlanController.listPlans(req, res).catch(next);
+	}
 );
 
 export { router as adminRouter };

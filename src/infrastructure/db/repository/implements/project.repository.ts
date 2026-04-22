@@ -156,7 +156,7 @@ export class ProjectRepository
 			return {
 				...project,
 				analytics: doc.analytics,
-			} as any;
+			} as IProjectWithAnalytics;
 		});
 	}
 }

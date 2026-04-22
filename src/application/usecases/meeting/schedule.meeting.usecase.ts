@@ -33,7 +33,7 @@ export class ScheduleMeetingUseCase implements IScheduleMeetingUseCase {
 			type: data.type,
 			status: MeetingStatus.SCHEDULED,
 			duration: data.duration,
-			participants: data.participants?.map((userId: any) => ({ userId })),
+			participants: data.participants?.map((userId: string) => ({ userId })),
 		});
 
 		const savedMeeting = await this.meetingRepository.create(meeting);

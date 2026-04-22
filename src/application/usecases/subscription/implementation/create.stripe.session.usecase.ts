@@ -1,8 +1,10 @@
-import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { inject, injectable } from "inversify";
 import Stripe from "stripe";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
-import { NotFoundError } from "../../../../shared/utils/error-handling/errors/not.found.error";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import type { ICreateStripeSessionUseCase } from "../interface/create.stripe.session.interface";
 
 @injectable()
@@ -12,12 +14,15 @@ export class CreateStripeSessionUseCase implements ICreateStripeSessionUseCase {
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
+		@inject(SUBSCRIPTION_PLAN_TYPES.ISubscriptionPlanRepository)
+		private _subscriptionPlanRepository: ISubscriptionPlanRepository,
 	) {
 		const secretKey = process.env.STRIPE_SECRET_KEY;
 		if (!secretKey) {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
 		this._stripe = new Stripe(secretKey, {
+			// biome-ignore lint/suspicious/noExplicitAny: Stripe version mismatch in SDK types
 			apiVersion: "2024-06-20" as any, // Using a stable version if the specific one is unknown to current SDK types
 			typescript: true,
 		});
@@ -35,6 +40,12 @@ export class CreateStripeSessionUseCase implements ICreateStripeSessionUseCase {
 
 		if (!company) {
 			throw new NotFoundError("Company not found");
+		}
+
+		// Validate that the priceId exists in our dynamic plans
+		const plan = await this._subscriptionPlanRepository.findByStripePriceId(priceId);
+		if (!plan) {
+			throw new NotFoundError(`Subscription plan with Stripe Price ID '${priceId}' not found in database.`);
 		}
 
 		let stripeCustomerId = company.stripeCustomerId;

@@ -1,7 +1,3 @@
-import {
-	PROJECT_LIMITS,
-	SubscriptionPlan,
-} from "@domain/enum/company/subscription.plan.enum";
 import type { Status } from "@domain/enum/user/user.status.enum";
 
 export interface GitHubCredentials {
@@ -24,7 +20,7 @@ export class CompanyEntity {
 	private _githubConnectedAt?: Date;
 	private _githubUsername?: string;
 	private _githubOrganization?: string;
-	private _currentPlan: SubscriptionPlan;
+	private _currentPlan: string;
 	private _projectLimit: number;
 	private _stripeCustomerId?: string;
 	private _stripeSubscriptionId?: string;
@@ -43,7 +39,7 @@ export class CompanyEntity {
 		githubConnectedAt?: Date;
 		githubUsername?: string;
 		githubOrganization?: string;
-		currentPlan: SubscriptionPlan;
+		currentPlan: string;
 		projectLimit: number;
 		stripeCustomerId?: string;
 		stripeSubscriptionId?: string;
@@ -81,15 +77,15 @@ export class CompanyEntity {
 		githubConnectedAt?: Date;
 		githubUsername?: string;
 		githubOrganization?: string;
-		currentPlan?: SubscriptionPlan;
+		currentPlan?: string;
 		projectLimit?: number;
 		stripeCustomerId?: string;
 		stripeSubscriptionId?: string;
 		subscriptionEndDate?: Date;
 		autoRenew?: boolean;
 	}): CompanyEntity {
-		const plan = props.currentPlan ?? SubscriptionPlan.FREE;
-		const limit = props.projectLimit ?? PROJECT_LIMITS[SubscriptionPlan.FREE];
+		const plan = props.currentPlan ?? "Free";
+		const limit = props.projectLimit ?? 2; // Simple default fallback
 		return new CompanyEntity({
 			id: props.id,
 			companyName: props.companyName,
@@ -186,6 +182,8 @@ export class CompanyEntity {
 	}
 
 	hasReachedProjectLimit(currentCount: number): boolean {
+		// Always allow if the plan is Pro (case-insensitive)
+		if (this._currentPlan.toLowerCase().includes("pro")) return false;
 		if (this._projectLimit === -1) return false; // unlimited
 		return currentCount >= this._projectLimit;
 	}

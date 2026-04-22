@@ -2,10 +2,8 @@ import type { ICompanyRepository } from "@infrastructure/db/repository/interface
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
 import { inject, injectable } from "inversify";
-import {
-	PROJECT_LIMITS,
-	SubscriptionPlan,
-} from "../../../../domain/enum/company/subscription.plan.enum";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
 import type { IUpgradeSubscriptionUseCase } from "../interface/upgrade.subscription.interface";
 
 @injectable()
@@ -13,6 +11,8 @@ export class UpgradeSubscriptionUseCase implements IUpgradeSubscriptionUseCase {
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
+		@inject(SUBSCRIPTION_PLAN_TYPES.ISubscriptionPlanRepository)
+		private _subscriptionPlanRepository: ISubscriptionPlanRepository,
 	) {}
 
 	async execute(
@@ -24,24 +24,30 @@ export class UpgradeSubscriptionUseCase implements IUpgradeSubscriptionUseCase {
 			throw new NotFoundError("Company not found");
 		}
 
-		if (company.currentPlan === SubscriptionPlan.PRO) {
+		// Find any 'Pro' plan in the database (e.g. "Pro Plan" or "Pro")
+		const allPlans = await this._subscriptionPlanRepository.findAll();
+		const proPlan = allPlans.find(p => p.name.toLowerCase().includes("pro"));
+		
+		if (!proPlan) {
+			throw new NotFoundError("No plan with 'Pro' in the name found in database. Please create it first in Super Admin.");
+		}
+
+		if (company.currentPlan === proPlan.name) {
 			return {
-				message: "Company is already on the Pro plan",
-				currentPlan: SubscriptionPlan.PRO,
+				message: `Company is already on the ${proPlan.name} plan`,
+				currentPlan: proPlan.name,
 			};
 		}
 
-		const proLimit = PROJECT_LIMITS[SubscriptionPlan.PRO]; // -1 (unlimited)
-
 		await this._companyRepository.updatePlan(
 			companyId,
-			SubscriptionPlan.PRO,
-			proLimit,
+			proPlan.name,
+			proPlan.projectLimit,
 		);
 
 		return {
-			message: "Successfully upgraded to Pro plan",
-			currentPlan: SubscriptionPlan.PRO,
+			message: `Successfully upgraded to ${proPlan.name} plan`,
+			currentPlan: proPlan.name,
 		};
 	}
 }

@@ -12,7 +12,9 @@ import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/sprints/sprint
 import { SUBTASK_TYPE } from "../../../../infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "../../../../infrastructure/di/types/userstory/userstory";
 import { WORKLOG_TYPE } from "../../../../infrastructure/di/types/worklog/worklog";
+import type { SubTaskEntity } from "../../../../domain/entities/subtask.entity";
 import type {
+	IDashboardEnrichedTask,
 	IDeveloperDashboardStats,
 	IGetDeveloperDashboardStatsUseCase,
 } from "../interface/get.developer.dashboard.stats.interface";
@@ -83,14 +85,14 @@ export class GetDeveloperDashboardStatsUseCase
 		const storyMap = new Map(userStories.map((s) => [s.id, s]));
 
 		// Helper to enrich a task
-		const enrichTask = (task: any) => {
+		const enrichTask = (task: SubTaskEntity): IDashboardEnrichedTask => {
 			const story = storyMap.get(task.userStoryId.toString());
 			const project = story ? projectMap.get(story.projectId.toString()) : null;
 			const sprint = story?.sprintId
 				? sprintMap.get(story.sprintId.toString())
 				: null;
 			return {
-				...task,
+				...task.toJSON(),
 				projectName: project?.name || "Unknown Project",
 				sprintName: sprint?.name || "No Sprint",
 				dueDate: sprint?.endDate || null,

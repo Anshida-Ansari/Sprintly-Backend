@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
 import type { CompanyEntity } from "../../../../domain/entities/company.entity";
-import type { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
+
 import type { Status } from "../../../../domain/enum/user/user.status.enum";
 import { COMPANY_TYPES } from "../../../di/types/company/company.types";
-import type { CompanyPersistenceMapper } from "../../../mappers/company.persistance.mapper";
+import type { CompanyPersistenceMapper } from "../../../mappers/company.persistence.mapper";
 import type { ICompanyRepository } from "../interface/company.interface";
 import { BaseRepository } from "./base.repository";
 
@@ -53,7 +53,7 @@ export class CompanyRepository
 
 	async updatePlan(
 		companyId: string,
-		plan: SubscriptionPlan,
+		plan: string,
 		projectLimit: number,
 		stripeCustomerId?: string,
 		stripeSubscriptionId?: string,

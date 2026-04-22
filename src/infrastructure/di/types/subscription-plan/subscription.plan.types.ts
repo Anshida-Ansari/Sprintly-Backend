@@ -6,4 +6,5 @@ export const SUBSCRIPTION_PLAN_TYPES = {
     IUpdateSubscriptionPlanUseCase: Symbol.for("IUpdateSubscriptionPlanUseCase"),
     IDeleteSubscriptionPlanUseCase: Symbol.for("IDeleteSubscriptionPlanUseCase"),
     IGetActiveSubscriptionPlansUseCase: Symbol.for("IGetActiveSubscriptionPlansUseCase"),
+    SubscriptionPlanController: Symbol.for("SubscriptionPlanController"),
 };

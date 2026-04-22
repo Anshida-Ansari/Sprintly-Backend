@@ -51,7 +51,7 @@ export class MeetingRepository
 		if (status === "COMPLETED") {
 			const endTime = new Date();
 			update.endTime = endTime;
-			const startTime = new Date((meeting as any).date as unknown as string);
+			const startTime = new Date((meeting as unknown as { date: Date }).date);
 			update.duration = Math.floor(
 				(endTime.getTime() - startTime.getTime()) / 1000 / 60,
 			);
@@ -59,7 +59,7 @@ export class MeetingRepository
 			update.cancelledAt = new Date();
 		}
 
-		await this.model.findByIdAndUpdate((meeting as any)._id, update).exec();
+		await this.model.findByIdAndUpdate((meeting as unknown as { id: string }).id, update).exec();
 	}
 
 	async findByRoomId(roomId: string): Promise<MeetingEntity | null> {

@@ -1,4 +1,4 @@
-import type { UserPersistenceMapper } from "@infrastructure/mappers/user.percistance.mapper";
+import type { UserPersistenceMapper } from "@infrastructure/mappers/user.persistence.mapper";
 import { inject, injectable } from "inversify";
 import type { Model } from "mongoose";
 import type { UserEntity } from "../../../../domain/entities/user.entity";

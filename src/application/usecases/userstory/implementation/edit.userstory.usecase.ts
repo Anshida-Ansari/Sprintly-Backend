@@ -22,7 +22,7 @@ import { inject, injectable } from "inversify";
 export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 	constructor(
 		@inject(USERSTORY_TYPE.IUserStoryRepository)
-		private _userStoryReposiotry: IUserStoryRepository,
+		private _userStoryRepository: IUserStoryRepository,
 		@inject(PROJECT_TYPE.IProjectRepository)
 		private _projectRepository: IProjectRepository,
 	) {}
@@ -60,7 +60,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 			throw new ForbiddenError(ErrorMessage.FORBIDDEN);
 		}
 
-		const userStory = await this._userStoryReposiotry.findById(userstoryId);
+		const userStory = await this._userStoryRepository.findById(userstoryId);
 
 		if (!userStory) {
 			throw new NotFoundError(ErrorMessage.NOT_FOUND);
@@ -91,7 +91,7 @@ export class EditUserStoryUseCase implements IEditUserstoryUseCase {
 			acceptanceCriteria: dto.acceptanceCriteria,
 		});
 
-		const updatedUserstory = await this._userStoryReposiotry.update(
+		const updatedUserstory = await this._userStoryRepository.update(
 			userstoryId,
 			userStory,
 		);

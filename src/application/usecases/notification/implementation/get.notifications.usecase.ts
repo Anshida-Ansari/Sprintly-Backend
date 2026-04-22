@@ -1,5 +1,5 @@
 import type { NotificationEntity } from "@domain/entities/notification.entity";
-import type { INotificationReposiotory } from "@infrastructure/db/repository/interface/notification.interface";
+import type { INotificationRepository } from "@infrastructure/db/repository/interface/notification.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { inject, injectable } from "inversify";
 import type { IGetNotificationsUseCase } from "../interface/get.notifications.interface";
@@ -7,8 +7,8 @@ import type { IGetNotificationsUseCase } from "../interface/get.notifications.in
 @injectable()
 export class GetNotificationsUseCase implements IGetNotificationsUseCase {
 	constructor(
-		@inject(NOTIFICATION_TYPE.INotificationReposiotory)
-		private readonly _notificationRepository: INotificationReposiotory,
+		@inject(NOTIFICATION_TYPE.INotificationRepository)
+		private readonly _notificationRepository: INotificationRepository,
 	) {}
 
 	async execute(userId: string): Promise<NotificationEntity[]> {

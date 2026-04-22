@@ -2,7 +2,7 @@ import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import type { NextFunction, Request, Response } from "express";
 import { ClientErrorStatus } from "../../../domain/enum/status-codes/client.error.status.enum";
-import { ServerErrorStatus } from "../../../domain/enum/status-codes/sever.error.status.enum";
+import { ServerErrorStatus } from "../../../domain/enum/status-codes/server.error.status.enum";
 
 export const validateDTO = <T extends object>(
 	dtoClass: new (...args: unknown[]) => T,

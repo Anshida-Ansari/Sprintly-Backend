@@ -1,7 +1,7 @@
 import { NotificationEntity } from "@domain/entities/notification.entity";
 import type { NotificationType } from "@domain/enum/notification/notification.types";
 import type { INotificationSocketService } from "@domain/interface/notification.socket.service.interface";
-import type { INotificationReposiotory } from "@infrastructure/db/repository/interface/notification.interface";
+import type { INotificationRepository } from "@infrastructure/db/repository/interface/notification.interface";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { inject, injectable } from "inversify";
 import type { ICreateNotificationUseCase } from "../interface/create.notification.interface";
@@ -9,8 +9,8 @@ import type { ICreateNotificationUseCase } from "../interface/create.notificatio
 @injectable()
 export class CreateNotificationUseCase implements ICreateNotificationUseCase {
 	constructor(
-		@inject(NOTIFICATION_TYPE.INotificationReposiotory)
-		private readonly _notificationRepository: INotificationReposiotory,
+		@inject(NOTIFICATION_TYPE.INotificationRepository)
+		private readonly _notificationRepository: INotificationRepository,
 		@inject(NOTIFICATION_TYPE.INotificationSocketService)
 		private readonly _notificationSocketService: INotificationSocketService,
 	) {}

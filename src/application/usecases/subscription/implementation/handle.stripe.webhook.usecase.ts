@@ -1,30 +1,30 @@
 import { inject, injectable } from "inversify";
 import Stripe from "stripe";
-import {
-	PROJECT_LIMITS,
-	SubscriptionPlan,
-} from "../../../../domain/enum/company/subscription.plan.enum.js";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
 import type { ITransactionRepository } from "../../../../infrastructure/db/repository/interface/transaction.interface.js";
+import type { ISubscriptionPlanRepository } from "../../../../infrastructure/db/repository/interface/subscription.plan.interface.js";
 import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types.js";
 import { TRANSACTION_TYPES } from "../../../../infrastructure/di/types/transaction/transaction.types.js";
+import { SUBSCRIPTION_PLAN_TYPES } from "../../../../infrastructure/di/types/subscription-plan/subscription.plan.types.js";
 import type { IHandleStripeWebhookUseCase } from "../interface/handle.stripe.webhook.interface.js";
 
 @injectable()
 export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 	private _stripe: Stripe;
-
 	constructor(
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private _companyRepository: ICompanyRepository,
 		@inject(TRANSACTION_TYPES.ITransactionRepository)
 		private _transactionRepository: ITransactionRepository,
+		@inject(SUBSCRIPTION_PLAN_TYPES.ISubscriptionPlanRepository)
+		private _subscriptionPlanRepository: ISubscriptionPlanRepository,
 	) {
 		const secretKey = process.env.STRIPE_SECRET_KEY;
 		if (!secretKey) {
 			throw new Error("STRIPE_SECRET_KEY is not configured");
 		}
 		this._stripe = new Stripe(secretKey, {
+			// biome-ignore lint/suspicious/noExplicitAny: Stripe version mismatch in SDK types
 			apiVersion: "2024-06-20" as any,
 			typescript: true,
 		});
@@ -65,16 +65,32 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 
 				const stripeCustomerId = session.customer as string;
 				const stripeSubscriptionId = session.subscription as string;
-				const proLimit = PROJECT_LIMITS[SubscriptionPlan.PRO];
 
-				// Calculate end date (30 days from now as fallback, will be overridden by invoice event)
-				const endDate = new Date();
-				endDate.setDate(endDate.getDate() + 30);
+				// Fetch subscription to get price ID
+				const subscription = await this._stripe.subscriptions.retrieve(stripeSubscriptionId);
+				const priceId = subscription.items.data[0]?.price.id;
+
+				let planName = "Free"; // Default fallback if something goes wrong
+				let projectLimit = 2;
+
+				if (priceId) {
+					const plan = await this._subscriptionPlanRepository.findByStripePriceId(priceId);
+					if (plan) {
+						planName = plan.name;
+						projectLimit = plan.projectLimit;
+					} else {
+						console.error(`[Stripe Webhook] No matching dynamic plan found for priceId: ${priceId}`);
+						// If we can't find the plan by priceId, we might want to look for any plan with this priceId or logs
+					}
+				}
+
+				// Calculate end date (will be overridden by invoice event later)
+				const endDate = new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000);
 
 				await this._companyRepository.updatePlan(
 					companyId,
-					SubscriptionPlan.PRO,
-					proLimit,
+					planName,
+					projectLimit,
 					stripeCustomerId,
 					stripeSubscriptionId,
 					endDate,
@@ -92,7 +108,7 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 					billingReason: "subscription_create",
 				});
 
-				console.log(`[Stripe Webhook] Company ${companyId} upgraded to PRO`);
+				console.log(`[Stripe Webhook] Company ${companyId} upgraded to ${planName}`);
 				break;
 			}
 
@@ -114,32 +130,37 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 						amount: invoice.amount_paid / 100,
 						currency: invoice.currency,
 						status: "succeeded",
-						billingReason: (invoice.billing_reason as any) || undefined,
+						billingReason: invoice.billing_reason || undefined,
 					});
 
 					// If it's a subscription renewal, update the end date
-					if (
-						(invoice as any).subscription &&
-						invoice.billing_reason !== "subscription_create"
-					) {
-						const subscriptionId = (invoice as any).subscription as string;
+					if ((invoice as unknown as { subscription: string }).subscription && invoice.billing_reason !== "subscription_create") {
+						const subscriptionId = (invoice as unknown as { subscription: string }).subscription;
 						const subscription =
 							await this._stripe.subscriptions.retrieve(subscriptionId);
-						const periodEnd = new Date(
-							(subscription as any).current_period_end * 1000,
-						);
-						const proLimit = PROJECT_LIMITS[SubscriptionPlan.PRO];
+						const periodEnd = new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000);
+						const priceId = (invoice.lines.data[0] as unknown as { price?: { id: string } })?.price?.id;
+						let planName = company.currentPlan;
+						let projectLimit = company.projectLimit;
+						
+						if (priceId) {
+							const plan = await this._subscriptionPlanRepository.findByStripePriceId(priceId);
+							if (plan) {
+								planName = plan.name;
+								projectLimit = plan.projectLimit;
+							}
+						}
 
 						await this._companyRepository.updatePlan(
 							company.id,
-							SubscriptionPlan.PRO,
-							proLimit,
+							planName,
+							projectLimit,
 							customerId,
 							subscriptionId,
 							periodEnd,
 						);
 						console.log(
-							`[Stripe Webhook] Company ${company.id} renewed PRO until ${periodEnd.toISOString()}`,
+							`[Stripe Webhook] Company ${company.id} renewed plan ${planName} until ${periodEnd.toISOString()}`,
 						);
 					}
 				}
@@ -155,14 +176,19 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 					await this._companyRepository.findByStripeCustomerId(customerId);
 
 				if (company?.id) {
-					const freeLimit = PROJECT_LIMITS[SubscriptionPlan.FREE];
+					// Fetch default free plan
+					const allPlans = await this._subscriptionPlanRepository.findAll();
+					const freePlan = allPlans.find(p => p.price === 0);
+					const freeLimit = freePlan ? freePlan.projectLimit : 2;
+					const planName = freePlan ? freePlan.name : "free";
+
 					await this._companyRepository.updatePlan(
 						company.id,
-						SubscriptionPlan.FREE,
+						planName,
 						freeLimit,
 					);
 					console.log(
-						`[Stripe Webhook] Company ${company.id} downgraded to FREE (payment failed)`,
+						`[Stripe Webhook] Company ${company.id} downgraded to ${planName} (payment failed)`,
 					);
 				}
 				break;
@@ -177,10 +203,15 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 					await this._companyRepository.findByStripeCustomerId(customerId);
 
 				if (company?.id) {
-					const freeLimit = PROJECT_LIMITS[SubscriptionPlan.FREE];
+					// Fetch default free plan
+					const allPlans = await this._subscriptionPlanRepository.findAll();
+					const freePlan = allPlans.find(p => p.price === 0);
+					const freeLimit = freePlan ? freePlan.projectLimit : 2;
+					const planName = freePlan ? freePlan.name : "free";
+
 					await this._companyRepository.updatePlan(
 						company.id,
-						SubscriptionPlan.FREE,
+						planName,
 						freeLimit,
 						undefined,
 						undefined,
@@ -188,7 +219,7 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 						false, // autoRenew OFF
 					);
 					console.log(
-						`[Stripe Webhook] Company ${company.id} downgraded to FREE (subscription cancelled)`,
+						`[Stripe Webhook] Company ${company.id} downgraded to ${planName} (subscription cancelled)`,
 					);
 				}
 				break;

@@ -72,7 +72,7 @@ export class SprintsRepository
 		};
 
 		if (excludeSprintId) {
-			(filter as any)._id = { $ne: excludeSprintId };
+			(filter as Record<string, unknown>)._id = { $ne: excludeSprintId };
 		}
 
 		const count = await this.model.countDocuments(filter);
@@ -106,11 +106,11 @@ export class SprintsRepository
 		};
 
 		if (search) {
-			(filter as any).name = { $regex: search, $options: "i" };
+			(filter as Record<string, unknown>).name = { $regex: search, $options: "i" };
 		}
 
 		if (status) {
-			(filter as any).status = status;
+			(filter as Record<string, unknown>).status = status;
 		}
 
 		const skip = (page - 1) * limit;

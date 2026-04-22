@@ -78,28 +78,26 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 				}));
 		} else {
 			totalWork = userStories.reduce(
-				(sum, us) => sum + (((us as any).estimationPoints as number) || 0),
+				(sum, us) => sum + (us.estimationPoints || 0),
 				0,
 			);
 			completedData = userStories
 				.filter(
 					(us) =>
-						(us as any).status === UserStoryStatus.DONE &&
-						((us as any).completedAt || (us as any).updatedAt),
+						us.status === UserStoryStatus.DONE &&
+						(us.completedAt || us.updatedAt),
 				)
 				.map((us) => ({
-					burned: ((us as any).estimationPoints as number) || 0,
-					date: (
-						((us as any).completedAt as Date) || ((us as any).updatedAt as Date)
-					)
-						.toISOString()
+					burned: us.estimationPoints || 0,
+					date: (us.completedAt || us.updatedAt)
+						?.toISOString()
 						.split("T")[0],
 				}));
 		}
 
 		return this.calculateBurndown(
-			(sprint as any).startDate as Date,
-			(sprint as any).endDate as Date,
+			sprint.startDate,
+			sprint.endDate,
 			totalWork,
 			completedData,
 		);
@@ -144,31 +142,28 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 				}));
 		} else {
 			const userStoriesAssigned = userStories.filter((us) =>
-				(us as any).assignedTo?.some((id: any) => id.toString() === userId),
+				us.assignedTo?.some((id) => id.toString() === userId),
 			);
 			totalWork = userStoriesAssigned.reduce(
-				(sum, us) => sum + (((us as any).estimationPoints as number) || 0),
+				(sum, us) => sum + (us.estimationPoints || 0),
 				0,
 			);
-			completedData = userStoriesAssigned
-				.filter(
-					(us) =>
-						(us as any).status === UserStoryStatus.DONE &&
-						((us as any).completedAt || (us as any).updatedAt),
+			completedData = userStoriesAssigned.filter(
+				(us) =>
+						us.status === UserStoryStatus.DONE &&
+						(us.completedAt || us.updatedAt),
 				)
 				.map((us) => ({
-					burned: ((us as any).estimationPoints as number) || 0,
-					date: (
-						((us as any).completedAt as Date) || ((us as any).updatedAt as Date)
-					)
-						.toISOString()
+					burned: us.estimationPoints || 0,
+					date: (us.completedAt || us.updatedAt)
+						?.toISOString()
 						.split("T")[0],
 				}));
 		}
 
 		return this.calculateBurndown(
-			(sprint as any).startDate as Date,
-			(sprint as any).endDate as Date,
+			sprint.startDate,
+			sprint.endDate,
 			totalWork,
 			completedData,
 		);
@@ -265,7 +260,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 													{
 														$in: [
 															"$userStoryId",
-															(subtaskMatchQuery.userStoryId as any).$in,
+															(subtaskMatchQuery.userStoryId as { $in: mongoose.Types.ObjectId[] }).$in,
 														],
 													},
 												]

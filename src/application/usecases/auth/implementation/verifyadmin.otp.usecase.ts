@@ -12,10 +12,12 @@ import type { ICompanyRepository } from "@infrastructure/db/repository/interface
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 
-import type { CompanyPersistenceMapper } from "@infrastructure/mappers/company.persistance.mapper";
-import type { UserPersistenceMapper } from "@infrastructure/mappers/user.percistance.mapper";
+import type { CompanyPersistenceMapper } from "@infrastructure/mappers/company.persistence.mapper";
+import type { UserPersistenceMapper } from "@infrastructure/mappers/user.persistence.mapper";
 import { redisClient } from "@infrastructure/providers/redis/redis.provider";
 
 import { InternalServerError } from "@shared/utils/error-handling/errors/internal.server.error";
@@ -31,16 +33,19 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 		private readonly _userRepository: IUserRepository,
 
 		@inject(USER_TYPES.UserPersistenceMapper)
-		private readonly _userPersistance: UserPersistenceMapper,
+		private readonly _userPersistence: UserPersistenceMapper,
 
 		@inject(COMPANY_TYPES.ICompanyRepository)
 		private readonly _companyRepository: ICompanyRepository,
 
 		@inject(COMPANY_TYPES.CompanyPersistenceMapper)
-		private readonly _companyPersistance: CompanyPersistenceMapper,
+		private readonly _companyPersistence: CompanyPersistenceMapper,
 
 		@inject(NOTIFICATION_TYPE.ICreateNotificationUseCase)
 		private readonly _createNotificationUseCase: ICreateNotificationUseCase,
+
+		@inject(SUBSCRIPTION_PLAN_TYPES.ISubscriptionPlanRepository)
+		private readonly _subscriptionPlanRepository: ISubscriptionPlanRepository,
 	) {}
 
 	async execute(dto: VerifyOtpDTO): Promise<{
@@ -73,18 +78,25 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 			adminId: undefined,
 		});
 
-		const adminMongo = this._userPersistance.toMongo(adminEntity);
+		const adminMongo = this._userPersistence.toMongo(adminEntity);
 		const newAdmin = await this._userRepository.create(adminMongo);
 
 		if (!newAdmin.id) throw new InternalServerError("Failed to create admin");
+
+		const allPlans = await this._subscriptionPlanRepository.findAll();
+		const freePlan = allPlans.find(p => p.price === 0);
+		const planName = freePlan ? freePlan.name : "free";
+		const projectLimit = freePlan ? freePlan.projectLimit : 2;
 
 		const companyEntity = CompanyEntity.create({
 			companyName: parsed.companyName,
 			adminId: newAdmin.id.toString(),
 			status: Status.PENDING,
+			currentPlan: planName,
+			projectLimit: projectLimit,
 		});
 
-		const companyMongo = this._companyPersistance.toMongo(companyEntity);
+		const companyMongo = this._companyPersistence.toMongo(companyEntity);
 		const newCompany = await this._companyRepository.create(companyMongo);
 
 		if (!newCompany.id)

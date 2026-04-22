@@ -2,9 +2,9 @@ import { ContainerModule } from "inversify";
 import type { Model } from "mongoose";
 import type { ICompany } from "../../../db/interface/company.interface";
 import { CompanyModel } from "../../../db/models/company.model";
-import { CompanyRepository } from "../../../db/repository/implements/company.repositry";
+import { CompanyRepository } from "../../../db/repository/implements/company.repository";
 import type { ICompanyRepository } from "../../../db/repository/interface/company.interface";
-import { CompanyPersistenceMapper } from "../../../mappers/company.persistance.mapper";
+import { CompanyPersistenceMapper } from "../../../mappers/company.persistence.mapper";
 import { COMPANY_TYPES } from "../../types/company/company.types";
 
 export const CompanyModule = new ContainerModule(({ bind }) => {

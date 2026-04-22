@@ -62,7 +62,7 @@ export class GetMyUserStoriesUseCase implements IGetMyUserStoriesUseCase {
 				acceptanceCriteria: story.acceptanceCriteria,
 				createdAt: story.createdAt,
 				updatedAt: story.updatedAt,
-				subtasks: storySubtasks as any,
+				subtasks: storySubtasks as unknown as IMyUserStoryResponse[],
 			};
 		});
 

@@ -1,3 +1,22 @@
+export interface IDashboardEnrichedTask {
+	id?: string;
+	userStoryId: string;
+	companyId: string;
+	title: string;
+	status: string;
+	assignedTo?: string;
+	estimatedHours?: number;
+	actualHours?: number;
+	comments?: unknown[];
+	attachments?: unknown[];
+	createdAt?: Date;
+	updatedAt?: Date;
+	completedAt?: Date;
+	projectName: string;
+	sprintName: string;
+	dueDate: Date | null;
+}
+
 export interface IDeveloperDashboardStats {
 	currentFocus: {
 		id: string;
@@ -19,9 +38,9 @@ export interface IDeveloperDashboardStats {
 		isOverdue: boolean;
 	}[];
 	myTasks: {
-		pending: any[];
-		inProgress: any[];
-		completed: any[];
+		pending: IDashboardEnrichedTask[];
+		inProgress: IDashboardEnrichedTask[];
+		completed: IDashboardEnrichedTask[];
 	};
 	activeSprint: {
 		id: string;

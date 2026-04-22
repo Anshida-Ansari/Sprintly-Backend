@@ -1,5 +1,5 @@
 import type { CompanyEntity } from "../../../../domain/entities/company.entity";
-import type { SubscriptionPlan } from "../../../../domain/enum/company/subscription.plan.enum";
+
 import type { Status } from "../../../../domain/enum/user/user.status.enum";
 import type { IBaseRepository } from "./base.repository";
 
@@ -11,7 +11,7 @@ export interface ICompanyRepository extends IBaseRepository<CompanyEntity> {
 	findByStripeCustomerId(customerId: string): Promise<CompanyEntity | null>;
 	updatePlan(
 		companyId: string,
-		plan: SubscriptionPlan,
+		plan: string,
 		projectLimit: number,
 		stripeCustomerId?: string,
 		stripeSubscriptionId?: string,
