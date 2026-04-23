@@ -1,10 +1,7 @@
 services:
   # ─── Sprintly Backend API ────────────────────────────────────────────────────
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: production
+    image: anshidaansari/sprintly-backend:latest
     container_name: sprintly-api
     restart: unless-stopped
     ports:
