@@ -23,8 +23,8 @@
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist"],
-	"ts-node": {
-		"esm": true,
-		"experimentalSpecifierResolution": "node"
+	"tsc-alias": {
+		"resolveFullPaths": true,
+		"resolveFullExtension": ".js"
 	}
 }
