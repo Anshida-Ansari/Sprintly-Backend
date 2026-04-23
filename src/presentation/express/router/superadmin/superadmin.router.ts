@@ -2,10 +2,10 @@ import { SUPERADMIN_ROUTES } from "@shared/constants/superadmin.routes.constants
 import { Router } from "express";
 import { container } from "../../../../infrastructure/di/inversify.di";
 import { ADMIN_TYPES } from "../../../../infrastructure/di/types/admin/admin.types";
-import { SUPERADMIN_TYPES } from "../../../../infrastructure/di/types/superadmin/superadmin.types";
-import type { SuperAdminController } from "../../../http/controllers/superadmin.controller";
-import type { SubscriptionPlanController } from "../../../http/controllers/subscription.plan.controller.js";
 import { SUBSCRIPTION_PLAN_TYPES } from "../../../../infrastructure/di/types/subscription-plan/subscription.plan.types.js";
+import { SUPERADMIN_TYPES } from "../../../../infrastructure/di/types/superadmin/superadmin.types";
+import type { SubscriptionPlanController } from "../../../http/controllers/subscription.plan.controller.js";
+import type { SuperAdminController } from "../../../http/controllers/superadmin.controller";
 import type { AuthGuard } from "../../middleware/auth.guard";
 
 const router = Router();
@@ -14,7 +14,7 @@ const superadminController = container.get<SuperAdminController>(
 	SUPERADMIN_TYPES.SuperAdminController,
 );
 const subscriptionPlanController = container.get<SubscriptionPlanController>(
-	SUBSCRIPTION_PLAN_TYPES.SubscriptionPlanController
+	SUBSCRIPTION_PLAN_TYPES.SubscriptionPlanController,
 );
 const authGuard = container.get<AuthGuard>(ADMIN_TYPES.AuthGuard);
 
@@ -96,22 +96,26 @@ router.get(
 router.post(
 	"/subscription-plans",
 	authGuard.authorize(["superadmin"]),
-	(req, res, next) => subscriptionPlanController.createPlan(req, res).catch(next)
+	(req, res, next) =>
+		subscriptionPlanController.createPlan(req, res).catch(next),
 );
 router.get(
 	"/subscription-plans",
 	authGuard.authorize(["superadmin"]),
-	(req, res, next) => subscriptionPlanController.listPlans(req, res).catch(next)
+	(req, res, next) =>
+		subscriptionPlanController.listPlans(req, res).catch(next),
 );
 router.put(
 	"/subscription-plans/:id",
 	authGuard.authorize(["superadmin"]),
-	(req, res, next) => subscriptionPlanController.updatePlan(req, res).catch(next)
+	(req, res, next) =>
+		subscriptionPlanController.updatePlan(req, res).catch(next),
 );
 router.delete(
 	"/subscription-plans/:id",
 	authGuard.authorize(["superadmin"]),
-	(req, res, next) => subscriptionPlanController.deletePlan(req, res).catch(next)
+	(req, res, next) =>
+		subscriptionPlanController.deletePlan(req, res).catch(next),
 );
 
 export { router as superadminRouter };

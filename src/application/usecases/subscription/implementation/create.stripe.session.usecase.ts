@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import Stripe from "stripe";
-import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
 import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
-import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { inject, injectable } from "inversify";
+import Stripe from "stripe";
 import type { ICreateStripeSessionUseCase } from "../interface/create.stripe.session.interface";
 
 @injectable()
@@ -43,9 +43,12 @@ export class CreateStripeSessionUseCase implements ICreateStripeSessionUseCase {
 		}
 
 		// Validate that the priceId exists in our dynamic plans
-		const plan = await this._subscriptionPlanRepository.findByStripePriceId(priceId);
+		const plan =
+			await this._subscriptionPlanRepository.findByStripePriceId(priceId);
 		if (!plan) {
-			throw new NotFoundError(`Subscription plan with Stripe Price ID '${priceId}' not found in database.`);
+			throw new NotFoundError(
+				`Subscription plan with Stripe Price ID '${priceId}' not found in database.`,
+			);
 		}
 
 		let stripeCustomerId = company.stripeCustomerId;

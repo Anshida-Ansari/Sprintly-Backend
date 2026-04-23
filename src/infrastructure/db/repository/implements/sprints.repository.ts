@@ -106,7 +106,10 @@ export class SprintsRepository
 		};
 
 		if (search) {
-			(filter as Record<string, unknown>).name = { $regex: search, $options: "i" };
+			(filter as Record<string, unknown>).name = {
+				$regex: search,
+				$options: "i",
+			};
 		}
 
 		if (status) {

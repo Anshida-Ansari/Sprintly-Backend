@@ -1,9 +1,9 @@
+import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 import { AI_TYPES } from "@infrastructure/di/types/ai/ai.types";
 import Groq from "groq-sdk";
 import { inject, injectable } from "inversify";
 import type { IAiChatUseCase } from "../interface/ai.chat.interface";
 import type { IAiDataAggregator } from "../interface/ai.data-aggregator.interface";
-import type { SubTaskEntity } from "@domain/entities/subtask.entity";
 
 const SYSTEM_PROMPT = `You are an AI assistant integrated into a Project Management System.
 
@@ -89,7 +89,7 @@ Description: ${projectContext.projectInfo.description}
 Status: ${projectContext.projectInfo.status}
 `
 			: "";
-			
+
 		if (projectContext?.companyProjects) {
 			projectBackground += `
 COMPANY CONTEXT:

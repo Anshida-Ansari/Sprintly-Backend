@@ -45,4 +45,7 @@ export const subscriptionPlanSchema = new mongoose.Schema(
 	},
 );
 
-export const SubscriptionPlanModel = mongoose.model("SubscriptionPlan", subscriptionPlanSchema);
+export const SubscriptionPlanModel = mongoose.model(
+	"SubscriptionPlan",
+	subscriptionPlanSchema,
+);

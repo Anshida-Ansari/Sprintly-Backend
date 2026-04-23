@@ -102,8 +102,7 @@ export class WorkLogRepository
 			const dateQuery: Record<string, unknown> = {};
 			if (filters.startDate)
 				dateQuery.$gte = new Date(filters.startDate as string);
-			if (filters.endDate)
-				dateQuery.$lte = new Date(filters.endDate as string);
+			if (filters.endDate) dateQuery.$lte = new Date(filters.endDate as string);
 			matchQuery.date = dateQuery;
 		}
 

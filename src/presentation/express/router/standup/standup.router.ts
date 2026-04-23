@@ -18,49 +18,49 @@ const authGuard = container.get<AuthGuard>(ADMIN_TYPES.AuthGuard);
 
 router.post(
 	STANDUP.SUBMIT_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	validateDTO(SubmitStandupDTO),
 	(req, res, next) => standupController.submitStandup(req, res, next),
 );
 router.post(
 	STANDUP.SUBMIT_PROJECT_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	validateDTO(SubmitStandupDTO),
 	(req, res, next) => standupController.submitStandup(req, res, next),
 );
 
 router.post(
 	STANDUP.ADD_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	validateDTO(AddStandupCommentDTO),
 	(req, res, next) => standupController.addStandup(req, res, next),
 );
 router.post(
 	STANDUP.ADD_PROJECT_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	validateDTO(AddStandupCommentDTO),
 	(req, res, next) => standupController.addStandup(req, res, next),
 );
 
 router.get(
 	STANDUP.LIST_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => standupController.listStandups(req, res, next),
 );
 router.get(
 	STANDUP.LIST_PROJECT_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => standupController.listStandups(req, res, next),
 );
 
 router.post(
 	STANDUP.TODAY_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => standupController.getMyTodayStandup(req, res, next),
 );
 router.post(
 	STANDUP.TODAY_PROJECT_STANDUP,
-	authGuard.authorize(["admin", "developers","lead"]),
+	authGuard.authorize(["admin", "developers", "lead"]),
 	(req, res, next) => standupController.getMyTodayStandup(req, res, next),
 );
 

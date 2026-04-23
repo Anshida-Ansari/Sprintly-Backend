@@ -9,11 +9,11 @@ import { Role } from "@domain/enum/role.enum";
 import { UserStatus } from "@domain/enum/status.enum";
 import { Status } from "@domain/enum/user/user.status.enum";
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
 import type { IUserRepository } from "@infrastructure/db/repository/interface/user.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import { NOTIFICATION_TYPE } from "@infrastructure/di/types/notification/notification";
 import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
-import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
 import { USER_TYPES } from "@infrastructure/di/types/user/user.types";
 
 import type { CompanyPersistenceMapper } from "@infrastructure/mappers/company.persistence.mapper";
@@ -84,7 +84,7 @@ export class VerifyAdminOtpUseCase implements IVerifyOtpUseCase {
 		if (!newAdmin.id) throw new InternalServerError("Failed to create admin");
 
 		const allPlans = await this._subscriptionPlanRepository.findAll();
-		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlan = allPlans.find((p) => p.price === 0);
 		const planName = freePlan ? freePlan.name : "free";
 		const projectLimit = freePlan ? freePlan.projectLimit : 2;
 

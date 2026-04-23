@@ -1,15 +1,17 @@
-import { inject, injectable } from "inversify";
 import type { CompanyEntity } from "@domain/entities/company.entity";
-import type { TransactionEntity } from "@infrastructure/db/repository/interface/transaction.interface";
 import type { ProjectEntity } from "@domain/entities/project.entity";
-import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
-import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
-import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
 import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
-import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
 import type { IProjectRepository } from "@infrastructure/db/repository/interface/project.interface";
+import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
+import type {
+	ITransactionRepository,
+	TransactionEntity,
+} from "@infrastructure/db/repository/interface/transaction.interface";
+import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
+import { PROJECT_TYPE } from "@infrastructure/di/types/Project/project.types";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
 import { TRANSACTION_TYPES } from "@infrastructure/di/types/transaction/transaction.types";
-import type { ITransactionRepository } from "@infrastructure/db/repository/interface/transaction.interface";
+import { inject, injectable } from "inversify";
 import type {
 	IGetSubscriptionReportsUseCase,
 	PaginatedResult,
@@ -39,21 +41,23 @@ export class GetSubscriptionReportsUseCase
 	): Promise<PaginatedResult<SubscriptionReportItem>> {
 		const skip = (page - 1) * limit;
 		const allPlans = await this._subscriptionPlanRepository.findAll();
-		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlan = allPlans.find((p) => p.price === 0);
 		const freePlanName = freePlan ? freePlan.name : "Free";
 
-		const companies = await this._companyRepository.findAll(); 
+		const companies = await this._companyRepository.findAll();
 		const total = companies.length;
 		const now = new Date();
 
-		const data = companies.slice(skip, skip + limit).map((c: CompanyEntity) => ({
-			companyName: c.companyName,
-			plan: c.currentPlan,
-			startDate: c.createdAt || "N/A",
-			endDate: c.subscriptionEndDate || "N/A",
-			status: this._getStatus(c, now, freePlanName),
-			autoRenew: c.autoRenew,
-		}));
+		const data = companies
+			.slice(skip, skip + limit)
+			.map((c: CompanyEntity) => ({
+				companyName: c.companyName,
+				plan: c.currentPlan,
+				startDate: c.createdAt || "N/A",
+				endDate: c.subscriptionEndDate || "N/A",
+				status: this._getStatus(c, now, freePlanName),
+				autoRenew: c.autoRenew,
+			}));
 
 		return { data, total, page, limit };
 	}
@@ -69,7 +73,8 @@ export class GetSubscriptionReportsUseCase
 
 		const data = transactions
 			.sort(
-				(a: TransactionEntity, b: TransactionEntity) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0),
+				(a: TransactionEntity, b: TransactionEntity) =>
+					(b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0),
 			)
 			.slice(skip, skip + limit)
 			.map((t: TransactionEntity) => {
@@ -98,7 +103,7 @@ export class GetSubscriptionReportsUseCase
 		in7Days.setDate(now.getDate() + 7);
 
 		const allPlans = await this._subscriptionPlanRepository.findAll();
-		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlan = allPlans.find((p) => p.price === 0);
 		const freePlanName = freePlan ? freePlan.name : "Free";
 
 		const companies = await this._companyRepository.findAll();
@@ -133,7 +138,7 @@ export class GetSubscriptionReportsUseCase
 		const projects = await this._projectRepository.findAll();
 
 		const allPlans = await this._subscriptionPlanRepository.findAll();
-		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlan = allPlans.find((p) => p.price === 0);
 		const freePlanName = freePlan ? freePlan.name : "Free";
 
 		const trials = companies.filter(

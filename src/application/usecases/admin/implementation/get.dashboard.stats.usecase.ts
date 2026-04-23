@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
+import type { SubTaskEntity } from "../../../../domain/entities/subtask.entity.js";
 import { ProjectStatus } from "../../../../domain/enum/project/project.status.js";
 import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status.js";
 import { UserStoryStatus } from "../../../../domain/enum/userstory/user.story.status.js";
-import type { SubTaskEntity } from "../../../../domain/entities/subtask.entity.js";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
 import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface.js";
 import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface.js";

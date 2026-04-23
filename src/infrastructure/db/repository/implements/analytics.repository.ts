@@ -89,9 +89,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 				)
 				.map((us) => ({
 					burned: us.estimationPoints || 0,
-					date: (us.completedAt || us.updatedAt)
-						?.toISOString()
-						.split("T")[0],
+					date: (us.completedAt || us.updatedAt)?.toISOString().split("T")[0],
 				}));
 		}
 
@@ -148,16 +146,15 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 				(sum, us) => sum + (us.estimationPoints || 0),
 				0,
 			);
-			completedData = userStoriesAssigned.filter(
-				(us) =>
+			completedData = userStoriesAssigned
+				.filter(
+					(us) =>
 						us.status === UserStoryStatus.DONE &&
 						(us.completedAt || us.updatedAt),
 				)
 				.map((us) => ({
 					burned: us.estimationPoints || 0,
-					date: (us.completedAt || us.updatedAt)
-						?.toISOString()
-						.split("T")[0],
+					date: (us.completedAt || us.updatedAt)?.toISOString().split("T")[0],
 				}));
 		}
 
@@ -260,7 +257,11 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 													{
 														$in: [
 															"$userStoryId",
-															(subtaskMatchQuery.userStoryId as { $in: mongoose.Types.ObjectId[] }).$in,
+															(
+																subtaskMatchQuery.userStoryId as {
+																	$in: mongoose.Types.ObjectId[];
+																}
+															).$in,
 														],
 													},
 												]

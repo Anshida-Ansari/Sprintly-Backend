@@ -15,7 +15,6 @@ const reportsController = container.get<ReportsController>(
 
 const authGuard = container.get<AuthGuard>(ADMIN_TYPES.AuthGuard);
 
-
 const authorizeReports = authGuard.authorize([Role.ADMIN, Role.LEAD]);
 
 router.get(REPORTS_ROUTES.PROJECTS, authorizeReports, (req, res, next) =>

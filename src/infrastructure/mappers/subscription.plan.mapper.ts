@@ -1,13 +1,17 @@
-import { SubscriptionPlanEntity } from "../../domain/entities/subscription.plan.entity.js";
 import { injectable } from "inversify";
+import { SubscriptionPlanEntity } from "../../domain/entities/subscription.plan.entity.js";
 import type { ISubscriptionPlanMapper } from "./interface/subscription.plan.mapper.interface.js";
 
 @injectable()
 export class SubscriptionPlanMapper implements ISubscriptionPlanMapper {
-	toEntity(data: Record<string, unknown> | null | undefined): SubscriptionPlanEntity | null {
+	toEntity(
+		data: Record<string, unknown> | null | undefined,
+	): SubscriptionPlanEntity | null {
 		if (!data) return null;
 		return new SubscriptionPlanEntity({
-			id: (data as { _id?: { toString(): string } })._id?.toString() || (data as { id?: string }).id,
+			id:
+				(data as { _id?: { toString(): string } })._id?.toString() ||
+				(data as { id?: string }).id,
 			name: data.name as string,
 			price: data.price as number,
 			stripePriceId: data.stripePriceId as string,

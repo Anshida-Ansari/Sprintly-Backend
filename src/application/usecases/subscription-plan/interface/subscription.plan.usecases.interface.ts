@@ -27,7 +27,7 @@ export interface IUpdateSubscriptionPlanUseCase {
 			features: Array<{ text: string; included: boolean }>;
 			isActive: boolean;
 			isPopular: boolean;
-		}>
+		}>,
 	): Promise<SubscriptionPlanEntity>;
 }
 

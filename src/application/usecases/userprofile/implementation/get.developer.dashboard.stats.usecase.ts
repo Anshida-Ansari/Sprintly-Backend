@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import type { SubTaskEntity } from "../../../../domain/entities/subtask.entity";
 import { SubTaskStatus } from "../../../../domain/enum/subtask/subtask.status";
 import type { IMeetingRepository } from "../../../../infrastructure/db/repository/interface/meeting.interface";
 import type { IProjectRepository } from "../../../../infrastructure/db/repository/interface/project.interface";
@@ -12,7 +13,6 @@ import { SPRINTS_TYPE } from "../../../../infrastructure/di/types/sprints/sprint
 import { SUBTASK_TYPE } from "../../../../infrastructure/di/types/subtask/subtask";
 import { USERSTORY_TYPE } from "../../../../infrastructure/di/types/userstory/userstory";
 import { WORKLOG_TYPE } from "../../../../infrastructure/di/types/worklog/worklog";
-import type { SubTaskEntity } from "../../../../domain/entities/subtask.entity";
 import type {
 	IDashboardEnrichedTask,
 	IDeveloperDashboardStats,

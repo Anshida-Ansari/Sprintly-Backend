@@ -59,7 +59,9 @@ export class MeetingRepository
 			update.cancelledAt = new Date();
 		}
 
-		await this.model.findByIdAndUpdate((meeting as unknown as { id: string }).id, update).exec();
+		await this.model
+			.findByIdAndUpdate((meeting as unknown as { id: string }).id, update)
+			.exec();
 	}
 
 	async findByRoomId(roomId: string): Promise<MeetingEntity | null> {

@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
 import Stripe from "stripe";
 import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface.js";
-import type { ITransactionRepository } from "../../../../infrastructure/db/repository/interface/transaction.interface.js";
 import type { ISubscriptionPlanRepository } from "../../../../infrastructure/db/repository/interface/subscription.plan.interface.js";
+import type { ITransactionRepository } from "../../../../infrastructure/db/repository/interface/transaction.interface.js";
 import { COMPANY_TYPES } from "../../../../infrastructure/di/types/company/company.types.js";
-import { TRANSACTION_TYPES } from "../../../../infrastructure/di/types/transaction/transaction.types.js";
 import { SUBSCRIPTION_PLAN_TYPES } from "../../../../infrastructure/di/types/subscription-plan/subscription.plan.types.js";
+import { TRANSACTION_TYPES } from "../../../../infrastructure/di/types/transaction/transaction.types.js";
 import type { IHandleStripeWebhookUseCase } from "../interface/handle.stripe.webhook.interface.js";
 
 @injectable()
@@ -67,25 +67,32 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 				const stripeSubscriptionId = session.subscription as string;
 
 				// Fetch subscription to get price ID
-				const subscription = await this._stripe.subscriptions.retrieve(stripeSubscriptionId);
+				const subscription =
+					await this._stripe.subscriptions.retrieve(stripeSubscriptionId);
 				const priceId = subscription.items.data[0]?.price.id;
 
 				let planName = "Free"; // Default fallback if something goes wrong
 				let projectLimit = 2;
 
 				if (priceId) {
-					const plan = await this._subscriptionPlanRepository.findByStripePriceId(priceId);
+					const plan =
+						await this._subscriptionPlanRepository.findByStripePriceId(priceId);
 					if (plan) {
 						planName = plan.name;
 						projectLimit = plan.projectLimit;
 					} else {
-						console.error(`[Stripe Webhook] No matching dynamic plan found for priceId: ${priceId}`);
+						console.error(
+							`[Stripe Webhook] No matching dynamic plan found for priceId: ${priceId}`,
+						);
 						// If we can't find the plan by priceId, we might want to look for any plan with this priceId or logs
 					}
 				}
 
 				// Calculate end date (will be overridden by invoice event later)
-				const endDate = new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000);
+				const endDate = new Date(
+					(subscription as unknown as { current_period_end: number })
+						.current_period_end * 1000,
+				);
 
 				await this._companyRepository.updatePlan(
 					companyId,
@@ -108,7 +115,9 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 					billingReason: "subscription_create",
 				});
 
-				console.log(`[Stripe Webhook] Company ${companyId} upgraded to ${planName}`);
+				console.log(
+					`[Stripe Webhook] Company ${companyId} upgraded to ${planName}`,
+				);
 				break;
 			}
 
@@ -134,17 +143,30 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 					});
 
 					// If it's a subscription renewal, update the end date
-					if ((invoice as unknown as { subscription: string }).subscription && invoice.billing_reason !== "subscription_create") {
-						const subscriptionId = (invoice as unknown as { subscription: string }).subscription;
+					if (
+						(invoice as unknown as { subscription: string }).subscription &&
+						invoice.billing_reason !== "subscription_create"
+					) {
+						const subscriptionId = (
+							invoice as unknown as { subscription: string }
+						).subscription;
 						const subscription =
 							await this._stripe.subscriptions.retrieve(subscriptionId);
-						const periodEnd = new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000);
-						const priceId = (invoice.lines.data[0] as unknown as { price?: { id: string } })?.price?.id;
+						const periodEnd = new Date(
+							(subscription as unknown as { current_period_end: number })
+								.current_period_end * 1000,
+						);
+						const priceId = (
+							invoice.lines.data[0] as unknown as { price?: { id: string } }
+						)?.price?.id;
 						let planName = company.currentPlan;
 						let projectLimit = company.projectLimit;
-						
+
 						if (priceId) {
-							const plan = await this._subscriptionPlanRepository.findByStripePriceId(priceId);
+							const plan =
+								await this._subscriptionPlanRepository.findByStripePriceId(
+									priceId,
+								);
 							if (plan) {
 								planName = plan.name;
 								projectLimit = plan.projectLimit;
@@ -178,7 +200,7 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 				if (company?.id) {
 					// Fetch default free plan
 					const allPlans = await this._subscriptionPlanRepository.findAll();
-					const freePlan = allPlans.find(p => p.price === 0);
+					const freePlan = allPlans.find((p) => p.price === 0);
 					const freeLimit = freePlan ? freePlan.projectLimit : 2;
 					const planName = freePlan ? freePlan.name : "free";
 
@@ -205,7 +227,7 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
 				if (company?.id) {
 					// Fetch default free plan
 					const allPlans = await this._subscriptionPlanRepository.findAll();
-					const freePlan = allPlans.find(p => p.price === 0);
+					const freePlan = allPlans.find((p) => p.price === 0);
 					const freeLimit = freePlan ? freePlan.projectLimit : 2;
 					const planName = freePlan ? freePlan.name : "free";
 

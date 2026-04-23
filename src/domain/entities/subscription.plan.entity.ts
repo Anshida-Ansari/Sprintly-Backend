@@ -34,18 +34,43 @@ export class SubscriptionPlanEntity {
 		this._updatedAt = props.updatedAt;
 	}
 
-	static create(props: Omit<ConstructorParameters<typeof SubscriptionPlanEntity>[0], "id" | "createdAt" | "updatedAt">): SubscriptionPlanEntity {
+	static create(
+		props: Omit<
+			ConstructorParameters<typeof SubscriptionPlanEntity>[0],
+			"id" | "createdAt" | "updatedAt"
+		>,
+	): SubscriptionPlanEntity {
 		return new SubscriptionPlanEntity(props);
 	}
 
-	get id() { return this._id; }
-	get name() { return this._name; }
-	get price() { return this._price; }
-	get stripePriceId() { return this._stripePriceId; }
-	get projectLimit() { return this._projectLimit; }
-	get features() { return this._features; }
-	get isActive() { return this._isActive; }
-	get isPopular() { return this._isPopular; }
-	get createdAt() { return this._createdAt; }
-	get updatedAt() { return this._updatedAt; }
+	get id() {
+		return this._id;
+	}
+	get name() {
+		return this._name;
+	}
+	get price() {
+		return this._price;
+	}
+	get stripePriceId() {
+		return this._stripePriceId;
+	}
+	get projectLimit() {
+		return this._projectLimit;
+	}
+	get features() {
+		return this._features;
+	}
+	get isActive() {
+		return this._isActive;
+	}
+	get isPopular() {
+		return this._isPopular;
+	}
+	get createdAt() {
+		return this._createdAt;
+	}
+	get updatedAt() {
+		return this._updatedAt;
+	}
 }

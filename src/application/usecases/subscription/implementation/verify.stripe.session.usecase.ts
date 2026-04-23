@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import Stripe from "stripe";
-import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
 import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
-import type { ICompanyRepository } from "@infrastructure/db/repository/interface/company.interface";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
 import { NotFoundError } from "@shared/utils/error-handling/errors/not.found.error";
+import { inject, injectable } from "inversify";
+import Stripe from "stripe";
 import type { IVerifyStripeSessionUseCase } from "../interface/verify.stripe.session.interface";
 
 @injectable()
@@ -38,10 +38,13 @@ export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
 		try {
 			// 1. Retrieve the session from Stripe
 			const session = await this._stripe.checkout.sessions.retrieve(sessionId, {
-				expand: ['subscription']
+				expand: ["subscription"],
 			});
 
-			if (session.payment_status !== "paid" || session.metadata?.companyId !== companyId) {
+			if (
+				session.payment_status !== "paid" ||
+				session.metadata?.companyId !== companyId
+			) {
 				return {
 					success: false,
 					message: "Session not paid or invalid",
@@ -58,9 +61,12 @@ export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
 			}
 
 			// 3. Find the matching dynamic plan in our database
-			const plan = await this._subscriptionPlanRepository.findByStripePriceId(priceId);
+			const plan =
+				await this._subscriptionPlanRepository.findByStripePriceId(priceId);
 			if (!plan) {
-				throw new NotFoundError(`Subscription plan with Price ID '${priceId}' not found in database. Please ensure the plan exists in Super Admin.`);
+				throw new NotFoundError(
+					`Subscription plan with Price ID '${priceId}' not found in database. Please ensure the plan exists in Super Admin.`,
+				);
 			}
 
 			// 4. Update the company with the EXACT plan details
@@ -70,8 +76,11 @@ export class VerifyStripeSessionUseCase implements IVerifyStripeSessionUseCase {
 				plan.projectLimit,
 				session.customer as string,
 				subscription.id,
-				new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000),
-				true
+				new Date(
+					(subscription as unknown as { current_period_end: number })
+						.current_period_end * 1000,
+				),
+				true,
 			);
 
 			return {

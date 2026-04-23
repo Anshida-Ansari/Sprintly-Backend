@@ -1,9 +1,9 @@
-import { inject, injectable } from "inversify";
-import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
 import type { ISubscriptionPlanRepository } from "@infrastructure/db/repository/interface/subscription.plan.interface";
 import { COMPANY_TYPES } from "@infrastructure/di/types/company/company.types";
-import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
+import { SUBSCRIPTION_PLAN_TYPES } from "@infrastructure/di/types/subscription-plan/subscription.plan.types";
+import { inject, injectable } from "inversify";
 import type { CompanyEntity } from "../../../../domain/entities/company.entity";
+import type { ICompanyRepository } from "../../../../infrastructure/db/repository/interface/company.interface";
 import type {
 	IGetSubscriptionMetricsUseCase,
 	SubscriptionStats,
@@ -25,14 +25,14 @@ export class GetSubscriptionMetricsUseCase
 		const now = new Date();
 
 		const allPlans = await this._subscriptionPlanRepository.findAll();
-		const freePlan = allPlans.find(p => p.price === 0);
+		const freePlan = allPlans.find((p) => p.price === 0);
 		const freePlanName = freePlan ? freePlan.name : "Free";
 
 		const totalUsers = companies.length;
 		const freeUsers = companies.filter(
 			(c: CompanyEntity) => c.currentPlan === freePlanName,
 		).length;
-		
+
 		const paidUsers = companies.filter(
 			(c: CompanyEntity) => c.currentPlan !== freePlanName,
 		).length;
@@ -52,9 +52,10 @@ export class GetSubscriptionMetricsUseCase
 		).length;
 
 		// Dynamic Plan Distribution
-		const planDistribution = allPlans.map(p => ({
+		const planDistribution = allPlans.map((p) => ({
 			name: p.name,
-			value: companies.filter((c: CompanyEntity) => c.currentPlan === p.name).length
+			value: companies.filter((c: CompanyEntity) => c.currentPlan === p.name)
+				.length,
 		}));
 
 		// Growth Trends (last 7 days)

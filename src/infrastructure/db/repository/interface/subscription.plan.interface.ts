@@ -10,10 +10,15 @@ export interface ISubscriptionPlanRepository {
 		isActive: boolean;
 		isPopular?: boolean;
 	}): Promise<SubscriptionPlanEntity>;
-	update(id: string, data: Partial<SubscriptionPlanEntity>): Promise<SubscriptionPlanEntity | null>;
+	update(
+		id: string,
+		data: Partial<SubscriptionPlanEntity>,
+	): Promise<SubscriptionPlanEntity | null>;
 	findById(id: string): Promise<SubscriptionPlanEntity | null>;
 	findByName(name: string): Promise<SubscriptionPlanEntity | null>;
-	findByStripePriceId(stripePriceId: string): Promise<SubscriptionPlanEntity | null>;
+	findByStripePriceId(
+		stripePriceId: string,
+	): Promise<SubscriptionPlanEntity | null>;
 	findAll(filter?: Record<string, unknown>): Promise<SubscriptionPlanEntity[]>;
 	delete(id: string): Promise<boolean>;
 }

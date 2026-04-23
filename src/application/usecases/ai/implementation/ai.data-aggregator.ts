@@ -92,11 +92,11 @@ export class AiDataAggregator implements IAiDataAggregator {
 		const recentStandups = projectId
 			? await this._standupRepository.findByProjectAndDate(projectId)
 			: [];
-			
+
 		// Fetch all projects for the company to provide global context
 		const allProjects = await this._projectRepository.find(
 			{ companyId: companyId },
-			{ skip: 0, limit: 100 }
+			{ skip: 0, limit: 100 },
 		);
 
 		return {
