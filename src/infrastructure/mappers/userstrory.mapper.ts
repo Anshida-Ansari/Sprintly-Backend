@@ -36,7 +36,7 @@ export class UserStoryPersisitanceMapper {
 		) {
 			parsedEstimationPoints = allowedPoints.reduce((prev, curr) =>
 				Math.abs(curr - parsedEstimationPoints) <
-					Math.abs(prev - parsedEstimationPoints)
+				Math.abs(prev - parsedEstimationPoints)
 					? curr
 					: prev,
 			);
@@ -54,8 +54,8 @@ export class UserStoryPersisitanceMapper {
 			)?.toString(),
 			assignedTo: doc.assignedTo
 				? (doc.assignedTo as unknown[]).map((id) =>
-					(id as { toString(): string }).toString(),
-				)
+						(id as { toString(): string }).toString(),
+					)
 				: [],
 			comments:
 				(doc.comments as Array<{

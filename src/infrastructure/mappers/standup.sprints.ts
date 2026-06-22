@@ -45,9 +45,9 @@ export class StandupPersistanceMapper {
 			userData:
 				user && typeof user === "object" && "name" in user
 					? {
-						name: user.name as string,
-						email: user.email as string,
-					}
+							name: user.name as string,
+							email: user.email as string,
+						}
 					: undefined,
 		});
 	}
