@@ -16,6 +16,7 @@ export class StandupPersistanceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): StandupEntity {
 		const user = doc.userId as Record<string, unknown>;
 		const userId =

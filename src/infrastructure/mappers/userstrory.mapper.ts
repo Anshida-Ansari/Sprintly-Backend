@@ -24,6 +24,7 @@ export class UserStoryPersisitanceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): UserStoryEntity {
 		const allowedPoints = [1, 2, 3, 5, 8, 13];
 		let parsedEstimationPoints = doc.estimationPoints as number;

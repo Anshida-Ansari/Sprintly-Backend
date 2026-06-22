@@ -13,6 +13,7 @@ export const TransactionMapper = {
 		};
 	},
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): TransactionEntity {
 		return {
 			id: (doc._id as { toString(): string })?.toString(),

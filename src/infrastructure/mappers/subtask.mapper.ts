@@ -20,6 +20,7 @@ export class SubTaskPersisitanceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): SubTaskEntity {
 		return SubTaskEntity.create({
 			id: (doc._id as string)?.toString() || "",

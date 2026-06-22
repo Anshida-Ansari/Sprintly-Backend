@@ -16,6 +16,7 @@ export class WorkLogMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): WorkLogEntity {
 		return WorkLogEntity.create({
 			id: (doc._id as { toString(): string }).toString(),

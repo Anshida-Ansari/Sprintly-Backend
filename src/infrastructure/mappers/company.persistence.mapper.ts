@@ -22,6 +22,7 @@ export class CompanyPersistenceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): CompanyEntity {
 		return CompanyEntity.create({
 			id: (doc._id as { toString(): string } | undefined)?.toString(),

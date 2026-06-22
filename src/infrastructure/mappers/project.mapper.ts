@@ -18,6 +18,7 @@ export class ProjectPersistanceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): ProjectEntity {
 		const members = (doc.members as unknown[]) || [];
 		return ProjectEntity.create({

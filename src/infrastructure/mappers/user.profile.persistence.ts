@@ -17,6 +17,7 @@ export class UserProfilePersistenceMapper {
 		};
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): UserProfileEntity {
 		return UserProfileEntity.create({
 			id: (doc._id as { toString(): string } | undefined)?.toString(),

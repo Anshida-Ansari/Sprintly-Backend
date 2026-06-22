@@ -15,6 +15,7 @@ export class UserPersistenceMapper {
 			lastActive: user.lastActive,
 		};
 	}
+	// biome-ignore lint/suspicious/noExplicitAny: MongoDB document type
 	fromMongo(doc: any): UserEntity {
 		return UserEntity.create({
 			id: (doc._id as { toString(): string } | undefined)?.toString(),
