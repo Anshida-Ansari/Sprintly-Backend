@@ -22,7 +22,6 @@ export class CompanyPersistenceMapper {
 		};
 	}
 
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): CompanyEntity {
 		return CompanyEntity.create({
 			id: (doc._id as { toString(): string } | undefined)?.toString(),

@@ -1,0 +1,39 @@
+services:
+  # ─── Sprintly Backend API ─────────────────────────────────────────────────
+  api:
+    # BACKEND_IMAGE is injected by the CD workflow (e.g. anshidaansari/sprintly-backend:main-latest)
+    # Falls back to the latest tag for manual docker compose up
+    image: ${BACKEND_IMAGE:-anshidaansari/sprintly-backend:latest}
+    container_name: sprintly-api
+    restart: unless-stopped
+    ports:
+      - "2000:2000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:2000/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+    networks:
+      - sprintly-network
+
+networks:
+  sprintly-network:
+    driver: bridge

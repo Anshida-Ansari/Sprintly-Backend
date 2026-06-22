@@ -17,7 +17,6 @@ export class SprintPersistenceMapper {
 		};
 	}
 
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): SprintEntity {
 		return SprintEntity.create({
 			id: (doc._id as { toString(): string }).toString(),

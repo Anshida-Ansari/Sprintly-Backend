@@ -20,7 +20,6 @@ export class SubTaskPersisitanceMapper {
 		};
 	}
 
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): SubTaskEntity {
 		return SubTaskEntity.create({
 			id: (doc._id as string)?.toString() || "",

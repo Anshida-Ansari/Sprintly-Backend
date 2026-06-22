@@ -13,7 +13,6 @@ export const TransactionMapper = {
 		};
 	},
 
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): TransactionEntity {
 		return {
 			id: (doc._id as { toString(): string })?.toString(),

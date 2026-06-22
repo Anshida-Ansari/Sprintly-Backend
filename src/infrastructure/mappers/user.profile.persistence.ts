@@ -17,7 +17,6 @@ export class UserProfilePersistenceMapper {
 		};
 	}
 
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): UserProfileEntity {
 		return UserProfileEntity.create({
 			id: (doc._id as { toString(): string } | undefined)?.toString(),

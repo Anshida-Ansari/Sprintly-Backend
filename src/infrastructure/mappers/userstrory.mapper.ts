@@ -24,7 +24,6 @@ export class UserStoryPersisitanceMapper {
 		};
 	}
 
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): UserStoryEntity {
 		const allowedPoints = [1, 2, 3, 5, 8, 13];
 		let parsedEstimationPoints = doc.estimationPoints as number;
@@ -36,7 +35,7 @@ export class UserStoryPersisitanceMapper {
 		) {
 			parsedEstimationPoints = allowedPoints.reduce((prev, curr) =>
 				Math.abs(curr - parsedEstimationPoints) <
-				Math.abs(prev - parsedEstimationPoints)
+					Math.abs(prev - parsedEstimationPoints)
 					? curr
 					: prev,
 			);
@@ -54,8 +53,8 @@ export class UserStoryPersisitanceMapper {
 			)?.toString(),
 			assignedTo: doc.assignedTo
 				? (doc.assignedTo as unknown[]).map((id) =>
-						(id as { toString(): string }).toString(),
-					)
+					(id as { toString(): string }).toString(),
+				)
 				: [],
 			comments:
 				(doc.comments as Array<{

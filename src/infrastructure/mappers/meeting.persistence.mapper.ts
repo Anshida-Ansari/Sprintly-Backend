@@ -3,7 +3,6 @@ import type { MeetingStatus } from "@domain/enum/meeting/meeting.status.enum";
 import { Types } from "mongoose";
 
 export class MeetingPersistenceMapper {
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): MeetingEntity {
 		return MeetingEntity.create({
 			id: (doc._id as { toString(): string }).toString(),

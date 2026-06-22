@@ -16,7 +16,6 @@ export class StandupPersistanceMapper {
 		};
 	}
 
-	// biome-ignore lint/suspicious/noExplicitAny: Raw database data requires 'any' for Mongoose Document compatibility
 	fromMongo(doc: any): StandupEntity {
 		const user = doc.userId as Record<string, unknown>;
 		const userId =
@@ -45,9 +44,9 @@ export class StandupPersistanceMapper {
 			userData:
 				user && typeof user === "object" && "name" in user
 					? {
-							name: user.name as string,
-							email: user.email as string,
-						}
+						name: user.name as string,
+						email: user.email as string,
+					}
 					: undefined,
 		});
 	}
