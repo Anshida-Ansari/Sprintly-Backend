@@ -74,4 +74,7 @@ app.get("/health", (_req, res) => {
 	res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
+import { errorMiddleware } from "../middleware/error.handling.middleware";
+app.use(errorMiddleware);
+
 export default app;
