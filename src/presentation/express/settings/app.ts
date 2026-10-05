@@ -75,6 +75,7 @@ app.get("/health", (_req, res) => {
 });
 
 import { errorMiddleware } from "../middleware/error.handling.middleware";
+
 app.use(errorMiddleware);
 
 export default app;
